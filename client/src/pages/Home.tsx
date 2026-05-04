@@ -1,25 +1,534 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
-
 /**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
+ * Digital Therapy quiet luxury private-banking interface.
+ * Preserve light ivory surfaces, charcoal typography, restrained Digital Therapy blue,
+ * image-led section rhythm, and concise family-office advisory positioning.
  */
-export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  BarChart3,
+  Bot,
+  Building2,
+  Check,
+  ChevronRight,
+  ClipboardCheck,
+  Database,
+  FileSearch,
+  GitBranch,
+  LockKeyhole,
+  Network,
+  ShieldCheck,
+  Sparkles,
+  UsersRound,
+  Workflow,
+} from "lucide-react";
+
+const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
+const markUrl = "/manus-storage/DTLOGO_PICMARKpng_2cf51494.png";
+const heroVisual =
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_hero_operating_layer-TEdtu9wcNJkxBt4PK2JKyo.webp";
+const boardroomVisual =
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_family_office_boardroom-UvecEVLEaVqpouVEhEb9mw.webp";
+const wealthMapVisual =
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_wealth_map_visual-TmSmhqHi8pgacxaNwHMRxs.webp";
+const securityVisual =
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_security_automation-Z4CfAdsU9T8pybHF6A7NLi.webp";
+
+const fadeUp = {
+  initial: { opacity: 0, y: 28 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-90px" },
+  transition: { duration: 0.65, ease: "easeOut" },
+} as const;
+
+const navItems = [
+  { label: "Operating Layer", href: "#operating-layer" },
+  { label: "Capabilities", href: "#capabilities" },
+  { label: "Security", href: "#security" },
+  { label: "Partners", href: "#partners" },
+];
+
+const complexityPoints = [
+  "Assets, entities, trusts, accounts, and documents live in separate systems.",
+  "Lean teams spend too much time collecting, reconciling, and reformatting information.",
+  "Principals and advisors expect faster answers without compromising privacy or control.",
+];
+
+const operatingLayers = [
+  {
+    eyebrow: "01",
+    title: "Data foundation",
+    copy: "Aggregation, reconciliation, entity mapping, ownership logic, and source-of-truth design.",
+    icon: Database,
+  },
+  {
+    eyebrow: "02",
+    title: "Workflow foundation",
+    copy: "Automation for documents, approvals, reconciliations, reporting cycles, and recurring tasks.",
+    icon: Workflow,
+  },
+  {
+    eyebrow: "03",
+    title: "Reporting foundation",
+    copy: "Dashboards, scheduled reporting, AI narratives, stakeholder views, and ad hoc questions.",
+    icon: BarChart3,
+  },
+  {
+    eyebrow: "04",
+    title: "Governance foundation",
+    copy: "Role-based access, documentation, auditability, continuity planning, and controlled integration.",
+    icon: ShieldCheck,
+  },
+];
+
+const capabilities = [
+  { title: "Global wealth mapping", icon: Network },
+  { title: "AI aggregation", icon: Sparkles },
+  { title: "Accounting operations", icon: ClipboardCheck },
+  { title: "Alternatives workflows", icon: Building2 },
+  { title: "Document automation", icon: FileSearch },
+  { title: "Custom reporting", icon: BarChart3 },
+];
+
+const fusionTeam = [
+  {
+    title: "Operations",
+    copy: "Maps how the office actually runs: handoffs, approvals, bottlenecks, exceptions, and ownership.",
+  },
+  {
+    title: "Accounting",
+    copy: "Improves books, close cycles, AP, AR, reconciliations, reporting evidence, and financial controls.",
+  },
+  {
+    title: "Technology",
+    copy: "Connects platforms, data, automation, AI agents, security patterns, and private infrastructure.",
+  },
+];
+
+const automationUseCases = [
+  "AI document agents for capital calls, notices, invoices, statements, and reports.",
+  "Conversational assistants that answer approved stakeholder questions from governed data.",
+  "One-click reconciliation across positions, cash flows, documents, and accounting records.",
+  "Workflow orchestration that routes approvals, exceptions, tasks, and recurring follow-ups.",
+];
+
+const securityPrinciples = [
+  { title: "Private deployment", copy: "On-premises, offline, or controlled infrastructure options when sensitivity requires it." },
+  { title: "Role-based access", copy: "Users see only the data, reports, and workflows appropriate to their mandate." },
+  { title: "Auditability", copy: "Key workflows, changes, approvals, and data flows remain documented and reviewable." },
+  { title: "Secure integration", copy: "Encrypted access and controlled connection patterns reduce unnecessary exposure." },
+];
+
+const engageSteps = [
+  {
+    step: "Diagnostic briefing",
+    result: "A focused conversation to identify operating friction and high-value transformation opportunities.",
+  },
+  {
+    step: "Discovery sprint",
+    result: "A current-state map, future-state design, access model, and implementation roadmap.",
+  },
+  {
+    step: "Focused pilot",
+    result: "A working automation or reporting workflow that proves value before broader rollout.",
+  },
+];
+
+function PrivateBriefingButton({ variant = "primary" }: { variant?: "primary" | "secondary" }) {
+  const classes =
+    variant === "primary"
+      ? "bg-[#0A65FF] text-white hover:bg-[#004ed1] shadow-[0_18px_45px_rgba(10,101,255,0.22)]"
+      : "border border-black/15 bg-white/60 text-[#111111] hover:border-[#0A65FF]/60 hover:text-[#0A65FF]";
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
+    <a
+      href="mailto:hello@digitaltherapy.io?subject=Private%20briefing%20request"
+      className={`group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold tracking-[-0.01em] transition-all duration-300 ${classes}`}
+    >
+      Request a private briefing
+      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+    </a>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="mb-5 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+      <span className="h-px w-8 bg-[#0A65FF]" />
+      {children}
+    </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <div className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#111111] selection:bg-[#0A65FF] selection:text-white">
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-black/8 bg-[#F7F4EE]/82 backdrop-blur-xl">
+        <div className="container flex h-20 items-center justify-between">
+          <a href="#top" className="flex items-center gap-3" aria-label="Digital Therapy home">
+            <img src={logoUrl} alt="Digital Therapy" className="h-8 w-auto object-contain" />
+          </a>
+          <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary navigation">
+            {navItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+          <div className="hidden items-center gap-3 md:flex">
+            <a
+              href="mailto:hello@digitaltherapy.io?subject=Partner%20model%20discussion"
+              className="text-sm font-semibold text-black/60 transition-colors duration-300 hover:text-[#0A65FF]"
+            >
+              Partner model
+            </a>
+            <PrivateBriefingButton />
+          </div>
+        </div>
+      </header>
+
+      <main id="top" className="pt-20">
+        <section className="relative min-h-[calc(100vh-5rem)] overflow-hidden border-b border-black/8">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_10%,rgba(10,101,255,0.09),transparent_32%),linear-gradient(115deg,#F7F4EE_0%,#FFFFFF_50%,#EEF4FF_100%)]" />
+          <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-10 py-20 lg:grid-cols-[0.92fr_1.08fr] lg:py-28">
+            <motion.div {...fadeUp}>
+              <SectionLabel>Private family-office operating layer</SectionLabel>
+              <h1 className="max-w-4xl font-display text-[clamp(3.4rem,7vw,7.7rem)] leading-[0.88] tracking-[-0.07em] text-[#111111]">
+                One private operating layer for modern family offices.
+              </h1>
+              <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
+                Digital Therapy unifies the people, data, systems, workflows, reporting, and AI automation that family-office leaders rely on to see the full picture and act with confidence.
+              </p>
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+                <PrivateBriefingButton />
+                <a
+                  href="#operating-layer"
+                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/50 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
+                >
+                  Explore the operating layer
+                  <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+              </div>
+              <div className="mt-12 grid max-w-xl grid-cols-3 gap-5 border-t border-black/10 pt-6">
+                {[
+                  ["Assets", "mapped"],
+                  ["Workflows", "automated"],
+                  ["Reporting", "governed"],
+                ].map(([top, bottom]) => (
+                  <div key={top}>
+                    <div className="font-display text-2xl leading-none tracking-[-0.04em]">{top}</div>
+                    <div className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-black/45">{bottom}</div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, x: 35 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ duration: 0.9, ease: "easeOut" as const }}
+              className="relative"
+            >
+              <div className="absolute -inset-6 rounded-[2.6rem] bg-[#0A65FF]/10 blur-3xl" />
+              <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
+                <img src={heroVisual} alt="Abstract private operating layer visualization" className="aspect-[16/12] w-full object-cover" />
+                <div className="absolute bottom-5 left-5 right-5 grid gap-3 rounded-[1.35rem] border border-white/70 bg-white/72 p-4 backdrop-blur-xl sm:grid-cols-3">
+                  {[
+                    ["Source of truth", "Connected data"],
+                    ["AI agents", "Document logic"],
+                    ["Owner answers", "Live intelligence"],
+                  ].map(([title, copy]) => (
+                    <div key={title} className="border-l border-black/10 pl-3 first:border-l-0 first:pl-0">
+                      <div className="text-sm font-bold">{title}</div>
+                      <div className="mt-1 text-xs text-black/52">{copy}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <section id="complexity" className="bg-white py-24 lg:py-32">
+          <div className="container grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+            <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.11)]">
+              <img src={boardroomVisual} alt="Modern family office boardroom" className="aspect-[16/11] w-full object-cover" />
+              <div className="absolute left-5 top-5 rounded-full border border-white/70 bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-black/58 backdrop-blur-xl">
+                Modern wealth is an operating company
+              </div>
+            </motion.div>
+            <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
+              <SectionLabel>Why the back office breaks</SectionLabel>
+              <h2 className="font-display text-[clamp(2.7rem,5vw,5.4rem)] leading-[0.92] tracking-[-0.06em]">
+                Complexity creates hidden operating costs.
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-black/62">
+                The most sophisticated family offices now coordinate far more than investments. Digital Therapy targets the everyday friction that compounds across accounting, reporting, technology, and governance.
+              </p>
+              <div className="mt-9 space-y-4">
+                {complexityPoints.map((point) => (
+                  <div key={point} className="flex gap-4 border-t border-black/10 pt-4">
+                    <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#0A65FF] text-white">
+                      <Check className="h-3.5 w-3.5" />
+                    </span>
+                    <p className="text-base leading-7 text-black/70">{point}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <section id="operating-layer" className="relative overflow-hidden bg-[#F7F4EE] py-24 lg:py-32">
+          <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_70%_40%,rgba(10,101,255,0.12),transparent_44%)]" />
+          <div className="container relative">
+            <motion.div {...fadeUp} className="max-w-4xl">
+              <SectionLabel>What Digital Therapy builds</SectionLabel>
+              <h2 className="font-display text-[clamp(2.7rem,5vw,5.8rem)] leading-[0.92] tracking-[-0.06em]">
+                A coherent layer above fragmented systems.
+              </h2>
+            </motion.div>
+            <div className="mt-14 grid gap-5 lg:grid-cols-4">
+              {operatingLayers.map((layer, index) => {
+                const Icon = layer.icon;
+                return (
+                  <motion.article
+                    key={layer.title}
+                    {...fadeUp}
+                    transition={{ ...fadeUp.transition, delay: index * 0.06 }}
+                    className="group min-h-[330px] border border-black/10 bg-white/72 p-7 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-[#0A65FF]/35 hover:bg-white"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">{layer.eyebrow}</span>
+                      <Icon className="h-6 w-6 text-black/48 transition-colors duration-300 group-hover:text-[#0A65FF]" />
+                    </div>
+                    <h3 className="mt-16 text-2xl font-semibold tracking-[-0.04em]">{layer.title}</h3>
+                    <p className="mt-4 leading-7 text-black/58">{layer.copy}</p>
+                  </motion.article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-24 lg:py-32">
+          <div className="container grid gap-12 lg:grid-cols-[0.82fr_1.18fr]">
+            <motion.div {...fadeUp}>
+              <SectionLabel>Fusion Team model</SectionLabel>
+              <h2 className="font-display text-[clamp(2.6rem,4.7vw,5.3rem)] leading-[0.92] tracking-[-0.06em]">
+                The handoff problem is the transformation problem.
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-black/62">
+                Digital Therapy uses one integrated pod with operations, accounting, and technology expertise in the same room, accountable for the outcome end to end.
+              </p>
+            </motion.div>
+            <div className="grid gap-5 md:grid-cols-3">
+              {fusionTeam.map((member, index) => (
+                <motion.div
+                  key={member.title}
+                  {...fadeUp}
+                  transition={{ ...fadeUp.transition, delay: index * 0.08 }}
+                  className="relative min-h-[310px] overflow-hidden bg-[#F7F4EE] p-7"
+                >
+                  <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#0A65FF]/10 blur-2xl" />
+                  <div className="relative flex h-full flex-col justify-between">
+                    <div className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-black/38">Discipline {index + 1}</div>
+                    <div>
+                      <h3 className="text-3xl font-semibold tracking-[-0.05em]">{member.title}</h3>
+                      <p className="mt-4 leading-7 text-black/58">{member.copy}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="capabilities" className="bg-[#F7F4EE] py-24 lg:py-32">
+          <div className="container grid items-center gap-12 lg:grid-cols-[1.04fr_0.96fr]">
+            <motion.div {...fadeUp} className="order-2 lg:order-1">
+              <SectionLabel>Capabilities built for complex wealth</SectionLabel>
+              <h2 className="font-display text-[clamp(2.7rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.06em]">
+                Everything required to answer the owner’s next question.
+              </h2>
+              <div className="mt-10 grid gap-3 sm:grid-cols-2">
+                {capabilities.map((capability) => {
+                  const Icon = capability.icon;
+                  return (
+                    <div key={capability.title} className="group flex items-center gap-4 border-t border-black/10 py-4">
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-[#0A65FF] shadow-sm transition-transform duration-300 group-hover:scale-110">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <span className="font-semibold tracking-[-0.02em] text-black/78">{capability.title}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </motion.div>
+            <motion.div {...fadeUp} className="order-1 overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_28px_80px_rgba(16,24,40,0.1)] lg:order-2">
+              <img src={wealthMapVisual} alt="Total wealth map visualization" className="aspect-[16/12] w-full object-cover" />
+            </motion.div>
+          </div>
+        </section>
+
+        <section className="bg-white py-24 lg:py-32">
+          <div className="container grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+            <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
+              <img src={securityVisual} alt="Secure automation and AI workflow visualization" className="aspect-[16/12] w-full object-cover" />
+            </motion.div>
+            <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
+              <SectionLabel>Automation and AI</SectionLabel>
+              <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.92] tracking-[-0.06em]">
+                Scale the office without scaling headcount.
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-black/62">
+                Digital Therapy converts manual collection, reconciliation, document processing, and reporting production into governed workflows that remain under the family office’s control.
+              </p>
+              <div className="mt-8 space-y-3">
+                {automationUseCases.map((useCase) => (
+                  <div key={useCase} className="flex gap-4 rounded-2xl border border-black/8 bg-[#F7F4EE]/70 p-4">
+                    <Bot className="mt-1 h-5 w-5 shrink-0 text-[#0A65FF]" />
+                    <p className="leading-7 text-black/66">{useCase}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <section id="security" className="relative overflow-hidden bg-[#111111] py-24 text-white lg:py-32">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(10,101,255,0.32),transparent_35%),linear-gradient(135deg,#111111_0%,#1C1C1C_100%)]" />
+          <div className="container relative grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+            <motion.div {...fadeUp}>
+              <SectionLabel>Security and control</SectionLabel>
+              <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.92] tracking-[-0.06em] text-white">
+                Privacy is not a feature. It is the foundation.
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-white/62">
+                Digital Therapy designs the operating layer so sensitive family-office data, reports, documents, and workflows remain governed by the office’s access model and infrastructure requirements.
+              </p>
+            </motion.div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {securityPrinciples.map((principle, index) => (
+                <motion.div
+                  key={principle.title}
+                  {...fadeUp}
+                  transition={{ ...fadeUp.transition, delay: index * 0.06 }}
+                  className="border border-white/12 bg-white/[0.06] p-7 backdrop-blur-xl"
+                >
+                  <LockKeyhole className="h-6 w-6 text-[#58B8FF]" />
+                  <h3 className="mt-10 text-2xl font-semibold tracking-[-0.04em]">{principle.title}</h3>
+                  <p className="mt-4 leading-7 text-white/58">{principle.copy}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="partners" className="bg-[#F7F4EE] py-24 lg:py-32">
+          <div className="container grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+            <motion.div {...fadeUp}>
+              <SectionLabel>For private banks and advisors</SectionLabel>
+              <h2 className="font-display text-[clamp(2.7rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.06em]">
+                A confidential implementation partner for complex clients.
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-black/62">
+                Digital Therapy helps private banks, multifamily offices, and wealth advisory firms solve client operating complexity without replacing the trusted advisory relationship.
+              </p>
+              <div className="mt-9 grid gap-4 sm:grid-cols-2">
+                {[
+                  "Works behind the scenes or in joint delivery models.",
+                  "Adds operating transformation without competing for the advisory mandate.",
+                  "Creates diagnostics, pilots, and implementation roadmaps partners can introduce.",
+                  "Reduces implementation risk through one accountable cross-functional pod.",
+                ].map((item) => (
+                  <div key={item} className="flex gap-3 border-t border-black/10 pt-4">
+                    <UsersRound className="mt-1 h-5 w-5 shrink-0 text-[#0A65FF]" />
+                    <p className="leading-7 text-black/66">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+            <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
+              <img src={boardroomVisual} alt="Advisor partnership discussion setting" className="aspect-[4/5] w-full object-cover" />
+              <div className="absolute bottom-5 left-5 right-5 rounded-[1.4rem] border border-white/70 bg-white/78 p-5 backdrop-blur-xl">
+                <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Partner-ready</div>
+                <p className="mt-2 text-lg font-semibold tracking-[-0.03em] text-black">
+                  Introduce Digital Therapy when a client needs a practical operating blueprint, not another abstract strategy deck.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <section className="bg-white py-24 lg:py-32">
+          <div className="container">
+            <motion.div {...fadeUp} className="mx-auto max-w-4xl text-center">
+              <SectionLabel>How engagements begin</SectionLabel>
+              <h2 className="font-display text-[clamp(2.7rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.06em]">
+                Diagnose first. Then build.
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-black/62">
+                Digital Therapy starts by understanding the office’s operating reality, then converts that insight into a sequenced and accountable implementation path.
+              </p>
+            </motion.div>
+            <div className="mt-14 grid gap-5 lg:grid-cols-3">
+              {engageSteps.map((step, index) => (
+                <motion.article
+                  key={step.step}
+                  {...fadeUp}
+                  transition={{ ...fadeUp.transition, delay: index * 0.08 }}
+                  className="relative min-h-[300px] overflow-hidden border border-black/10 bg-[#F7F4EE] p-8"
+                >
+                  <div className="absolute right-6 top-6 font-display text-7xl leading-none tracking-[-0.08em] text-[#0A65FF]/10">
+                    0{index + 1}
+                  </div>
+                  <GitBranch className="h-7 w-7 text-[#0A65FF]" />
+                  <h3 className="mt-24 text-2xl font-semibold tracking-[-0.04em]">{step.step}</h3>
+                  <p className="mt-4 leading-7 text-black/58">{step.result}</p>
+                </motion.article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="relative overflow-hidden bg-[#F7F4EE] py-24 lg:py-32">
+          <div className="container grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr]">
+            <motion.div {...fadeUp}>
+              <img src={markUrl} alt="Digital Therapy picture mark" className="h-14 w-14 object-contain" />
+              <h2 className="mt-9 font-display text-[clamp(3rem,6vw,6.6rem)] leading-[0.88] tracking-[-0.07em]">
+                Ready for total clarity?
+              </h2>
+              <p className="mt-7 max-w-2xl text-xl leading-8 text-black/62">
+                Let’s show your family office, client family, or partner team what a private, unified, and automated operating layer can make possible.
+              </p>
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+                <PrivateBriefingButton />
+                <PrivateBriefingButton variant="secondary" />
+              </div>
+              <p className="mt-6 text-sm text-black/48">hello@digitaltherapy.io · 1 (917) 495-0455</p>
+            </motion.div>
+            <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
+              <img src={heroVisual} alt="Digital Therapy abstract operating layer" className="aspect-[16/11] w-full object-cover" />
+            </motion.div>
+          </div>
+        </section>
       </main>
+
+      <footer className="border-t border-black/8 bg-white py-10">
+        <div className="container flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <img src={logoUrl} alt="Digital Therapy" className="h-7 w-auto object-contain" />
+          <div className="flex flex-wrap gap-5 text-sm text-black/50">
+            <a href="#operating-layer" className="hover:text-[#0A65FF]">Operating Layer</a>
+            <a href="#capabilities" className="hover:text-[#0A65FF]">Capabilities</a>
+            <a href="#security" className="hover:text-[#0A65FF]">Security</a>
+            <a href="mailto:hello@digitaltherapy.io" className="hover:text-[#0A65FF]">Contact</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
