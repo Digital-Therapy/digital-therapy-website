@@ -16,3 +16,10 @@
 - [ ] Integrate the Team page into the main navigation and relevant internal links.
 - [ ] Validate TypeScript, production build, route rendering, and image availability.
 - [ ] Save a checkpoint and deliver the updated website version to the user.
+
+# Navigation Logo Size Update
+
+- [ ] Increase the Digital Therapy logo height in the navigation header across Home, DT Brain, and Team pages.
+- [ ] Validate that the larger logo does not crowd the header, overlap nav links, or reduce CTA clarity.
+- [ ] Run TypeScript/build validation after the logo size change.
+- [ ] Save a new checkpoint and deliver the updated version link.

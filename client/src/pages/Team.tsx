@@ -148,7 +148,7 @@ export default function Team() {
       <header className="fixed left-0 right-0 top-0 z-50 border-b border-black/8 bg-[#F7F4EE]/82 backdrop-blur-xl">
         <div className="container flex h-20 items-center justify-between">
           <a href="/" className="flex items-center gap-3" aria-label="Digital Therapy home">
-            <img src={logoUrl} alt="Digital Therapy" className="h-8 w-auto object-contain" />
+            <img src={logoUrl} alt="Digital Therapy" className="h-10 w-auto object-contain lg:h-11" />
           </a>
           <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary navigation">
             <a href="/" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">

@@ -23,3 +23,7 @@ At the bottom of `/team`, the advisor cards for Geoff Horn, Harry Dublinsky, Bru
 ## Navigation validation
 
 The Team page header successfully navigates to `/dt-brain`, and the DT Brain page header now includes a Team link that successfully returns to `/team`. The subpage navigation is therefore consistent between DT Brain and Team, while the homepage navigation also includes the new Team link in its primary nav array.
+
+## Navigation logo size update QA
+
+The homepage preview shows the enlarged navigation logo rendering at the new responsive size without crowding the primary navigation links or the right-side briefing CTA. The fixed header remains 80px tall, the logo remains aligned vertically, and the larger brand mark improves visibility while preserving the existing quiet-luxury spacing system. TypeScript and production build validation passed after using `pnpm check && pnpm build`; an earlier shorthand command was rejected by pnpm and replaced with the correct scripts.
