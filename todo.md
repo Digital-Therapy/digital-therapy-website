@@ -23,3 +23,18 @@
 - [ ] Validate that the larger logo does not crowd the header, overlap nav links, or reduce CTA clarity.
 - [ ] Run TypeScript/build validation after the logo size change.
 - [ ] Save a new checkpoint and deliver the updated version link.
+
+# Team Headshot Update
+
+- [ ] Upload the seven user-provided headshot files through the web asset workflow without re-opening the image previews.
+- [ ] Map the uploaded images in order to Harry Dublinsky, Bruce Ditman, Liron David, Jonathan Kobrin, Hunter Atkins, Milton Rodas, and Stan Gretov.
+- [ ] Update the Team page so the matched headshots appear on the corresponding existing team entries.
+- [ ] Validate TypeScript, production build, and live Team page rendering.
+- [ ] Save a new checkpoint and deliver the updated website version to the user.
+
+# Corrected Team Headshot Mapping
+
+- [ ] Remap the seventh uploaded headshot from Stan Gretov to Kennedy Kraner.
+- [ ] Add Kennedy Kraner’s bookkeeper bio to the Team page entry.
+- [ ] Ensure Stan Gretov remains listed without the seventh headshot unless another image is provided.
+- [ ] Validate the corrected headshot mapping, build, and Team page rendering before saving a checkpoint.

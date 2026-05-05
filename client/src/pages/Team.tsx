@@ -28,6 +28,16 @@ const boardroomVisual =
 const wealthMapVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_wealth_map_visual-TmSmhqHi8pgacxaNwHMRxs.webp";
 
+const headshots = {
+  harryDublinsky: "/manus-storage/harry-dublinsky_16bc2837.png",
+  bruceDitman: "/manus-storage/bruce-ditman_6bc44f86.png",
+  lironDavid: "/manus-storage/liron-david_5e58795c.png",
+  jonathanKobrin: "/manus-storage/jonathan-kobrin_ccc4cf34.png",
+  hunterAtkins: "/manus-storage/hunter-atkins_72901b2f.png",
+  miltonRodas: "/manus-storage/milton-rodas_07ab6aa9.png",
+  kennedyKraner: "/manus-storage/stan-gretov_492b611c.png",
+};
+
 const fadeUp = {
   initial: { opacity: 0, y: 28 },
   whileInView: { opacity: 1, y: 0 },
@@ -35,21 +45,54 @@ const fadeUp = {
   transition: { duration: 0.65, ease: "easeOut" },
 } as const;
 
-const leaders = [
-  { name: "Jon Kobrin", role: "Team Lead", specialty: "Operating model, transformation strategy, and client leadership." },
-  { name: "Milton Rodas", role: "Tech Lead", specialty: "Systems architecture, integration, and technical execution." },
-  { name: "Hunter Atkins, CPA", role: "Fin Lead", specialty: "Accounting leadership, financial controls, and reporting operations." },
+type TeamPerson = {
+  name: string;
+  role: string;
+  specialty?: string;
+  bio?: string;
+  imageUrl?: string;
+};
+
+const leaders: TeamPerson[] = [
+  {
+    name: "Jonathan Kobrin",
+    role: "CEO",
+    specialty: "Operating model, transformation strategy, and client leadership.",
+    imageUrl: headshots.jonathanKobrin,
+  },
+  {
+    name: "Milton Rodas",
+    role: "Chief Solution Engineer",
+    specialty: "Systems architecture, integration, and technical execution.",
+    imageUrl: headshots.miltonRodas,
+  },
+  {
+    name: "Hunter Atkins, CPA",
+    role: "CPA",
+    specialty: "Accounting leadership, financial controls, and reporting operations.",
+    imageUrl: headshots.hunterAtkins,
+  },
 ];
 
-const groups = [
+const groups: Array<{
+  label: string;
+  description: string;
+  icon: typeof CircleDollarSign;
+  members: TeamPerson[];
+}> = [
   {
     label: "Accounting & Reporting",
     description: "The finance bench brings bookkeeping, tax, public-company reporting, and real-estate accounting expertise into transformation work from day one.",
     icon: CircleDollarSign,
     members: [
-      { name: "Kennnedy Kraner", role: "Bookkeeper" },
+      {
+        name: "Kennedy Kraner",
+        role: "Bookkeeper",
+        imageUrl: headshots.kennedyKraner,
+        bio: "Kennedy Kraner is a bookkeeper with four years of experience in property management accounting, transaction categorization, and financial record-keeping across multi-property portfolios. She brings proficiency in Rent Manager, QuickBooks, and Microsoft Office, along with additional capabilities in web development and graphic design.",
+      },
       { name: "Rick Toussaint, CPA", role: "Tax + Pubco Reporting" },
-      { name: "Harry Dublinsky, CPA", role: "Real Estate Expert" },
+      { name: "Harry Dublinsky, CPA", role: "CPA", imageUrl: headshots.harryDublinsky },
     ],
   },
   {
@@ -57,7 +100,7 @@ const groups = [
     description: "The technology bench supports websites, search visibility, product design, engineering, and digital infrastructure required for durable systems.",
     icon: Code2,
     members: [
-      { name: "Stan Gretov", role: "Director of Websites" },
+      { name: "Stan Gretov", role: "Team Lead: Websites + BPO" },
       { name: "Vadim Litvak", role: "Director of SEO" },
       { name: "Daria Shulenko", role: "Designer" },
       { name: "Valerio Mirof", role: "Engineer" },
@@ -78,11 +121,11 @@ const groups = [
   },
 ];
 
-const extendedNetwork = [
+const extendedNetwork: Array<TeamPerson & { group: string; icon: typeof Landmark }> = [
   { name: "Geoff Horn", role: "Payments", group: "Alliances", icon: Landmark },
-  { name: "Harry Dublinsky", role: "Advisor", group: "Advisors", icon: BadgeCheck },
-  { name: "Bruce Ditman", role: "Advisor", group: "Advisors", icon: BadgeCheck },
-  { name: "Liron David", role: "Advisor", group: "Advisors", icon: BadgeCheck },
+  { name: "Harry Dublinsky", role: "Accounting Advisor", group: "Advisors", icon: BadgeCheck },
+  { name: "Bruce Ditman", role: "Advisor", group: "Advisors", icon: BadgeCheck, imageUrl: headshots.bruceDitman },
+  { name: "Liron David", role: "Advisor", group: "Advisors", icon: BadgeCheck, imageUrl: headshots.lironDavid },
 ];
 
 const principles = [
@@ -233,8 +276,14 @@ export default function Team() {
                   className="group relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] p-7 shadow-[0_20px_55px_rgba(17,17,17,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)]"
                 >
                   <div className="absolute right-0 top-0 h-28 w-28 rounded-bl-[4rem] bg-[#0A65FF]/8" />
-                  <InitialMark name={leader.name} />
-                  <p className="mt-8 text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">{leader.role}</p>
+                  {leader.imageUrl ? (
+                    <div className="relative -m-3 mb-7 overflow-hidden rounded-[1.6rem] bg-[#0A65FF]/8">
+                      <img src={leader.imageUrl} alt={leader.name} className="h-64 w-full object-cover object-center" />
+                    </div>
+                  ) : (
+                    <InitialMark name={leader.name} />
+                  )}
+                  <p className={`${leader.imageUrl ? "mt-0" : "mt-8"} text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]`}>{leader.role}</p>
                   <h3 className="mt-3 font-display text-4xl leading-none tracking-[-0.05em]">{leader.name}</h3>
                   <p className="mt-5 text-sm leading-6 text-black/58">{leader.specialty}</p>
                 </motion.article>
@@ -317,12 +366,17 @@ export default function Team() {
                         {group.members.map((member) => (
                           <article key={`${group.label}-${member.name}-${member.role}`} className="rounded-[1.4rem] border border-black/7 bg-white p-5">
                             <div className="flex items-center gap-4">
-                              <InitialMark name={member.name} />
+                              {member.imageUrl ? (
+                                <img src={member.imageUrl} alt={member.name} className="h-20 w-20 shrink-0 rounded-[1.35rem] border border-black/8 object-cover object-center shadow-[0_18px_45px_rgba(17,17,17,0.08)]" />
+                              ) : (
+                                <InitialMark name={member.name} />
+                              )}
                               <div>
                                 <h4 className="font-display text-2xl leading-none tracking-[-0.045em]">{member.name}</h4>
                                 <p className="mt-2 text-xs font-bold uppercase tracking-[0.16em] text-black/44">{member.role}</p>
                               </div>
                             </div>
+                            {member.bio ? <p className="mt-4 text-sm leading-6 text-black/56">{member.bio}</p> : null}
                           </article>
                         ))}
                       </div>
@@ -350,8 +404,13 @@ export default function Team() {
                     key={`${person.group}-${person.name}`}
                     {...fadeUp}
                     transition={{ ...fadeUp.transition, delay: index * 0.05 }}
-                    className="rounded-[1.75rem] border border-black/8 bg-white p-6 shadow-[0_18px_45px_rgba(17,17,17,0.05)]"
+                    className="overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 shadow-[0_18px_45px_rgba(17,17,17,0.05)]"
                   >
+                    {person.imageUrl ? (
+                      <div className="-mx-2 -mt-2 mb-5 overflow-hidden rounded-[1.35rem] bg-[#0A65FF]/8">
+                        <img src={person.imageUrl} alt={person.name} className="h-56 w-full object-cover object-center" />
+                      </div>
+                    ) : null}
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0A65FF]/10 text-[#0A65FF]">
                         <Icon className="h-5 w-5" />

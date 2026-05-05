@@ -27,3 +27,13 @@ The Team page header successfully navigates to `/dt-brain`, and the DT Brain pag
 ## Navigation logo size update QA
 
 The homepage preview shows the enlarged navigation logo rendering at the new responsive size without crowding the primary navigation links or the right-side briefing CTA. The fixed header remains 80px tall, the logo remains aligned vertically, and the larger brand mark improves visibility while preserving the existing quiet-luxury spacing system. TypeScript and production build validation passed after using `pnpm check && pnpm build`; an earlier shorthand command was rejected by pnpm and replaced with the correct scripts.
+
+## Corrected team headshot update QA — May 05, 2026
+
+Live preview reviewed at `/team` after the corrected headshot update. TypeScript and production build validation passed. The leadership section displays the mapped headshots for Jonathan Kobrin, Milton Rodas, and Hunter Atkins, CPA in the intended card layout, with no visible header overlap or broken image placeholders in the first inspected viewport after scrolling.
+
+The Specialist Benches section was inspected in live preview after scrolling. Kennedy Kraner now appears in the Accounting & Reporting group with the seventh uploaded headshot, the Bookkeeper role label, and the beginning of the provided property-management accounting bio visible in the card. The image renders as a rounded square thumbnail and aligns cleanly with the updated card structure.
+
+Further live preview inspection confirmed that Harry Dublinsky, CPA displays with the first uploaded headshot in the Accounting & Reporting section. Stan Gretov remains listed under Engineering & Digital Growth with an initials-based card rather than the seventh uploaded headshot, matching the corrected mapping requirement that the last provided image belongs to Kennedy Kraner.
+
+The Alliances & Advisors section was inspected in live preview. Bruce Ditman and Liron David render with their uploaded advisor headshots in the correct cards, with names and Advisor role labels visible beneath the images. Geoff Horn remains an initials/icon-style card, and the separate Harry Dublinsky advisor card remains text-only while the CPA-specific Harry Dublinsky card above carries the uploaded Harry headshot.
