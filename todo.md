@@ -88,3 +88,9 @@
 - [x] Verify the homepage hero headline was updated from “One private operating layer for modern family offices.” to “Private operating solutions for modern family offices.”
 - [x] Validate the homepage copy change does not introduce source, TypeScript, build, or preview issues.
 - [x] Save a new checkpoint for the verified visual-edit update.
+
+# Homepage Headline Copy Update — Data Solutions
+
+- [x] Verify the homepage hero headline was updated from “Private operating solutions for modern family offices.” to “Private data solutions that empower family offices.”
+- [x] Validate the revised homepage headline does not introduce source, TypeScript, build, test, or live-preview issues.
+- [x] Save a new checkpoint for the verified revised headline update.
