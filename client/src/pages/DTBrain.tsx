@@ -142,6 +142,9 @@ export default function DTBrain() {
             <a href="/dt-brain" className="text-sm font-semibold text-[#0A65FF]">
               DT Brain
             </a>
+            <a href="/team" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
+              Team
+            </a>
           </nav>
           <div className="hidden items-center gap-3 md:flex">
             <a href="/" className="inline-flex items-center gap-2 text-sm font-semibold text-black/60 transition-colors duration-300 hover:text-[#0A65FF]">

@@ -7,3 +7,12 @@
 - [ ] Integrate the DT Brain page into the main navigation and relevant calls to action.
 - [ ] Validate TypeScript, production build, and browser rendering.
 - [ ] Save a checkpoint and deliver the updated website version to the user.
+
+# Team Page Implementation Checklist
+
+- [ ] Visit the provided Digital Therapy team URL and capture the team member names, titles, bios, and available profile image references.
+- [ ] Save the sourced team information in a structured local notes file for implementation traceability.
+- [ ] Add a dedicated `/team` route and Team page component matching the current premium light website style.
+- [ ] Integrate the Team page into the main navigation and relevant internal links.
+- [ ] Validate TypeScript, production build, route rendering, and image availability.
+- [ ] Save a checkpoint and deliver the updated website version to the user.
