@@ -50,7 +50,7 @@
 - [x] Update `/home/ubuntu/digital-therapy-website/team_headshot_mapping.md` with the confirmed mappings for Rick Toussaint, Stan Gretov, and Kennedy Kraner.
 - [x] Run TypeScript and production build validation with `pnpm check && pnpm build`.
 - [x] Confirm the `/team` page renders the corrected Rick Toussaint, Stan Gretov, Kennedy Kraner cards and removes Harry Dublinsky from Alliances & Advisors.
-- [ ] Save a new checkpoint and deliver the updated version.
+- [x] Save a new checkpoint and deliver the updated version.
 
 # Add Vadim Litvak, Valerio Mirof, and Geoff Horn Headshots
 
@@ -62,4 +62,13 @@
 - [x] Update `/home/ubuntu/digital-therapy-website/team_headshot_mapping.md` with the confirmed mappings for Vadim Litvak, Valerio Mirof, and Geoff Horn.
 - [x] Run TypeScript and production build validation.
 - [x] Confirm the `/team` page renders the corrected Vadim Litvak, Valerio Mirof, and Geoff Horn cards and that Harry Dublinsky is not duplicated in Alliances & Advisors.
+- [x] Save a new checkpoint and deliver the updated version.
+
+# Add Book 30 Min CTA
+
+- [x] Locate existing CTA text, navigation labels, and landing-page CTA sections that should be updated or extended.
+- [x] Add a compelling “Book 30 Min” CTA for family office leaders and advisors, emphasizing pain-point discovery, first-value prioritization, and a tour of successful custom solutions used by discerning NYC family offices.
+- [x] Ensure the CTA interaction is clear and consistent with the current frontend pattern, without adding unsupported backend functionality.
+- [x] Validate the updated frontend with TypeScript and production build checks.
+- [x] Visually inspect the relevant page or pages where the CTA appears.
 - [ ] Save a new checkpoint and deliver the updated version.

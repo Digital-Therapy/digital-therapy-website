@@ -12,3 +12,12 @@ Technical QA confirms the homepage has the expected title, 11 page sections, 7 h
 ## DT Brain Page QA — 2026-05-04
 
 The new `/dt-brain` route renders successfully in the live preview. The page displays the requested “Your Secure Automation Hub” positioning, the on-premises Apple M4 Pro automation environment language, local control/privacy messaging, hardware specification row, sandbox architecture, VPN/Tailscale perimeter, and DT Brain briefing calls to action. The visual review confirms that the page follows the existing premium light Digital Therapy style with ivory/off-white surfaces, charcoal typography, and blue accent treatments. TypeScript and production build validation passed before browser review.
+
+## Book 30 Min CTA Visual QA — May 05, 2026
+
+The homepage preview at `/` rendered the updated header and hero CTA as **Book 30 Min** with the established warm ivory background, Digital Therapy blue accent button, and no visible contrast or spacing issue in the first viewport. The extracted page text also confirmed the final conversion section now reads **“Book 30 minutes to find the first high-value win.”** with supporting copy about pain-point discovery, first-value prioritization, and tours of custom operating-layer solutions for discerning New York City family offices.
+
+The Team page preview at `/team` rendered the header CTA and hero CTA as **Book 30 Min** in the same blue button treatment. The final dark conversion section text was updated to **“Book 30 minutes with the team built to find your first high-value win.”** and included the requested pain-point, solution-tour, first-value, and delivery-fit messaging. The first viewport preserved the premium light layout and readable contrast.
+
+The DT Brain preview at `/dt-brain` rendered the updated **Book 30 Min** CTA in both the header and hero area, with the expected product-specific accessible label for discussing DT Brain. The extracted page text confirmed the final conversion section now says **“Book 30 minutes to see where private automation should create value first.”** and includes the requested pain-point, solution-tour, and first-value prioritization language. The first viewport preserved the premium light style, blue accent button, readable contrast, and balanced product imagery.
+

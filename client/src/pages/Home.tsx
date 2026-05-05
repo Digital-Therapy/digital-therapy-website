@@ -144,10 +144,11 @@ function PrivateBriefingButton({ variant = "primary" }: { variant?: "primary" | 
 
   return (
     <a
-      href="mailto:hello@digitaltherapy.io?subject=Private%20briefing%20request"
+      href="mailto:hello@digitaltherapy.io?subject=Book%2030%20Min%20with%20Digital%20Therapy&body=I%27d%20like%20to%20book%2030%20minutes%20to%20discuss%20our%20family-office%20pain%20points%2C%20identify%20the%20best%20first%20place%20Digital%20Therapy%20can%20deliver%20value%2C%20and%20see%20examples%20of%20custom%20solutions%20deployed%20for%20discerning%20family%20offices."
+      aria-label="Book 30 minutes with Digital Therapy"
       className={`group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold tracking-[-0.01em] transition-all duration-300 ${classes}`}
     >
-      Request a private briefing
+      Book 30 Min
       <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
     </a>
   );
@@ -509,14 +510,20 @@ export default function Home() {
             <motion.div {...fadeUp}>
               <img src={markUrl} alt="Digital Therapy picture mark" className="h-14 w-14 object-contain" />
               <h2 className="mt-9 font-display text-[clamp(3rem,6vw,6.6rem)] leading-[0.88] tracking-[-0.07em]">
-                Ready for total clarity?
+                Book 30 minutes to find the first high-value win.
               </h2>
               <p className="mt-7 max-w-2xl text-xl leading-8 text-black/62">
-                Let’s show your family office, client family, or partner team what a private, unified, and automated operating layer can make possible.
+                Family-office leaders and advisors can use one focused conversation to surface pain points, identify where Digital Therapy can deliver meaningful value first, and tour custom operating-layer solutions already deployed for some of New York City’s largest and most discerning family offices.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <PrivateBriefingButton />
-                <PrivateBriefingButton variant="secondary" />
+                <a
+                  href="mailto:hello@digitaltherapy.io?subject=Family%20office%20pain-point%20conversation"
+                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/15 bg-white/60 px-6 py-3 text-sm font-semibold text-[#111111] transition-all duration-300 hover:border-[#0A65FF]/60 hover:text-[#0A65FF]"
+                >
+                  Discuss our pain points
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
               </div>
               <p className="mt-6 text-sm text-black/48">hello@digitaltherapy.io · 1 (917) 495-0455</p>
             </motion.div>

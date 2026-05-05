@@ -103,10 +103,11 @@ function PrivateBriefingButton({ variant = "primary" }: { variant?: "primary" | 
 
   return (
     <a
-      href="mailto:hello@digitaltherapy.io?subject=DT%20Brain%20private%20briefing"
+      href="mailto:hello@digitaltherapy.io?subject=Book%2030%20Min%20for%20DT%20Brain&body=I%27d%20like%20to%20book%2030%20minutes%20to%20discuss%20our%20family-office%20automation%20pain%20points%2C%20tour%20DT%20Brain%20and%20other%20custom%20solutions%2C%20and%20identify%20where%20private%20AI%20or%20secure%20workflow%20automation%20can%20deliver%20value%20first."
+      aria-label="Book 30 minutes to discuss DT Brain with Digital Therapy"
       className={`group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold tracking-[-0.01em] transition-all duration-300 ${classes}`}
     >
-      Request a DT Brain briefing
+      Book 30 Min
       <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
     </a>
   );
@@ -367,12 +368,12 @@ export default function DTBrain() {
             <motion.div {...fadeUp}>
               <div className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-[#6DA6FF]">Private deployment conversation</div>
               <h2 className="max-w-4xl font-display text-[clamp(2.7rem,5.3vw,5.8rem)] leading-[0.9] tracking-[-0.06em]">
-                Put the automation layer where control belongs.
+                Book 30 minutes to see where private automation should create value first.
               </h2>
             </motion.div>
             <motion.div {...fadeUp} className="lg:justify-self-end">
               <p className="max-w-md text-lg leading-8 text-white/66">
-                Use a DT Brain briefing to identify which family-office workflows should run locally, which integrations need a sandbox, and where private AI can create the most value.
+                Bring your workflow, reporting, and privacy pain points. We will tour DT Brain and other custom solutions already deployed for discerning New York City family offices, then identify the best place to deliver high-value impact first.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row lg:flex-col">
                 <PrivateBriefingButton />

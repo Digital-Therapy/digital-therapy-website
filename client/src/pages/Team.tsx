@@ -162,10 +162,11 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 function PrimaryCta() {
   return (
     <a
-      href="mailto:hello@digitaltherapy.io?subject=Family%20office%20team%20briefing"
+      href="mailto:hello@digitaltherapy.io?subject=Book%2030%20Min%20with%20Digital%20Therapy&body=I%27d%20like%20to%20book%2030%20minutes%20with%20Digital%20Therapy%20to%20review%20our%20family-office%20pain%20points%2C%20see%20game-changing%20solutions%2C%20and%20identify%20where%20your%20team%20can%20deliver%20the%20first%20high-value%20win."
+      aria-label="Book 30 minutes with Digital Therapy"
       className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#0A65FF] px-6 py-3 text-sm font-semibold tracking-[-0.01em] text-white shadow-[0_18px_45px_rgba(10,101,255,0.22)] transition-all duration-300 hover:bg-[#004ed1]"
     >
-      Meet the fusion team
+      Book 30 Min
       <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
     </a>
   );
@@ -439,10 +440,10 @@ export default function Team() {
                 Work with us
               </div>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.9] tracking-[-0.07em]">
-                Bring the whole team into one operating conversation.
+                Book 30 minutes with the team built to find your first high-value win.
               </h2>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-white/64">
-                Use a private briefing to assess which specialists should join the first diagnostic: finance, systems, automation, reporting, security, or partner enablement.
+                Bring us your pain points, see game-changing custom solutions already deployed for some of New York City’s largest and most discerning family offices, and leave with a practical view of where technology, operations, and accounting expertise can create value first.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <PrimaryCta />
@@ -457,10 +458,10 @@ export default function Team() {
             </motion.div>
             <motion.div {...fadeUp} className="grid gap-4 sm:grid-cols-2">
               {[
-                { label: "Family office", icon: Building2, copy: "Map the people and systems needed to improve reporting, workflows, and control." },
-                { label: "Partner firm", icon: UsersRound, copy: "Bring Digital Therapy into advisory relationships that need implementation depth." },
-                { label: "Automation sprint", icon: Compass, copy: "Assemble the right delivery bench around one high-friction workflow." },
-                { label: "Secure rollout", icon: ShieldCheck, copy: "Align stakeholders before implementing private infrastructure or DT Brain." },
+                { label: "Pain points", icon: Building2, copy: "Surface the reporting, workflow, data, or control issues that are consuming leadership attention." },
+                { label: "Solution tour", icon: UsersRound, copy: "See custom systems that have been successfully deployed in demanding family-office environments." },
+                { label: "First value", icon: Compass, copy: "Prioritize the best initial place to create measurable impact before broader transformation." },
+                { label: "Delivery fit", icon: ShieldCheck, copy: "Align the right Digital Therapy specialists around a practical, secure path forward." },
               ].map((item) => {
                 const Icon = item.icon;
                 return (
