@@ -21,3 +21,15 @@ The Team page preview at `/team` rendered the header CTA and hero CTA as **Book 
 
 The DT Brain preview at `/dt-brain` rendered the updated **Book 30 Min** CTA in both the header and hero area, with the expected product-specific accessible label for discussing DT Brain. The extracted page text confirmed the final conversion section now says **“Book 30 minutes to see where private automation should create value first.”** and includes the requested pain-point, solution-tour, and first-value prioritization language. The first viewport preserved the premium light style, blue accent button, readable contrast, and balanced product imagery.
 
+
+## Manual visual QA — no-email CTA dialogs
+
+The homepage booking dialog opens as an in-page modal overlay with the Apollo meeting scheduler visible, while the surrounding page is dimmed; this confirms the Book 30 Min action keeps visitors inside the site experience instead of launching an email client.
+
+The homepage contact dialog opens as an in-page contact form modal with visible form fields and a submit button. The form is compact, centered, and visually consistent with the homepage styling, with no `mailto:` behavior visible.
+
+The Team page booking dialog opens above the hero section as a centered Apollo scheduler modal with the background dimmed. The modal inherits the site’s restrained premium feel, keeps the Book 30 Min action on-site, and does not expose or trigger an email launch.
+
+The Team page contact dialog opens as a centered on-site form with visible name, role, organization, email, and message fields plus a clear submit button. A non-destructive status notice is visible near the bottom, indicating the flow remains web-form based rather than email-client based.
+
+The DT Brain page booking dialog opens as a larger centered Apollo scheduler modal over the DT Brain hero section. The modal clearly frames a focused 30-minute briefing, uses the provided Apollo link inside the site experience, and shows no sign of `mailto:` behavior or email-client launch.

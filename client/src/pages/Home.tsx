@@ -3,9 +3,9 @@
  * Preserve light ivory surfaces, charcoal typography, restrained Digital Therapy blue,
  * image-led section rhythm, and concise family-office advisory positioning.
  */
+import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
 import { motion } from "framer-motion";
 import {
-  ArrowRight,
   BarChart3,
   Bot,
   Building2,
@@ -137,21 +137,7 @@ const engageSteps = [
 ];
 
 function PrivateBriefingButton({ variant = "primary" }: { variant?: "primary" | "secondary" }) {
-  const classes =
-    variant === "primary"
-      ? "bg-[#0A65FF] text-white hover:bg-[#004ed1] shadow-[0_18px_45px_rgba(10,101,255,0.22)]"
-      : "border border-black/15 bg-white/60 text-[#111111] hover:border-[#0A65FF]/60 hover:text-[#0A65FF]";
-
-  return (
-    <a
-      href="mailto:hello@digitaltherapy.io?subject=Book%2030%20Min%20with%20Digital%20Therapy&body=I%27d%20like%20to%20book%2030%20minutes%20to%20discuss%20our%20family-office%20pain%20points%2C%20identify%20the%20best%20first%20place%20Digital%20Therapy%20can%20deliver%20value%2C%20and%20see%20examples%20of%20custom%20solutions%20deployed%20for%20discerning%20family%20offices."
-      aria-label="Book 30 minutes with Digital Therapy"
-      className={`group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold tracking-[-0.01em] transition-all duration-300 ${classes}`}
-    >
-      Book 30 Min
-      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-    </a>
-  );
+  return <BookingWidgetDialog variant={variant} context="homepage family-office booking" />;
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -183,12 +169,13 @@ export default function Home() {
             ))}
           </nav>
           <div className="hidden items-center gap-3 md:flex">
-            <a
-              href="mailto:hello@digitaltherapy.io?subject=Partner%20model%20discussion"
-              className="text-sm font-semibold text-black/60 transition-colors duration-300 hover:text-[#0A65FF]"
-            >
-              Partner model
-            </a>
+            <ContactFormDialog
+              variant="text"
+              label="Partner model"
+              context="partner model discussion"
+              icon="none"
+              className="text-sm font-semibold transition-colors duration-300"
+            />
             <PrivateBriefingButton />
           </div>
         </div>
@@ -517,13 +504,11 @@ export default function Home() {
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <PrivateBriefingButton />
-                <a
-                  href="mailto:hello@digitaltherapy.io?subject=Family%20office%20pain-point%20conversation"
-                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/15 bg-white/60 px-6 py-3 text-sm font-semibold text-[#111111] transition-all duration-300 hover:border-[#0A65FF]/60 hover:text-[#0A65FF]"
-                >
-                  Discuss our pain points
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
+                <ContactFormDialog
+                  variant="secondary"
+                  label="Discuss our pain points"
+                  context="family office pain-point conversation"
+                />
               </div>
               <p className="mt-6 text-sm text-black/48">hello@digitaltherapy.io · 1 (917) 495-0455</p>
             </motion.div>
@@ -541,7 +526,7 @@ export default function Home() {
             <a href="#operating-layer" className="hover:text-[#0A65FF]">Operating Layer</a>
             <a href="#capabilities" className="hover:text-[#0A65FF]">Capabilities</a>
             <a href="#security" className="hover:text-[#0A65FF]">Security</a>
-            <a href="mailto:hello@digitaltherapy.io" className="hover:text-[#0A65FF]">Contact</a>
+            <ContactFormDialog variant="text" label="Contact" context="footer contact inquiry" icon="none" className="hover:text-[#0A65FF]" />
           </div>
         </div>
       </footer>

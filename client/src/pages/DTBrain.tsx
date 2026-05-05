@@ -3,6 +3,7 @@
  * Preserve quiet luxury private-banking interface: warm ivory surfaces, charcoal typography,
  * precise whitespace, restrained Digital Therapy blue accents, and visual product storytelling.
  */
+import { BookingWidgetDialog } from "@/components/ContactBooking";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -96,21 +97,7 @@ const controlPrinciples = [
 ];
 
 function PrivateBriefingButton({ variant = "primary" }: { variant?: "primary" | "secondary" }) {
-  const classes =
-    variant === "primary"
-      ? "bg-[#0A65FF] text-white hover:bg-[#004ed1] shadow-[0_18px_45px_rgba(10,101,255,0.22)]"
-      : "border border-black/15 bg-white/70 text-[#111111] hover:border-[#0A65FF]/60 hover:text-[#0A65FF]";
-
-  return (
-    <a
-      href="mailto:hello@digitaltherapy.io?subject=Book%2030%20Min%20for%20DT%20Brain&body=I%27d%20like%20to%20book%2030%20minutes%20to%20discuss%20our%20family-office%20automation%20pain%20points%2C%20tour%20DT%20Brain%20and%20other%20custom%20solutions%2C%20and%20identify%20where%20private%20AI%20or%20secure%20workflow%20automation%20can%20deliver%20value%20first."
-      aria-label="Book 30 minutes to discuss DT Brain with Digital Therapy"
-      className={`group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold tracking-[-0.01em] transition-all duration-300 ${classes}`}
-    >
-      Book 30 Min
-      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-    </a>
-  );
+  return <BookingWidgetDialog variant={variant} context="DT Brain private AI booking" />;
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {

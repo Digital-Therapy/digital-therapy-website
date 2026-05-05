@@ -8,8 +8,8 @@ import Home from "./pages/Home";
 import DTBrain from "./pages/DTBrain";
 import Team from "./pages/Team";
 
-
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path={"/"} component={Home} />

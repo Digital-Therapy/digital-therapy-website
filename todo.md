@@ -71,4 +71,14 @@
 - [x] Ensure the CTA interaction is clear and consistent with the current frontend pattern, without adding unsupported backend functionality.
 - [x] Validate the updated frontend with TypeScript and production build checks.
 - [x] Visually inspect the relevant page or pages where the CTA appears.
-- [ ] Save a new checkpoint and deliver the updated version.
+- [x] Save a new checkpoint and deliver the updated version.
+
+# Replace Email-Launching CTAs with Form and Booking Widget
+
+- [x] Audit all Contact and Book 30 Min CTA destinations across Home, Team, DT Brain, navigation, and footer surfaces.
+- [x] Replace Book 30 Min email-launch behavior with an on-site booking experience using the Apollo meeting link: https://app.apollo.io/#/meet/jonathan_kobrin_67f/30-min
+- [x] Replace Contact email-launch behavior with an on-site contact form experience that does not open the visitor’s email client.
+- [x] Ensure the contact form clearly handles submissions without misleading users about delivery until backend or form-service routing is connected.
+- [x] Validate TypeScript and production build checks after the interaction changes.
+- [x] Visually inspect the updated Contact and Book 30 Min flows in the live preview.
+- [x] Save a checkpoint and deliver the updated version.

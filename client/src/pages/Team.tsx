@@ -3,9 +3,9 @@
  * Preserve light ivory surfaces, charcoal typography, restrained Digital Therapy blue,
  * editorial spacing, and fusion-team positioning for family-office audiences.
  */
+import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
 import { motion } from "framer-motion";
 import {
-  ArrowRight,
   BadgeCheck,
   Building2,
   ChevronRight,
@@ -160,16 +160,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 function PrimaryCta() {
-  return (
-    <a
-      href="mailto:hello@digitaltherapy.io?subject=Book%2030%20Min%20with%20Digital%20Therapy&body=I%27d%20like%20to%20book%2030%20minutes%20with%20Digital%20Therapy%20to%20review%20our%20family-office%20pain%20points%2C%20see%20game-changing%20solutions%2C%20and%20identify%20where%20your%20team%20can%20deliver%20the%20first%20high-value%20win."
-      aria-label="Book 30 minutes with Digital Therapy"
-      className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#0A65FF] px-6 py-3 text-sm font-semibold tracking-[-0.01em] text-white shadow-[0_18px_45px_rgba(10,101,255,0.22)] transition-all duration-300 hover:bg-[#004ed1]"
-    >
-      Book 30 Min
-      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-    </a>
-  );
+  return <BookingWidgetDialog context="team page family-office booking" />;
 }
 
 function InitialMark({ name }: { name: string }) {
@@ -208,9 +199,13 @@ export default function Team() {
             <a href="/team" className="text-sm font-semibold text-[#0A65FF]">
               Team
             </a>
-            <a href="mailto:hello@digitaltherapy.io" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
-              Contact
-            </a>
+            <ContactFormDialog
+              variant="text"
+              label="Contact"
+              context="team page navigation contact"
+              icon="none"
+              className="text-sm font-medium transition-colors duration-300 hover:text-black"
+            />
           </nav>
           <div className="hidden md:flex">
             <PrimaryCta />
