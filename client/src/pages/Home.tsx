@@ -188,7 +188,7 @@ export default function Home() {
             <motion.div {...fadeUp}>
               <SectionLabel>Private family-office operating layer</SectionLabel>
               <h1 className="max-w-4xl font-display text-[clamp(3.4rem,7vw,7.7rem)] leading-[0.88] tracking-[-0.07em] text-[#111111]">
-                One private operating layer for modern family offices.
+                Private operating solutions for modern family offices.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
                 Digital Therapy unifies the people, data, systems, workflows, reporting, and AI automation that family-office leaders rely on to see the full picture and act with confidence.

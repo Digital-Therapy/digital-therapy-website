@@ -82,3 +82,9 @@
 - [x] Validate TypeScript and production build checks after the interaction changes.
 - [x] Visually inspect the updated Contact and Book 30 Min flows in the live preview.
 - [x] Save a checkpoint and deliver the updated version.
+
+# Homepage Headline Copy Update
+
+- [x] Verify the homepage hero headline was updated from “One private operating layer for modern family offices.” to “Private operating solutions for modern family offices.”
+- [x] Validate the homepage copy change does not introduce source, TypeScript, build, or preview issues.
+- [x] Save a new checkpoint for the verified visual-edit update.
