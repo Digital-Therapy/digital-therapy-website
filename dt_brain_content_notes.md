@@ -1,0 +1,10 @@
+# DT Brain Page Source Content
+
+The user requested a new page called **DT Brain** presenting the content from two uploaded slides. The attached image file was not re-opened. The first slide content was captured from the visible preview embedded in the user’s message.
+
+| Slide | Source Method | Content to Preserve |
+|---|---|---|
+| Slide 1 | Visible user-provided preview only, without image-view tooling | Hardware. Your Secure Automation Hub. It runs in your own office, on your own hardware, in your actual control. We set up a private, on-premises automation environment powered by Apple M4 Pro. No cloud dependency. No data leaves your ecosystem. That is real security and true privacy. Your data. Your servers. Your rules. Specs: 12-Core CPU, 16-Core GPU, 16-Core Neural Engine, 48 GB memory, 2 TB SSD storage. |
+| Slide 2 | Extracted PDF text | Automation Hub. 12-Core CPU, 16-Core GPU, 48GB. Secure on-premises architecture, Apple M4 Pro. 2TB SSD, 16-Core Neural Engine. Your data. Your hardware. Your rules. 1 Gbps Ethernet. Sandbox 1 includes Ollama local LLM, GitHub version control, and a testing environment for document analysis, AI assistance and knowledge retrieval, code, workflow scripts and configuration tracking, and testing workflows, APIs, and automations before going live. Sandbox 2 includes n8n Flow Hub, OpenRPA desktop RPA, and Python scripting for rapid testing and prototyping of AI workflows and integrations in isolation, desktop task automation and legacy system bridging, and custom integrations, ETL pipelines, and analytics. Secure perimeter uses VPN via Tailscale for encrypted traffic and identity-based access. Outcomes: enhanced privacy, direct control, no cloud dependency, and predictable costs. |
+
+The web page should translate this slide content into a premium, image-led product page rather than merely reproducing slide layouts. It should keep the site’s existing light ivory/off-white backgrounds, charcoal typography, disciplined Digital Therapy blue accents, and concise family-office positioning.

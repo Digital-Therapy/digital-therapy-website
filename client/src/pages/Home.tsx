@@ -46,6 +46,7 @@ const navItems = [
   { label: "Capabilities", href: "#capabilities" },
   { label: "Security", href: "#security" },
   { label: "Partners", href: "#partners" },
+  { label: "DT Brain", href: "/dt-brain" },
 ];
 
 const complexityPoints = [
@@ -210,6 +211,13 @@ export default function Home() {
                   className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/50 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
                 >
                   Explore the operating layer
+                  <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+                <a
+                  href="/dt-brain"
+                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#0A65FF]/25 bg-[#0A65FF]/8 px-6 py-3 text-sm font-semibold text-[#0A65FF] transition-all duration-300 hover:border-[#0A65FF]/55 hover:bg-[#0A65FF]/12"
+                >
+                  Meet DT Brain
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
               </div>
