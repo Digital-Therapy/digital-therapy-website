@@ -1,43 +1,43 @@
 # DT Brain Page Implementation Checklist
 
-- [ ] Extract the text content from the uploaded DT Brain PDF without re-opening the attached image file.
-- [ ] Use the visible user-provided slide preview as the first-slide content reference without using image-view tooling.
-- [ ] Review the current website routing and homepage navigation implementation.
-- [ ] Add a dedicated `/dt-brain` page that matches the existing premium light Digital Therapy visual system.
-- [ ] Integrate the DT Brain page into the main navigation and relevant calls to action.
-- [ ] Validate TypeScript, production build, and browser rendering.
-- [ ] Save a checkpoint and deliver the updated website version to the user.
+- [x] Extract the text content from the uploaded DT Brain PDF without re-opening the attached image file.
+- [x] Use the visible user-provided slide preview as the first-slide content reference without using image-view tooling.
+- [x] Review the current website routing and homepage navigation implementation.
+- [x] Add a dedicated `/dt-brain` page that matches the existing premium light Digital Therapy visual system.
+- [x] Integrate the DT Brain page into the main navigation and relevant calls to action.
+- [x] Validate TypeScript, production build, and browser rendering.
+- [x] Save a checkpoint and deliver the updated website version to the user.
 
 # Team Page Implementation Checklist
 
-- [ ] Visit the provided Digital Therapy team URL and capture the team member names, titles, bios, and available profile image references.
-- [ ] Save the sourced team information in a structured local notes file for implementation traceability.
-- [ ] Add a dedicated `/team` route and Team page component matching the current premium light website style.
-- [ ] Integrate the Team page into the main navigation and relevant internal links.
-- [ ] Validate TypeScript, production build, route rendering, and image availability.
-- [ ] Save a checkpoint and deliver the updated website version to the user.
+- [x] Visit the provided Digital Therapy team URL, capture the available team member names and titles, and document that individual bios/profile image references were unavailable or not relied upon from the source page.
+- [x] Save the sourced team information in a structured local notes file for implementation traceability.
+- [x] Add a dedicated `/team` route and Team page component matching the current premium light website style.
+- [x] Integrate the Team page into the main navigation and relevant internal links.
+- [x] Validate TypeScript, production build, route rendering, and image availability.
+- [x] Save a checkpoint and deliver the updated website version to the user.
 
 # Navigation Logo Size Update
 
-- [ ] Increase the Digital Therapy logo height in the navigation header across Home, DT Brain, and Team pages.
-- [ ] Validate that the larger logo does not crowd the header, overlap nav links, or reduce CTA clarity.
-- [ ] Run TypeScript/build validation after the logo size change.
-- [ ] Save a new checkpoint and deliver the updated version link.
+- [x] Increase the Digital Therapy logo height in the navigation header across Home, DT Brain, and Team pages.
+- [x] Validate that the larger logo does not crowd the header, overlap nav links, or reduce CTA clarity.
+- [x] Run TypeScript/build validation after the logo size change.
+- [x] Save a new checkpoint and deliver the updated version link.
 
 # Team Headshot Update
 
-- [ ] Upload the seven user-provided headshot files through the web asset workflow without re-opening the image previews.
-- [ ] Map the uploaded images in order to Harry Dublinsky, Bruce Ditman, Liron David, Jonathan Kobrin, Hunter Atkins, Milton Rodas, and Stan Gretov.
-- [ ] Update the Team page so the matched headshots appear on the corresponding existing team entries.
-- [ ] Validate TypeScript, production build, and live Team page rendering.
-- [ ] Save a new checkpoint and deliver the updated website version to the user.
+- [x] Upload the seven user-provided headshot files through the web asset workflow without re-opening the image previews.
+- [x] Map the initially uploaded headshot set and document the later correction that the seventh image belongs to Kennedy Kraner rather than Stan Gretov.
+- [x] Update the Team page so the matched headshots appear on the corresponding existing team entries.
+- [x] Validate TypeScript, production build, and live Team page rendering.
+- [x] Save a new checkpoint and deliver the updated website version to the user.
 
 # Corrected Team Headshot Mapping
 
-- [ ] Remap the seventh uploaded headshot from Stan Gretov to Kennedy Kraner.
-- [ ] Add Kennedy Kraner’s bookkeeper bio to the Team page entry.
-- [ ] Ensure Stan Gretov remains listed without the seventh headshot unless another image is provided.
-- [ ] Validate the corrected headshot mapping, build, and Team page rendering before saving a checkpoint.
+- [x] Remap the seventh uploaded headshot from Stan Gretov to Kennedy Kraner.
+- [x] Add Kennedy Kraner’s bookkeeper bio to the Team page entry.
+- [x] Ensure Stan Gretov remains listed without the seventh headshot unless another image is provided.
+- [x] Validate the corrected headshot mapping, build, and Team page rendering before saving a checkpoint.
 
 # Correct Rick Toussaint and Stan Gretov Headshots
 
