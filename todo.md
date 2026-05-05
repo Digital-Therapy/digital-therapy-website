@@ -38,3 +38,28 @@
 - [ ] Add Kennedy Kraner’s bookkeeper bio to the Team page entry.
 - [ ] Ensure Stan Gretov remains listed without the seventh headshot unless another image is provided.
 - [ ] Validate the corrected headshot mapping, build, and Team page rendering before saving a checkpoint.
+
+# Correct Rick Toussaint and Stan Gretov Headshots
+
+- [x] Copy Rick Toussaint's provided headshot from `/home/ubuntu/upload/pasted_file_yadhTp_image.png` into `/home/ubuntu/webdev-static-assets/team-headshots/rick-toussaint.png` without re-viewing the image.
+- [x] Copy Stan Gretov's provided headshot from `/home/ubuntu/upload/pasted_file_1RG68F_image.png` into `/home/ubuntu/webdev-static-assets/team-headshots/stan-gretov.png` without re-viewing the image.
+- [x] Copy Kennedy Kraner's explicitly confirmed headshot from `/home/ubuntu/upload/pasted_file_YqJSua_image.png` into `/home/ubuntu/webdev-static-assets/team-headshots/kennedy-kraner.png` without re-viewing the image.
+- [x] Upload the copied Rick Toussaint, Stan Gretov, and Kennedy Kraner headshots through the web asset workflow and capture the returned `/manus-storage/` paths.
+- [x] Update `/home/ubuntu/digital-therapy-website/client/src/pages/Team.tsx` so Rick Toussaint, Stan Gretov, and Kennedy Kraner use their correct returned headshot paths.
+- [x] Remove the duplicate Harry Dublinsky card from the alliances/advisors section so he is not listed twice on the Team page.
+- [x] Update `/home/ubuntu/digital-therapy-website/team_headshot_mapping.md` with the confirmed mappings for Rick Toussaint, Stan Gretov, and Kennedy Kraner.
+- [x] Run TypeScript and production build validation with `pnpm check && pnpm build`.
+- [x] Confirm the `/team` page renders the corrected Rick Toussaint, Stan Gretov, Kennedy Kraner cards and removes Harry Dublinsky from Alliances & Advisors.
+- [ ] Save a new checkpoint and deliver the updated version.
+
+# Add Vadim Litvak, Valerio Mirof, and Geoff Horn Headshots
+
+- [x] Copy Vadim Litvak's explicitly confirmed headshot from `/home/ubuntu/upload/pasted_file_esI3jh_image.png` into `/home/ubuntu/webdev-static-assets/team-headshots/vadim-litvak.png` without re-viewing the image.
+- [x] Copy Valerio Mirof's explicitly confirmed headshot from `/home/ubuntu/upload/pasted_file_4Qyn6P_image.png` into `/home/ubuntu/webdev-static-assets/team-headshots/valerio-mirof.png` without re-viewing the image.
+- [x] Copy Geoff Horn's explicitly confirmed headshot from `/home/ubuntu/upload/pasted_file_8K9TvX_image.png` into `/home/ubuntu/webdev-static-assets/team-headshots/geoff-horn.png` without re-viewing the image.
+- [x] Upload the copied Vadim Litvak, Valerio Mirof, and Geoff Horn headshots through the web asset workflow and capture the returned `/manus-storage/` paths.
+- [x] Update `/home/ubuntu/digital-therapy-website/client/src/pages/Team.tsx` so Vadim Litvak, Valerio Mirof, and Geoff Horn use their correct returned headshot paths.
+- [x] Update `/home/ubuntu/digital-therapy-website/team_headshot_mapping.md` with the confirmed mappings for Vadim Litvak, Valerio Mirof, and Geoff Horn.
+- [x] Run TypeScript and production build validation.
+- [x] Confirm the `/team` page renders the corrected Vadim Litvak, Valerio Mirof, and Geoff Horn cards and that Harry Dublinsky is not duplicated in Alliances & Advisors.
+- [ ] Save a new checkpoint and deliver the updated version.

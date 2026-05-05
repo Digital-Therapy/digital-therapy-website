@@ -35,7 +35,12 @@ const headshots = {
   jonathanKobrin: "/manus-storage/jonathan-kobrin_ccc4cf34.png",
   hunterAtkins: "/manus-storage/hunter-atkins_72901b2f.png",
   miltonRodas: "/manus-storage/milton-rodas_07ab6aa9.png",
-  kennedyKraner: "/manus-storage/stan-gretov_492b611c.png",
+  kennedyKraner: "/manus-storage/kennedy-kraner_a4421e21.png",
+  rickToussaint: "/manus-storage/rick-toussaint_fcf58b84.png",
+  stanGretov: "/manus-storage/stan-gretov_df6e2dbc.png",
+  vadimLitvak: "/manus-storage/vadim-litvak_99842098.png",
+  valerioMirof: "/manus-storage/valerio-mirof_c4f41ca3.png",
+  geoffHorn: "/manus-storage/geoff-horn_7dc6f1b3.png",
 };
 
 const fadeUp = {
@@ -91,7 +96,7 @@ const groups: Array<{
         imageUrl: headshots.kennedyKraner,
         bio: "Kennedy Kraner is a bookkeeper with four years of experience in property management accounting, transaction categorization, and financial record-keeping across multi-property portfolios. She brings proficiency in Rent Manager, QuickBooks, and Microsoft Office, along with additional capabilities in web development and graphic design.",
       },
-      { name: "Rick Toussaint, CPA", role: "Tax + Pubco Reporting" },
+      { name: "Rick Toussaint, CPA", role: "Tax + Pubco Reporting", imageUrl: headshots.rickToussaint },
       { name: "Harry Dublinsky, CPA", role: "CPA", imageUrl: headshots.harryDublinsky },
     ],
   },
@@ -100,10 +105,10 @@ const groups: Array<{
     description: "The technology bench supports websites, search visibility, product design, engineering, and digital infrastructure required for durable systems.",
     icon: Code2,
     members: [
-      { name: "Stan Gretov", role: "Team Lead: Websites + BPO" },
-      { name: "Vadim Litvak", role: "Director of SEO" },
+      { name: "Stan Gretov", role: "Team Lead: Websites + BPO", imageUrl: headshots.stanGretov },
+      { name: "Vadim Litvak", role: "Director of SEO", imageUrl: headshots.vadimLitvak },
       { name: "Daria Shulenko", role: "Designer" },
-      { name: "Valerio Mirof", role: "Engineer" },
+      { name: "Valerio Mirof", role: "Engineer", imageUrl: headshots.valerioMirof },
     ],
   },
   {
@@ -122,8 +127,7 @@ const groups: Array<{
 ];
 
 const extendedNetwork: Array<TeamPerson & { group: string; icon: typeof Landmark }> = [
-  { name: "Geoff Horn", role: "Payments", group: "Alliances", icon: Landmark },
-  { name: "Harry Dublinsky", role: "Accounting Advisor", group: "Advisors", icon: BadgeCheck },
+  { name: "Geoff Horn", role: "Payments", group: "Alliances", icon: Landmark, imageUrl: headshots.geoffHorn },
   { name: "Bruce Ditman", role: "Advisor", group: "Advisors", icon: BadgeCheck, imageUrl: headshots.bruceDitman },
   { name: "Liron David", role: "Advisor", group: "Advisors", icon: BadgeCheck, imageUrl: headshots.lironDavid },
 ];
