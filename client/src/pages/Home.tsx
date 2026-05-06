@@ -191,7 +191,7 @@ export default function Home() {
                 Private data solutions that empower family offices.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
-                Digital Therapy unifies the people, data, systems, workflows, reporting, and AI automation that family-office leaders rely on to see the full picture and act with confidence.
+                Digital Therapy transforms fragmented family-office data into governed intelligence, helping leaders understand exposure, automate decisions, and act with clarity across every entity, asset, and workflow.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <PrivateBriefingButton />

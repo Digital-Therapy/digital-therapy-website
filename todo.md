@@ -94,3 +94,10 @@
 - [x] Verify the homepage hero headline was updated from “Private operating solutions for modern family offices.” to “Private data solutions that empower family offices.”
 - [x] Validate the revised homepage headline does not introduce source, TypeScript, build, test, or live-preview issues.
 - [x] Save a new checkpoint for the verified revised headline update.
+
+# Homepage Hero Subheadline Data Intelligence Update
+
+- [x] Update the homepage hero subheadline to emphasize data intelligence and practical benefits for family offices.
+- [x] Verify the updated subheadline appears correctly in the homepage source and live preview.
+- [x] Validate the copy update with TypeScript, production build, and existing tests.
+- [x] Save a new checkpoint for the verified hero subheadline update.
