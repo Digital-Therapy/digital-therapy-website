@@ -96,7 +96,7 @@ const capabilities = [
 const fusionTeam = [
   {
     title: "Operations",
-    copy: "Maps how the office actually runs: handoffs, approvals, bottlenecks, exceptions, and ownership.",
+    copy: "Process architecture, workflow optimization, SOPs, playbooks, KPI design, delivery systems, & organizational clarity.\n\nTransforms operational chaos into structured, scalable systems by mapping current-state workflows, identifying bottlenecks, & designing future-state processes.",
   },
   {
     title: "Accounting",
@@ -320,7 +320,7 @@ export default function Home() {
                 The handoff problem is the transformation problem.
               </h2>
               <p className="mt-6 text-lg leading-8 text-black/62">
-                Digital Therapy uses one integrated pod with operations, accounting, and technology expertise in the same room, accountable for the outcome end to end.
+                Digital Therapy uses one integrated team with operations, accounting, & technology expertise in the same room, accountable for the outcome end to end.
               </p>
             </motion.div>
             <div className="grid gap-5 md:grid-cols-3">
@@ -333,10 +333,10 @@ export default function Home() {
                 >
                   <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#0A65FF]/10 blur-2xl" />
                   <div className="relative flex h-full flex-col justify-between">
-                    <div className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-black/38">Discipline {index + 1}</div>
+                    <div className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-black/38">{index + 1} of 3</div>
                     <div>
-                      <h3 className="text-3xl font-semibold tracking-[-0.05em]">{member.title}</h3>
-                      <p className="mt-4 leading-7 text-black/58">{member.copy}</p>
+                      <h3 className="text-2xl font-semibold tracking-[-0.05em]">{member.title}</h3>
+                      <p className="mt-4 whitespace-pre-line leading-7 text-black/58">{member.copy}</p>
                     </div>
                   </div>
                 </motion.div>

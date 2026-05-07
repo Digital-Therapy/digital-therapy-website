@@ -109,3 +109,9 @@
 - [x] Ensure the page matches the existing premium light Digital Therapy visual system and remains responsive.
 - [x] Validate the Thesis page with TypeScript, production build, existing tests, and live preview checks.
 - [x] Save a new checkpoint for the verified Thesis page update.
+
+# Home Page Visual Edit Verification
+
+- [x] Review the deterministic visual edits applied to `client/src/pages/Home.tsx` and confirm they match the requested copy and typography changes.
+- [x] Validate the updated Home page with TypeScript, existing tests, production build, and development environment status.
+- [x] Save a new checkpoint for the verified Home page visual edits.
