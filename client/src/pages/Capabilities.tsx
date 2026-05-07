@@ -327,19 +327,6 @@ export default function Capabilities() {
         </section>
       </main>
 
-      <footer className="border-t border-black/8 bg-white py-10">
-        <div className="container flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <img src={logoUrl} alt="Digital Therapy" className="h-7 w-auto object-contain" />
-          <div className="flex flex-wrap gap-5 text-sm text-black/50">
-            <a href="/" className="hover:text-[#0A65FF]">Home</a>
-            <a href="/capabilities" className="text-[#0A65FF]">Capabilities</a>
-            <a href="/#security" className="hover:text-[#0A65FF]">Security</a>
-            <a href="/thesis" className="hover:text-[#0A65FF]">Thesis</a>
-            <a href="/dt-brain" className="hover:text-[#0A65FF]">DT Brain</a>
-            <a href="/team" className="hover:text-[#0A65FF]">Team</a>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

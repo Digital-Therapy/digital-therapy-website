@@ -163,3 +163,15 @@
 - [x] Add a brief case-study style example beneath the AP & AR section that illustrates the before-state, DT intervention, and measurable-style impact without presenting fictional client data as verified fact.
 - [x] Update approach page test coverage to assert the new AP & AR case-study example content.
 - [x] Validate the case-study example update with Vitest, TypeScript, production build, live preview, and environment health checks before checkpointing.
+
+# Site-Wide Footer Sitemap
+
+- [x] Add a reusable site-wide footer with sitemap links for the main public pages: Home, Approach, Capabilities, Thesis, DT Brain, Team, Contact, and Book 30 Min.
+- [x] Integrate the footer across the Digital Therapy public pages without disrupting the existing premium light visual system, navigation, CTAs, or responsive layouts.
+- [x] Add or update test coverage to verify the footer sitemap component and links are present.
+- [x] Validate the footer sitemap update with Vitest, TypeScript, production build, live preview, and environment health checks before checkpointing.
+
+# Footer Sitemap Remediation
+
+- [x] Remove any legacy page-specific footers, including the existing footer in the Capabilities page, so the reusable SiteFooter is the single footer across public routes.
+- [x] Verify the reusable footer on Home, Capabilities, Thesis, DT Brain, and Team live previews to confirm there are no duplicate footers or layout/CTA regressions.

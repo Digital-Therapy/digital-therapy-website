@@ -492,17 +492,6 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-black/8 bg-white py-10">
-        <div className="container flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <img src={logoUrl} alt="Digital Therapy" className="h-7 w-auto object-contain" />
-          <div className="flex flex-wrap gap-5 text-sm text-black/50">
-            <a href="#operating-layer" className="hover:text-[#0A65FF]">Operating Layer</a>
-            <a href="/capabilities" className="hover:text-[#0A65FF]">Capabilities</a>
-            <a href="#security" className="hover:text-[#0A65FF]">Security</a>
-            <ContactFormDialog variant="text" label="Contact" context="footer contact inquiry" icon="none" className="hover:text-[#0A65FF]" />
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
