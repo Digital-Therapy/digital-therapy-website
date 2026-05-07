@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import DTBrain from "./pages/DTBrain";
 import Team from "./pages/Team";
 import Thesis from "./pages/Thesis";
+import Capabilities from "./pages/Capabilities";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -16,6 +17,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/dt-brain"} component={DTBrain} />
       <Route path={"/thesis"} component={Thesis} />
+      <Route path={"/capabilities"} component={Capabilities} />
       <Route path={"/team"} component={Team} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}

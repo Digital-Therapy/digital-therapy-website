@@ -121,7 +121,7 @@ export default function DTBrain() {
             <a href="/" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
               Home
             </a>
-            <a href="/#capabilities" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
+            <a href="/capabilities" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
               Capabilities
             </a>
             <a href="/#security" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">

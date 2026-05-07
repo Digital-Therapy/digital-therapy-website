@@ -122,3 +122,12 @@
 - [x] Add or integrate the Traditional Options vs. DT's Fusion Teams contrast copy in the same section without breaking the existing premium layout.
 - [x] Validate the updated Home page with TypeScript, Vitest, production build, and development environment status.
 - [x] Save a new checkpoint for the verified Fusion Team Model copy update.
+
+# Capabilities Page Migration
+
+- [x] Move the existing Capabilities content from the Home page into a dedicated `/capabilities` page.
+- [x] Add the user-provided Typical Customer Requests content to the dedicated Capabilities page.
+- [x] Update site navigation across Home, Thesis, DT Brain, Team, and related headers so Capabilities links to `/capabilities` instead of the Home page anchor.
+- [x] Preserve the premium Digital Therapy visual system and ensure the new page remains responsive.
+- [x] Validate the updated site with TypeScript, Vitest, production build, and development environment status.
+- [x] Save a new checkpoint for the verified Capabilities page migration.

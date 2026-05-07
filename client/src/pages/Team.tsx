@@ -196,6 +196,9 @@ export default function Team() {
             <a href="/thesis" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
               Thesis
             </a>
+            <a href="/capabilities" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
+              Capabilities
+            </a>
             <a href="/dt-brain" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
               DT Brain
             </a>

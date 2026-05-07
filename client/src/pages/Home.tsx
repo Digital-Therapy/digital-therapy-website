@@ -8,17 +8,12 @@ import { motion } from "framer-motion";
 import {
   BarChart3,
   Bot,
-  Building2,
   Check,
   ChevronRight,
-  ClipboardCheck,
   Database,
-  FileSearch,
   GitBranch,
   LockKeyhole,
-  Network,
   ShieldCheck,
-  Sparkles,
   UsersRound,
   Workflow,
 } from "lucide-react";
@@ -29,8 +24,6 @@ const heroVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_hero_operating_layer-TEdtu9wcNJkxBt4PK2JKyo.webp";
 const boardroomVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_family_office_boardroom-UvecEVLEaVqpouVEhEb9mw.webp";
-const wealthMapVisual =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_wealth_map_visual-TmSmhqHi8pgacxaNwHMRxs.webp";
 const securityVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_security_automation-Z4CfAdsU9T8pybHF6A7NLi.webp";
 
@@ -43,7 +36,7 @@ const fadeUp = {
 
 const navItems = [
   { label: "Operating Layer", href: "#operating-layer" },
-  { label: "Capabilities", href: "#capabilities" },
+  { label: "Capabilities", href: "/capabilities" },
   { label: "Security", href: "#security" },
   { label: "Partners", href: "#partners" },
   { label: "Thesis", href: "/thesis" },
@@ -82,15 +75,6 @@ const operatingLayers = [
     copy: "Role-based access, documentation, auditability, continuity planning, and controlled integration.",
     icon: ShieldCheck,
   },
-];
-
-const capabilities = [
-  { title: "Global wealth mapping", icon: Network },
-  { title: "AI aggregation", icon: Sparkles },
-  { title: "Accounting operations", icon: ClipboardCheck },
-  { title: "Alternatives workflows", icon: Building2 },
-  { title: "Document automation", icon: FileSearch },
-  { title: "Custom reporting", icon: BarChart3 },
 ];
 
 const fusionTeam = [
@@ -360,33 +344,6 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="capabilities" className="bg-[#F7F4EE] py-24 lg:py-32">
-          <div className="container grid items-center gap-12 lg:grid-cols-[1.04fr_0.96fr]">
-            <motion.div {...fadeUp} className="order-2 lg:order-1">
-              <SectionLabel>Capabilities built for complex wealth</SectionLabel>
-              <h2 className="font-display text-[clamp(2.7rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.06em]">
-                Everything required to answer the owner’s next question.
-              </h2>
-              <div className="mt-10 grid gap-3 sm:grid-cols-2">
-                {capabilities.map((capability) => {
-                  const Icon = capability.icon;
-                  return (
-                    <div key={capability.title} className="group flex items-center gap-4 border-t border-black/10 py-4">
-                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-[#0A65FF] shadow-sm transition-transform duration-300 group-hover:scale-110">
-                        <Icon className="h-5 w-5" />
-                      </span>
-                      <span className="font-semibold tracking-[-0.02em] text-black/78">{capability.title}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </motion.div>
-            <motion.div {...fadeUp} className="order-1 overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_28px_80px_rgba(16,24,40,0.1)] lg:order-2">
-              <img src={wealthMapVisual} alt="Total wealth map visualization" className="aspect-[16/12] w-full object-cover" />
-            </motion.div>
-          </div>
-        </section>
-
         <section className="bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
@@ -540,7 +497,7 @@ export default function Home() {
           <img src={logoUrl} alt="Digital Therapy" className="h-7 w-auto object-contain" />
           <div className="flex flex-wrap gap-5 text-sm text-black/50">
             <a href="#operating-layer" className="hover:text-[#0A65FF]">Operating Layer</a>
-            <a href="#capabilities" className="hover:text-[#0A65FF]">Capabilities</a>
+            <a href="/capabilities" className="hover:text-[#0A65FF]">Capabilities</a>
             <a href="#security" className="hover:text-[#0A65FF]">Security</a>
             <ContactFormDialog variant="text" label="Contact" context="footer contact inquiry" icon="none" className="hover:text-[#0A65FF]" />
           </div>
