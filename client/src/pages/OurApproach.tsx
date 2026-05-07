@@ -404,6 +404,40 @@ export default function OurApproach() {
                 </div>
               </div>
             </motion.div>
+
+            <motion.div {...fadeUp} className="mt-8 border border-black/10 bg-white/78 p-7 shadow-[0_24px_70px_rgba(16,24,40,0.06)] lg:p-9">
+              <div className="grid gap-8 lg:grid-cols-[0.74fr_1.26fr]">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">Illustrative case example</p>
+                  <h3 className="mt-4 font-display text-[clamp(2rem,3vw,3.2rem)] leading-[0.94] tracking-[-0.06em] text-[#111111]">
+                    From close backlog to first-week operating rhythm.
+                  </h3>
+                  <p className="mt-5 text-sm leading-7 text-black/56">
+                    Example scenario, not a quoted client result: a multi-entity family office enters each month 20+ days behind, with AP approvals, AR follow-up, reconciliations, and reporting evidence scattered across inboxes, spreadsheets, and accounting exports.
+                  </p>
+                </div>
+                <div className="grid gap-4 md:grid-cols-3">
+                  <div className="border-l border-black/10 pl-5">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-black/42">Before</p>
+                    <p className="mt-3 text-sm leading-7 text-black/62">
+                      Month-end remains unresolved deep into the following month, limiting timely visibility into cash, vendor obligations, receivables, and entity-level performance.
+                    </p>
+                  </div>
+                  <div className="border-l border-black/10 pl-5">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-black/42">DT intervention</p>
+                    <p className="mt-3 text-sm leading-7 text-black/62">
+                      Digital Therapy maps the close, redesigns ownership and checkpoints, then builds lightweight exception dashboards and approval tooling around the accounting system.
+                    </p>
+                  </div>
+                  <div className="border-l border-[#0A65FF]/35 pl-5">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0A65FF]">Impact</p>
+                    <p className="mt-3 text-sm leading-7 text-black/62">
+                      The office shifts from reactive cleanup to a managed close calendar, giving leaders a practical path toward the first 3 - 5 days of the next month target.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </section>
 

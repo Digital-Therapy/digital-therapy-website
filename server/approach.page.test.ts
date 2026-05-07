@@ -82,4 +82,24 @@ describe("Our Approach page implementation", () => {
       expect(approachSource).toContain(closeSystemText);
     });
   });
+
+  it("includes the AP & AR illustrative case-study example on the Our Approach page", () => {
+    const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
+
+    [
+      "Illustrative case example",
+      "From close backlog to first-week operating rhythm.",
+      "Example scenario, not a quoted client result",
+      "a multi-entity family office enters each month 20+ days behind",
+      "Before",
+      "DT intervention",
+      "Impact",
+      "Digital Therapy maps the close, redesigns ownership and checkpoints",
+      "lightweight exception dashboards and approval tooling",
+      "a managed close calendar",
+      "first 3 - 5 days of the next month target",
+    ].forEach((caseStudyText) => {
+      expect(approachSource).toContain(caseStudyText);
+    });
+  });
 });

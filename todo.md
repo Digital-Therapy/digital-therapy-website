@@ -157,3 +157,9 @@
 - [x] Add Section 2 to the Our Approach page for AP & AR close-system redesign, preserving the client context that offices often operate 15 to 30+ days behind, DT redesigns close systems and processes, DT often builds custom tools to reduce monthly close burden, and the target outcome is closing in the first 3–5 days of the next month.
 - [x] Update approach page test coverage to assert the new AP & AR close-system redesign content.
 - [x] Validate the AP & AR Our Approach update with Vitest, TypeScript, production build, live preview, and environment health checks before checkpointing.
+
+# AP & AR Case-Study Impact Example
+
+- [x] Add a brief case-study style example beneath the AP & AR section that illustrates the before-state, DT intervention, and measurable-style impact without presenting fictional client data as verified fact.
+- [x] Update approach page test coverage to assert the new AP & AR case-study example content.
+- [x] Validate the case-study example update with Vitest, TypeScript, production build, live preview, and environment health checks before checkpointing.
