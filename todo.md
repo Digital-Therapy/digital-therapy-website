@@ -115,3 +115,10 @@
 - [x] Review the deterministic visual edits applied to `client/src/pages/Home.tsx` and confirm they match the requested copy and typography changes.
 - [x] Validate the updated Home page with TypeScript, existing tests, production build, and development environment status.
 - [x] Save a new checkpoint for the verified Home page visual edits.
+
+# Fusion Team Model Function Leader Copy Update
+
+- [x] Replace the Operations, Accounting, and Technology box descriptions in the Home page Fusion Team Model section with the user-provided expanded function-leader copy.
+- [x] Add or integrate the Traditional Options vs. DT's Fusion Teams contrast copy in the same section without breaking the existing premium layout.
+- [x] Validate the updated Home page with TypeScript, Vitest, production build, and development environment status.
+- [x] Save a new checkpoint for the verified Fusion Team Model copy update.

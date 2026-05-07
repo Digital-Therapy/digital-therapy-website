@@ -95,16 +95,16 @@ const capabilities = [
 
 const fusionTeam = [
   {
-    title: "Operations",
-    copy: "Process architecture, workflow optimization, SOPs, playbooks, KPI design, delivery systems, & organizational clarity.\n\nTransforms operational chaos into structured, scalable systems by mapping current-state workflows, identifying bottlenecks, & designing future-state processes.",
+    title: "Operations Expert",
+    copy: "The Operations SME focuses on people, process & delivery. This expert prizes efficiency, productivity, playbooks, KPIs & SOPs. They turn swirling chaos into digestible organization and reduce complex systems into the right size bites to plan effectively & ensure collective understanding by visualizing workflows to clarify how a business operation occurs now (Current State), highlighting weaknesses (like bottlenecks & redundancies) and optimizing a new process design (or Future State).",
   },
   {
-    title: "Accounting",
-    copy: "Improves books, close cycles, AP, AR, reconciliations, reporting evidence, and financial controls.",
+    title: "Accounting Expert",
+    copy: "This SME is not your typical accountant. He does not fear technology & he voraciously embraces automation. They are masters of close acceleration and can tame the most complex AP & AR processes out there. They work intimately with engineers and they’re acutely aware of how they need to support technical team members to assure success as well as what limitations they have and where they need support from tech leaders.",
   },
   {
-    title: "Technology",
-    copy: "Connects platforms, data, automation, AI agents, security patterns, and private infrastructure.",
+    title: "Technology Expert",
+    copy: "The Technology SME is not an easy resource to find. They need to be trained for a purpose with intention & vigor to achieve the breadth & depth of skills necessary to fill the shoes of this daunting role — They are full stack engineers, data scientists, artists of Robotic Process Automation and masters of AI of the highest order.",
   },
 ];
 
@@ -312,36 +312,51 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="bg-white py-24 lg:py-32">
-          <div className="container grid gap-12 lg:grid-cols-[0.82fr_1.18fr]">
-            <motion.div {...fadeUp}>
-              <SectionLabel>Fusion Team model</SectionLabel>
-              <h2 className="font-display text-[clamp(2.6rem,4.7vw,5.3rem)] leading-[0.92] tracking-[-0.06em]">
-                The handoff problem is the transformation problem.
-              </h2>
-              <p className="mt-6 text-lg leading-8 text-black/62">
+        <section id="fusion-team" className="bg-white py-24 lg:py-32">
+          <div className="container">
+            <motion.div {...fadeUp} className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
+              <div>
+                <SectionLabel>Fusion Team model</SectionLabel>
+                <h2 className="font-display text-[clamp(2.6rem,4.7vw,5.3rem)] leading-[0.92] tracking-[-0.06em]">
+                  The handoff problem is the transformation problem.
+                </h2>
+              </div>
+              <p className="max-w-3xl text-lg leading-8 text-black/62 lg:pb-2">
                 Digital Therapy uses one integrated team with operations, accounting, & technology expertise in the same room, accountable for the outcome end to end.
               </p>
             </motion.div>
-            <div className="grid gap-5 md:grid-cols-3">
+            <div className="mt-14 grid gap-5 lg:grid-cols-3">
               {fusionTeam.map((member, index) => (
                 <motion.div
                   key={member.title}
                   {...fadeUp}
                   transition={{ ...fadeUp.transition, delay: index * 0.08 }}
-                  className="relative min-h-[310px] overflow-hidden bg-[#F7F4EE] p-7"
+                  className="relative min-h-[500px] overflow-hidden bg-[#F7F4EE] p-7 lg:p-8"
                 >
                   <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#0A65FF]/10 blur-2xl" />
-                  <div className="relative flex h-full flex-col justify-between">
+                  <div className="relative flex h-full flex-col">
                     <div className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-black/38">{index + 1} of 3</div>
-                    <div>
+                    <div className="mt-14">
                       <h3 className="text-2xl font-semibold tracking-[-0.05em]">{member.title}</h3>
-                      <p className="mt-4 whitespace-pre-line leading-7 text-black/58">{member.copy}</p>
+                      <p className="mt-5 text-[0.95rem] leading-7 text-black/64">{member.copy}</p>
                     </div>
                   </div>
                 </motion.div>
               ))}
             </div>
+            <motion.div
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.12 }}
+              className="mt-5 grid gap-6 border border-black/10 bg-[#111111] p-7 text-white lg:grid-cols-[0.42fr_1fr] lg:p-9"
+            >
+              <div>
+                <div className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[#58B8FF]">Traditional options vs. DT&apos;s Fusion Teams</div>
+                <h3 className="mt-6 text-2xl font-semibold tracking-[-0.04em]">Collaboration cannot be an afterthought.</h3>
+              </div>
+              <p className="text-base leading-8 text-white/68">
+                Accountants work exclusively with accountants. Engineers with engineers. There is no natural mechanism for these experts to come together. Professional bias obstructs collaboration — CPAs fear that AI and RPA will render the methods they know obsolete and reduce their billable hours or, worse, cost them their clients.
+              </p>
+            </motion.div>
           </div>
         </section>
 

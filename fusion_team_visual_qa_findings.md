@@ -1,0 +1,5 @@
+# Fusion Team Model Visual QA Findings
+
+The first tall Home page screenshot captured the top hero rather than the target section, so it was not sufficient to verify the Fusion Team Model update. A dedicated Chrome DevTools screenshot script was created and used to scroll directly to the `#fusion-team` section.
+
+The scrolled screenshot confirms that the updated Fusion Team Model section renders in the live preview with the premium light layout preserved. The three function-leader cards are visible in a balanced three-column grid with labels `1 of 3`, `2 of 3`, and `3 of 3`, headings `Operations Expert`, `Accounting Expert`, and `Technology Expert`, and the expanded descriptions flowing inside the card boundaries. The new dark contrast panel for `Traditional Options vs. DT's Fusion Teams` appears immediately beneath the cards and maintains section hierarchy; a follow-up lower-position capture may be used if full panel copy needs additional visual confirmation beyond the top of the panel.
