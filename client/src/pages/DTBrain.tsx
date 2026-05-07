@@ -127,6 +127,9 @@ export default function DTBrain() {
             <a href="/#security" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
               Security
             </a>
+            <a href="/thesis" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
+              Thesis
+            </a>
             <a href="/dt-brain" className="text-sm font-semibold text-[#0A65FF]">
               DT Brain
             </a>

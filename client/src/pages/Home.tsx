@@ -46,6 +46,7 @@ const navItems = [
   { label: "Capabilities", href: "#capabilities" },
   { label: "Security", href: "#security" },
   { label: "Partners", href: "#partners" },
+  { label: "Thesis", href: "/thesis" },
   { label: "DT Brain", href: "/dt-brain" },
   { label: "Team", href: "/team" },
 ];
