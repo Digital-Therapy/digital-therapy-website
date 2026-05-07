@@ -151,3 +151,9 @@
 - [x] Update or extend tests to verify the Discovery output deliverables appear in the source.
 - [x] Validate the updated site with Vitest, TypeScript, production build, and development environment status.
 - [x] Save a new checkpoint for the verified Discovery Process outputs update.
+
+# AP & AR Close-System Redesign Section
+
+- [x] Add Section 2 to the Our Approach page for AP & AR close-system redesign, preserving the client context that offices often operate 15 to 30+ days behind, DT redesigns close systems and processes, DT often builds custom tools to reduce monthly close burden, and the target outcome is closing in the first 3–5 days of the next month.
+- [x] Update approach page test coverage to assert the new AP & AR close-system redesign content.
+- [x] Validate the AP & AR Our Approach update with Vitest, TypeScript, production build, live preview, and environment health checks before checkpointing.

@@ -65,4 +65,21 @@ describe("Our Approach page implementation", () => {
       expect(approachSource).toContain(deliverableText);
     });
   });
+
+  it("includes the AP & AR close-system redesign section on the Our Approach page", () => {
+    const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
+
+    [
+      "AP &amp; AR close-system redesign.",
+      "After Discovery, Digital Therapy dives into AP &amp; AR.",
+      "Clients often operate 15 to 30+ days behind",
+      "redesign close systems &amp; processes",
+      "build custom tools to reduce the monthly close burden",
+      "Close in the first 3 - 5 days of the next month.",
+      "Reduce the monthly close burden",
+      "Target close",
+    ].forEach((closeSystemText) => {
+      expect(approachSource).toContain(closeSystemText);
+    });
+  });
 });

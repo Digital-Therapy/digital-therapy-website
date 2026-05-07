@@ -116,6 +116,27 @@ const discoveryOutputs = [
   },
 ];
 
+const closeRedesignPillars = [
+  {
+    eyebrow: "Current lag",
+    title: "15 to 30+ days behind",
+    copy: "Clients often operate 15 to 30+ days behind, which compresses management visibility, delays decisions, and keeps accounting teams in a permanent catch-up cycle.",
+    icon: BarChart3,
+  },
+  {
+    eyebrow: "System redesign",
+    title: "Redesign close systems & processes",
+    copy: "DT helps redesign close systems & processes across AP, AR, reconciliations, approvals, entity workflows, data movement, and exception handling.",
+    icon: Workflow,
+  },
+  {
+    eyebrow: "Custom tooling",
+    title: "Reduce the monthly close burden",
+    copy: "DT often builds custom tools to reduce the monthly close burden, replacing manual follow-up, spreadsheet-heavy reviews, and recurring data cleanup with governed workflows.",
+    icon: ClipboardCheck,
+  },
+];
+
 function PrivateBriefingButton({ variant = "primary" }: { variant?: "primary" | "secondary" }) {
   return <BookingWidgetDialog variant={variant} context="our approach page family-office booking" />;
 }
@@ -322,6 +343,67 @@ export default function OurApproach() {
                 );
               })}
             </div>
+          </div>
+        </section>
+
+        <section id="ap-ar-close" className="relative overflow-hidden bg-[#F7F4EE] py-24 lg:py-32">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_88%_16%,rgba(10,101,255,0.1),transparent_30%)]" />
+          <div className="container relative">
+            <motion.div {...fadeUp} className="grid items-end gap-10 lg:grid-cols-[0.76fr_1.24fr]">
+              <div>
+                <SectionLabel>Section 2</SectionLabel>
+                <h2 className="font-display text-[clamp(2.8rem,5vw,5.6rem)] leading-[0.9] tracking-[-0.06em] text-[#111111]">
+                  AP &amp; AR close-system redesign.
+                </h2>
+              </div>
+              <div className="max-w-3xl">
+                <p className="text-lg leading-8 text-black/64">
+                  After Discovery, Digital Therapy dives into AP &amp; AR. Our clients often operate 15 to 30+ days behind, so we help them redesign close systems &amp; processes and often build custom tools to reduce the monthly close burden.
+                </p>
+                <div className="mt-7 inline-flex flex-wrap items-center gap-3 border-y border-black/10 py-4">
+                  <span className="text-xs font-bold uppercase tracking-[0.22em] text-black/45">Target close</span>
+                  <span className="font-display text-4xl leading-none tracking-[-0.06em] text-[#0A65FF]">3 - 5 days</span>
+                  <span className="text-sm font-semibold leading-6 text-black/58">of the next month</span>
+                </div>
+              </div>
+            </motion.div>
+
+            <div className="mt-14 grid gap-5 lg:grid-cols-3">
+              {closeRedesignPillars.map((pillar) => {
+                const Icon = pillar.icon;
+                return (
+                  <motion.div key={pillar.title} {...fadeUp} className="border border-black/10 bg-white/72 p-7 shadow-[0_24px_70px_rgba(16,24,40,0.06)]">
+                    <div className="flex items-start justify-between gap-5">
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">{pillar.eyebrow}</p>
+                        <h3 className="mt-4 text-2xl font-semibold leading-tight tracking-[-0.04em] text-[#111111]">{pillar.title}</h3>
+                      </div>
+                      <div className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#0A65FF]/16 bg-[#0A65FF]/8 text-[#0A65FF]">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                    </div>
+                    <p className="mt-6 text-base leading-7 text-black/62">{pillar.copy}</p>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            <motion.div {...fadeUp} className="mt-16 grid gap-8 border border-black/10 bg-[#111111] p-8 text-white lg:grid-cols-[0.85fr_1.15fr] lg:p-10">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#58B8FF]">Operating outcome</p>
+                <h3 className="mt-5 font-display text-[clamp(2.2rem,4vw,4.2rem)] leading-[0.9] tracking-[-0.06em]">
+                  Close in the first 3 - 5 days of the next month.
+                </h3>
+              </div>
+              <div className="grid gap-4 text-sm leading-7 text-white/68 sm:grid-cols-2">
+                <div className="border-l border-white/18 pl-5">
+                  AP and AR workflows are redesigned around clear ownership, recurring checkpoints, approval discipline, and exception visibility.
+                </div>
+                <div className="border-l border-white/18 pl-5">
+                  Custom tools are introduced where off-the-shelf systems leave gaps, reducing manual work and turning the monthly close into a managed operating rhythm.
+                </div>
+              </div>
+            </motion.div>
           </div>
         </section>
 

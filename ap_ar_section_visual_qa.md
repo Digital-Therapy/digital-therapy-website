@@ -1,0 +1,3 @@
+# AP & AR Section Visual QA
+
+The live `/approach` preview was opened at `https://3000-ibhiqf4egke1mzoe64d3i-ab353b9c.us2.manus.computer/approach`. Browser keyword verification found the new `AP & AR close-system redesign` section. After scrolling to the lower portion of the page, the Section 2 cards rendered in the quiet luxury Digital Therapy style with three columns: `15 to 30+ days behind`, `Redesign close systems & processes`, and `Reduce the monthly close burden`. The dark operating-outcome panel also rendered below the cards with the target statement: `Close in the first 3 - 5 days of the next month.` The header remained fixed, the footer CTA section remained visible below, and no obvious rendering breakage was observed in the live preview.
