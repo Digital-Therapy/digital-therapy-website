@@ -131,3 +131,14 @@
 - [x] Preserve the premium Digital Therapy visual system and ensure the new page remains responsive.
 - [x] Validate the updated site with TypeScript, Vitest, production build, and development environment status.
 - [x] Save a new checkpoint for the verified Capabilities page migration.
+
+# Our Approach Page Implementation
+
+- [x] Locate the existing “Meet the team” CTA and change its label to “Understand our approach.”
+- [x] Create a new `/approach` page that opens from the updated CTA.
+- [x] Add Section 1, “Discovery,” with the Diagnostics-First framing and the eight user-provided Discovery process parts.
+- [x] Wire the new Our Approach route into the application router without disrupting existing public navigation.
+- [x] Preserve the premium Digital Therapy visual system and ensure the page remains responsive.
+- [x] Add or update tests that verify the new route, CTA label, and Discovery content.
+- [x] Validate the updated site with TypeScript, Vitest, production build, and development environment status.
+- [x] Save a new checkpoint for the verified Our Approach page update.
