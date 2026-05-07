@@ -82,6 +82,40 @@ const discoveryParts = [
   },
 ];
 
+const discoveryOutputs = [
+  {
+    number: "01",
+    title: "Graded Priorities List",
+    copy: "A ranked operating agenda that clarifies which transformation priorities should move first, why they matter, and how each priority connects to efficiency, growth, risk reduction, reporting visibility, and automation.",
+    icon: BadgeCheck,
+    details: ["Priority grades tied to stakeholder alignment", "Decision context for sequencing the implementation roadmap"],
+  },
+  {
+    number: "02",
+    title: "Visualized Operations | Current State w/ Pain Points Heat Map + New State",
+    copy: "A visual operating model that shows how work happens today, where friction concentrates, and how the future-state workflow should operate.",
+    icon: Workflow,
+    details: [
+      "Current State Mapping — comprehensive swim-lane process diagrams documenting every workflow",
+      "Operational Heat Map — diagnostic overlay highlighting bottlenecks, silos, and risk areas",
+      "Future State Design — optimized workflows with automation, clear ownership, and Kanban checkpoints",
+    ],
+    note: "The future-state model becomes the blueprint for the implementation phase.",
+  },
+  {
+    number: "03",
+    title: "Project Plan | Implementation Roadmap",
+    copy: "A practical implementation plan that converts discovery into sequenced workstreams, ownership, timelines, and risk controls.",
+    icon: BarChart3,
+    details: [
+      "Phased roadmap — configuration, workflows, integrations, migration, testing, onboarding",
+      "Milestones & timelines aligned with business priorities and stakeholder expectations",
+      "Roles & responsibilities — decision-makers, admins, operational owners, technical leads",
+      "Risk mitigation — strategies addressing potential implementation risks and contingencies",
+    ],
+  },
+];
+
 function PrivateBriefingButton({ variant = "primary" }: { variant?: "primary" | "secondary" }) {
   return <BookingWidgetDialog variant={variant} context="our approach page family-office booking" />;
 }
@@ -243,29 +277,51 @@ export default function OurApproach() {
         </section>
 
         <section className="border-y border-black/8 bg-[#111111] py-20 text-white lg:py-24">
-          <div className="container grid items-center gap-10 lg:grid-cols-[0.82fr_1.18fr]">
-            <motion.div {...fadeUp}>
-              <SectionLabel>Output</SectionLabel>
-              <h2 className="font-display text-[clamp(2.6rem,4.8vw,5.2rem)] leading-[0.9] tracking-[-0.06em]">
-                Discovery turns ambiguity into a build-ready operating specification.
-              </h2>
+          <div className="container">
+            <motion.div {...fadeUp} className="grid items-end gap-10 lg:grid-cols-[0.82fr_1.18fr]">
+              <div>
+                <SectionLabel>Output</SectionLabel>
+                <h2 className="font-display text-[clamp(2.6rem,4.8vw,5.2rem)] leading-[0.9] tracking-[-0.06em]">
+                  Discovery produces three implementation-ready deliverables.
+                </h2>
+              </div>
+              <p className="max-w-3xl text-lg leading-8 text-white/62">
+                The Discovery Process converts interviews, workflow mapping, system evaluation, and governance review into a prioritized operating plan that can guide configuration, automation, integration, migration, testing, and onboarding.
+              </p>
             </motion.div>
-            <motion.div {...fadeUp} className="grid gap-4 sm:grid-cols-2">
-              {[
-                ["Priorities", "Stakeholders align on the transformation goals that matter most."],
-                ["Workflows", "Actions, transactions, and data flows are mapped across departments."],
-                ["Systems", "Software, accounting, access, and integration requirements are defined."],
-                ["V1 Spec", "Rules, automation logic, scoring rubrics, and triage methodology guide design."],
-              ].map(([title, copy]) => (
-                <div key={title} className="border-t border-white/16 pt-5">
-                  <div className="flex items-center gap-3">
-                    <Database className="h-4 w-4 text-[#58B8FF]" />
-                    <h3 className="text-lg font-semibold tracking-[-0.03em]">{title}</h3>
-                  </div>
-                  <p className="mt-3 text-sm leading-6 text-white/62">{copy}</p>
-                </div>
-              ))}
-            </motion.div>
+
+            <div className="mt-14 grid gap-5 lg:grid-cols-3">
+              {discoveryOutputs.map((output) => {
+                const Icon = output.icon;
+                return (
+                  <motion.div key={output.number} {...fadeUp} className="flex min-h-full flex-col border border-white/14 bg-white/[0.045] p-7">
+                    <div className="flex items-start justify-between gap-5 border-b border-white/14 pb-6">
+                      <div>
+                        <p className="font-display text-5xl leading-none tracking-[-0.07em] text-[#58B8FF]">{output.number}</p>
+                        <h3 className="mt-5 text-2xl font-semibold leading-tight tracking-[-0.04em]">{output.title}</h3>
+                      </div>
+                      <div className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/18 bg-white/8 text-[#58B8FF]">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                    </div>
+                    <p className="mt-6 text-sm leading-7 text-white/64">{output.copy}</p>
+                    <div className="mt-6 space-y-4">
+                      {output.details.map((detail) => (
+                        <div key={detail} className="grid grid-cols-[1rem_1fr] gap-3 text-sm leading-6 text-white/72">
+                          <Database className="mt-1 h-3.5 w-3.5 text-[#58B8FF]" />
+                          <span>{detail}</span>
+                        </div>
+                      ))}
+                    </div>
+                    {output.note ? (
+                      <div className="mt-7 border-t border-white/14 pt-5 text-sm font-semibold leading-6 text-white">
+                        “{output.note}”
+                      </div>
+                    ) : null}
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </section>
 

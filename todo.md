@@ -142,3 +142,12 @@
 - [x] Add or update tests that verify the new route, CTA label, and Discovery content.
 - [x] Validate the updated site with TypeScript, Vitest, production build, and development environment status.
 - [x] Save a new checkpoint for the verified Our Approach page update.
+
+# Discovery Process Output Deliverables Update
+
+- [x] Add the Discovery Process output section to `/approach` with the three deliverables: Graded Priorities List; Visualized Operations | Current State with Pain Points Heat Map + New State; and Project Plan | Implementation Roadmap.
+- [x] Include the detailed Current State Mapping, Operational Heat Map, Future State Design, and implementation-roadmap sub-deliverables exactly in the Our Approach page content.
+- [x] Preserve the existing premium Digital Therapy page style and responsive layout while adding the new Discovery outputs content.
+- [x] Update or extend tests to verify the Discovery output deliverables appear in the source.
+- [x] Validate the updated site with Vitest, TypeScript, production build, and development environment status.
+- [x] Save a new checkpoint for the verified Discovery Process outputs update.

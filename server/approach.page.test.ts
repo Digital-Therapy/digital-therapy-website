@@ -44,4 +44,25 @@ describe("Our Approach page implementation", () => {
       expect(approachSource).toContain(heading);
     });
   });
+
+  it("includes the Discovery Process output deliverables on the Our Approach page", () => {
+    const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
+
+    [
+      "Discovery produces three implementation-ready deliverables.",
+      "Graded Priorities List",
+      "Visualized Operations | Current State w/ Pain Points Heat Map + New State",
+      "Current State Mapping — comprehensive swim-lane process diagrams documenting every workflow",
+      "Operational Heat Map — diagnostic overlay highlighting bottlenecks, silos, and risk areas",
+      "Future State Design — optimized workflows with automation, clear ownership, and Kanban checkpoints",
+      "The future-state model becomes the blueprint for the implementation phase.",
+      "Project Plan | Implementation Roadmap",
+      "Phased roadmap — configuration, workflows, integrations, migration, testing, onboarding",
+      "Milestones & timelines aligned with business priorities and stakeholder expectations",
+      "Roles & responsibilities — decision-makers, admins, operational owners, technical leads",
+      "Risk mitigation — strategies addressing potential implementation risks and contingencies",
+    ].forEach((deliverableText) => {
+      expect(approachSource).toContain(deliverableText);
+    });
+  });
 });
