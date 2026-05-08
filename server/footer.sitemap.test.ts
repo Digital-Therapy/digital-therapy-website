@@ -36,6 +36,14 @@ describe("Site footer sitemap", () => {
     expect(partnersSource).toContain('context="partner model discussion"');
   });
 
+  it("renders the Home contact email and phone number with enlarged typography", () => {
+    const homeSource = readProjectFile("client/src/pages/Home.tsx");
+
+    expect(homeSource).toContain("hello@digitaltherapy.io · 1 (917) 495-0455");
+    expect(homeSource).toContain("font-display text-[clamp(1.45rem,2.2vw,2.35rem)]");
+    expect(homeSource).not.toContain("mt-6 text-sm text-black/48");
+  });
+
   it("includes sitemap groups, primary routes, and footer actions", () => {
     const footerSource = readProjectFile("client/src/components/SiteFooter.tsx");
 

@@ -186,3 +186,8 @@
 - [x] Remove the “Partner model” button from the Home page top navigation while keeping the primary Book 30 Min CTA in the header.
 - [x] Add the “Partner model” button to the Partners section so visitors can access the partner-model modal in contextual content.
 - [x] Validate the relocation with Vitest, TypeScript, production build, live preview, and environment health checks before checkpointing.
+
+# Contact Detail Sizing Update
+
+- [x] Increase the visual size of the displayed email and phone number while preserving the existing contact content and layout hierarchy.
+- [x] Validate the contact detail sizing update with tests, TypeScript, production build, preview, and environment health checks before checkpointing.
