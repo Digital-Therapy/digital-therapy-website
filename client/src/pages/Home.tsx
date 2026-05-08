@@ -153,13 +153,6 @@ export default function Home() {
             ))}
           </nav>
           <div className="hidden items-center gap-3 md:flex">
-            <ContactFormDialog
-              variant="text"
-              label="Partner model"
-              context="partner model discussion"
-              icon="none"
-              className="text-sm font-semibold transition-colors duration-300"
-            />
             <PrivateBriefingButton />
           </div>
         </div>
@@ -407,6 +400,15 @@ export default function Home() {
               <p className="mt-6 text-lg leading-8 text-black/62">
                 Digital Therapy helps private banks, multifamily offices, and wealth advisory firms solve client operating complexity without replacing the trusted advisory relationship.
               </p>
+              <div className="mt-8">
+                <ContactFormDialog
+                  variant="secondary"
+                  label="Partner model"
+                  context="partner model discussion"
+                  icon="message"
+                  className="bg-white/74"
+                />
+              </div>
               <div className="mt-9 grid gap-4 sm:grid-cols-2">
                 {[
                   "Works behind the scenes or in joint delivery models.",

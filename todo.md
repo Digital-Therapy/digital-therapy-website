@@ -180,3 +180,9 @@
 
 - [x] Remove the “Operating Layer” item from the top navigation across the Digital Therapy public site while preserving the existing footer sitemap and page content.
 - [x] Validate the navigation update with tests, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Partner Model Button Relocation
+
+- [x] Remove the “Partner model” button from the Home page top navigation while keeping the primary Book 30 Min CTA in the header.
+- [x] Add the “Partner model” button to the Partners section so visitors can access the partner-model modal in contextual content.
+- [x] Validate the relocation with Vitest, TypeScript, production build, live preview, and environment health checks before checkpointing.

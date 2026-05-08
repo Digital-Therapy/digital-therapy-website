@@ -1,0 +1,3 @@
+# Partner Model Button Relocation QA
+
+The Home live preview was opened at `/#partners` after moving the Partner model dialog trigger. The fixed top navigation now shows the primary navigation links and the `Book 30 Min` action only; the `Partner model` trigger no longer appears in the header action group. The Partners section displays the heading `A confidential implementation partner for complex clients.` and includes the `Partner model` button directly below the section introduction, before the partner-delivery benefit grid. The footer sitemap still includes its separate `Partner Model` link.

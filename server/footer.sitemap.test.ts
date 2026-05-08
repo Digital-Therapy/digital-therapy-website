@@ -25,6 +25,17 @@ describe("Site footer sitemap", () => {
     expect(homeSource).toContain('id="operating-layer"');
   });
 
+  it("moves the Partner model dialog trigger from the header into the Partners section", () => {
+    const homeSource = readProjectFile("client/src/pages/Home.tsx");
+    const headerSource = homeSource.match(/<header[\s\S]*?<\/header>/)?.[0] ?? "";
+    const partnersSource = homeSource.match(/<section id="partners"[\s\S]*?<\/section>/)?.[0] ?? "";
+
+    expect(headerSource).not.toContain('label="Partner model"');
+    expect(headerSource).not.toContain('context="partner model discussion"');
+    expect(partnersSource).toContain('label="Partner model"');
+    expect(partnersSource).toContain('context="partner model discussion"');
+  });
+
   it("includes sitemap groups, primary routes, and footer actions", () => {
     const footerSource = readProjectFile("client/src/components/SiteFooter.tsx");
 
