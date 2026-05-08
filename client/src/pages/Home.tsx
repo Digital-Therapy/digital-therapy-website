@@ -35,7 +35,6 @@ const fadeUp = {
 } as const;
 
 const navItems = [
-  { label: "Operating Layer", href: "#operating-layer" },
   { label: "Capabilities", href: "/capabilities" },
   { label: "Security", href: "#security" },
   { label: "Partners", href: "#partners" },

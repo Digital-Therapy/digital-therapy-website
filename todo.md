@@ -175,3 +175,8 @@
 
 - [x] Remove any legacy page-specific footers, including the existing footer in the Capabilities page, so the reusable SiteFooter is the single footer across public routes.
 - [x] Verify the reusable footer on Home, Capabilities, Thesis, DT Brain, and Team live previews to confirm there are no duplicate footers or layout/CTA regressions.
+
+# Top Navigation Operating Layer Removal
+
+- [x] Remove the “Operating Layer” item from the top navigation across the Digital Therapy public site while preserving the existing footer sitemap and page content.
+- [x] Validate the navigation update with tests, TypeScript, production build, preview, and environment health checks before checkpointing.

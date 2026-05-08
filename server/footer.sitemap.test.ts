@@ -16,6 +16,15 @@ describe("Site footer sitemap", () => {
     expect(appSource).toContain("<SiteFooter />");
   });
 
+  it("removes Operating Layer from the Home page top navigation", () => {
+    const homeSource = readProjectFile("client/src/pages/Home.tsx");
+    const navItemsSource = homeSource.match(/const navItems = \[[\s\S]*?\];/)?.[0] ?? "";
+
+    expect(navItemsSource).not.toContain("Operating Layer");
+    expect(navItemsSource).not.toContain("#operating-layer");
+    expect(homeSource).toContain('id="operating-layer"');
+  });
+
   it("includes sitemap groups, primary routes, and footer actions", () => {
     const footerSource = readProjectFile("client/src/components/SiteFooter.tsx");
 
