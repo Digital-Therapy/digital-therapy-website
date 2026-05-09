@@ -4,6 +4,11 @@ import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBook
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
 const markUrl = "/manus-storage/DTLOGO_PICMARKpng_2cf51494.png";
 
+const footerLinkClasses =
+  "group flex w-full items-center justify-between gap-4 text-left text-sm font-medium text-black/58 transition-colors duration-300 hover:text-[#0A65FF]";
+
+const footerDialogLinkClasses = `${footerLinkClasses} !justify-between after:h-3.5 after:w-3.5 after:content-['']`;
+
 const sitemapGroups = [
   {
     title: "Sitemap",
@@ -76,7 +81,7 @@ export default function SiteFooter() {
                           label={link.label}
                           context="footer sitemap contact link"
                           icon="none"
-                          className="text-sm font-medium text-black/58 hover:text-[#0A65FF]"
+                          className={footerDialogLinkClasses}
                         />
                       );
                     }
@@ -88,7 +93,7 @@ export default function SiteFooter() {
                           variant="text"
                           label={link.label}
                           icon="none"
-                          className="text-sm font-medium text-black/58 hover:text-[#0A65FF]"
+                          className={footerDialogLinkClasses}
                         />
                       );
                     }
@@ -97,7 +102,7 @@ export default function SiteFooter() {
                       <a
                         key={link.href}
                         href={link.href}
-                        className="group flex items-center justify-between gap-4 text-sm font-medium text-black/58 transition-colors duration-300 hover:text-[#0A65FF]"
+                        className={footerLinkClasses}
                       >
                         <span>{link.label}</span>
                         <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

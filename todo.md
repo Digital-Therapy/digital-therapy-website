@@ -214,3 +214,9 @@
 - [x] Add an “Approach” link to the public site menu immediately after “Capabilities.”
 - [x] Preserve the existing desktop and reduced-width responsive menu behavior after adding the Approach link.
 - [x] Validate the Approach menu update with regression tests, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Footer Company Column Alignment
+
+- [x] Adjust the footer Company column so the Contact and Book 30 Min links are evenly laid out with the adjacent sitemap columns.
+- [x] Preserve the existing footer visual style, responsive behavior, and CTA destinations while fixing the spacing.
+- [x] Validate the footer alignment fix with regression coverage, TypeScript, production build, preview, and environment health checks before checkpointing.

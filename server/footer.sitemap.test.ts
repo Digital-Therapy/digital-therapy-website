@@ -99,6 +99,17 @@ describe("Site footer sitemap", () => {
     expect(homeSource).not.toContain("mt-6 text-sm text-black/48");
   });
 
+  it("keeps footer dialog links aligned with neighboring sitemap link rows", () => {
+    const footerSource = readProjectFile("client/src/components/SiteFooter.tsx");
+
+    expect(footerSource).toContain("const footerLinkClasses =");
+    expect(footerSource).toContain("flex w-full items-center justify-between");
+    expect(footerSource).toContain("const footerDialogLinkClasses");
+    expect(footerSource).toContain("after:h-3.5 after:w-3.5 after:content-['']");
+    expect(footerSource).toContain("className={footerDialogLinkClasses}");
+    expect(footerSource).toContain("className={footerLinkClasses}");
+  });
+
   it("includes sitemap groups, primary routes, and footer actions", () => {
     const footerSource = readProjectFile("client/src/components/SiteFooter.tsx");
 
