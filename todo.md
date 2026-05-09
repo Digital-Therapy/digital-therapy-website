@@ -234,3 +234,10 @@
 - [x] Replace the four step-box titles with “01 Search & Find,” “02 Connect & Pull,” “03 Clean & Structure,” and “04 Analyze & Leverage.”
 - [x] Preserve the existing section layout, visual style, and responsive behavior while updating the copy.
 - [x] Validate the Data Empowerment copy update with regression coverage, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Homepage Data Empowerment Step Context Update
+
+- [x] Add a short explanatory sentence beneath each of the four Data Empowerment step titles on the homepage.
+- [x] Preserve the existing four-step section layout, quiet-luxury visual system, and responsive behavior while adding the context sentences.
+- [x] Update regression coverage to verify the new explanatory sentences are present in the homepage source.
+- [x] Validate the step-context update with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.

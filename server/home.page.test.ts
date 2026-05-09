@@ -61,6 +61,22 @@ describe("Home page content updates", () => {
     const cleanStructureIndex = homeSource.indexOf('title: "Clean & Structure"', stepThreeIndex);
     const stepFourIndex = homeSource.indexOf('eyebrow: "04"', cleanStructureIndex);
     const analyzeLeverageIndex = homeSource.indexOf('title: "Analyze & Leverage"', stepFourIndex);
+    const searchFindCopyIndex = homeSource.indexOf(
+      "Locate critical records, accounts, entities, and documents across every system before decisions are made.",
+      searchFindIndex,
+    );
+    const connectPullCopyIndex = homeSource.indexOf(
+      "Bring approved source data into one governed workflow without forcing teams to chase files manually.",
+      connectPullIndex,
+    );
+    const cleanStructureCopyIndex = homeSource.indexOf(
+      "Standardize, reconcile, and organize information so it becomes reliable operating intelligence.",
+      cleanStructureIndex,
+    );
+    const analyzeLeverageCopyIndex = homeSource.indexOf(
+      "Turn structured data into reporting, automation, and AI-enabled answers leaders can use.",
+      analyzeLeverageIndex,
+    );
 
     expect(sectionIndex).toBeGreaterThanOrEqual(0);
     expect(layersIndex).toBeGreaterThanOrEqual(0);
@@ -68,6 +84,10 @@ describe("Home page content updates", () => {
     expect(connectPullIndex).toBeGreaterThan(stepTwoIndex);
     expect(cleanStructureIndex).toBeGreaterThan(stepThreeIndex);
     expect(analyzeLeverageIndex).toBeGreaterThan(stepFourIndex);
+    expect(searchFindCopyIndex).toBeGreaterThan(searchFindIndex);
+    expect(connectPullCopyIndex).toBeGreaterThan(connectPullIndex);
+    expect(cleanStructureCopyIndex).toBeGreaterThan(cleanStructureIndex);
+    expect(analyzeLeverageCopyIndex).toBeGreaterThan(analyzeLeverageIndex);
     expect(homeSource).not.toContain("A coherent layer above fragmented systems.");
     expect(homeSource).not.toContain("Data foundation");
     expect(homeSource).not.toContain("Workflow foundation");

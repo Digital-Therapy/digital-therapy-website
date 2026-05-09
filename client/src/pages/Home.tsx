@@ -54,25 +54,25 @@ const operatingLayers = [
   {
     eyebrow: "01",
     title: "Search & Find",
-    copy: "Aggregation, reconciliation, entity mapping, ownership logic, and source-of-truth design.",
+    copy: "Locate critical records, accounts, entities, and documents across every system before decisions are made.",
     icon: Database,
   },
   {
     eyebrow: "02",
     title: "Connect & Pull",
-    copy: "Automation for documents, approvals, reconciliations, reporting cycles, and recurring tasks.",
+    copy: "Bring approved source data into one governed workflow without forcing teams to chase files manually.",
     icon: Workflow,
   },
   {
     eyebrow: "03",
     title: "Clean & Structure",
-    copy: "Dashboards, scheduled reporting, AI narratives, stakeholder views, and ad hoc questions.",
+    copy: "Standardize, reconcile, and organize information so it becomes reliable operating intelligence.",
     icon: BarChart3,
   },
   {
     eyebrow: "04",
     title: "Analyze & Leverage",
-    copy: "Role-based access, documentation, auditability, continuity planning, and controlled integration.",
+    copy: "Turn structured data into reporting, automation, and AI-enabled answers leaders can use.",
     icon: ShieldCheck,
   },
 ];
