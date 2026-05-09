@@ -227,3 +227,10 @@
 - [x] Make the relocated Book 30 Min button more prominent and wide enough to keep its label on one line.
 - [x] Change the hero button label from “Explore the operating layer” to “View our capabilities” while preserving the intended navigation destination to capabilities.
 - [x] Validate the hero CTA layout update with regression coverage, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Homepage Data Empowerment Copy Update
+
+- [x] Change the homepage section headline from “A coherent layer above fragmented systems” to “Data Empowerment in four steps.”
+- [x] Replace the four step-box titles with “01 Search & Find,” “02 Connect & Pull,” “03 Clean & Structure,” and “04 Analyze & Leverage.”
+- [x] Preserve the existing section layout, visual style, and responsive behavior while updating the copy.
+- [x] Validate the Data Empowerment copy update with regression coverage, TypeScript, production build, preview, and environment health checks before checkpointing.

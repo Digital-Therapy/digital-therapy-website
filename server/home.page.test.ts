@@ -47,4 +47,31 @@ describe("Home page content updates", () => {
     expect(prominentClassIndex).toBeGreaterThan(imageSideBookingIndex);
     expect(minWidthIndex).toBeGreaterThan(imageSideBookingIndex);
   });
+
+  it("updates the operating-layer section to the requested Data Empowerment four-step copy", () => {
+    const homeSource = readProjectFile("client/src/pages/Home.tsx");
+
+    const sectionIndex = homeSource.indexOf("Data Empowerment in four steps.");
+    const layersIndex = homeSource.indexOf("const operatingLayers = [");
+    const stepOneIndex = homeSource.indexOf('eyebrow: "01"', layersIndex);
+    const searchFindIndex = homeSource.indexOf('title: "Search & Find"', stepOneIndex);
+    const stepTwoIndex = homeSource.indexOf('eyebrow: "02"', searchFindIndex);
+    const connectPullIndex = homeSource.indexOf('title: "Connect & Pull"', stepTwoIndex);
+    const stepThreeIndex = homeSource.indexOf('eyebrow: "03"', connectPullIndex);
+    const cleanStructureIndex = homeSource.indexOf('title: "Clean & Structure"', stepThreeIndex);
+    const stepFourIndex = homeSource.indexOf('eyebrow: "04"', cleanStructureIndex);
+    const analyzeLeverageIndex = homeSource.indexOf('title: "Analyze & Leverage"', stepFourIndex);
+
+    expect(sectionIndex).toBeGreaterThanOrEqual(0);
+    expect(layersIndex).toBeGreaterThanOrEqual(0);
+    expect(searchFindIndex).toBeGreaterThan(stepOneIndex);
+    expect(connectPullIndex).toBeGreaterThan(stepTwoIndex);
+    expect(cleanStructureIndex).toBeGreaterThan(stepThreeIndex);
+    expect(analyzeLeverageIndex).toBeGreaterThan(stepFourIndex);
+    expect(homeSource).not.toContain("A coherent layer above fragmented systems.");
+    expect(homeSource).not.toContain("Data foundation");
+    expect(homeSource).not.toContain("Workflow foundation");
+    expect(homeSource).not.toContain("Reporting foundation");
+    expect(homeSource).not.toContain("Governance foundation");
+  });
 });

@@ -53,25 +53,25 @@ const complexityPoints = [
 const operatingLayers = [
   {
     eyebrow: "01",
-    title: "Data foundation",
+    title: "Search & Find",
     copy: "Aggregation, reconciliation, entity mapping, ownership logic, and source-of-truth design.",
     icon: Database,
   },
   {
     eyebrow: "02",
-    title: "Workflow foundation",
+    title: "Connect & Pull",
     copy: "Automation for documents, approvals, reconciliations, reporting cycles, and recurring tasks.",
     icon: Workflow,
   },
   {
     eyebrow: "03",
-    title: "Reporting foundation",
+    title: "Clean & Structure",
     copy: "Dashboards, scheduled reporting, AI narratives, stakeholder views, and ad hoc questions.",
     icon: BarChart3,
   },
   {
     eyebrow: "04",
-    title: "Governance foundation",
+    title: "Analyze & Leverage",
     copy: "Role-based access, documentation, auditability, continuity planning, and controlled integration.",
     icon: ShieldCheck,
   },
@@ -254,7 +254,7 @@ export default function Home() {
             <motion.div {...fadeUp} className="max-w-4xl">
               <SectionLabel>What Digital Therapy builds</SectionLabel>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.8rem)] leading-[0.92] tracking-[-0.06em]">
-                A coherent layer above fragmented systems.
+                Data Empowerment in four steps.
               </h2>
             </motion.div>
             <div className="mt-14 grid gap-5 lg:grid-cols-4">
