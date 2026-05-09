@@ -208,3 +208,9 @@
 - [x] Add the sentence “For more on this topic, check out our Thesis Page.” after the paragraph beneath “Collaboration cannot be an afterthought.”
 - [x] Add a “View Our Thesis” button linking to the Thesis page in the same section.
 - [x] Validate the callout update with regression tests, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Approach Menu Link Update
+
+- [x] Add an “Approach” link to the public site menu immediately after “Capabilities.”
+- [x] Preserve the existing desktop and reduced-width responsive menu behavior after adding the Approach link.
+- [x] Validate the Approach menu update with regression tests, TypeScript, production build, preview, and environment health checks before checkpointing.

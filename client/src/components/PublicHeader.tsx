@@ -15,6 +15,7 @@ const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
 const primaryNavItems = [
   { label: "Thesis", href: "/thesis" },
   { label: "Capabilities", href: "/capabilities" },
+  { label: "Approach", href: "/approach" },
   { label: "DT Brain", href: "/dt-brain" },
   { label: "Security", href: "/#security", homeHref: "#security" },
   { label: "Team", href: "/team" },
