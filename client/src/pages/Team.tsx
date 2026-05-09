@@ -190,9 +190,6 @@ export default function Team() {
             <img src={logoUrl} alt="Digital Therapy" className="h-10 w-auto object-contain lg:h-11" />
           </a>
           <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary navigation">
-            <a href="/" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
-              Home
-            </a>
             <a href="/thesis" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
               Thesis
             </a>
@@ -202,8 +199,14 @@ export default function Team() {
             <a href="/dt-brain" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
               DT Brain
             </a>
+            <a href="/#security" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
+              Security
+            </a>
             <a href="/team" className="text-sm font-semibold text-[#0A65FF]">
               Team
+            </a>
+            <a href="/#partners" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
+              Partners
             </a>
             <ContactFormDialog
               variant="text"

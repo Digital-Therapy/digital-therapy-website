@@ -118,23 +118,23 @@ export default function DTBrain() {
             <img src={logoUrl} alt="Digital Therapy" className="h-10 w-auto object-contain lg:h-11" />
           </a>
           <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary navigation">
-            <a href="/" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
-              Home
+            <a href="/thesis" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
+              Thesis
             </a>
             <a href="/capabilities" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
               Capabilities
             </a>
-            <a href="/#security" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
-              Security
-            </a>
-            <a href="/thesis" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
-              Thesis
-            </a>
             <a href="/dt-brain" className="text-sm font-semibold text-[#0A65FF]">
               DT Brain
             </a>
+            <a href="/#security" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
+              Security
+            </a>
             <a href="/team" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
               Team
+            </a>
+            <a href="/#partners" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
+              Partners
             </a>
           </nav>
           <div className="hidden items-center gap-3 md:flex">

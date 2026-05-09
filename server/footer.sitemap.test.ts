@@ -8,6 +8,22 @@ function readProjectFile(relativePath: string) {
   return readFileSync(path.join(projectRoot, relativePath), "utf8");
 }
 
+const expectedTopMenuOrder = ["Thesis", "Capabilities", "DT Brain", "Security", "Team", "Partners"];
+
+function extractTopMenuSource(source: string) {
+  return source.match(/const navItems = \[[\s\S]*?\];/)?.[0] ?? source.match(/<nav className="hidden items-center gap-8 lg:flex" aria-label="Primary navigation">[\s\S]*?<\/nav>/)?.[0] ?? "";
+}
+
+function expectTopMenuOrder(navSource: string) {
+  let cursor = -1;
+
+  expectedTopMenuOrder.forEach((label) => {
+    const nextIndex = navSource.indexOf(label, cursor + 1);
+    expect(nextIndex, `${label} should appear after the previous top-menu item`).toBeGreaterThan(cursor);
+    cursor = nextIndex;
+  });
+}
+
 describe("Site footer sitemap", () => {
   it("renders the reusable footer across the app shell", () => {
     const appSource = readProjectFile("client/src/App.tsx");
@@ -16,12 +32,26 @@ describe("Site footer sitemap", () => {
     expect(appSource).toContain("<SiteFooter />");
   });
 
-  it("removes Operating Layer from the Home page top navigation", () => {
-    const homeSource = readProjectFile("client/src/pages/Home.tsx");
-    const navItemsSource = homeSource.match(/const navItems = \[[\s\S]*?\];/)?.[0] ?? "";
+  it("orders top-menu page links as Thesis, Capabilities, DT Brain, Security, Team, Partners", () => {
+    [
+      "client/src/pages/Home.tsx",
+      "client/src/pages/Capabilities.tsx",
+      "client/src/pages/OurApproach.tsx",
+      "client/src/pages/DTBrain.tsx",
+      "client/src/pages/Team.tsx",
+      "client/src/pages/Thesis.tsx",
+    ].forEach((relativePath) => {
+      const pageSource = readProjectFile(relativePath);
+      const navSource = extractTopMenuSource(pageSource);
 
-    expect(navItemsSource).not.toContain("Operating Layer");
-    expect(navItemsSource).not.toContain("#operating-layer");
+      expect(navSource, `${relativePath} should expose a primary top-menu source`).toBeTruthy();
+      expectTopMenuOrder(navSource);
+      expect(navSource).not.toContain("Home");
+      expect(navSource).not.toContain("Operating Layer");
+      expect(navSource).not.toContain("#operating-layer");
+    });
+
+    const homeSource = readProjectFile("client/src/pages/Home.tsx");
     expect(homeSource).toContain('id="operating-layer"');
   });
 

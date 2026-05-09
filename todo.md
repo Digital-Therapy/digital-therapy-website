@@ -191,3 +191,8 @@
 
 - [x] Increase the visual size of the displayed email and phone number while preserving the existing contact content and layout hierarchy.
 - [x] Validate the contact detail sizing update with tests, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Top Menu Link Reorder
+
+- [x] Reorder the top menu page links to Thesis, Capabilities, DT Brain, Security, Team, Partners while preserving existing link destinations and labels.
+- [x] Validate the reordered menu with regression tests, TypeScript, production build, live preview, and environment health checks before checkpointing.

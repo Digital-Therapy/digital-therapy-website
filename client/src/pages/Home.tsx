@@ -35,12 +35,12 @@ const fadeUp = {
 } as const;
 
 const navItems = [
-  { label: "Capabilities", href: "/capabilities" },
-  { label: "Security", href: "#security" },
-  { label: "Partners", href: "#partners" },
   { label: "Thesis", href: "/thesis" },
+  { label: "Capabilities", href: "/capabilities" },
   { label: "DT Brain", href: "/dt-brain" },
+  { label: "Security", href: "#security" },
   { label: "Team", href: "/team" },
+  { label: "Partners", href: "#partners" },
 ];
 
 const complexityPoints = [
