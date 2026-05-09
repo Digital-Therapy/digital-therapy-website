@@ -241,3 +241,10 @@
 - [x] Preserve the existing four-step section layout, quiet-luxury visual system, and responsive behavior while adding the context sentences.
 - [x] Update regression coverage to verify the new explanatory sentences are present in the homepage source.
 - [x] Validate the step-context update with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Homepage Data Empowerment Mobile Card Spacing Refinement
+
+- [x] Adjust mobile spacing and padding of the four Data Empowerment step cards for a cleaner, more readable stacked layout.
+- [x] Preserve the desktop four-card layout, quiet-luxury visual system, and existing content while refining mobile responsiveness.
+- [x] Update regression coverage to verify the responsive spacing and padding classes for the Data Empowerment cards.
+- [x] Validate the mobile spacing refinement with Vitest, TypeScript, production build, mobile preview, and environment health checks before checkpointing.

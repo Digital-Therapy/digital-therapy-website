@@ -88,6 +88,11 @@ describe("Home page content updates", () => {
     expect(connectPullCopyIndex).toBeGreaterThan(connectPullIndex);
     expect(cleanStructureCopyIndex).toBeGreaterThan(cleanStructureIndex);
     expect(analyzeLeverageCopyIndex).toBeGreaterThan(analyzeLeverageIndex);
+    expect(homeSource).toContain("mt-10 grid gap-3 sm:mt-12 sm:gap-4 lg:mt-14 lg:grid-cols-4 lg:gap-5");
+    expect(homeSource).toContain("min-h-[230px] border border-black/10 bg-white/72 p-5");
+    expect(homeSource).toContain("sm:min-h-[270px] sm:p-6 lg:min-h-[330px] lg:p-7");
+    expect(homeSource).toContain("mt-10 text-xl font-semibold tracking-[-0.04em] sm:mt-12 sm:text-2xl lg:mt-16");
+    expect(homeSource).toContain("mt-3 text-[0.95rem] leading-6 text-black/58 sm:mt-4 sm:leading-7");
     expect(homeSource).not.toContain("A coherent layer above fragmented systems.");
     expect(homeSource).not.toContain("Data foundation");
     expect(homeSource).not.toContain("Workflow foundation");
