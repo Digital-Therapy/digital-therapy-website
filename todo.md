@@ -202,3 +202,9 @@
 - [x] Fix the public top navigation so menu links remain accessible when the website width is reduced.
 - [x] Preserve the requested page-link order: Thesis, Capabilities, DT Brain, Security, Team, Partners across desktop and narrow-width navigation.
 - [x] Validate the responsive navigation fix with regression tests, TypeScript, production build, live preview, and environment health checks before checkpointing.
+
+# Collaboration Thesis Callout
+
+- [x] Add the sentence “For more on this topic, check out our Thesis Page.” after the paragraph beneath “Collaboration cannot be an afterthought.”
+- [x] Add a “View Our Thesis” button linking to the Thesis page in the same section.
+- [x] Validate the callout update with regression tests, TypeScript, production build, preview, and environment health checks before checkpointing.
