@@ -220,3 +220,10 @@
 - [x] Adjust the footer Company column so the Contact and Book 30 Min links are evenly laid out with the adjacent sitemap columns.
 - [x] Preserve the existing footer visual style, responsive behavior, and CTA destinations while fixing the spacing.
 - [x] Validate the footer alignment fix with regression coverage, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Homepage Hero CTA Layout Update
+
+- [x] Move the blue Book 30 Min button from beneath the left-side welcome copy to the right side beneath the hero image.
+- [x] Make the relocated Book 30 Min button more prominent and wide enough to keep its label on one line.
+- [x] Change the hero button label from “Explore the operating layer” to “View our capabilities” while preserving the intended navigation destination to capabilities.
+- [x] Validate the hero CTA layout update with regression coverage, TypeScript, production build, preview, and environment health checks before checkpointing.

@@ -157,12 +157,11 @@ export default function Home() {
                 Digital Therapy transforms fragmented family-office data into governed intelligence, helping leaders understand exposure, automate decisions, and act with clarity across every entity, asset, and workflow.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-                <PrivateBriefingButton />
                 <a
-                  href="#operating-layer"
+                  href="/capabilities"
                   className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/50 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
                 >
-                  Explore the operating layer
+                  View our capabilities
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
                 <a
@@ -190,11 +189,11 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.96, x: 35 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
               transition={{ duration: 0.9, ease: "easeOut" as const }}
-              className="relative"
+              className="relative lg:-mt-24 xl:-mt-16"
             >
               <div className="absolute -inset-6 rounded-[2.6rem] bg-[#0A65FF]/10 blur-3xl" />
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
-                <img src={heroVisual} alt="Abstract private operating layer visualization" className="aspect-[16/12] w-full object-cover" />
+                <img src={heroVisual} alt="Abstract private operating layer visualization" className="aspect-[16/8] w-full object-cover" />
                 <div className="absolute bottom-5 left-5 right-5 grid gap-3 rounded-[1.35rem] border border-white/70 bg-white/72 p-4 backdrop-blur-xl sm:grid-cols-3">
                   {[
                     ["Source of truth", "Connected data"],
@@ -207,6 +206,13 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
+              </div>
+              <div className="mt-6 flex justify-center lg:justify-end">
+                <BookingWidgetDialog
+                  variant="primary"
+                  context="homepage hero image-side booking"
+                  className="w-full min-w-[260px] whitespace-nowrap px-8 py-4 text-base shadow-[0_26px_70px_rgba(10,101,255,0.32)] sm:w-auto sm:min-w-[300px]"
+                />
               </div>
             </motion.div>
           </div>

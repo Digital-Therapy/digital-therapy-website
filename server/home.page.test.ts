@@ -21,4 +21,30 @@ describe("Home page content updates", () => {
     expect(buttonIndex).toBeGreaterThan(calloutIndex);
     expect(homeSource).toContain('href="/thesis"');
   });
+
+  it("moves the hero booking CTA beneath the image and renames the capabilities CTA", () => {
+    const homeSource = readProjectFile("client/src/pages/Home.tsx");
+
+    const leftCtaGroupIndex = homeSource.indexOf('className="mt-10 flex flex-col gap-3 sm:flex-row"');
+    const capabilitiesHrefIndex = homeSource.indexOf('href="/capabilities"', leftCtaGroupIndex);
+    const capabilitiesLabelIndex = homeSource.indexOf("View our capabilities", capabilitiesHrefIndex);
+    const dtBrainIndex = homeSource.indexOf('href="/dt-brain"', capabilitiesLabelIndex);
+    const heroImageIndex = homeSource.indexOf('alt="Abstract private operating layer visualization"');
+    const compactHeroImageIndex = homeSource.indexOf('aspect-[16/8]', heroImageIndex);
+    const desktopOffsetIndex = homeSource.indexOf('lg:-mt-24 xl:-mt-16');
+    const imageSideBookingIndex = homeSource.indexOf('context="homepage hero image-side booking"');
+    const prominentClassIndex = homeSource.indexOf('whitespace-nowrap px-8 py-4 text-base', imageSideBookingIndex);
+    const minWidthIndex = homeSource.indexOf('sm:min-w-[300px]', imageSideBookingIndex);
+
+    expect(leftCtaGroupIndex).toBeGreaterThanOrEqual(0);
+    expect(capabilitiesHrefIndex).toBeGreaterThan(leftCtaGroupIndex);
+    expect(capabilitiesLabelIndex).toBeGreaterThan(capabilitiesHrefIndex);
+    expect(dtBrainIndex).toBeGreaterThan(capabilitiesLabelIndex);
+    expect(homeSource).not.toContain("Explore the operating layer");
+    expect(desktopOffsetIndex).toBeGreaterThanOrEqual(0);
+    expect(compactHeroImageIndex).toBeGreaterThan(heroImageIndex);
+    expect(imageSideBookingIndex).toBeGreaterThan(heroImageIndex);
+    expect(prominentClassIndex).toBeGreaterThan(imageSideBookingIndex);
+    expect(minWidthIndex).toBeGreaterThan(imageSideBookingIndex);
+  });
 });
