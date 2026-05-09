@@ -248,3 +248,11 @@
 - [x] Preserve the desktop four-card layout, quiet-luxury visual system, and existing content while refining mobile responsiveness.
 - [x] Update regression coverage to verify the responsive spacing and padding classes for the Data Empowerment cards.
 - [x] Validate the mobile spacing refinement with Vitest, TypeScript, production build, mobile preview, and environment health checks before checkpointing.
+
+# Homepage Engagement Section Removal
+
+- [x] Remove the homepage section titled “How engagements begin — Diagnose first. Then build.”
+- [x] Delete the three boxes beneath the section titled “Diagnostic Briefing,” “Discovery Sprint,” and “Focused Pilot.”
+- [x] Remove related unused homepage data or code while preserving surrounding homepage layout and visual continuity.
+- [x] Update regression coverage to verify the removed engagement section and boxes no longer appear in the homepage source.
+- [x] Validate the engagement-section removal with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.

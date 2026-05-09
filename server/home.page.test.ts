@@ -48,6 +48,27 @@ describe("Home page content updates", () => {
     expect(minWidthIndex).toBeGreaterThan(imageSideBookingIndex);
   });
 
+  it("removes the engagement-begin section and its three engagement cards", () => {
+    const homeSource = readProjectFile("client/src/pages/Home.tsx");
+
+    expect(homeSource).not.toContain("How engagements begin");
+    expect(homeSource).not.toContain("Diagnose first. Then build.");
+    expect(homeSource).not.toContain("Diagnostic Briefing");
+    expect(homeSource).not.toContain("Diagnostic briefing");
+    expect(homeSource).not.toContain("Discovery Sprint");
+    expect(homeSource).not.toContain("Discovery sprint");
+    expect(homeSource).not.toContain("Focused Pilot");
+    expect(homeSource).not.toContain("Focused pilot");
+    expect(homeSource).not.toContain("engageSteps");
+    expect(homeSource).not.toContain("GitBranch");
+
+    const partnersIndex = homeSource.indexOf('id="partners"');
+    const ctaIndex = homeSource.indexOf("Book 30 minutes to find the first high-value win.");
+
+    expect(partnersIndex).toBeGreaterThanOrEqual(0);
+    expect(ctaIndex).toBeGreaterThan(partnersIndex);
+  });
+
   it("updates the operating-layer section to the requested Data Empowerment four-step copy", () => {
     const homeSource = readProjectFile("client/src/pages/Home.tsx");
 

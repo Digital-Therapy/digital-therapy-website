@@ -12,7 +12,6 @@ import {
   Check,
   ChevronRight,
   Database,
-  GitBranch,
   LockKeyhole,
   ShieldCheck,
   UsersRound,
@@ -106,20 +105,6 @@ const securityPrinciples = [
   { title: "Secure integration", copy: "Encrypted access and controlled connection patterns reduce unnecessary exposure." },
 ];
 
-const engageSteps = [
-  {
-    step: "Diagnostic briefing",
-    result: "A focused conversation to identify operating friction and high-value transformation opportunities.",
-  },
-  {
-    step: "Discovery sprint",
-    result: "A current-state map, future-state design, access model, and implementation roadmap.",
-  },
-  {
-    step: "Focused pilot",
-    result: "A working automation or reporting workflow that proves value before broader rollout.",
-  },
-];
 
 function PrivateBriefingButton({ variant = "primary" }: { variant?: "primary" | "secondary" }) {
   return <BookingWidgetDialog variant={variant} context="homepage family-office booking" />;
@@ -441,36 +426,6 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="bg-white py-24 lg:py-32">
-          <div className="container">
-            <motion.div {...fadeUp} className="mx-auto max-w-4xl text-center">
-              <SectionLabel>How engagements begin</SectionLabel>
-              <h2 className="font-display text-[clamp(2.7rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.06em]">
-                Diagnose first. Then build.
-              </h2>
-              <p className="mt-6 text-lg leading-8 text-black/62">
-                Digital Therapy starts by understanding the office’s operating reality, then converts that insight into a sequenced and accountable implementation path.
-              </p>
-            </motion.div>
-            <div className="mt-14 grid gap-5 lg:grid-cols-3">
-              {engageSteps.map((step, index) => (
-                <motion.article
-                  key={step.step}
-                  {...fadeUp}
-                  transition={{ ...fadeUp.transition, delay: index * 0.08 }}
-                  className="relative min-h-[300px] overflow-hidden border border-black/10 bg-[#F7F4EE] p-8"
-                >
-                  <div className="absolute right-6 top-6 font-display text-7xl leading-none tracking-[-0.08em] text-[#0A65FF]/10">
-                    0{index + 1}
-                  </div>
-                  <GitBranch className="h-7 w-7 text-[#0A65FF]" />
-                  <h3 className="mt-24 text-2xl font-semibold tracking-[-0.04em]">{step.step}</h3>
-                  <p className="mt-4 leading-7 text-black/58">{step.result}</p>
-                </motion.article>
-              ))}
-            </div>
-          </div>
-        </section>
 
         <section className="relative overflow-hidden bg-[#F7F4EE] py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr]">
