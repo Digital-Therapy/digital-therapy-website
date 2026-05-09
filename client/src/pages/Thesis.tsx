@@ -4,6 +4,7 @@
  * using the established quiet-luxury family-office visual system.
  */
 import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
+import PublicHeader from "@/components/PublicHeader";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -121,43 +122,11 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 export default function Thesis() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#111111] selection:bg-[#0A65FF] selection:text-white">
-      <header className="fixed left-0 right-0 top-0 z-50 border-b border-black/8 bg-[#F7F4EE]/84 backdrop-blur-xl">
-        <div className="container flex h-20 items-center justify-between">
-          <a href="/" className="flex items-center gap-3" aria-label="Digital Therapy home">
-            <img src={logoUrl} alt="Digital Therapy" className="h-10 w-auto object-contain lg:h-11" />
-          </a>
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary navigation">
-            <a href="/thesis" className="text-sm font-semibold text-[#0A65FF]">
-              Thesis
-            </a>
-            <a href="/capabilities" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
-              Capabilities
-            </a>
-            <a href="/dt-brain" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
-              DT Brain
-            </a>
-            <a href="/#security" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
-              Security
-            </a>
-            <a href="/team" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
-              Team
-            </a>
-            <a href="/#partners" className="text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black">
-              Partners
-            </a>
-          </nav>
-          <div className="hidden items-center gap-3 md:flex">
-            <ContactFormDialog
-              variant="text"
-              label="Contact"
-              context="thesis page navigation contact"
-              icon="none"
-              className="text-sm font-medium transition-colors duration-300 hover:text-black"
-            />
-            <PrivateBriefingButton />
-          </div>
-        </div>
-      </header>
+      <PublicHeader
+        activeLabel="Thesis"
+        bookingContext="thesis page family-office booking"
+        contactContext="thesis page navigation contact"
+      />
 
       <main className="pt-20">
         <section className="relative overflow-hidden border-b border-black/8">

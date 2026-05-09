@@ -8,10 +8,19 @@ function readProjectFile(relativePath: string) {
   return readFileSync(path.join(projectRoot, relativePath), "utf8");
 }
 
+const publicPagePaths = [
+  "client/src/pages/Home.tsx",
+  "client/src/pages/Capabilities.tsx",
+  "client/src/pages/OurApproach.tsx",
+  "client/src/pages/DTBrain.tsx",
+  "client/src/pages/Team.tsx",
+  "client/src/pages/Thesis.tsx",
+];
+
 const expectedTopMenuOrder = ["Thesis", "Capabilities", "DT Brain", "Security", "Team", "Partners"];
 
 function extractTopMenuSource(source: string) {
-  return source.match(/const navItems = \[[\s\S]*?\];/)?.[0] ?? source.match(/<nav className="hidden items-center gap-8 lg:flex" aria-label="Primary navigation">[\s\S]*?<\/nav>/)?.[0] ?? "";
+  return source.match(/const primaryNavItems = \[[\s\S]*?\] as const;/)?.[0] ?? "";
 }
 
 function expectTopMenuOrder(navSource: string) {
@@ -33,31 +42,46 @@ describe("Site footer sitemap", () => {
   });
 
   it("orders top-menu page links as Thesis, Capabilities, DT Brain, Security, Team, Partners", () => {
-    [
-      "client/src/pages/Home.tsx",
-      "client/src/pages/Capabilities.tsx",
-      "client/src/pages/OurApproach.tsx",
-      "client/src/pages/DTBrain.tsx",
-      "client/src/pages/Team.tsx",
-      "client/src/pages/Thesis.tsx",
-    ].forEach((relativePath) => {
-      const pageSource = readProjectFile(relativePath);
-      const navSource = extractTopMenuSource(pageSource);
+    const headerSource = readProjectFile("client/src/components/PublicHeader.tsx");
+    const navSource = extractTopMenuSource(headerSource);
 
-      expect(navSource, `${relativePath} should expose a primary top-menu source`).toBeTruthy();
-      expectTopMenuOrder(navSource);
-      expect(navSource).not.toContain("Home");
-      expect(navSource).not.toContain("Operating Layer");
-      expect(navSource).not.toContain("#operating-layer");
+    expect(navSource, "PublicHeader should expose a primary top-menu source").toBeTruthy();
+    expectTopMenuOrder(navSource);
+    expect(navSource).not.toContain("Home");
+    expect(navSource).not.toContain("Operating Layer");
+    expect(navSource).not.toContain("#operating-layer");
+
+    publicPagePaths.forEach((relativePath) => {
+      const pageSource = readProjectFile(relativePath);
+      expect(pageSource, `${relativePath} should use the responsive public header`).toContain("<PublicHeader");
     });
 
     const homeSource = readProjectFile("client/src/pages/Home.tsx");
     expect(homeSource).toContain('id="operating-layer"');
   });
 
+  it("keeps the public menu available at narrower widths through a responsive sheet trigger", () => {
+    const headerSource = readProjectFile("client/src/components/PublicHeader.tsx");
+
+    expect(headerSource).toContain('aria-label="Open primary navigation menu"');
+    expect(headerSource).toContain("lg:hidden");
+    expect(headerSource).toContain("<SheetTrigger asChild>");
+    expect(headerSource).toContain("justify-start gap-4");
+    expect(headerSource).not.toContain("fixed right-4 top-[1.125rem]");
+    expect(headerSource).toContain("Primary mobile navigation");
+    expect(headerSource).toContain("<SheetClose key={item.label} asChild>");
+
+    publicPagePaths.forEach((relativePath) => {
+      const pageSource = readProjectFile(relativePath);
+      expect(pageSource, `${relativePath} should not hide its only navigation behind a desktop-only nav`).not.toContain(
+        '<nav className="hidden items-center gap-8 lg:flex"',
+      );
+    });
+  });
+
   it("moves the Partner model dialog trigger from the header into the Partners section", () => {
     const homeSource = readProjectFile("client/src/pages/Home.tsx");
-    const headerSource = homeSource.match(/<header[\s\S]*?<\/header>/)?.[0] ?? "";
+    const headerSource = homeSource.match(/<PublicHeader[\s\S]*?\/>/)?.[0] ?? "";
     const partnersSource = homeSource.match(/<section id="partners"[\s\S]*?<\/section>/)?.[0] ?? "";
 
     expect(headerSource).not.toContain('label="Partner model"');
@@ -102,14 +126,7 @@ describe("Site footer sitemap", () => {
   });
 
   it("keeps routed public pages free of legacy page-specific footers", () => {
-    [
-      "client/src/pages/Home.tsx",
-      "client/src/pages/Capabilities.tsx",
-      "client/src/pages/OurApproach.tsx",
-      "client/src/pages/DTBrain.tsx",
-      "client/src/pages/Team.tsx",
-      "client/src/pages/Thesis.tsx",
-    ].forEach((relativePath) => {
+    publicPagePaths.forEach((relativePath) => {
       const pageSource = readProjectFile(relativePath);
       expect(pageSource).not.toContain("<footer");
       expect(pageSource).not.toContain("</footer>");

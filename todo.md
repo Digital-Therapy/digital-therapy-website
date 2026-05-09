@@ -196,3 +196,9 @@
 
 - [x] Reorder the top menu page links to Thesis, Capabilities, DT Brain, Security, Team, Partners while preserving existing link destinations and labels.
 - [x] Validate the reordered menu with regression tests, TypeScript, production build, live preview, and environment health checks before checkpointing.
+
+# Responsive Top Navigation Fix
+
+- [x] Fix the public top navigation so menu links remain accessible when the website width is reduced.
+- [x] Preserve the requested page-link order: Thesis, Capabilities, DT Brain, Security, Team, Partners across desktop and narrow-width navigation.
+- [x] Validate the responsive navigation fix with regression tests, TypeScript, production build, live preview, and environment health checks before checkpointing.
