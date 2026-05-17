@@ -22,13 +22,14 @@ describe("Home page content updates", () => {
     expect(homeSource).toContain('href="/thesis"');
   });
 
-  it("moves the hero booking CTA beneath the image and renames the capabilities CTA", () => {
+  it("moves the hero booking CTA beneath the image and uses the new hero CTA labels", () => {
     const homeSource = readProjectFile("client/src/pages/Home.tsx");
 
     const leftCtaGroupIndex = homeSource.indexOf('className="mt-10 flex flex-col gap-3 sm:flex-row"');
     const capabilitiesHrefIndex = homeSource.indexOf('href="/capabilities"', leftCtaGroupIndex);
-    const capabilitiesLabelIndex = homeSource.indexOf("View our capabilities", capabilitiesHrefIndex);
-    const dtBrainIndex = homeSource.indexOf('href="/dt-brain"', capabilitiesLabelIndex);
+    const capabilitiesLabelIndex = homeSource.indexOf("Learn what DT can do", capabilitiesHrefIndex);
+    const dtBrainHrefIndex = homeSource.indexOf('href="/dt-brain"', capabilitiesLabelIndex);
+    const dtBrainLabelIndex = homeSource.indexOf("What is DT Brain?", dtBrainHrefIndex);
     const heroImageIndex = homeSource.indexOf('alt="Abstract private operating layer visualization"');
     const compactHeroImageIndex = homeSource.indexOf('aspect-[16/8]', heroImageIndex);
     const desktopOffsetIndex = homeSource.indexOf('lg:-mt-24 xl:-mt-16');
@@ -39,13 +40,35 @@ describe("Home page content updates", () => {
     expect(leftCtaGroupIndex).toBeGreaterThanOrEqual(0);
     expect(capabilitiesHrefIndex).toBeGreaterThan(leftCtaGroupIndex);
     expect(capabilitiesLabelIndex).toBeGreaterThan(capabilitiesHrefIndex);
-    expect(dtBrainIndex).toBeGreaterThan(capabilitiesLabelIndex);
+    expect(dtBrainHrefIndex).toBeGreaterThan(capabilitiesLabelIndex);
+    expect(dtBrainLabelIndex).toBeGreaterThan(dtBrainHrefIndex);
     expect(homeSource).not.toContain("Explore the operating layer");
+    expect(homeSource).not.toContain("View our capabilities");
+    expect(homeSource).not.toContain("Meet DT Brain");
     expect(desktopOffsetIndex).toBeGreaterThanOrEqual(0);
     expect(compactHeroImageIndex).toBeGreaterThan(heroImageIndex);
     expect(imageSideBookingIndex).toBeGreaterThan(heroImageIndex);
     expect(prominentClassIndex).toBeGreaterThan(imageSideBookingIndex);
     expect(minWidthIndex).toBeGreaterThan(imageSideBookingIndex);
+  });
+
+  it("renders the new hero headline, paragraph, and tightened font-size clamp", () => {
+    const homeSource = readProjectFile("client/src/pages/Home.tsx");
+
+    const headlineIndex = homeSource.indexOf("Tech, Ops + Accounting Solutions for Family Offices.");
+    const paragraphLeadIndex = homeSource.indexOf("We deliver the value you wish you got from accounting firms.");
+    const ecosystemIndex = homeSource.indexOf("truly comprehend your eco-system and unique nuances", paragraphLeadIndex);
+    const collectiveIndex = homeSource.indexOf("Achieving collective understanding is the key to delivery success.", ecosystemIndex);
+    const onSiteIndex = homeSource.indexOf("send a team to work on-site the first two&ndash;four weeks of new engagements", collectiveIndex);
+
+    expect(headlineIndex).toBeGreaterThanOrEqual(0);
+    expect(paragraphLeadIndex).toBeGreaterThan(headlineIndex);
+    expect(ecosystemIndex).toBeGreaterThan(paragraphLeadIndex);
+    expect(collectiveIndex).toBeGreaterThan(ecosystemIndex);
+    expect(onSiteIndex).toBeGreaterThan(collectiveIndex);
+    expect(homeSource).toContain("text-[clamp(2.6rem,5.4vw,4.7rem)] leading-[0.92] tracking-[-0.06em]");
+    expect(homeSource).not.toContain("Private data solutions that empower family offices.");
+    expect(homeSource).not.toContain("text-[clamp(3.4rem,7vw,7.7rem)]");
   });
 
   it("removes the engagement-begin section and its three engagement cards", () => {

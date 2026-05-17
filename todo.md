@@ -256,3 +256,11 @@
 - [x] Remove related unused homepage data or code while preserving surrounding homepage layout and visual continuity.
 - [x] Update regression coverage to verify the removed engagement section and boxes no longer appear in the homepage source.
 - [x] Validate the engagement-section removal with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Homepage Hero Copy and CTA Update
+
+- [x] Update the hero headline in Home.tsx to title-cased "Tech, Ops + Accounting Solutions for Family Offices." and reduce the responsive font-size clamp so the upper bound is approximately 75px.
+- [x] Update the hero paragraph in Home.tsx to the confirmed new copy about delivering accounting-firm value, comprehending the client's eco-system and unique nuances, achieving collective understanding, and sending a team on-site for the first two to four weeks.
+- [x] Rename the two secondary hero CTAs to "Learn what DT can do" (linking to the operating-layer section) and "What is DT Brain?" (linking to the DT Brain page) while keeping the primary "Book 30 Min" CTA unchanged.
+- [x] Update regression coverage so the homepage tests assert the new hero headline, paragraph, CTA labels, and tighter font-size clamp.
+- [x] Validate the hero copy and CTA update with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.

@@ -135,25 +135,25 @@ export default function Home() {
           <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-10 py-20 lg:grid-cols-[0.92fr_1.08fr] lg:py-28">
             <motion.div {...fadeUp}>
               <SectionLabel>Private family-office operating layer</SectionLabel>
-              <h1 className="max-w-4xl font-display text-[clamp(3.4rem,7vw,7.7rem)] leading-[0.88] tracking-[-0.07em] text-[#111111]">
-                Private data solutions that empower family offices.
+              <h1 className="max-w-4xl font-display text-[clamp(2.6rem,5.4vw,4.7rem)] leading-[0.92] tracking-[-0.06em] text-[#111111]">
+                Tech, Ops + Accounting Solutions for Family Offices.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
-                Digital Therapy transforms fragmented family-office data into governed intelligence, helping leaders understand exposure, automate decisions, and act with clarity across every entity, asset, and workflow.
+                We deliver the value you wish you got from accounting firms. We spend the time to truly comprehend your eco-system and unique nuances. Achieving collective understanding is the key to delivery success. We&rsquo;ll typically send a team to work on-site the first two&ndash;four weeks of new engagements.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <a
                   href="/capabilities"
                   className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/50 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
                 >
-                  View our capabilities
+                  Learn what DT can do
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
                 <a
                   href="/dt-brain"
                   className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#0A65FF]/25 bg-[#0A65FF]/8 px-6 py-3 text-sm font-semibold text-[#0A65FF] transition-all duration-300 hover:border-[#0A65FF]/55 hover:bg-[#0A65FF]/12"
                 >
-                  Meet DT Brain
+                  What is DT Brain?
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
               </div>
