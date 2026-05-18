@@ -331,3 +331,10 @@
 - [x] Update `server/approach.page.test.ts` so the legacy paragraph copy is forbidden and the new copy + style are required.
 - [x] Validate with Vitest, TypeScript, and production build.
 - [x] Save a new checkpoint for the verified Approach hero paragraph edit.
+
+# Approach Hero H1 Visual Edit
+
+- [x] Apply the visual-editor h1 change to the Approach hero: rewrite text from "Transformation begins with diagnostics." to "The difference one month can make." and resize the heading from the previous `clamp(3.3rem,7vw,7.6rem)` to a fixed 70px.
+- [x] Update `server/approach.page.test.ts` so the legacy h1 copy + clamp class are forbidden and the new copy + 70px size are required.
+- [x] Validate with Vitest, TypeScript, and production build.
+- [x] Save a new checkpoint for the verified Approach hero h1 edit.

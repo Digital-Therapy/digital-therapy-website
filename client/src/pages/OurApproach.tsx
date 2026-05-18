@@ -141,8 +141,8 @@ export default function OurApproach() {
           <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-12 py-20 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:py-28">
             <motion.div {...fadeUp}>
               <SectionLabel>Our approach</SectionLabel>
-              <h1 className="max-w-4xl font-display text-[clamp(3.3rem,7vw,7.6rem)] leading-[0.88] tracking-[-0.07em] text-[#111111]">
-                Transformation begins with diagnostics.
+              <h1 className="max-w-4xl font-display text-[70px] leading-[0.88] tracking-[-0.07em] text-[#111111]">
+                The difference one month can make.
               </h1>
               <p className="mt-8 max-w-2xl text-[18px] font-light leading-8 text-[#3e3c3c]">
                 Digital Therapy breaks transformation into a sequenced operating process. Phase 1 is Discovery — and we do it twice (sorry but it&apos;s worth it). We evaluate two parallel functional tracks: Track 1 - Technology Discovery led by a Technology SME, and Track 2 - Finance &amp; Accounting Discovery led by a Finance + Accounting SME. All three Fusion Team SMEs deploy on-site for 2 - 4 weeks.

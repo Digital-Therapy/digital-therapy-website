@@ -127,6 +127,17 @@ describe("Our Approach page implementation", () => {
     });
   });
 
+  it("presents the new Approach hero headline 'The difference one month can make.' at a fixed 70px", () => {
+    const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
+
+    expect(approachSource).toContain("The difference one month can make.");
+    expect(approachSource).toContain(
+      'max-w-4xl font-display text-[70px] leading-[0.88] tracking-[-0.07em] text-[#111111]',
+    );
+    expect(approachSource).not.toContain("Transformation begins with diagnostics.");
+    expect(approachSource).not.toContain("text-[clamp(3.3rem,7vw,7.6rem)]");
+  });
+
   it("prevents the hero right-side card from being squeezed by giving each grid track a minmax(0,...) base", () => {
     const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
 
