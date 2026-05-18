@@ -359,7 +359,7 @@ export default function Thesis() {
             <motion.div {...fadeUp} className="mx-auto max-w-4xl">
               <SectionLabel>The thesis in one line</SectionLabel>
               <h2 className="font-display text-[clamp(3rem,6vw,6.4rem)] leading-[0.88] tracking-[-0.07em]">
-                Family offices need one team to tackle one systems problem.
+                Family offices, you need one team to tackle one systems problem.
               </h2>
               <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-black/62">
                 Digital Therapy delivers one team, one aligned incentive structure, one operating model, and one shared mission for transformation that moves beyond advice into accountable execution.

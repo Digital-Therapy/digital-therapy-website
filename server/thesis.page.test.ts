@@ -14,7 +14,7 @@ describe("Thesis page content updates", () => {
 
     const sectionLabelIndex = thesisSource.indexOf("The thesis in one line");
     const headingIndex = thesisSource.indexOf(
-      "Family offices need one team to tackle one systems problem.",
+      "Family offices, you need one team to tackle one systems problem.",
       sectionLabelIndex,
     );
     const supportingCopyIndex = thesisSource.indexOf(
@@ -32,6 +32,9 @@ describe("Thesis page content updates", () => {
 
     expect(thesisSource).not.toContain(
       "Family offices need one integrated team for one interconnected systems problem.",
+    );
+    expect(thesisSource).not.toContain(
+      "Family offices need one team to tackle one systems problem.",
     );
     expect(thesisSource).not.toContain("one integrated team");
     expect(thesisSource).not.toContain("one integrated Fusion Pod");
