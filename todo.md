@@ -307,3 +307,11 @@
 - [x] Increase the top-nav logo height by 50% (h-10 → h-[60px], lg:h-11 → lg:h-[66px]) for both the desktop header and the mobile sheet, preserving `object-contain`.
 - [x] Add or update regression coverage so the relevant page tests assert the new top-nav logo size and explicitly fail if the previous size returns.
 - [x] Validate the top-nav logo enlargement with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Fusion Team Model Headline Swap
+
+- [x] Locate the Fusion Team Model section's current "The handoff problem is the transformation problem." headline and its subheadline, plus the black callout block with "Collaboration cannot be an afterthought."
+- [x] Confirm the exact replacement copy with the user (use the black callout copy as the new headline and subheadline; decide what to do with the now-redundant black callout).
+- [x] Replace the headline and subheadline in the Fusion Team Model section with the confirmed "Collaboration cannot be an afterthought." copy and remove the redundant black callout, relocating the View Our Thesis link beneath the new subheadline.
+- [x] Update regression coverage so the relevant page tests assert the new headline/subheadline and explicitly fail if the previous "handoff problem is the transformation problem" copy returns.
+- [x] Validate the Fusion Team Model headline swap with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.

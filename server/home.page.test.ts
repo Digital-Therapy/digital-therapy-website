@@ -9,17 +9,32 @@ function readProjectFile(relativePath: string) {
 }
 
 describe("Home page content updates", () => {
-  it("adds the Thesis callout after the collaboration section with a Thesis page button", () => {
+  it("makes the Fusion Team Model section lead with the Collaboration headline and an inline Thesis link", () => {
     const homeSource = readProjectFile("client/src/pages/Home.tsx");
 
-    const headingIndex = homeSource.indexOf("Collaboration cannot be an afterthought.");
-    const calloutIndex = homeSource.indexOf("For more on this topic, check out our Thesis Page.");
-    const buttonIndex = homeSource.indexOf("View Our Thesis");
+    const sectionIndex = homeSource.indexOf('id="fusion-team"');
+    const sectionLabelIndex = homeSource.indexOf("<SectionLabel>Fusion Team model</SectionLabel>", sectionIndex);
+    const headlineIndex = homeSource.indexOf("Collaboration cannot be an afterthought.", sectionLabelIndex);
+    const subheadlineIndex = homeSource.indexOf(
+      "Accountants work exclusively with accountants. Engineers with engineers.",
+      headlineIndex,
+    );
+    const inlineLinkLabelIndex = homeSource.indexOf("For more on this topic, view our Thesis", subheadlineIndex);
+    const inlineLinkHrefIndex = homeSource.indexOf('href="/thesis"', subheadlineIndex);
 
-    expect(headingIndex).toBeGreaterThanOrEqual(0);
-    expect(calloutIndex).toBeGreaterThan(headingIndex);
-    expect(buttonIndex).toBeGreaterThan(calloutIndex);
-    expect(homeSource).toContain('href="/thesis"');
+    expect(sectionIndex).toBeGreaterThanOrEqual(0);
+    expect(sectionLabelIndex).toBeGreaterThan(sectionIndex);
+    expect(headlineIndex).toBeGreaterThan(sectionLabelIndex);
+    expect(subheadlineIndex).toBeGreaterThan(headlineIndex);
+    expect(inlineLinkLabelIndex).toBeGreaterThan(subheadlineIndex);
+    expect(inlineLinkHrefIndex).toBeGreaterThan(subheadlineIndex);
+    expect(homeSource).not.toContain("The handoff problem is the transformation problem.");
+    expect(homeSource).not.toContain(
+      "Digital Therapy uses one integrated team with operations, accounting, & technology expertise in the same room, accountable for the outcome end to end.",
+    );
+    expect(homeSource).not.toContain("Traditional options vs. DT&apos;s Fusion Teams");
+    expect(homeSource).not.toContain("For more on this topic, check out our Thesis Page.");
+    expect(homeSource).not.toContain("View Our Thesis");
   });
 
   it("moves the hero booking CTA beneath the image and uses the new hero CTA labels", () => {

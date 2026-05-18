@@ -271,12 +271,21 @@ export default function Home() {
               <div>
                 <SectionLabel>Fusion Team model</SectionLabel>
                 <h2 className="font-display text-[clamp(2.6rem,4.7vw,5.3rem)] leading-[0.92] tracking-[-0.06em]">
-                  The handoff problem is the transformation problem.
+                  Collaboration cannot be an afterthought.
                 </h2>
               </div>
-              <p className="max-w-3xl text-lg leading-8 text-black/62 lg:pb-2">
-                Digital Therapy uses one integrated team with operations, accounting, & technology expertise in the same room, accountable for the outcome end to end.
-              </p>
+              <div className="max-w-3xl lg:pb-2">
+                <p className="text-lg leading-8 text-black/62">
+                  Accountants work exclusively with accountants. Engineers with engineers. There is no natural mechanism for these experts to come together. Professional bias obstructs collaboration &mdash; CPAs fear that AI and RPA will render the methods they know obsolete and reduce their billable hours or, worse, cost them their clients.
+                </p>
+                <a
+                  href="/thesis"
+                  className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#0A65FF] transition-colors duration-300 hover:text-[#004ed1]"
+                >
+                  For more on this topic, view our Thesis
+                  <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+              </div>
             </motion.div>
             <div className="mt-14 grid gap-5 lg:grid-cols-3">
               {fusionTeam.map((member, index) => (
@@ -297,33 +306,6 @@ export default function Home() {
                 </motion.div>
               ))}
             </div>
-            <motion.div
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.12 }}
-              className="mt-5 grid gap-6 border border-black/10 bg-[#111111] p-7 text-white lg:grid-cols-[0.42fr_1fr] lg:p-9"
-            >
-              <div>
-                <div className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[#58B8FF]">Traditional options vs. DT&apos;s Fusion Teams</div>
-                <h3 className="mt-6 text-2xl font-semibold tracking-[-0.04em]">Collaboration cannot be an afterthought.</h3>
-              </div>
-              <div>
-                <p className="text-base leading-8 text-white/68">
-                  Accountants work exclusively with accountants. Engineers with engineers. There is no natural mechanism for these experts to come together. Professional bias obstructs collaboration — CPAs fear that AI and RPA will render the methods they know obsolete and reduce their billable hours or, worse, cost them their clients.
-                </p>
-                <div className="mt-7 flex flex-col items-start gap-4 border-t border-white/12 pt-6 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-sm font-medium leading-6 text-white/72">
-                    For more on this topic, check out our Thesis Page.
-                  </p>
-                  <a
-                    href="/thesis"
-                    className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-white/18 bg-white px-5 py-3 text-sm font-semibold text-[#111111] transition-colors duration-300 hover:border-[#58B8FF] hover:text-[#0A65FF]"
-                  >
-                    View Our Thesis
-                    <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </a>
-                </div>
-              </div>
-            </motion.div>
           </div>
         </section>
 
