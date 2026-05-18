@@ -68,7 +68,7 @@ export default function PublicHeader({
     <header className={`fixed left-0 right-0 top-0 z-50 border-b border-black/8 ${headerClassName} backdrop-blur-xl`}>
       <div className="mx-auto flex h-20 w-full max-w-[1280px] items-center justify-start gap-4 px-4 sm:px-6 lg:justify-between lg:px-8">
         <a href={logoHref} className="flex shrink-0 items-center gap-3" aria-label="Digital Therapy home">
-          <img src={logoUrl} alt="Digital Therapy" className="h-10 w-auto object-contain lg:h-11" />
+          <img src={logoUrl} alt="Digital Therapy" className="h-[60px] w-auto object-contain lg:h-[66px]" />
         </a>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary navigation">
@@ -111,7 +111,7 @@ export default function PublicHeader({
             </SheetHeader>
             <div className="mt-8 flex flex-col gap-8">
               <a href={logoHref} className="inline-flex items-center gap-3" aria-label="Digital Therapy home">
-                <img src={logoUrl} alt="Digital Therapy" className="h-10 w-auto object-contain" />
+                <img src={logoUrl} alt="Digital Therapy" className="h-[60px] w-auto object-contain" />
               </a>
               <nav className="flex flex-col gap-1" aria-label="Primary mobile navigation">
                 {primaryNavItems.map((item) => (

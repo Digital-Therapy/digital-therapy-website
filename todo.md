@@ -300,3 +300,10 @@
 - [x] Make Jonathan Kobrin's Team card clickable so opening it presents the confirmed founder story in an accessible dialog (keyboard reachable, focus trapped, escape closes).
 - [x] Update regression coverage so the Team page tests assert the clickable founder card, the dialog trigger, and the founder story content.
 - [x] Validate the founder card click-to-story update with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Top Nav Logo Size Increase
+
+- [x] Find every top-nav logo declaration across pages and shared components (Home, Thesis, OurApproach, DTBrain, Capabilities, Security, Team, Partners, NotFound, footer/sitemap, and any Header component) so the size increase is applied consistently. (Survey result: top-nav logo is centralized in PublicHeader.tsx with a desktop slot and a mobile-sheet slot; SiteFooter has its own logo intentionally left unchanged.)
+- [x] Increase the top-nav logo height by 50% (h-10 → h-[60px], lg:h-11 → lg:h-[66px]) for both the desktop header and the mobile sheet, preserving `object-contain`.
+- [x] Add or update regression coverage so the relevant page tests assert the new top-nav logo size and explicitly fail if the previous size returns.
+- [x] Validate the top-nav logo enlargement with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
