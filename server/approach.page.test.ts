@@ -67,6 +67,7 @@ describe("Our Approach page implementation", () => {
       "Phase 1",
       "Discover",
       "Technology +Finance",
+      "3 SMEs",
       "2\u20134 weeks",
     ].forEach((trackText) => {
       expect(approachSource).toContain(trackText);

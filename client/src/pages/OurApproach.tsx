@@ -167,13 +167,11 @@ export default function OurApproach() {
                 {[
                   ["Phase 1", "Discover"],
                   ["2 Tracks", "Technology +Finance"],
-                  ["", "2–4 weeks"],
+                  ["3 SMEs", "2–4 weeks"],
                 ].map(([top, bottom]) => (
                   <div key={bottom}>
-                    {top ? (
-                      <div className="font-display text-2xl leading-none tracking-[-0.04em]">{top}</div>
-                    ) : null}
-                    <div className={`${top ? "mt-1" : ""} text-xs font-semibold uppercase tracking-[0.18em] text-[#525151]`}>{bottom}</div>
+                    <div className="font-display text-2xl leading-none tracking-[-0.04em]">{top}</div>
+                    <div className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#525151]">{bottom}</div>
                   </div>
                 ))}
               </div>
