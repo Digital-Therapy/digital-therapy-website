@@ -118,6 +118,15 @@ describe("Our Approach page implementation", () => {
     });
   });
 
+  it("prevents the hero right-side card from being squeezed by giving each grid track a minmax(0,...) base", () => {
+    const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
+
+    expect(approachSource).toContain(
+      "lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]",
+    );
+    expect(approachSource).not.toContain("lg:grid-cols-[0.92fr_1.08fr]");
+  });
+
   it("includes the AP & AR illustrative case-study example on the Our Approach page", () => {
     const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
 

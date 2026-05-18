@@ -138,7 +138,7 @@ export default function OurApproach() {
       <main className="pt-20">
         <section className="relative overflow-hidden border-b border-black/8">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_12%,rgba(10,101,255,0.11),transparent_34%),linear-gradient(115deg,#F7F4EE_0%,#FFFFFF_52%,#EEF4FF_100%)]" />
-          <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-12 py-20 lg:grid-cols-[0.92fr_1.08fr] lg:py-28">
+          <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-12 py-20 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:py-28">
             <motion.div {...fadeUp}>
               <SectionLabel>Our approach</SectionLabel>
               <h1 className="max-w-4xl font-display text-[clamp(3.3rem,7vw,7.6rem)] leading-[0.88] tracking-[-0.07em] text-[#111111]">

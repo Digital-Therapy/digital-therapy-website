@@ -322,3 +322,5 @@
 - [x] Search the rest of the codebase (other pages, tests, copy strings) for any remaining "Privacy is not a feature" references that need to be updated for consistency. (Survey result: no other files referenced the previous copy.)
 - [x] Update or add regression coverage so the home page tests assert the new contracted headline and explicitly fail if the previous expanded copy returns.
 - [x] Validate the privacy headline edit with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+- [x] Approach page: fix first-section right-side box that is being cut off — root cause: long hero heading inflated the left grid auto-track and squeezed the right column. Fix: change `lg:grid-cols-[0.92fr_1.08fr]` to `lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]` so each track has a zero base size and the heading can no longer squeeze the right card. Regression test added in approach.page.test.ts.
