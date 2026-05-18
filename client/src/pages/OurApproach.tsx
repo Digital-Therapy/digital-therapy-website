@@ -130,7 +130,7 @@ export default function OurApproach() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#111111] selection:bg-[#0A65FF] selection:text-white">
       <PublicHeader
-        activeLabel="Approach"
+        activeLabel="Process"
         bookingContext="our approach page family-office booking"
         contactContext="our approach page navigation contact"
       />
@@ -140,11 +140,11 @@ export default function OurApproach() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_12%,rgba(10,101,255,0.11),transparent_34%),linear-gradient(115deg,#F7F4EE_0%,#FFFFFF_52%,#EEF4FF_100%)]" />
           <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-12 py-20 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:py-28">
             <motion.div {...fadeUp}>
-              <SectionLabel>Our approach</SectionLabel>
-              <h1 className="max-w-4xl font-display text-[70px] leading-[0.88] tracking-[-0.07em] text-[#111111]">
+              <SectionLabel>Our process</SectionLabel>
+              <h1 className="max-w-4xl font-display text-[60px] leading-[0.88] tracking-[-0.07em] text-[#111111]">
                 The difference one month can make.
               </h1>
-              <p className="mt-8 max-w-2xl text-[18px] font-light leading-8 text-[#3e3c3c]">
+              <p className="mt-8 max-w-2xl text-[16px] font-light leading-8 text-[#3e3c3c]">
                 Digital Therapy breaks transformation into a sequenced operating process. Phase 1 is Discovery — and we do it twice (sorry but it&apos;s worth it). We evaluate two parallel functional tracks: Track 1 - Technology Discovery led by a Technology SME, and Track 2 - Finance &amp; Accounting Discovery led by a Finance + Accounting SME. All three Fusion Team SMEs deploy on-site for 2 - 4 weeks.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
@@ -159,20 +159,21 @@ export default function OurApproach() {
                   href="/thesis"
                   className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/55 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
                 >
-                  See the thesis
+                  Service Thesis
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
               </div>
               <div className="mt-12 grid max-w-xl grid-cols-3 gap-5 border-t border-black/10 pt-6">
                 {[
-                  ["Section 1", "Discovery"],
-                  ["2 parallel", "tracks"],
-                  ["On-site", "2–4 weeks"],
+                  ["Phase 1", "Discover"],
+                  ["2 Tracks", "Technology +Finance"],
+                  ["", "2–4 weeks"],
                 ].map(([top, bottom]) => (
-
-                  <div key={top}>
-                    <div className="font-display text-2xl leading-none tracking-[-0.04em]">{top}</div>
-                    <div className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-black/45">{bottom}</div>
+                  <div key={bottom}>
+                    {top ? (
+                      <div className="font-display text-2xl leading-none tracking-[-0.04em]">{top}</div>
+                    ) : null}
+                    <div className={`${top ? "mt-1" : ""} text-xs font-semibold uppercase tracking-[0.18em] text-[#525151]`}>{bottom}</div>
                   </div>
                 ))}
               </div>

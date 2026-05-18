@@ -15,7 +15,7 @@ const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
 const primaryNavItems = [
   { label: "Thesis", href: "/thesis" },
   { label: "Capabilities", href: "/capabilities" },
-  { label: "Approach", href: "/approach" },
+  { label: "Process", href: "/approach" },
   { label: "DT Brain", href: "/dt-brain" },
   { label: "Security", href: "/#security", homeHref: "#security" },
   { label: "Team", href: "/team" },
@@ -34,8 +34,8 @@ type PublicHeaderProps = {
 
 function navClassName(label: string, activeLabel?: string) {
   return label === activeLabel
-    ? "text-sm font-semibold text-[#0A65FF]"
-    : "text-sm font-medium text-black/60 transition-colors duration-300 hover:text-black";
+    ? "text-base font-normal text-[#0A65FF]"
+    : "text-base font-normal text-black/60 transition-colors duration-300 hover:text-black";
 }
 
 function getNavHref(item: (typeof primaryNavItems)[number], useHomeAnchorLinks?: boolean) {

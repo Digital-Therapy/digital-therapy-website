@@ -17,7 +17,7 @@ const publicPagePaths = [
   "client/src/pages/Thesis.tsx",
 ];
 
-const expectedTopMenuOrder = ["Thesis", "Capabilities", "Approach", "DT Brain", "Security", "Team", "Partners"];
+const expectedTopMenuOrder = ["Thesis", "Capabilities", "Process", "DT Brain", "Security", "Team", "Partners"];
 
 function extractTopMenuSource(source: string) {
   return source.match(/const primaryNavItems = \[[\s\S]*?\] as const;/)?.[0] ?? "";
@@ -41,13 +41,14 @@ describe("Site footer sitemap", () => {
     expect(appSource).toContain("<SiteFooter />");
   });
 
-  it("orders top-menu page links as Thesis, Capabilities, Approach, DT Brain, Security, Team, Partners", () => {
+  it("orders top-menu page links as Thesis, Capabilities, Process, DT Brain, Security, Team, Partners", () => {
     const headerSource = readProjectFile("client/src/components/PublicHeader.tsx");
     const navSource = extractTopMenuSource(headerSource);
 
     expect(navSource, "PublicHeader should expose a primary top-menu source").toBeTruthy();
     expectTopMenuOrder(navSource);
-    expect(navSource).toContain('{ label: "Approach", href: "/approach" }');
+    expect(navSource).toContain('{ label: "Process", href: "/approach" }');
+    expect(navSource).not.toContain('{ label: "Approach", href: "/approach" }');
     expect(navSource).not.toContain("Home");
     expect(navSource).not.toContain("Operating Layer");
     expect(navSource).not.toContain("#operating-layer");
@@ -119,7 +120,7 @@ describe("Site footer sitemap", () => {
       "Solutions",
       "Company",
       "Home",
-      "Our Approach",
+      "Process",
       "Capabilities",
       "Thesis",
       "Operating Layer",
@@ -131,10 +132,13 @@ describe("Site footer sitemap", () => {
       "Book 30 Min",
       "footer sitemap inquiry",
       "Digital Therapy builds private data, workflow, reporting, and automation systems",
-      "Understand our approach",
+      "Understand our process",
     ].forEach((footerText) => {
       expect(footerSource).toContain(footerText);
     });
+
+    expect(footerSource).not.toContain('{ label: "Our Approach", href: "/approach" }');
+    expect(footerSource).not.toContain("Understand our approach");
   });
 
   it("keeps routed public pages free of legacy page-specific footers", () => {

@@ -9,7 +9,7 @@ import { trpc } from "@/lib/trpc";
 const APOLLO_BOOKING_URL = "https://app.apollo.io/#/meet/jonathan_kobrin_67f/30-min";
 
 const buttonBaseClasses =
-  "group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold tracking-[-0.01em] transition-all duration-300";
+  "group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-normal tracking-[-0.01em] transition-all duration-300";
 
 const variantClasses = {
   primary: "bg-[#0A65FF] text-white shadow-[0_18px_45px_rgba(10,101,255,0.22)] hover:bg-[#004ed1]",

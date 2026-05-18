@@ -14,7 +14,7 @@ const sitemapGroups = [
     title: "Sitemap",
     links: [
       { label: "Home", href: "/" },
-      { label: "Our Approach", href: "/approach" },
+      { label: "Process", href: "/approach" },
       { label: "Capabilities", href: "/capabilities" },
       { label: "Thesis", href: "/thesis" },
     ],
@@ -121,7 +121,7 @@ export default function SiteFooter() {
             <span>© {new Date().getFullYear()} Digital Therapy. Private operating systems for family offices.</span>
           </div>
           <a href="/approach" className="inline-flex items-center gap-2 font-semibold text-black/56 transition-colors duration-300 hover:text-[#0A65FF]">
-            Understand our approach
+            Understand our process
             <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
         </div>

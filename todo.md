@@ -352,3 +352,15 @@
 - [x] Update `server/approach.page.test.ts` so the legacy copy is forbidden and the new copy is required.
 - [x] Validate with Vitest, TypeScript, and production build.
 - [x] Save a new checkpoint for the verified Operating Outcome h3 update.
+
+# Approach Visual-Edit Batch + Approach → Process Rename
+
+- [x] Reconcile Approach hero metric callout: cell 1 = "Phase 1 / Discover", cell 2 = "2 Tracks / Technology +Finance", cell 3 = remove top label, keep bottom "2–4 weeks". Recolor bottom labels from `text-black/45` to `text-[#525151]` and adapt the grid for cell 3 having only one line.
+- [x] Resize Approach hero h1 from `text-[70px]` to `text-[60px]` and the hero paragraph from `text-[18px]` to `text-[16px]`.
+- [x] Rename Approach hero CTA button "See the thesis" → "Service Thesis" (route stays `/thesis`).
+- [x] Rename "Approach" → "Process" everywhere it appears as a visible label (PublicHeader nav, OurApproach SectionLabel, Footer sitemap, activeLabel prop, any tests). Keep route `/approach` unchanged.
+- [x] Restyle PublicHeader nav links and Book 30 Min CTA from `text-sm font-medium/font-semibold` to `text-base font-normal` (16px / weight 400).
+- [x] Restyle ContactBooking confirm button from `text-sm font-semibold` (14/600) to `text-base font-normal` (16/400).
+- [x] Update or add regression tests for the new copy and sizes.
+- [x] Validate with Vitest, TypeScript, and production build.
+- [x] Save a new checkpoint for the multi-file visual-edit reconciliation.

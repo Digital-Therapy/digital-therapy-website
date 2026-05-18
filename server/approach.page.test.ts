@@ -20,7 +20,8 @@ describe("Our Approach page implementation", () => {
     const thesisSource = readProjectFile("client/src/pages/Thesis.tsx");
 
     expect(thesisSource).toContain('href="/approach"');
-    expect(thesisSource).toContain("Understand our approach.");
+    expect(thesisSource).toContain("Understand our process.");
+    expect(thesisSource).not.toContain("Understand our approach.");
     expect(thesisSource).not.toContain("Meet the team");
   });
 
@@ -31,6 +32,9 @@ describe("Our Approach page implementation", () => {
       "Digital Therapy breaks transformation into a sequenced operating process. Phase 1 is Discovery \u2014 and we do it twice (sorry but it&apos;s worth it). We evaluate two parallel functional tracks: Track 1 - Technology Discovery led by a Technology SME, and Track 2 - Finance &amp; Accounting Discovery led by a Finance + Accounting SME. All three Fusion Team SMEs deploy on-site for 2 - 4 weeks.",
     );
     expect(approachSource).toContain(
+      'mt-8 max-w-2xl text-[16px] font-light leading-8 text-[#3e3c3c]',
+    );
+    expect(approachSource).not.toContain(
       'mt-8 max-w-2xl text-[18px] font-light leading-8 text-[#3e3c3c]',
     );
     expect(approachSource).not.toContain(
@@ -59,7 +63,10 @@ describe("Our Approach page implementation", () => {
       "Finance optimization and tooling priorities",
       "View Discovery tracks",
       "Two parallel tracks",
-      "2 parallel",
+      "2 Tracks",
+      "Phase 1",
+      "Discover",
+      "Technology +Finance",
       "2\u20134 weeks",
     ].forEach((trackText) => {
       expect(approachSource).toContain(trackText);
@@ -147,10 +154,49 @@ describe("Our Approach page implementation", () => {
 
     expect(approachSource).toContain("The difference one month can make.");
     expect(approachSource).toContain(
+      'max-w-4xl font-display text-[60px] leading-[0.88] tracking-[-0.07em] text-[#111111]',
+    );
+    expect(approachSource).not.toContain(
       'max-w-4xl font-display text-[70px] leading-[0.88] tracking-[-0.07em] text-[#111111]',
     );
     expect(approachSource).not.toContain("Transformation begins with diagnostics.");
     expect(approachSource).not.toContain("text-[clamp(3.3rem,7vw,7.6rem)]");
+  });
+
+  it("renames the Approach navigation entry to Process while keeping the /approach route, and resizes nav links to 16px / weight 400", () => {
+    const headerSource = readProjectFile("client/src/components/PublicHeader.tsx");
+    const footerSource = readProjectFile("client/src/components/SiteFooter.tsx");
+    const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
+
+    expect(headerSource).toContain('{ label: "Process", href: "/approach" }');
+    expect(headerSource).not.toContain('{ label: "Approach", href: "/approach" }');
+    expect(headerSource).toContain('text-base font-normal text-[#0A65FF]');
+    expect(headerSource).toContain('text-base font-normal text-black/60');
+    expect(headerSource).not.toContain('text-sm font-medium text-black/60 transition-colors');
+    expect(headerSource).not.toContain('text-sm font-semibold text-[#0A65FF]');
+
+    expect(footerSource).toContain('{ label: "Process", href: "/approach" }');
+    expect(footerSource).not.toContain('{ label: "Our Approach", href: "/approach" }');
+    expect(footerSource).toContain("Understand our process");
+    expect(footerSource).not.toContain("Understand our approach");
+
+    expect(approachSource).toContain('activeLabel="Process"');
+    expect(approachSource).not.toContain('activeLabel="Approach"');
+    expect(approachSource).toContain("<SectionLabel>Our process</SectionLabel>");
+    expect(approachSource).not.toContain("<SectionLabel>Our approach</SectionLabel>");
+    expect(approachSource).toContain("Service Thesis");
+    expect(approachSource).not.toContain("See the thesis");
+  });
+
+  it("resizes the booking + contact CTA buttons to 16px / weight 400 via the shared base classes", () => {
+    const contactSource = readProjectFile("client/src/components/ContactBooking.tsx");
+
+    expect(contactSource).toContain(
+      'rounded-full px-6 py-3 text-base font-normal tracking-[-0.01em]',
+    );
+    expect(contactSource).not.toContain(
+      'rounded-full px-6 py-3 text-sm font-semibold tracking-[-0.01em]',
+    );
   });
 
   it("prevents the hero right-side card from being squeezed by giving each grid track a minmax(0,...) base", () => {
