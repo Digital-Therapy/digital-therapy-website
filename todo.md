@@ -324,3 +324,10 @@
 - [x] Validate the privacy headline edit with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
 
 - [x] Approach page: fix first-section right-side box that is being cut off — root cause: long hero heading inflated the left grid auto-track and squeezed the right column. Fix: change `lg:grid-cols-[0.92fr_1.08fr]` to `lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]` so each track has a zero base size and the heading can no longer squeeze the right card. Regression test added in approach.page.test.ts.
+
+# Approach Hero Paragraph Visual Edit
+
+- [x] Apply the visual-editor copy + style changes to the Approach hero paragraph (`client/src/pages/OurApproach.tsx` ~ line 147): rewrite to "Phase 1 / Track 1 / Track 2 / 2 - 4 weeks" wording and restyle to `text-[18px] font-light text-[#3e3c3c]`.
+- [x] Update `server/approach.page.test.ts` so the legacy paragraph copy is forbidden and the new copy + style are required.
+- [x] Validate with Vitest, TypeScript, and production build.
+- [x] Save a new checkpoint for the verified Approach hero paragraph edit.

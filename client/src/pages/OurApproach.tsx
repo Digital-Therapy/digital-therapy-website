@@ -144,8 +144,8 @@ export default function OurApproach() {
               <h1 className="max-w-4xl font-display text-[clamp(3.3rem,7vw,7.6rem)] leading-[0.88] tracking-[-0.07em] text-[#111111]">
                 Transformation begins with diagnostics.
               </h1>
-              <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
-                Digital Therapy breaks transformation into a sequenced operating process. Section 1 is Discovery — and it actually runs as two parallel tracks: a Technology Discovery led by a Technology SME, and a Finance &amp; Accounting Discovery led by a Finance + Accounting SME. All three Fusion Team SMEs deploy on-site for two to four weeks and stay present in every kickoff, stakeholder meeting, and review.
+              <p className="mt-8 max-w-2xl text-[18px] font-light leading-8 text-[#3e3c3c]">
+                Digital Therapy breaks transformation into a sequenced operating process. Phase 1 is Discovery — and we do it twice (sorry but it&apos;s worth it). We evaluate two parallel functional tracks: Track 1 - Technology Discovery led by a Technology SME, and Track 2 - Finance &amp; Accounting Discovery led by a Finance + Accounting SME. All three Fusion Team SMEs deploy on-site for 2 - 4 weeks.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <a

@@ -28,7 +28,16 @@ describe("Our Approach page implementation", () => {
     const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
 
     expect(approachSource).toContain(
-      "Digital Therapy breaks transformation into a sequenced operating process. Section 1 is Discovery \u2014 and it actually runs as two parallel tracks: a Technology Discovery led by a Technology SME, and a Finance &amp; Accounting Discovery led by a Finance + Accounting SME. All three Fusion Team SMEs deploy on-site for two to four weeks and stay present in every kickoff, stakeholder meeting, and review.",
+      "Digital Therapy breaks transformation into a sequenced operating process. Phase 1 is Discovery \u2014 and we do it twice (sorry but it&apos;s worth it). We evaluate two parallel functional tracks: Track 1 - Technology Discovery led by a Technology SME, and Track 2 - Finance &amp; Accounting Discovery led by a Finance + Accounting SME. All three Fusion Team SMEs deploy on-site for 2 - 4 weeks.",
+    );
+    expect(approachSource).toContain(
+      'mt-8 max-w-2xl text-[18px] font-light leading-8 text-[#3e3c3c]',
+    );
+    expect(approachSource).not.toContain(
+      "Digital Therapy breaks transformation into a sequenced operating process. Section 1 is Discovery \u2014 and it actually runs as two parallel tracks",
+    );
+    expect(approachSource).not.toContain(
+      'mt-8 max-w-2xl text-xl leading-8 text-black/62',
     );
     expect(approachSource).toContain("Discovery runs as two parallel tracks.");
     expect(approachSource).toContain("Diagnostics-First, on-site for 2\u20134 weeks");
