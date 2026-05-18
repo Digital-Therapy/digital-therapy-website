@@ -5,6 +5,14 @@
  */
 import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
 import PublicHeader from "@/components/PublicHeader";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import {
   BadgeCheck,
@@ -57,14 +65,16 @@ type TeamPerson = {
   specialty?: string;
   bio?: string;
   imageUrl?: string;
+  isFounder?: boolean;
 };
 
 const leaders: TeamPerson[] = [
   {
     name: "Jonathan Kobrin",
-    role: "CEO",
+    role: "Founder & CEO",
     specialty: "Operating model, transformation strategy, and client leadership.",
     imageUrl: headshots.jonathanKobrin,
+    isFounder: true,
   },
   {
     name: "Milton Rodas",
@@ -164,6 +174,65 @@ function PrimaryCta() {
   return <BookingWidgetDialog context="team page family-office booking" />;
 }
 
+function FounderStoryDialog({ leader, children }: { leader: TeamPerson; children: React.ReactNode }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent
+        data-testid="founder-story-dialog"
+        className="max-h-[88vh] overflow-y-auto rounded-[1.6rem] border-black/10 bg-[#F7F4EE] p-0 text-[#111111] sm:max-w-2xl"
+      >
+        <div className="grid gap-0 sm:grid-cols-[0.42fr_0.58fr]">
+          {leader.imageUrl ? (
+            <div className="relative hidden bg-[#0A65FF]/8 sm:block">
+              <img
+                src={leader.imageUrl}
+                alt={leader.name}
+                className="h-full w-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A65FF]/15 via-transparent to-transparent" />
+            </div>
+          ) : null}
+          <div className="px-6 py-7 sm:px-8 sm:py-9">
+            <DialogHeader className="space-y-3 text-left">
+              <div className="inline-flex w-fit items-center gap-2 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                <span className="h-px w-8 bg-[#0A65FF]" />
+                Founder story
+              </div>
+              <DialogTitle className="font-display text-4xl leading-[0.95] tracking-[-0.05em] text-[#111111] sm:text-5xl">
+                {leader.name}
+              </DialogTitle>
+              <DialogDescription className="text-sm font-semibold text-[#0A65FF]">
+                Founder &amp; CEO, Digital Therapy
+              </DialogDescription>
+            </DialogHeader>
+            <div className="mt-6 space-y-4 text-sm leading-7 text-black/68">
+              <p>
+                Jon Kobrin is the founder of Digital Therapy, a firm often referred to as the accounting firm of the future. With a background in entrepreneurship and software development, Jon brings a unique perspective to transformation projects.
+              </p>
+              <p>
+                From 2021 to 2024, Jon served as Director of Software Solutions &amp; Transformation at EisnerAmper, a Top 20 tax, accounting, and advisory firm. There, he created the beginnings of his Fusion Team concept, which he has since evolved and brought to market through Digital Therapy.
+              </p>
+              <p>
+                Fusion Teams begin with three SMEs &mdash; one Finance &amp; Accounting SME, one Technology SME, and one Operations &amp; Process SME. These experts don&apos;t have natural pathways to work with one another inside a typical practice-based firm architecture. Together, they can tackle and overcome the most complex transformation challenges, and the right team mix solves roughly 95% of project friction.
+              </p>
+            </div>
+            <p className="mt-6 rounded-[1rem] border border-black/8 bg-white/70 p-4 text-xs leading-6 text-black/60">
+              These three functions used to be siloed departments, each governed by a dedicated leader. But the work has become knotted &mdash; no one function easily separates from another. In this transitional period, all three minds must cooperate and be re-trained to approach projects collectively, so each role can bridge the gaps for the others. It may seem like a small twist, but it makes for an incredibly capable solution team that delivers big &mdash; the type of impact clients deserve but rarely experience.
+            </p>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <BookingWidgetDialog context="team page founder story booking" />
+              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-black/45">
+                Press Esc to close
+              </span>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function InitialMark({ name }: { name: string }) {
   const initials = name
     .split(" ")
@@ -246,26 +315,57 @@ export default function Team() {
               </h2>
             </motion.div>
             <div className="mt-14 grid gap-6 lg:grid-cols-3">
-              {leaders.map((leader, index) => (
-                <motion.article
-                  key={leader.name}
-                  {...fadeUp}
-                  transition={{ ...fadeUp.transition, delay: index * 0.08 }}
-                  className="group relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] p-7 shadow-[0_20px_55px_rgba(17,17,17,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)]"
-                >
-                  <div className="absolute right-0 top-0 h-28 w-28 rounded-bl-[4rem] bg-[#0A65FF]/8" />
-                  {leader.imageUrl ? (
-                    <div className="relative -m-3 mb-7 overflow-hidden rounded-[1.6rem] bg-[#0A65FF]/8">
-                      <img src={leader.imageUrl} alt={leader.name} className="h-64 w-full object-cover object-center" />
-                    </div>
-                  ) : (
-                    <InitialMark name={leader.name} />
-                  )}
-                  <p className={`${leader.imageUrl ? "mt-0" : "mt-8"} text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]`}>{leader.role}</p>
-                  <h3 className="mt-3 font-display text-4xl leading-none tracking-[-0.05em]">{leader.name}</h3>
-                  <p className="mt-5 text-sm leading-6 text-black/58">{leader.specialty}</p>
-                </motion.article>
-              ))}
+              {leaders.map((leader, index) => {
+                const cardInner = (
+                  <>
+                    <div className="absolute right-0 top-0 h-28 w-28 rounded-bl-[4rem] bg-[#0A65FF]/8" />
+                    {leader.imageUrl ? (
+                      <div className="relative -m-3 mb-7 overflow-hidden rounded-[1.6rem] bg-[#0A65FF]/8">
+                        <img src={leader.imageUrl} alt={leader.name} className="h-64 w-full object-cover object-center" />
+                      </div>
+                    ) : (
+                      <InitialMark name={leader.name} />
+                    )}
+                    <p className={`${leader.imageUrl ? "mt-0" : "mt-8"} text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]`}>{leader.role}</p>
+                    <h3 className="mt-3 font-display text-4xl leading-none tracking-[-0.05em]">{leader.name}</h3>
+                    <p className="mt-5 text-sm leading-6 text-black/58">{leader.specialty}</p>
+                    {leader.isFounder ? (
+                      <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#0A65FF] transition-transform duration-300 group-hover:translate-x-1">
+                        Read founder story
+                        <ChevronRight className="h-4 w-4" />
+                      </span>
+                    ) : null}
+                  </>
+                );
+
+                if (leader.isFounder) {
+                  return (
+                    <FounderStoryDialog key={leader.name} leader={leader}>
+                      <motion.button
+                        type="button"
+                        aria-label={`Read founder story: ${leader.name}`}
+                        data-testid="founder-card-trigger"
+                        {...fadeUp}
+                        transition={{ ...fadeUp.transition, delay: index * 0.08 }}
+                        className="group relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] p-7 text-left shadow-[0_20px_55px_rgba(17,17,17,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE]"
+                      >
+                        {cardInner}
+                      </motion.button>
+                    </FounderStoryDialog>
+                  );
+                }
+
+                return (
+                  <motion.article
+                    key={leader.name}
+                    {...fadeUp}
+                    transition={{ ...fadeUp.transition, delay: index * 0.08 }}
+                    className="group relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] p-7 shadow-[0_20px_55px_rgba(17,17,17,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)]"
+                  >
+                    {cardInner}
+                  </motion.article>
+                );
+              })}
             </div>
           </div>
         </section>

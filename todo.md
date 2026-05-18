@@ -286,9 +286,17 @@
 
 # Two-Track Discovery Restructure
 
-- [ ] Survey every existing "Discovery" reference across the site (Approach, Home, DT Brain, Capabilities, Thesis, Team, Partners, Security, footer/sitemap, and tests) and capture exact current copy for each location.
-- [ ] Propose the new two-track Discovery copy ("Technology Discovery" lead by the Technology SME and "Finance & Accounting Discovery" lead by the Finance + Accounting SME, with the Operations & Process SME splitting time across both, all three on-site for two to four weeks and present in every kickoff and review) and confirm wording with the user.
-- [ ] Treat the Approach page as the canonical home for the two-track Discovery section (parallel tracks, on-site framing, swim-lane / future-state architecture detail).
-- [ ] Update shorter Discovery references on Home, DT Brain, Capabilities, Thesis, and any other pages so they match the new two-track structure.
-- [ ] Update regression coverage so the relevant page tests assert the new two-track Discovery copy and that the previous single-track Discovery wording is removed.
-- [ ] Validate the two-track Discovery restructure with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
+- [x] Survey every existing "Discovery" reference across the site (Approach, Home, DT Brain, Capabilities, Thesis, Team, Partners, Security, footer/sitemap, and tests) and capture exact current copy for each location. (Survey result: substantive Discovery copy lives only on the Approach page; other pages reference Discovery only as nav labels or output narrative, with no track-specific copy that needs migration.)
+- [x] Propose the new two-track Discovery copy ("Technology Discovery" lead by the Technology SME and "Finance & Accounting Discovery" lead by the Finance + Accounting SME, with the Operations & Process SME splitting time across both, all three on-site for two to four weeks and present in every kickoff and review) and confirm wording with the user.
+- [x] Treat the Approach page as the canonical home for the two-track Discovery section (parallel tracks, on-site framing, swim-lane / future-state architecture detail).
+- [x] Update shorter Discovery references on Home, DT Brain, Capabilities, Thesis, and any other pages so they match the new two-track structure. (Verified survey above: no other page currently carries single-track Discovery copy that conflicts with the new model.)
+- [x] Update regression coverage so the relevant page tests assert the new two-track Discovery copy and that the previous single-track Discovery wording is removed.
+- [x] Validate the two-track Discovery restructure with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Founder Card Click-To-Story On Team Page
+
+- [x] Read the Team page and inventory existing dialog/modal patterns (e.g. ManusDialog, shadcn/ui Dialog) to align the founder-story interaction with the rest of the site.
+- [x] Draft Jonathan Kobrin's founder story copy (entrepreneurship + software background, EisnerAmper Director of Software Solutions & Transformation 2021-2024, Fusion Team origin) and confirm the wording with the user before implementing.
+- [x] Make Jonathan Kobrin's Team card clickable so opening it presents the confirmed founder story in an accessible dialog (keyboard reachable, focus trapped, escape closes).
+- [x] Update regression coverage so the Team page tests assert the clickable founder card, the dialog trigger, and the founder story content.
+- [x] Validate the founder card click-to-story update with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
