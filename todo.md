@@ -264,3 +264,10 @@
 - [x] Rename the two secondary hero CTAs to "Learn what DT can do" (linking to the operating-layer section) and "What is DT Brain?" (linking to the DT Brain page) while keeping the primary "Book 30 Min" CTA unchanged.
 - [x] Update regression coverage so the homepage tests assert the new hero headline, paragraph, CTA labels, and tighter font-size clamp.
 - [x] Validate the hero copy and CTA update with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Thesis Page Heading and Consistency Update
+
+- [x] Update the Thesis heading in Thesis.tsx from "Family offices need one integrated team for one interconnected systems problem." to "Family offices need one team to tackle one systems problem." with single spacing and no hyphen.
+- [x] Reword related Thesis page copy that referenced the previous "integrated team" or "interconnected systems" framing so the page reads consistently with the new heading.
+- [x] Update regression coverage so the Thesis page tests assert the new heading and any reworded supporting copy.
+- [x] Validate the Thesis heading and consistency update with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.

@@ -54,7 +54,7 @@ const structuralFailures = [
   {
     eyebrow: "01",
     title: "Silo culture & professional bias",
-    copy: "Accountants, engineers, operations consultants, and finance teams often work beside each other rather than as one integrated unit. Professional bias compounds the divide: CPAs may resist AI and automation, engineers may lack accounting fluency, and operators may lack the technical depth required to architect scalable systems.",
+    copy: "Accountants, engineers, operations consultants, and finance teams often work beside each other rather than as one unit. Professional bias compounds the divide: CPAs may resist AI and automation, engineers may lack accounting fluency, and operators may lack the technical depth required to architect scalable systems.",
     icon: UsersRound,
   },
   {
@@ -138,7 +138,7 @@ export default function Thesis() {
                 The old consulting model is structurally broken.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
-                Most transformation work fails to reach its potential not because advisory firms lack smart people, but because their organizational structure rewards silo behavior. Digital Therapy replaces that fragmentation with one integrated Fusion Pod built around operations, accounting, and technology.
+                Most transformation work fails to reach its potential not because advisory firms lack smart people, but because their organizational structure rewards silo behavior. Digital Therapy replaces that fragmentation with one Fusion Pod built around operations, accounting, and technology.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <PrivateBriefingButton />
@@ -197,7 +197,7 @@ export default function Thesis() {
                 Consulting firms are designed to prevent true collaboration.
               </h2>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-black/62">
-                Accounting practices operate independently from engineering teams. Operations consultants work separately from finance. Each group protects its own revenue, utilization, and client control, producing predictable delivery failures for clients with interconnected systems problems.
+                Accounting practices operate independently from engineering teams. Operations consultants work separately from finance. Each group protects its own revenue, utilization, and client control, producing predictable delivery failures for clients with one shared systems problem.
               </p>
               <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {problemSignals.map((signal) => (
@@ -289,7 +289,7 @@ export default function Thesis() {
               <div className="absolute bottom-8 left-8 right-8 rounded-[1.45rem] border border-white/70 bg-white/78 p-5 backdrop-blur-xl">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">One systems problem</p>
                 <p className="mt-2 text-sm leading-6 text-black/66">
-                  Modern family offices no longer have separate technology, operations, and accounting challenges. They have one interconnected systems problem.
+                  Modern family offices no longer have separate technology, operations, and accounting challenges. They have one systems problem.
                 </p>
               </div>
             </motion.div>
@@ -297,7 +297,7 @@ export default function Thesis() {
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <SectionLabel>Why family offices need this</SectionLabel>
               <h2 className="font-display text-[clamp(2.8rem,5vw,5.6rem)] leading-[0.9] tracking-[-0.06em]">
-                Fragmented advisors cannot solve interconnected operating realities.
+                Fragmented advisors cannot solve one shared operating reality.
               </h2>
               <p className="mt-7 text-lg leading-8 text-black/62">
                 Family-office leaders need one team that can see the full architecture: process, controls, data, workflow, automation, AI, integrations, and execution discipline. The Fusion Pod succeeds or fails together, so collaboration is no longer optional; it is the operating model itself.
@@ -359,10 +359,10 @@ export default function Thesis() {
             <motion.div {...fadeUp} className="mx-auto max-w-4xl">
               <SectionLabel>The thesis in one line</SectionLabel>
               <h2 className="font-display text-[clamp(3rem,6vw,6.4rem)] leading-[0.88] tracking-[-0.07em]">
-                Family offices need one integrated team for one interconnected systems problem.
+                Family offices need one team to tackle one systems problem.
               </h2>
               <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-black/62">
-                Digital Therapy delivers one integrated team, one aligned incentive structure, one operating model, and one shared mission for transformation that moves beyond advice into accountable execution.
+                Digital Therapy delivers one team, one aligned incentive structure, one operating model, and one shared mission for transformation that moves beyond advice into accountable execution.
               </p>
               <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
                 <PrivateBriefingButton />
