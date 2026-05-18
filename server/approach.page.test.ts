@@ -24,24 +24,58 @@ describe("Our Approach page implementation", () => {
     expect(thesisSource).not.toContain("Meet the team");
   });
 
-  it("includes the Discovery diagnostics-first sequence on the Our Approach page", () => {
+  it("presents Discovery as two parallel tracks led by the Technology and Finance + Accounting SMEs on the Our Approach page", () => {
     const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
 
-    expect(approachSource).toContain("Discovery");
-    expect(approachSource).toContain("Diagnostics-First");
-    expect(approachSource).toContain("Digital Therapy&apos;s Discovery process consists of 8 parts:");
+    expect(approachSource).toContain(
+      "Digital Therapy breaks transformation into a sequenced operating process. Section 1 is Discovery \u2014 and it actually runs as two parallel tracks: a Technology Discovery led by a Technology SME, and a Finance &amp; Accounting Discovery led by a Finance + Accounting SME. All three Fusion Team SMEs deploy on-site for two to four weeks and stay present in every kickoff, stakeholder meeting, and review.",
+    );
+    expect(approachSource).toContain("Discovery runs as two parallel tracks.");
+    expect(approachSource).toContain("Diagnostics-First, on-site for 2\u20134 weeks");
 
     [
-      "Define Project Priorities",
-      "Map Processes",
-      "User Identity & Access",
-      "Evaluate + Demo Software",
-      "Support Requirements",
-      "Accounting Systems",
-      "Integration Requirements",
-      "Establish V1 Spec",
-    ].forEach((heading) => {
-      expect(approachSource).toContain(heading);
+      "Track A",
+      "Track B",
+      "Technology Discovery",
+      "Finance & Accounting Discovery",
+      "Lead: Technology SME",
+      "Lead: Finance + Accounting SME",
+      "Systems, tools, and integrations inventory",
+      "User identity, access, and governance controls",
+      "Software evaluation and architecture decisions",
+      "Integration requirements and data exchange design",
+      "AR, AP, and GL workflow analysis",
+      "Close-cycle, reconciliation, and approval review",
+      "Accounting systems, controls, and reporting evidence",
+      "Finance optimization and tooling priorities",
+      "View Discovery tracks",
+      "Two parallel tracks",
+      "2 parallel",
+      "2\u20134 weeks",
+    ].forEach((trackText) => {
+      expect(approachSource).toContain(trackText);
+    });
+
+    [
+      "Digital Therapy&apos;s Discovery process consists of 8 parts:",
+      "View Discovery sequence",
+      '["8 parts", "diagnosed"]',
+      '["V1 spec", "established"]',
+    ].forEach((legacyText) => {
+      expect(approachSource).not.toContain(legacyText);
+    });
+  });
+
+  it("includes the shared Operations & Process SME callout that spans both Discovery tracks", () => {
+    const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
+
+    [
+      "Shared across both tracks",
+      "Operations &amp; Process SME splits time across both Discoveries.",
+      "As the Technology and Finance + Accounting leads identify complex current-state processes, they call the Operations &amp; Process SME in to collaborate on unpacking and mapping each one with swim lanes \u2014 who is involved, how many people, how many tasks, and where the handoffs break.",
+      "Together, all three SMEs then architect the future-state strategy, leveraging the new tools and automation capabilities surfaced by the parallel tracks so the implementation phase inherits one shared operating blueprint.",
+    ].forEach((opsText) => {
+      expect(approachSource).toContain(opsText);
     });
   });
 
@@ -50,6 +84,7 @@ describe("Our Approach page implementation", () => {
 
     [
       "Discovery produces three implementation-ready deliverables.",
+      "The two Discovery tracks converge into one prioritized operating plan. Together, the Technology Discovery, the Finance &amp; Accounting Discovery, and the Operations &amp; Process swim-lane work convert interviews, system mapping, accounting analysis, and future-state architecture into a sequenced roadmap that can guide configuration, automation, integration, migration, testing, and onboarding.",
       "Graded Priorities List",
       "Visualized Operations | Current State w/ Pain Points Heat Map + New State",
       "Current State Mapping — comprehensive swim-lane process diagrams documenting every workflow",

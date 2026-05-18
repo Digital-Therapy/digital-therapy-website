@@ -283,3 +283,12 @@
 - [x] Replace every remaining "Fusion Pod" mention in client/src/pages/Thesis.tsx with "Fusion Team", preserving sentence structure and surrounding copy.
 - [x] Update regression coverage so server/thesis.page.test.ts asserts the new "Fusion Team" copy and explicitly fails if any "Fusion Pod" string returns to Thesis.tsx.
 - [x] Validate the Fusion Pod -> Fusion Team cleanup with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Two-Track Discovery Restructure
+
+- [ ] Survey every existing "Discovery" reference across the site (Approach, Home, DT Brain, Capabilities, Thesis, Team, Partners, Security, footer/sitemap, and tests) and capture exact current copy for each location.
+- [ ] Propose the new two-track Discovery copy ("Technology Discovery" lead by the Technology SME and "Finance & Accounting Discovery" lead by the Finance + Accounting SME, with the Operations & Process SME splitting time across both, all three on-site for two to four weeks and present in every kickoff and review) and confirm wording with the user.
+- [ ] Treat the Approach page as the canonical home for the two-track Discovery section (parallel tracks, on-site framing, swim-lane / future-state architecture detail).
+- [ ] Update shorter Discovery references on Home, DT Brain, Capabilities, Thesis, and any other pages so they match the new two-track structure.
+- [ ] Update regression coverage so the relevant page tests assert the new two-track Discovery copy and that the previous single-track Discovery wording is removed.
+- [ ] Validate the two-track Discovery restructure with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.

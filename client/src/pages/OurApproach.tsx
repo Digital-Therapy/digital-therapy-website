@@ -12,11 +12,8 @@ import {
   ChevronRight,
   ClipboardCheck,
   Database,
-  GitBranch,
-  KeyRound,
-  Layers3,
   Network,
-  Settings2,
+  UsersRound,
   Workflow,
 } from "lucide-react";
 
@@ -32,54 +29,32 @@ const fadeUp = {
   transition: { duration: 0.65, ease: "easeOut" },
 } as const;
 
-const discoveryParts = [
+const discoveryTracks = [
   {
-    number: "01",
-    title: "Define Project Priorities",
-    copy: "Align stakeholders on key goals: efficiency, growth, risk reduction, reporting visibility, and automation.",
-    icon: BadgeCheck,
-  },
-  {
-    number: "02",
-    title: "Map Processes",
-    copy: "Swim-lane diagrams tracing actions (personnel), transactions (money) & data flows through departments.",
-    icon: Workflow,
-  },
-  {
-    number: "03",
-    title: "User Identity & Access",
-    copy: "Define user roles, access privileges, authorization logic, and compliance controls for governance.",
-    icon: KeyRound,
-  },
-  {
-    number: "04",
-    title: "Evaluate + Demo Software",
-    copy: "Structured evaluation of CRM and relationship platforms — demos, functional comparisons, use-case validation.",
-    icon: Layers3,
-  },
-  {
-    number: "05",
-    title: "Support Requirements",
-    copy: "Assess technical admin needs, internal ownership, training requirements, & maintenance planning.",
-    icon: Settings2,
-  },
-  {
-    number: "06",
-    title: "Accounting Systems",
-    copy: "Full AP/AR & GL workflow analysis with finance optimization planning.",
-    icon: ClipboardCheck,
-  },
-  {
-    number: "07",
-    title: "Integration Requirements",
-    copy: "Cross-system data exchange architecture — CRM, accounting, workflow tools, reporting, & external sources.",
+    label: "Track A",
+    title: "Technology Discovery",
+    lead: "Lead: Technology SME",
+    copy: "Inventories and maps the client's technology footprint — systems, tools, integrations, data flows, user access, and current-state architecture — then frames the future-state platform and automation strategy.",
+    focus: [
+      "Systems, tools, and integrations inventory",
+      "User identity, access, and governance controls",
+      "Software evaluation and architecture decisions",
+      "Integration requirements and data exchange design",
+    ],
     icon: Network,
   },
   {
-    number: "08",
-    title: "Establish V1 Spec",
-    copy: "Business rules, automation logic, scoring rubrics, and triage methodology to guide system design.",
-    icon: GitBranch,
+    label: "Track B",
+    title: "Finance & Accounting Discovery",
+    lead: "Lead: Finance + Accounting SME",
+    copy: "Maps AR, AP, the close cycle, and the broader accounting operating model — systems, processes, controls, and tools — to surface where finance is operating behind and where redesign will compound.",
+    focus: [
+      "AR, AP, and GL workflow analysis",
+      "Close-cycle, reconciliation, and approval review",
+      "Accounting systems, controls, and reporting evidence",
+      "Finance optimization and tooling priorities",
+    ],
+    icon: ClipboardCheck,
   },
 ];
 
@@ -170,14 +145,14 @@ export default function OurApproach() {
                 Transformation begins with diagnostics.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
-                Digital Therapy breaks transformation into a sequenced operating process. Section 1 is Discovery: a diagnostics-first assessment that defines priorities, maps workflows, evaluates systems, and establishes the V1 specification before build work begins.
+                Digital Therapy breaks transformation into a sequenced operating process. Section 1 is Discovery — and it actually runs as two parallel tracks: a Technology Discovery led by a Technology SME, and a Finance &amp; Accounting Discovery led by a Finance + Accounting SME. All three Fusion Team SMEs deploy on-site for two to four weeks and stay present in every kickoff, stakeholder meeting, and review.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <a
                   href="#discovery"
                   className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#0A65FF] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_45px_rgba(10,101,255,0.22)] transition-all duration-300 hover:bg-[#004ed1]"
                 >
-                  View Discovery sequence
+                  View Discovery tracks
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
                 <a
@@ -191,9 +166,10 @@ export default function OurApproach() {
               <div className="mt-12 grid max-w-xl grid-cols-3 gap-5 border-t border-black/10 pt-6">
                 {[
                   ["Section 1", "Discovery"],
-                  ["8 parts", "diagnosed"],
-                  ["V1 spec", "established"],
+                  ["2 parallel", "tracks"],
+                  ["On-site", "2–4 weeks"],
                 ].map(([top, bottom]) => (
+
                   <div key={top}>
                     <div className="font-display text-2xl leading-none tracking-[-0.04em]">{top}</div>
                     <div className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-black/45">{bottom}</div>
@@ -215,9 +191,9 @@ export default function OurApproach() {
                   <div className="flex items-start gap-4">
                     <img src={markUrl} alt="" className="mt-1 h-9 w-9 object-contain" />
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Diagnostics-first</p>
+                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Two parallel tracks</p>
                       <p className="mt-2 text-sm leading-6 text-black/66">
-                        Priorities, workflows, access, systems, support, accounting, integrations, and V1 specifications are aligned before implementation.
+                        Technology Discovery and Finance &amp; Accounting Discovery run side by side, with the Operations &amp; Process SME splitting time across both before implementation begins.
                       </p>
                     </div>
                   </div>
@@ -232,37 +208,71 @@ export default function OurApproach() {
             <motion.div {...fadeUp} className="mx-auto max-w-4xl text-center">
               <SectionLabel>Section 1</SectionLabel>
               <h2 className="font-display text-[clamp(2.8rem,5vw,5.6rem)] leading-[0.9] tracking-[-0.06em] text-[#111111]">
-                Discovery
+                Discovery runs as two parallel tracks.
               </h2>
-              <p className="mt-6 text-xl font-semibold tracking-[-0.02em] text-[#0A65FF]">Diagnostics-First</p>
+              <p className="mt-6 text-xl font-semibold tracking-[-0.02em] text-[#0A65FF]">Diagnostics-First, on-site for 2–4 weeks</p>
               <p className="mt-6 text-lg leading-8 text-black/62">
-                Digital Therapy&apos;s Discovery process consists of 8 parts:
+                All three Fusion Team SMEs deploy on-site with the client and stay present in every kickoff, internal review, and stakeholder readout. The Technology SME and the Finance + Accounting SME each lead a parallel Discovery track. The Operations &amp; Process SME splits time across both, pulled in to unpack any current-state process complex enough to warrant its own swim-lane analysis.
               </p>
             </motion.div>
 
             <div className="mt-16 grid gap-5 lg:grid-cols-2">
-              {discoveryParts.map((part) => {
-                const Icon = part.icon;
+              {discoveryTracks.map((track) => {
+                const Icon = track.icon;
                 return (
                   <motion.div
-                    key={part.number}
+                    key={track.title}
                     {...fadeUp}
-                    className="group grid gap-5 border border-black/10 bg-[#F7F4EE] p-7 transition-colors duration-300 hover:border-[#0A65FF]/35 lg:grid-cols-[4.7rem_1fr]"
+                    className="flex min-h-full flex-col border border-black/10 bg-[#F7F4EE] p-7 transition-colors duration-300 hover:border-[#0A65FF]/35"
                   >
-                    <div className="flex items-start justify-between gap-4 lg:block">
-                      <div className="font-display text-5xl leading-none tracking-[-0.07em] text-[#0A65FF]">{part.number}</div>
-                      <div className="mt-1 inline-flex h-12 w-12 items-center justify-center rounded-full border border-black/10 bg-white text-[#0A65FF] lg:mt-7">
+                    <div className="flex items-start justify-between gap-5 border-b border-black/10 pb-6">
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">{track.label}</p>
+                        <h3 className="mt-4 text-3xl font-semibold leading-tight tracking-[-0.04em] text-[#111111]">{track.title}</h3>
+                        <p className="mt-2 text-sm font-semibold uppercase tracking-[0.18em] text-black/52">{track.lead}</p>
+                      </div>
+                      <div className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-[#0A65FF]">
                         <Icon className="h-5 w-5" />
                       </div>
                     </div>
-                    <div>
-                      <h3 className="text-2xl font-semibold tracking-[-0.04em] text-[#111111]">{part.title}</h3>
-                      <p className="mt-4 text-base leading-7 text-black/62">{part.copy}</p>
+                    <p className="mt-6 text-base leading-7 text-black/64">{track.copy}</p>
+                    <div className="mt-6 space-y-3">
+                      {track.focus.map((item) => (
+                        <div key={item} className="grid grid-cols-[1rem_1fr] gap-3 text-sm leading-6 text-black/68">
+                          <Database className="mt-1 h-3.5 w-3.5 text-[#0A65FF]" />
+                          <span>{item}</span>
+                        </div>
+                      ))}
                     </div>
                   </motion.div>
                 );
               })}
             </div>
+
+            <motion.div
+              {...fadeUp}
+              className="mt-10 grid gap-8 border border-black/10 bg-[#111111] p-8 text-white lg:grid-cols-[0.82fr_1.18fr] lg:p-10"
+            >
+              <div>
+                <div className="inline-flex items-center gap-3">
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/18 bg-white/10 text-[#58B8FF]">
+                    <UsersRound className="h-5 w-5" />
+                  </div>
+                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#58B8FF]">Shared across both tracks</p>
+                </div>
+                <h3 className="mt-6 font-display text-[clamp(2rem,3.4vw,3.4rem)] leading-[0.94] tracking-[-0.06em]">
+                  Operations &amp; Process SME splits time across both Discoveries.
+                </h3>
+              </div>
+              <div className="grid gap-4 text-sm leading-7 text-white/68 sm:grid-cols-2">
+                <div className="border-l border-white/18 pl-5">
+                  As the Technology and Finance + Accounting leads identify complex current-state processes, they call the Operations &amp; Process SME in to collaborate on unpacking and mapping each one with swim lanes — who is involved, how many people, how many tasks, and where the handoffs break.
+                </div>
+                <div className="border-l border-white/18 pl-5">
+                  Together, all three SMEs then architect the future-state strategy, leveraging the new tools and automation capabilities surfaced by the parallel tracks so the implementation phase inherits one shared operating blueprint.
+                </div>
+              </div>
+            </motion.div>
           </div>
         </section>
 
@@ -276,7 +286,7 @@ export default function OurApproach() {
                 </h2>
               </div>
               <p className="max-w-3xl text-lg leading-8 text-white/62">
-                The Discovery Process converts interviews, workflow mapping, system evaluation, and governance review into a prioritized operating plan that can guide configuration, automation, integration, migration, testing, and onboarding.
+                The two Discovery tracks converge into one prioritized operating plan. Together, the Technology Discovery, the Finance &amp; Accounting Discovery, and the Operations &amp; Process swim-lane work convert interviews, system mapping, accounting analysis, and future-state architecture into a sequenced roadmap that can guide configuration, automation, integration, migration, testing, and onboarding.
               </p>
             </motion.div>
 
