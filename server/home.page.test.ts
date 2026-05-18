@@ -9,6 +9,20 @@ function readProjectFile(relativePath: string) {
 }
 
 describe("Home page content updates", () => {
+  it("renders the contracted privacy headline and removes the previous expanded copy", () => {
+    const homeSource = readProjectFile("client/src/pages/Home.tsx");
+
+    const securitySectionLabelIndex = homeSource.indexOf("<SectionLabel>Security and control</SectionLabel>");
+    const headlineIndex = homeSource.indexOf(
+      "Privacy isn&apos;t a feature. It&apos;s the foundation.",
+      securitySectionLabelIndex,
+    );
+
+    expect(securitySectionLabelIndex).toBeGreaterThanOrEqual(0);
+    expect(headlineIndex).toBeGreaterThan(securitySectionLabelIndex);
+    expect(homeSource).not.toContain("Privacy is not a feature. It is the foundation.");
+  });
+
   it("makes the Fusion Team Model section lead with the Collaboration headline and an inline Thesis link", () => {
     const homeSource = readProjectFile("client/src/pages/Home.tsx");
 

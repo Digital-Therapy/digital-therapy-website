@@ -315,3 +315,10 @@
 - [x] Replace the headline and subheadline in the Fusion Team Model section with the confirmed "Collaboration cannot be an afterthought." copy and remove the redundant black callout, relocating the View Our Thesis link beneath the new subheadline.
 - [x] Update regression coverage so the relevant page tests assert the new headline/subheadline and explicitly fail if the previous "handoff problem is the transformation problem" copy returns.
 - [x] Validate the Fusion Team Model headline swap with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Privacy Headline Visual Edit
+
+- [x] Verify the privacy headline in Home.tsx now reads "Privacy isn't a feature. It's the foundation." (contractions) and that the previous "Privacy is not a feature. It is the foundation." copy is gone. (Visual editor diff did not land; applied manually.)
+- [x] Search the rest of the codebase (other pages, tests, copy strings) for any remaining "Privacy is not a feature" references that need to be updated for consistency. (Survey result: no other files referenced the previous copy.)
+- [x] Update or add regression coverage so the home page tests assert the new contracted headline and explicitly fail if the previous expanded copy returns.
+- [x] Validate the privacy headline edit with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.

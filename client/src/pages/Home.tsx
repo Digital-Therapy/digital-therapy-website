@@ -340,7 +340,7 @@ export default function Home() {
             <motion.div {...fadeUp}>
               <SectionLabel>Security and control</SectionLabel>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.92] tracking-[-0.06em] text-white">
-                Privacy is not a feature. It is the foundation.
+                Privacy isn&apos;t a feature. It&apos;s the foundation.
               </h2>
               <p className="mt-6 text-lg leading-8 text-white/62">
                 Digital Therapy designs the operating layer so sensitive family-office data, reports, documents, and workflows remain governed by the office’s access model and infrastructure requirements.
