@@ -277,3 +277,9 @@
 - [x] Verify the Thesis hero paragraph in Thesis.tsx now reads the confirmed "one Fusion Team — custom built and trained..." copy with the softened "And these days, that includes basically everything." closing line.
 - [x] Update regression coverage so the Thesis page tests assert the new hero paragraph and that the previous "one Fusion Pod" hero copy is removed.
 - [x] Validate the Thesis hero paragraph update with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Thesis Page Fusion Pod -> Fusion Team Cleanup
+
+- [x] Replace every remaining "Fusion Pod" mention in client/src/pages/Thesis.tsx with "Fusion Team", preserving sentence structure and surrounding copy.
+- [x] Update regression coverage so server/thesis.page.test.ts asserts the new "Fusion Team" copy and explicitly fails if any "Fusion Pod" string returns to Thesis.tsx.
+- [x] Validate the Fusion Pod -> Fusion Team cleanup with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.

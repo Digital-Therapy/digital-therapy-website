@@ -63,4 +63,22 @@ describe("Thesis page content updates", () => {
       'Accountants, engineers, operations consultants, and finance teams often work beside each other rather than as one unit.',
     );
   });
+
+  it("renames every remaining Fusion Pod reference on the Thesis page to Fusion Team", () => {
+    const thesisSource = readProjectFile("client/src/pages/Thesis.tsx");
+
+    expect(thesisSource).not.toMatch(/Fusion Pod/);
+    expect(thesisSource).not.toMatch(/Fusion Pods/);
+    expect(thesisSource).toContain("One permanent Fusion Team");
+    expect(thesisSource).toContain("Fusion Team model");
+    expect(thesisSource).toContain(
+      "Digital Therapy\u2019s Fusion Team model was built to eliminate structural failure at the root. Rather than assembling temporary teams from competing departments, the Fusion Team is a permanent leadership layer composed of deeply aligned operations, accounting, and technology disciplines.",
+    );
+    expect(thesisSource).toContain(
+      "The Fusion Team succeeds or fails together, so collaboration is no longer optional; it is the operating model itself.",
+    );
+    expect(thesisSource).toContain(
+      "Traditional firms attempt collaboration between competing departments. Fusion Teams eliminate the competition entirely by creating one shared mission and one accountable delivery structure.",
+    );
+  });
 });

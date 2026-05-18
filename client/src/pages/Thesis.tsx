@@ -1,6 +1,6 @@
 /**
  * Digital Therapy Thesis page.
- * Presents the structural consulting problem and Digital Therapy's Fusion Pod solution
+ * Presents the structural consulting problem and Digital Therapy's Fusion Team solution
  * using the established quiet-luxury family-office visual system.
  */
 import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
@@ -93,7 +93,7 @@ const fusionDisciplines = [
 ];
 
 const comparisonRows = [
-  ["Operating structure", "Competing practice groups", "One permanent Fusion Pod"],
+  ["Operating structure", "Competing practice groups", "One permanent Fusion Team"],
   ["Economics", "Transfer pricing and utilization politics", "Shared incentives and unified accountability"],
   ["Delivery rhythm", "Fragmented handoffs across departments", "Integrated execution across operations, accounting, and technology"],
   ["Technology adoption", "Bolted-on tools after advisory work", "Data, automation, AI, and workflow design embedded from day one"],
@@ -177,7 +177,7 @@ export default function Thesis() {
                   <div className="flex items-start gap-4">
                     <img src={markUrl} alt="" className="mt-1 h-9 w-9 object-contain" />
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Fusion Pod model</p>
+                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Fusion Team model</p>
                       <p className="mt-2 text-sm leading-6 text-black/66">
                         One accountable unit beneath the CEO: operations, accounting, and technology working from the same mission.
                       </p>
@@ -245,7 +245,7 @@ export default function Thesis() {
                 One integrated unit — not “collaborating” practice groups.
               </h2>
               <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-black/62">
-                Digital Therapy’s Fusion Pod model was built to eliminate structural failure at the root. Rather than assembling temporary teams from competing departments, the Fusion Pod is a permanent leadership layer composed of deeply aligned operations, accounting, and technology disciplines.
+                Digital Therapy’s Fusion Team model was built to eliminate structural failure at the root. Rather than assembling temporary teams from competing departments, the Fusion Team is a permanent leadership layer composed of deeply aligned operations, accounting, and technology disciplines.
               </p>
             </motion.div>
 
@@ -300,7 +300,7 @@ export default function Thesis() {
                 Fragmented advisors cannot solve one shared operating reality.
               </h2>
               <p className="mt-7 text-lg leading-8 text-black/62">
-                Family-office leaders need one team that can see the full architecture: process, controls, data, workflow, automation, AI, integrations, and execution discipline. The Fusion Pod succeeds or fails together, so collaboration is no longer optional; it is the operating model itself.
+                Family-office leaders need one team that can see the full architecture: process, controls, data, workflow, automation, AI, integrations, and execution discipline. The Fusion Team succeeds or fails together, so collaboration is no longer optional; it is the operating model itself.
               </p>
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
                 {[
@@ -331,7 +331,7 @@ export default function Thesis() {
                   The structural difference changes everything.
                 </h2>
                 <p className="mt-7 text-lg leading-8 text-white/62">
-                  Traditional firms attempt collaboration between competing departments. Fusion Pods eliminate the competition entirely by creating one shared mission and one accountable delivery structure.
+                  Traditional firms attempt collaboration between competing departments. Fusion Teams eliminate the competition entirely by creating one shared mission and one accountable delivery structure.
                 </p>
               </div>
               <div className="overflow-hidden rounded-[2rem] border border-white/12 bg-white/[0.04]">
