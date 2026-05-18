@@ -88,6 +88,17 @@ describe("Our Approach page implementation", () => {
     });
   });
 
+  it("renders the Output intro paragraph in full white for stronger contrast on the dark deliverables section", () => {
+    const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
+
+    expect(approachSource).toContain(
+      'max-w-3xl text-lg leading-8 text-white">\n                The two Discovery tracks converge into one prioritized operating plan.',
+    );
+    expect(approachSource).not.toContain(
+      'max-w-3xl text-lg leading-8 text-white/62',
+    );
+  });
+
   it("includes the Discovery Process output deliverables on the Our Approach page", () => {
     const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
 

@@ -338,3 +338,10 @@
 - [x] Update `server/approach.page.test.ts` so the legacy h1 copy + clamp class are forbidden and the new copy + 70px size are required.
 - [x] Validate with Vitest, TypeScript, and production build.
 - [x] Save a new checkpoint for the verified Approach hero h1 edit.
+
+# Approach Output Intro Paragraph Color
+
+- [x] Brighten the Approach Output intro paragraph from `text-white/62` to full `text-white` for stronger contrast on the dark Output section.
+- [x] Update `server/approach.page.test.ts` so the legacy `text-white/62` is forbidden and the new `text-white` requirement is locked in.
+- [x] Validate with Vitest, TypeScript, and production build.
+- [x] Save a new checkpoint for the verified Output paragraph color edit.

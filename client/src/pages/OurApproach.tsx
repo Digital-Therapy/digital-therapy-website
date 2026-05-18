@@ -285,7 +285,7 @@ export default function OurApproach() {
                   Discovery produces three implementation-ready deliverables.
                 </h2>
               </div>
-              <p className="max-w-3xl text-lg leading-8 text-white/62">
+              <p className="max-w-3xl text-lg leading-8 text-white">
                 The two Discovery tracks converge into one prioritized operating plan. Together, the Technology Discovery, the Finance &amp; Accounting Discovery, and the Operations &amp; Process swim-lane work convert interviews, system mapping, accounting analysis, and future-state architecture into a sequenced roadmap that can guide configuration, automation, integration, migration, testing, and onboarding.
               </p>
             </motion.div>
