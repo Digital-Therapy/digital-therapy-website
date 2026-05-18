@@ -345,3 +345,10 @@
 - [x] Update `server/approach.page.test.ts` so the legacy `text-white/62` is forbidden and the new `text-white` requirement is locked in.
 - [x] Validate with Vitest, TypeScript, and production build.
 - [x] Save a new checkpoint for the verified Output paragraph color edit.
+
+# Approach Operating Outcome H3 Copy
+
+- [x] Update the Operating Outcome h3 on the Approach page from "Close in the first 3 - 5 days of the next month." to "Close in 05 days. Perhaps, even 03.".
+- [x] Update `server/approach.page.test.ts` so the legacy copy is forbidden and the new copy is required.
+- [x] Validate with Vitest, TypeScript, and production build.
+- [x] Save a new checkpoint for the verified Operating Outcome h3 update.

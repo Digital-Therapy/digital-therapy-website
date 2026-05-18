@@ -371,7 +371,7 @@ export default function OurApproach() {
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#58B8FF]">Operating outcome</p>
                 <h3 className="mt-5 font-display text-[clamp(2.2rem,4vw,4.2rem)] leading-[0.9] tracking-[-0.06em]">
-                  Close in the first 3 - 5 days of the next month.
+                  Close in 05 days. Perhaps, even 03.
                 </h3>
               </div>
               <div className="grid gap-4 text-sm leading-7 text-white/68 sm:grid-cols-2">

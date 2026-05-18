@@ -130,12 +130,16 @@ describe("Our Approach page implementation", () => {
       "Clients often operate 15 to 30+ days behind",
       "redesign close systems &amp; processes",
       "build custom tools to reduce the monthly close burden",
-      "Close in the first 3 - 5 days of the next month.",
+      "Close in 05 days. Perhaps, even 03.",
       "Reduce the monthly close burden",
       "Target close",
     ].forEach((closeSystemText) => {
       expect(approachSource).toContain(closeSystemText);
     });
+
+    expect(approachSource).not.toContain(
+      "Close in the first 3 - 5 days of the next month.",
+    );
   });
 
   it("presents the new Approach hero headline 'The difference one month can make.' at a fixed 70px", () => {
