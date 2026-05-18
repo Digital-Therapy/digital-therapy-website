@@ -271,3 +271,9 @@
 - [x] Reword related Thesis page copy that referenced the previous "integrated team" or "interconnected systems" framing so the page reads consistently with the new heading.
 - [x] Update regression coverage so the Thesis page tests assert the new heading and any reworded supporting copy.
 - [x] Validate the Thesis heading and consistency update with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.
+
+# Thesis Hero Paragraph Visual Edit
+
+- [x] Verify the Thesis hero paragraph in Thesis.tsx now reads the confirmed "one Fusion Team — custom built and trained..." copy with the softened "And these days, that includes basically everything." closing line.
+- [x] Update regression coverage so the Thesis page tests assert the new hero paragraph and that the previous "one Fusion Pod" hero copy is removed.
+- [x] Validate the Thesis hero paragraph update with Vitest, TypeScript, production build, preview, and environment health checks before checkpointing.

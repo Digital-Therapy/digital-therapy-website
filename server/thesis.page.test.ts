@@ -45,6 +45,9 @@ describe("Thesis page content updates", () => {
     const thesisSource = readProjectFile("client/src/pages/Thesis.tsx");
 
     expect(thesisSource).toContain(
+      "Digital Therapy replaces that fragmentation with one Fusion Team — custom built and trained to understand and overcome even the most complex business and data challenges that touch operations, accounting, and technology. And these days, that includes basically everything.",
+    );
+    expect(thesisSource).not.toContain(
       "Digital Therapy replaces that fragmentation with one Fusion Pod built around operations, accounting, and technology.",
     );
     expect(thesisSource).toContain(

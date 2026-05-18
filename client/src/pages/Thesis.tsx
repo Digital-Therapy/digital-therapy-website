@@ -138,7 +138,7 @@ export default function Thesis() {
                 The old consulting model is structurally broken.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
-                Most transformation work fails to reach its potential not because advisory firms lack smart people, but because their organizational structure rewards silo behavior. Digital Therapy replaces that fragmentation with one Fusion Pod built around operations, accounting, and technology.
+                Most transformation work fails to reach its potential not because advisory firms lack smart people, but because their organizational structure rewards silo behavior. Digital Therapy replaces that fragmentation with one Fusion Team — custom built and trained to understand and overcome even the most complex business and data challenges that touch operations, accounting, and technology. And these days, that includes basically everything.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <PrivateBriefingButton />
