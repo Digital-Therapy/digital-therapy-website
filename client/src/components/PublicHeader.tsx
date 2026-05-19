@@ -19,7 +19,6 @@ const primaryNavItems = [
   { label: "DT Brain", href: "/dt-brain" },
   { label: "Security", href: "/#security", homeHref: "#security" },
   { label: "Team", href: "/team" },
-  { label: "Partners", href: "/#partners", homeHref: "#partners" },
 ] as const;
 
 type PublicHeaderProps = {

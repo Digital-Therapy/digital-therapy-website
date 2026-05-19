@@ -40,7 +40,6 @@ const navItems = [
   { label: "DT Brain", href: "/dt-brain" },
   { label: "Security", href: "#security" },
   { label: "Team", href: "/team" },
-  { label: "Partners", href: "#partners" },
 ];
 
 const complexityPoints = [

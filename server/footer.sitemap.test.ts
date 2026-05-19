@@ -17,7 +17,7 @@ const publicPagePaths = [
   "client/src/pages/Thesis.tsx",
 ];
 
-const expectedTopMenuOrder = ["Thesis", "Capabilities", "Process", "DT Brain", "Security", "Team", "Partners"];
+const expectedTopMenuOrder = ["Thesis", "Capabilities", "Process", "DT Brain", "Security", "Team"];
 
 function extractTopMenuSource(source: string) {
   return source.match(/const primaryNavItems = \[[\s\S]*?\] as const;/)?.[0] ?? "";
@@ -41,7 +41,7 @@ describe("Site footer sitemap", () => {
     expect(appSource).toContain("<SiteFooter />");
   });
 
-  it("orders top-menu page links as Thesis, Capabilities, Process, DT Brain, Security, Team, Partners", () => {
+  it("orders top-menu page links as Thesis, Capabilities, Process, DT Brain, Security, Team", () => {
     const headerSource = readProjectFile("client/src/components/PublicHeader.tsx");
     const navSource = extractTopMenuSource(headerSource);
 
@@ -52,6 +52,8 @@ describe("Site footer sitemap", () => {
     expect(navSource).not.toContain("Home");
     expect(navSource).not.toContain("Operating Layer");
     expect(navSource).not.toContain("#operating-layer");
+    expect(navSource).not.toContain('label: "Partners"');
+    expect(navSource).not.toContain("#partners");
 
     publicPagePaths.forEach((relativePath) => {
       const pageSource = readProjectFile(relativePath);
