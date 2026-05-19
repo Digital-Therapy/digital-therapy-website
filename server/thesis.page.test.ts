@@ -82,9 +82,12 @@ describe("Thesis page content updates", () => {
   it("renames the problem h2 and the why-family-offices h2 with their new sizes", () => {
     const thesisSource = readProjectFile("client/src/pages/Thesis.tsx");
 
-    expect(thesisSource).toContain("Firm architecture prevents collaboration.");
+    expect(thesisSource).toContain("Firm architecture prevents effective collaboration.");
     expect(thesisSource).not.toContain(
       "Consulting firms are designed to prevent true collaboration.",
+    );
+    expect(thesisSource).not.toMatch(
+      /Firm architecture prevents collaboration\.[\s\S]{0,40}<\/h2>/,
     );
 
     expect(thesisSource).toContain(
@@ -130,7 +133,13 @@ describe("Thesis page content updates", () => {
     expect(thesisSource).not.toContain('"Poor technology adoption"');
 
     expect(thesisSource).toContain(
+      'className="rounded-full border border-black/10 bg-[#F7F4EE] px-4 py-3 text-center text-[14px] font-medium uppercase tracking-[0.14em] text-black/62"',
+    );
+    expect(thesisSource).not.toContain(
       'className="rounded-full border border-black/10 bg-[#F7F4EE] px-4 py-3 text-center text-[20px] font-normal uppercase tracking-[0.14em] text-black/62"',
+    );
+    expect(thesisSource).not.toContain(
+      'className="rounded-full border border-black/10 bg-[#F7F4EE] px-4 py-3 text-center text-xs font-bold uppercase tracking-[0.14em] text-black/62"',
     );
   });
 

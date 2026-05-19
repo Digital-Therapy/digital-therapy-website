@@ -194,14 +194,14 @@ export default function Thesis() {
             <motion.div {...fadeUp} className="sticky top-28">
               <SectionLabel>The problem</SectionLabel>
               <h2 className="max-w-3xl font-display text-[clamp(2.7rem,5vw,5.4rem)] leading-[0.9] tracking-[-0.06em]">
-                Firm architecture prevents collaboration.
+                Firm architecture prevents effective collaboration.
               </h2>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-black/62">
                 Accounting practices operate independently from engineering teams. Operations consultants work separately from finance. Each group protects its own revenue, utilization, and client control, producing predictable delivery failures for clients with one shared systems problem.
               </p>
               <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {problemSignals.map((signal) => (
-                  <div key={signal} className="rounded-full border border-black/10 bg-[#F7F4EE] px-4 py-3 text-center text-[20px] font-normal uppercase tracking-[0.14em] text-black/62">
+                  <div key={signal} className="rounded-full border border-black/10 bg-[#F7F4EE] px-4 py-3 text-center text-[14px] font-medium uppercase tracking-[0.14em] text-black/62">
                     {signal}
                   </div>
                 ))}
