@@ -9,18 +9,28 @@ function readProjectFile(relativePath: string) {
 }
 
 describe("Home page content updates", () => {
-  it("renders the contracted privacy headline and removes the previous expanded copy", () => {
+  it("renders the privacy section with the conditional headline and the extended access-model paragraph", () => {
     const homeSource = readProjectFile("client/src/pages/Home.tsx");
 
     const securitySectionLabelIndex = homeSource.indexOf("<SectionLabel>Security and control</SectionLabel>");
     const headlineIndex = homeSource.indexOf(
-      "Privacy isn&apos;t a feature. It&apos;s the foundation.",
+      "If privacy &amp; security are top priority..",
       securitySectionLabelIndex,
+    );
+    const paragraphIndex = homeSource.indexOf(
+      "governed by the office\u2019s access model, infrastructure requirements and data privacy policies.",
+      headlineIndex,
     );
 
     expect(securitySectionLabelIndex).toBeGreaterThanOrEqual(0);
     expect(headlineIndex).toBeGreaterThan(securitySectionLabelIndex);
+    expect(paragraphIndex).toBeGreaterThan(headlineIndex);
+
+    expect(homeSource).not.toContain("Privacy isn&apos;t a feature. It&apos;s the foundation.");
     expect(homeSource).not.toContain("Privacy is not a feature. It is the foundation.");
+    expect(homeSource).not.toContain(
+      "governed by the office\u2019s access model and infrastructure requirements.",
+    );
   });
 
   it("makes the Fusion Team Model section lead with the Collaboration headline and an inline Thesis link", () => {
