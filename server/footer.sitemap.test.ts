@@ -102,15 +102,39 @@ describe("Site footer sitemap", () => {
     expect(homeSource).not.toContain("mt-6 text-sm text-black/48");
   });
 
-  it("keeps footer dialog links aligned with neighboring sitemap link rows", () => {
+  it("renders Book 30 Min and Contact as full button variants under Team in the Company column", () => {
     const footerSource = readProjectFile("client/src/components/SiteFooter.tsx");
 
-    expect(footerSource).toContain("const footerLinkClasses =");
-    expect(footerSource).toContain("flex w-full items-center justify-between");
-    expect(footerSource).toContain("const footerDialogLinkClasses");
-    expect(footerSource).toContain("after:h-3.5 after:w-3.5 after:content-['']");
-    expect(footerSource).toContain("className={footerDialogLinkClasses}");
-    expect(footerSource).toContain("className={footerLinkClasses}");
+    // Standalone button block (previously rendered next to the logo paragraph) is gone.
+    expect(footerSource).not.toMatch(
+      /<div className="mt-7 flex flex-col gap-3 sm:flex-row">[\s\S]*?<BookingWidgetDialog label="Book 30 Min" icon="arrow" \/>/,
+    );
+    expect(footerSource).not.toContain(
+      '<BookingWidgetDialog label="Book 30 Min" icon="arrow" />',
+    );
+
+    // Company-column rows now render the prominent button variants in place of the text link counterparts.
+    expect(footerSource).toMatch(
+      /if \(link\.href === "#book"\) \{[\s\S]*?<BookingWidgetDialog[\s\S]*?label=\{link\.label\}[\s\S]*?icon="arrow"[\s\S]*?className="w-full justify-center"/,
+    );
+    expect(footerSource).toMatch(
+      /if \(link\.href === "#contact"\) \{[\s\S]*?<ContactFormDialog[\s\S]*?variant="secondary"[\s\S]*?label=\{link\.label\}[\s\S]*?context="footer sitemap inquiry"[\s\S]*?icon="message"[\s\S]*?className="w-full justify-center bg-white\/55"/,
+    );
+
+    // Legacy text-link versions of the dialogs are no longer used.
+    expect(footerSource).not.toContain('variant="text"');
+    expect(footerSource).not.toContain('context="footer sitemap contact link"');
+    expect(footerSource).not.toContain("className={footerDialogLinkClasses}");
+
+    // Team still appears immediately before Contact and Book 30 Min in the Company group.
+    const companyGroup = footerSource.match(/title: "Company",[\s\S]*?\],/)?.[0] ?? "";
+    expect(companyGroup).toBeTruthy();
+    const teamIdx = companyGroup.indexOf('label: "Team"');
+    const contactIdx = companyGroup.indexOf('label: "Contact"');
+    const bookIdx = companyGroup.indexOf('label: "Book 30 Min"');
+    expect(teamIdx).toBeGreaterThanOrEqual(0);
+    expect(contactIdx).toBeGreaterThan(teamIdx);
+    expect(bookIdx).toBeGreaterThan(contactIdx);
   });
 
   it("includes sitemap groups, primary routes, and footer actions", () => {

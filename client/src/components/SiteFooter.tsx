@@ -50,16 +50,6 @@ export default function SiteFooter() {
             <p className="mt-6 max-w-md text-base leading-7 text-black/62">
               Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & family office operated businesses.
             </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <BookingWidgetDialog label="Book 30 Min" icon="arrow" />
-              <ContactFormDialog
-                variant="secondary"
-                label="Contact"
-                context="footer sitemap inquiry"
-                icon="message"
-                className="bg-white/55"
-              />
-            </div>
           </div>
 
           <div className="grid gap-8 sm:grid-cols-3">
@@ -77,11 +67,11 @@ export default function SiteFooter() {
                       return (
                         <ContactFormDialog
                           key={link.label}
-                          variant="text"
+                          variant="secondary"
                           label={link.label}
-                          context="footer sitemap contact link"
-                          icon="none"
-                          className={footerDialogLinkClasses}
+                          context="footer sitemap inquiry"
+                          icon="message"
+                          className="w-full justify-center bg-white/55"
                         />
                       );
                     }
@@ -90,10 +80,9 @@ export default function SiteFooter() {
                       return (
                         <BookingWidgetDialog
                           key={link.label}
-                          variant="text"
                           label={link.label}
-                          icon="none"
-                          className={footerDialogLinkClasses}
+                          icon="arrow"
+                          className="w-full justify-center"
                         />
                       );
                     }
