@@ -56,7 +56,7 @@ describe("Home page content updates", () => {
 
     const leftCtaGroupIndex = homeSource.indexOf('className="mt-10 flex flex-col gap-3 sm:flex-row"');
     const capabilitiesHrefIndex = homeSource.indexOf('href="/capabilities"', leftCtaGroupIndex);
-    const capabilitiesLabelIndex = homeSource.indexOf("Learn what DT can do", capabilitiesHrefIndex);
+    const capabilitiesLabelIndex = homeSource.indexOf("See what DT can do", capabilitiesHrefIndex);
     const dtBrainHrefIndex = homeSource.indexOf('href="/dt-brain"', capabilitiesLabelIndex);
     const dtBrainLabelIndex = homeSource.indexOf("What is DT Brain?", dtBrainHrefIndex);
     const heroImageIndex = homeSource.indexOf('alt="Abstract private operating layer visualization"');
@@ -74,6 +74,7 @@ describe("Home page content updates", () => {
     expect(homeSource).not.toContain("Explore the operating layer");
     expect(homeSource).not.toContain("View our capabilities");
     expect(homeSource).not.toContain("Meet DT Brain");
+    expect(homeSource).not.toContain("Learn what DT can do");
     expect(desktopOffsetIndex).toBeGreaterThanOrEqual(0);
     expect(compactHeroImageIndex).toBeGreaterThan(heroImageIndex);
     expect(imageSideBookingIndex).toBeGreaterThan(heroImageIndex);
