@@ -413,7 +413,7 @@ export default function Home() {
             <motion.div {...fadeUp}>
               <img src={markUrl} alt="Digital Therapy picture mark" className="h-14 w-14 object-contain" />
               <h2 className="mt-9 font-display text-[clamp(3rem,6vw,6.6rem)] leading-[0.88] tracking-[-0.07em]">
-                Book 30 minutes to find the first high-value win.
+                Book 20 min. Let’s find the first win !
               </h2>
               <p className="mt-7 max-w-2xl text-xl leading-8 text-black/62">
                 Family-office leaders and advisors can use one focused conversation to surface pain points, identify where Digital Therapy can deliver meaningful value first, and tour custom operating-layer solutions already deployed for some of New York City’s largest and most discerning family offices.
@@ -426,7 +426,6 @@ export default function Home() {
                   context="family office pain-point conversation"
                 />
               </div>
-              <p className="mt-7 font-display text-[clamp(1.45rem,2.2vw,2.35rem)] leading-tight tracking-[-0.045em] text-black/70">hello@digitaltherapy.io · 1 (917) 495-0455</p>
             </motion.div>
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
               <img src={heroVisual} alt="Digital Therapy abstract operating layer" className="aspect-[16/11] w-full object-cover" />

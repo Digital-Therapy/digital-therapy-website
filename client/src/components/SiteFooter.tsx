@@ -50,6 +50,20 @@ export default function SiteFooter() {
             <p className="mt-6 max-w-md text-base leading-7 text-black/62">
               Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & family office operated businesses.
             </p>
+            <div className="mt-7 flex flex-col gap-2 text-base text-black/72">
+              <a
+                href="mailto:hello@digitaltherapy.io"
+                className="font-medium transition-colors duration-300 hover:text-[#0A65FF]"
+              >
+                hello@digitaltherapy.io
+              </a>
+              <a
+                href="tel:+19174950455"
+                className="font-medium transition-colors duration-300 hover:text-[#0A65FF]"
+              >
+                1 (917) 495-0455
+              </a>
+            </div>
           </div>
 
           <div className="grid gap-8 sm:grid-cols-3">

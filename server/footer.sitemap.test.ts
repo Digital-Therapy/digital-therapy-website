@@ -94,12 +94,30 @@ describe("Site footer sitemap", () => {
     expect(partnersSource).toContain('context="partner model discussion"');
   });
 
-  it("renders the Home contact email and phone number with enlarged typography", () => {
+  it("moves the contact email and phone number out of Home and into the footer logo column", () => {
     const homeSource = readProjectFile("client/src/pages/Home.tsx");
+    const footerSource = readProjectFile("client/src/components/SiteFooter.tsx");
 
-    expect(homeSource).toContain("hello@digitaltherapy.io · 1 (917) 495-0455");
-    expect(homeSource).toContain("font-display text-[clamp(1.45rem,2.2vw,2.35rem)]");
-    expect(homeSource).not.toContain("mt-6 text-sm text-black/48");
+    // Home no longer renders email/phone (in any form, including the previous combined paragraph).
+    expect(homeSource).not.toContain("hello@digitaltherapy.io");
+    expect(homeSource).not.toContain("1 (917) 495-0455");
+    expect(homeSource).not.toContain("hello@digitaltherapy.io · 1 (917) 495-0455");
+    expect(homeSource).not.toContain("font-display text-[clamp(1.45rem,2.2vw,2.35rem)]");
+
+    // Footer renders both as actionable mailto/tel links beneath the tagline paragraph.
+    expect(footerSource).toContain('href="mailto:hello@digitaltherapy.io"');
+    expect(footerSource).toContain(">\n                hello@digitaltherapy.io\n              </a>");
+    expect(footerSource).toContain('href="tel:+19174950455"');
+    expect(footerSource).toContain(">\n                1 (917) 495-0455\n              </a>");
+
+    const taglineIdx = footerSource.indexOf(
+      "Digital Therapy builds private data, workflow, reporting, and automation systems",
+    );
+    const emailIdx = footerSource.indexOf('href="mailto:hello@digitaltherapy.io"');
+    const phoneIdx = footerSource.indexOf('href="tel:+19174950455"');
+    expect(taglineIdx).toBeGreaterThanOrEqual(0);
+    expect(emailIdx).toBeGreaterThan(taglineIdx);
+    expect(phoneIdx).toBeGreaterThan(emailIdx);
   });
 
   it("renders Book 30 Min and Contact as full button variants under Team in the Company column", () => {

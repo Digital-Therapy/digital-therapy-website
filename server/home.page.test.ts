@@ -171,10 +171,11 @@ describe("Home page content updates", () => {
     expect(homeSource).not.toContain("GitBranch");
 
     const partnersIndex = homeSource.indexOf('id="partners"');
-    const ctaIndex = homeSource.indexOf("Book 30 minutes to find the first high-value win.");
+    const ctaIndex = homeSource.indexOf("Book 20 min. Let\u2019s find the first win !");
 
     expect(partnersIndex).toBeGreaterThanOrEqual(0);
     expect(ctaIndex).toBeGreaterThan(partnersIndex);
+    expect(homeSource).not.toContain("Book 30 minutes to find the first high-value win.");
   });
 
   it("updates the operating-layer section to the requested Data Empowerment four-step copy", () => {
