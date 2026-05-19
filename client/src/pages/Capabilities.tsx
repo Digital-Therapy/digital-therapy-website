@@ -133,8 +133,8 @@ export default function Capabilities() {
           <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-12 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:py-28">
             <motion.div {...fadeUp}>
               <SectionLabel>Capabilities built for complex wealth</SectionLabel>
-              <h1 className="max-w-4xl font-display text-[clamp(3.3rem,7vw,7.6rem)] leading-[0.88] tracking-[-0.07em] text-[#111111]">
-                Everything required to answer the owner’s next question.
+              <h1 className="max-w-4xl font-display text-[60px] leading-[0.88] tracking-[-0.07em] text-[#111111]">
+                Get real time answers & insights from your data.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
                 Digital Therapy builds private data, automation, accounting, and reporting capabilities for family offices that need confidence across sensitive information, complex assets, and lean operating teams.
@@ -177,8 +177,8 @@ export default function Capabilities() {
           <div className="container grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
             <motion.div {...fadeUp}>
               <SectionLabel>Typical customer requests</SectionLabel>
-              <h2 className="font-display text-[clamp(2.7rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.06em]">
-                What sophisticated offices ask for first.
+              <h2 className="font-display text-[60px] leading-[0.92] tracking-[-0.06em]">
+                Family offices typically want..
               </h2>
               <p className="mt-6 text-lg leading-8 text-black/62">
                 These requests show the practical outcomes family offices want: trust, control, self-service intelligence, lower operating burden, and automation that respects the sensitivity of the data.
@@ -209,7 +209,7 @@ export default function Capabilities() {
             <motion.div {...fadeUp} className="max-w-4xl">
               <SectionLabel>Core capabilities</SectionLabel>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.06em]">
-                The operating toolkit for complex wealth.
+                Digital Therapy offers a toolbox for complex wealth.
               </h2>
             </motion.div>
             <div className="mt-14 grid gap-5 lg:grid-cols-3">
@@ -243,7 +243,7 @@ export default function Capabilities() {
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <SectionLabel>Delivery architecture</SectionLabel>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.92] tracking-[-0.06em]">
-                Built as a secure operating layer, not another isolated tool.
+                Built to be fully integrated & securely on-prem.
               </h2>
               <div className="mt-9 grid gap-4 sm:grid-cols-2">
                 {deliveryLayers.map((layer, index) => {
