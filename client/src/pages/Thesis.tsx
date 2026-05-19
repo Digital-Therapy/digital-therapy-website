@@ -240,9 +240,9 @@ export default function Thesis() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_18%,rgba(10,101,255,0.10),transparent_30%)]" />
           <div className="container relative">
             <motion.div {...fadeUp} className="mx-auto max-w-4xl text-center">
-              <SectionLabel>DT's solution</SectionLabel>
-              <h2 className="font-display text-[clamp(2.8rem,5.5vw,6.1rem)] leading-[0.9] tracking-[-0.065em]">
-                One trained team — not “collaborating” practice groups.
+              <SectionLabel>Fusion teams by digital therapy</SectionLabel>
+              <h2 className="font-display text-[55px] leading-[0.9] tracking-[-0.065em]">
+                One trained team — Not “collaborating” practice groups.
               </h2>
               <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-black/62">
                 Digital Therapy’s Fusion Team model was built to eliminate structural failure at the root. Rather than assembling temporary teams from competing departments, the Fusion Team is a permanent leadership layer composed of deeply aligned operations, accounting, and technology disciplines.
@@ -358,7 +358,7 @@ export default function Thesis() {
           <div className="container relative text-center">
             <motion.div {...fadeUp} className="mx-auto max-w-4xl">
               <SectionLabel>Your fusion team can do it</SectionLabel>
-              <h2 className="font-display text-[clamp(3rem,6vw,6.4rem)] leading-[0.88] tracking-[-0.07em]">
+              <h2 className="font-display text-[55px] leading-[0.88] tracking-[-0.07em]">
                 Family offices, you need one team to tackle one fused problem.
               </h2>
               <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-black/62">

@@ -104,14 +104,24 @@ describe("Thesis page content updates", () => {
     const thesisSource = readProjectFile("client/src/pages/Thesis.tsx");
 
     expect(thesisSource).toContain(
-      "One trained team \u2014 \u201ccollaborating\u201d practice groups.".replace(
-        "\u201ccollaborating\u201d practice groups.",
-        "not \u201ccollaborating\u201d practice groups.",
-      ),
+      "One trained team \u2014 Not \u201ccollaborating\u201d practice groups.",
+    );
+    expect(thesisSource).not.toContain(
+      "One trained team \u2014 not \u201ccollaborating\u201d practice groups.",
     );
     expect(thesisSource).not.toContain(
       "One integrated unit \u2014 not \u201ccollaborating\u201d practice groups.",
     );
+
+    expect(thesisSource).toContain(
+      "<SectionLabel>Fusion teams by digital therapy</SectionLabel>",
+    );
+    expect(thesisSource).not.toContain("<SectionLabel>DT's solution</SectionLabel>");
+
+    expect(thesisSource).toContain(
+      'className="font-display text-[55px] leading-[0.9] tracking-[-0.065em]"',
+    );
+    expect(thesisSource).not.toContain("text-[clamp(2.8rem,5.5vw,6.1rem)]");
 
     expect(thesisSource).toContain("Traditional Advisory vs. Fusion Teams");
     expect(thesisSource).not.toContain("Traditional consulting vs. Fusion Teams");
@@ -122,6 +132,15 @@ describe("Thesis page content updates", () => {
     expect(thesisSource).toContain("Small changes. Big Impact.");
     expect(thesisSource).not.toContain("The structural difference changes everything.");
     expect(thesisSource).not.toContain("text-[clamp(2.7rem,5vw,5.4rem)] leading-[0.9] tracking-[-0.06em]\">\n                  The structural");
+  });
+
+  it("locks in the closing call-to-action h2 at fixed 55px", () => {
+    const thesisSource = readProjectFile("client/src/pages/Thesis.tsx");
+
+    expect(thesisSource).toContain(
+      'className="font-display text-[55px] leading-[0.88] tracking-[-0.07em]"',
+    );
+    expect(thesisSource).not.toContain("text-[clamp(3rem,6vw,6.4rem)]");
   });
 
   it("updates the problem-signal pills and replaces two of the six labels", () => {
