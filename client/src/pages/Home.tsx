@@ -214,7 +214,7 @@ export default function Home() {
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <SectionLabel>Why the back office breaks</SectionLabel>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.4rem)] leading-[0.92] tracking-[-0.06em]">
-                Complexity creates hidden operating costs.
+                Complexity creates cost.
               </h2>
               <p className="mt-6 text-lg leading-8 text-black/62">
                 The most sophisticated family offices now coordinate far more than investments. Digital Therapy targets the everyday friction that compounds across accounting, reporting, technology, and governance.

@@ -82,6 +82,17 @@ describe("Home page content updates", () => {
     expect(minWidthIndex).toBeGreaterThan(imageSideBookingIndex);
   });
 
+  it("shortens the 'Why the back office breaks' h2 from 'Complexity creates hidden operating costs.' to 'Complexity creates cost.'", () => {
+    const homeSource = readProjectFile("client/src/pages/Home.tsx");
+
+    const sectionLabelIndex = homeSource.indexOf("<SectionLabel>Why the back office breaks</SectionLabel>");
+    const headlineIndex = homeSource.indexOf("Complexity creates cost.", sectionLabelIndex);
+
+    expect(sectionLabelIndex).toBeGreaterThanOrEqual(0);
+    expect(headlineIndex).toBeGreaterThan(sectionLabelIndex);
+    expect(homeSource).not.toContain("Complexity creates hidden operating costs.");
+  });
+
   it("renders the new hero headline, paragraph, and tightened font-size clamp", () => {
     const homeSource = readProjectFile("client/src/pages/Home.tsx");
 
