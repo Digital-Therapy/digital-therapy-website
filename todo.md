@@ -364,3 +364,11 @@
 - [x] Update or add regression tests for the new copy and sizes.
 - [x] Validate with Vitest, TypeScript, and production build.
 - [x] Save a new checkpoint for the multi-file visual-edit reconciliation.
+
+# Home Four-Steps Visual-Edit Reconciliation
+
+- [x] Verify which Home four-steps visual-edit intents landed (h2 rename + size, four h3 titles, two paragraph rewrites).
+- [x] Apply any missed intents to `client/src/pages/Home.tsx` (h2 "Four steps to Data Empowerment." at fixed `text-[54px]`; rename four h3s to "Connect + Pull", "Format + Clean", "Search + Find", "Query + Report"; rewrite the matching paragraphs).
+- [x] Update `server/home.page.test.ts` so the legacy four-steps copy is forbidden and the new copy + 54px size are required.
+- [x] Validate with Vitest, TypeScript, and production build.
+- [x] Save a new checkpoint for the verified four-steps edits.

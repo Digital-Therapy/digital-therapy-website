@@ -52,25 +52,25 @@ const complexityPoints = [
 const operatingLayers = [
   {
     eyebrow: "01",
-    title: "Search & Find",
+    title: "Search + Find",
     copy: "Locate critical records, accounts, entities, and documents across every system before decisions are made.",
     icon: Database,
   },
   {
     eyebrow: "02",
-    title: "Connect & Pull",
-    copy: "Bring approved source data into one governed workflow without forcing teams to chase files manually.",
+    title: "Connect + Pull",
+    copy: "Bring approved source data into one governed workflow without forcing teams to chase down files manually.",
     icon: Workflow,
   },
   {
     eyebrow: "03",
-    title: "Clean & Structure",
-    copy: "Standardize, reconcile, and organize information so it becomes reliable operating intelligence.",
+    title: "Format + Clean",
+    copy: "Format, reconcile & clean data so it can be used as trusted operating intelligence.",
     icon: BarChart3,
   },
   {
     eyebrow: "04",
-    title: "Analyze & Leverage",
+    title: "Query + Report",
     copy: "Turn structured data into reporting, automation, and AI-enabled answers leaders can use.",
     icon: ShieldCheck,
   },
@@ -238,8 +238,8 @@ export default function Home() {
           <div className="container relative">
             <motion.div {...fadeUp} className="max-w-4xl">
               <SectionLabel>What Digital Therapy builds</SectionLabel>
-              <h2 className="font-display text-[clamp(2.7rem,5vw,5.8rem)] leading-[0.92] tracking-[-0.06em]">
-                Data Empowerment in four steps.
+              <h2 className="font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
+                Four steps to Data Empowerment.
               </h2>
             </motion.div>
             <div className="mt-10 grid gap-3 sm:mt-12 sm:gap-4 lg:mt-14 lg:grid-cols-4 lg:gap-5">

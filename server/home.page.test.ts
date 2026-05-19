@@ -154,26 +154,26 @@ describe("Home page content updates", () => {
   it("updates the operating-layer section to the requested Data Empowerment four-step copy", () => {
     const homeSource = readProjectFile("client/src/pages/Home.tsx");
 
-    const sectionIndex = homeSource.indexOf("Data Empowerment in four steps.");
+    const sectionIndex = homeSource.indexOf("Four steps to Data Empowerment.");
     const layersIndex = homeSource.indexOf("const operatingLayers = [");
     const stepOneIndex = homeSource.indexOf('eyebrow: "01"', layersIndex);
-    const searchFindIndex = homeSource.indexOf('title: "Search & Find"', stepOneIndex);
+    const searchFindIndex = homeSource.indexOf('title: "Search + Find"', stepOneIndex);
     const stepTwoIndex = homeSource.indexOf('eyebrow: "02"', searchFindIndex);
-    const connectPullIndex = homeSource.indexOf('title: "Connect & Pull"', stepTwoIndex);
+    const connectPullIndex = homeSource.indexOf('title: "Connect + Pull"', stepTwoIndex);
     const stepThreeIndex = homeSource.indexOf('eyebrow: "03"', connectPullIndex);
-    const cleanStructureIndex = homeSource.indexOf('title: "Clean & Structure"', stepThreeIndex);
+    const cleanStructureIndex = homeSource.indexOf('title: "Format + Clean"', stepThreeIndex);
     const stepFourIndex = homeSource.indexOf('eyebrow: "04"', cleanStructureIndex);
-    const analyzeLeverageIndex = homeSource.indexOf('title: "Analyze & Leverage"', stepFourIndex);
+    const analyzeLeverageIndex = homeSource.indexOf('title: "Query + Report"', stepFourIndex);
     const searchFindCopyIndex = homeSource.indexOf(
       "Locate critical records, accounts, entities, and documents across every system before decisions are made.",
       searchFindIndex,
     );
     const connectPullCopyIndex = homeSource.indexOf(
-      "Bring approved source data into one governed workflow without forcing teams to chase files manually.",
+      "Bring approved source data into one governed workflow without forcing teams to chase down files manually.",
       connectPullIndex,
     );
     const cleanStructureCopyIndex = homeSource.indexOf(
-      "Standardize, reconcile, and organize information so it becomes reliable operating intelligence.",
+      "Format, reconcile & clean data so it can be used as trusted operating intelligence.",
       cleanStructureIndex,
     );
     const analyzeLeverageCopyIndex = homeSource.indexOf(
@@ -196,6 +196,15 @@ describe("Home page content updates", () => {
     expect(homeSource).toContain("sm:min-h-[270px] sm:p-6 lg:min-h-[330px] lg:p-7");
     expect(homeSource).toContain("mt-10 text-xl font-semibold tracking-[-0.04em] sm:mt-12 sm:text-2xl lg:mt-16");
     expect(homeSource).toContain("mt-3 text-[0.95rem] leading-6 text-black/58 sm:mt-4 sm:leading-7");
+    expect(homeSource).toContain('font-display text-[54px] leading-[0.92] tracking-[-0.06em]');
+    expect(homeSource).not.toContain("text-[clamp(2.7rem,5vw,5.8rem)] leading-[0.92] tracking-[-0.06em]");
+    expect(homeSource).not.toContain("Data Empowerment in four steps.");
+    expect(homeSource).not.toContain('title: "Search & Find"');
+    expect(homeSource).not.toContain('title: "Connect & Pull"');
+    expect(homeSource).not.toContain('title: "Clean & Structure"');
+    expect(homeSource).not.toContain('title: "Analyze & Leverage"');
+    expect(homeSource).not.toContain("Bring approved source data into one governed workflow without forcing teams to chase files manually.");
+    expect(homeSource).not.toContain("Standardize, reconcile, and organize information so it becomes reliable operating intelligence.");
     expect(homeSource).not.toContain("A coherent layer above fragmented systems.");
     expect(homeSource).not.toContain("Data foundation");
     expect(homeSource).not.toContain("Workflow foundation");
