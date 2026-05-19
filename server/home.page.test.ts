@@ -195,6 +195,8 @@ describe("Home page content updates", () => {
     expect(homeSource).toContain("min-h-[230px] border border-black/10 bg-white/72 p-5");
     expect(homeSource).toContain("sm:min-h-[270px] sm:p-6 lg:min-h-[330px] lg:p-7");
     expect(homeSource).toContain("mt-10 text-xl font-semibold tracking-[-0.04em] sm:mt-12 sm:text-2xl lg:mt-16");
+    expect(homeSource).toContain('text-[30px] font-light uppercase tracking-[0.22em] text-[#0A65FF]');
+    expect(homeSource).not.toContain('text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">{layer.eyebrow}');
     expect(homeSource).toContain("mt-3 text-[0.95rem] leading-6 text-black/58 sm:mt-4 sm:leading-7");
     expect(homeSource).toContain('font-display text-[54px] leading-[0.92] tracking-[-0.06em]');
     expect(homeSource).not.toContain("text-[clamp(2.7rem,5vw,5.8rem)] leading-[0.92] tracking-[-0.06em]");

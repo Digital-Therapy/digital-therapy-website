@@ -253,7 +253,7 @@ export default function Home() {
                     className="group min-h-[230px] border border-black/10 bg-white/72 p-5 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-[#0A65FF]/35 hover:bg-white sm:min-h-[270px] sm:p-6 lg:min-h-[330px] lg:p-7"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">{layer.eyebrow}</span>
+                      <span className="text-[30px] font-light uppercase tracking-[0.22em] text-[#0A65FF]">{layer.eyebrow}</span>
                       <Icon className="h-5 w-5 text-black/48 transition-colors duration-300 group-hover:text-[#0A65FF] sm:h-6 sm:w-6" />
                     </div>
                     <h3 className="mt-10 text-xl font-semibold tracking-[-0.04em] sm:mt-12 sm:text-2xl lg:mt-16">{layer.title}</h3>
