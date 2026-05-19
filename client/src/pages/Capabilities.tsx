@@ -38,17 +38,17 @@ const fadeUp = {
 
 const capabilities = [
   {
-    title: "Global wealth mapping",
-    copy: "Entity, trust, account, investment, real-estate, and operating-company views organized into one trusted map of the family-office universe.",
+    title: "Entity + Revenue mapping",
+    copy: "Entity, trust, account, investment, real-estate, and operating-company views organized into one trusted map.",
     icon: Network,
   },
   {
-    title: "AI aggregation",
-    copy: "Secure intelligence layers that collect, reconcile, summarize, and answer questions across approved documents, systems, and workflows.",
+    title: "AI Data-Aggregation",
+    copy: "Unify your data by connecting every source to your DT On-Prem central warehouse. We can migrate any data repository including legacy mainframe & green screen systems.",
     icon: Sparkles,
   },
   {
-    title: "Accounting operations",
+    title: "Accounting Systems",
     copy: "Close acceleration, AP and AR workflow improvement, reporting evidence, control design, and automation-forward accounting support.",
     icon: ClipboardCheck,
   },

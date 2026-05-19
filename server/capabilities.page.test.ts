@@ -50,6 +50,31 @@ describe("Capabilities page content updates", () => {
     expect(source).not.toContain("The operating toolkit for complex wealth.");
   });
 
+  it("renames and rewrites the first three capability tiles", () => {
+    const source = readProjectFile("client/src/pages/Capabilities.tsx");
+
+    expect(source).toContain('title: "Entity + Revenue mapping"');
+    expect(source).toContain('title: "AI Data-Aggregation"');
+    expect(source).toContain('title: "Accounting Systems"');
+    expect(source).not.toContain('title: "Global wealth mapping"');
+    expect(source).not.toContain('title: "AI aggregation"');
+    expect(source).not.toContain('title: "Accounting operations"');
+
+    expect(source).toContain(
+      "Entity, trust, account, investment, real-estate, and operating-company views organized into one trusted map.",
+    );
+    expect(source).not.toContain(
+      "Entity, trust, account, investment, real-estate, and operating-company views organized into one trusted map of the family-office universe.",
+    );
+
+    expect(source).toContain(
+      "Unify your data by connecting every source to your DT On-Prem central warehouse. We can migrate any data repository including legacy mainframe & green screen systems.",
+    );
+    expect(source).not.toContain(
+      "Secure intelligence layers that collect, reconcile, summarize, and answer questions across approved documents, systems, and workflows.",
+    );
+  });
+
   it("renames the delivery-architecture h2", () => {
     const source = readProjectFile("client/src/pages/Capabilities.tsx");
 
