@@ -28,9 +28,9 @@ describe("Home page content updates", () => {
 
     const sectionIndex = homeSource.indexOf('id="fusion-team"');
     const sectionLabelIndex = homeSource.indexOf("<SectionLabel>Fusion Team model</SectionLabel>", sectionIndex);
-    const headlineIndex = homeSource.indexOf("Collaboration cannot be an afterthought.", sectionLabelIndex);
+    const headlineIndex = homeSource.indexOf("Collaboration can\u2019t be an afterthought.", sectionLabelIndex);
     const subheadlineIndex = homeSource.indexOf(
-      "Accountants work exclusively with accountants. Engineers with engineers.",
+      "Accountants work with accountants &mdash; Engineers with engineers.",
       headlineIndex,
     );
     const inlineLinkLabelIndex = homeSource.indexOf("For more on this topic, view our Thesis", subheadlineIndex);
@@ -42,6 +42,22 @@ describe("Home page content updates", () => {
     expect(subheadlineIndex).toBeGreaterThan(headlineIndex);
     expect(inlineLinkLabelIndex).toBeGreaterThan(subheadlineIndex);
     expect(inlineLinkHrefIndex).toBeGreaterThan(subheadlineIndex);
+
+    expect(homeSource).toContain('font-display text-[54px] leading-[0.92] tracking-[-0.06em]');
+    expect(homeSource).toContain(
+      "There\u2019s no organic pathway for these experts to come together &amp; learn to collaborate effectively.",
+    );
+    expect(homeSource).toContain('text-[18px] font-medium text-[#0A65FF] transition-colors duration-300 hover:text-[#004ed1]');
+    expect(homeSource).toContain('text-[30px] font-normal tracking-[-0.02em] text-[#0A65FF]">{String(index + 1).padStart(2, "0")}');
+
+    expect(homeSource).not.toContain("Collaboration cannot be an afterthought.");
+    expect(homeSource).not.toContain("text-[clamp(2.6rem,4.7vw,5.3rem)] leading-[0.92] tracking-[-0.06em]");
+    expect(homeSource).not.toContain(
+      "Accountants work exclusively with accountants. Engineers with engineers. There is no natural mechanism for these experts to come together.",
+    );
+    expect(homeSource).not.toContain("text-sm font-semibold text-[#0A65FF] transition-colors duration-300 hover:text-[#004ed1]");
+    expect(homeSource).not.toContain("text-[0.72rem] font-bold uppercase tracking-[0.22em] text-black/38");
+    expect(homeSource).not.toContain("{index + 1} of 3");
     expect(homeSource).not.toContain("The handoff problem is the transformation problem.");
     expect(homeSource).not.toContain(
       "Digital Therapy uses one integrated team with operations, accounting, & technology expertise in the same room, accountable for the outcome end to end.",

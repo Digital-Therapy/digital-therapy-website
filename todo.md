@@ -381,3 +381,12 @@
 - [x] Update `server/home.page.test.ts` so the legacy h2 + intro + every legacy bullet are forbidden and the new copy is required.
 - [x] Validate with Vitest, TypeScript, and production build.
 - [x] Save a new checkpoint for the verified automation-section edits.
+
+# Home Collaboration-Section Visual-Edit Reconciliation
+
+- [x] Inspect Home.tsx Collaboration section to confirm which of the 11 intents (h2 + size, paragraph rewrite, link size, three step indices) landed.
+- [x] Reconcile the chained intents: step indices "1 of 3"/"2 of 3"/"3 of 3" become large "01"/"02"/"03" in DT blue at `text-[30px] font-normal`; link size resolves to `text-[18px] font-medium` per intent 9; h2 final size `text-[54px]` per intent 10.
+- [x] Apply h2 "Collaboration can’t be an afterthought." (typographic apostrophe), the trimmed paragraph copy, restyled step indices, and new link size to Home.tsx.
+- [x] Update `server/home.page.test.ts` so legacy h2/paragraph/step-indices/link size are forbidden and the new copy + sizes are required.
+- [x] Validate with Vitest, TypeScript, and production build.
+- [x] Save a new checkpoint for the verified Collaboration-section edits.

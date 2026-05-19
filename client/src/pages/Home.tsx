@@ -270,17 +270,17 @@ export default function Home() {
             <motion.div {...fadeUp} className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
               <div>
                 <SectionLabel>Fusion Team model</SectionLabel>
-                <h2 className="font-display text-[clamp(2.6rem,4.7vw,5.3rem)] leading-[0.92] tracking-[-0.06em]">
-                  Collaboration cannot be an afterthought.
+                <h2 className="font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
+                  Collaboration can’t be an afterthought.
                 </h2>
               </div>
               <div className="max-w-3xl lg:pb-2">
                 <p className="text-lg leading-8 text-black/62">
-                  Accountants work exclusively with accountants. Engineers with engineers. There is no natural mechanism for these experts to come together. Professional bias obstructs collaboration &mdash; CPAs fear that AI and RPA will render the methods they know obsolete and reduce their billable hours or, worse, cost them their clients.
+                  Accountants work with accountants &mdash; Engineers with engineers. There’s no organic pathway for these experts to come together &amp; learn to collaborate effectively.
                 </p>
                 <a
                   href="/thesis"
-                  className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#0A65FF] transition-colors duration-300 hover:text-[#004ed1]"
+                  className="group mt-6 inline-flex items-center gap-2 text-[18px] font-medium text-[#0A65FF] transition-colors duration-300 hover:text-[#004ed1]"
                 >
                   For more on this topic, view our Thesis
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -297,7 +297,7 @@ export default function Home() {
                 >
                   <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#0A65FF]/10 blur-2xl" />
                   <div className="relative flex h-full flex-col">
-                    <div className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-black/38">{index + 1} of 3</div>
+                    <div className="text-[30px] font-normal tracking-[-0.02em] text-[#0A65FF]">{String(index + 1).padStart(2, "0")}</div>
                     <div className="mt-14">
                       <h3 className="text-2xl font-semibold tracking-[-0.05em]">{member.title}</h3>
                       <p className="mt-5 text-[0.95rem] leading-7 text-black/64">{member.copy}</p>
