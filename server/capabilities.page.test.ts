@@ -54,6 +54,9 @@ describe("Capabilities page content updates", () => {
     const source = readProjectFile("client/src/pages/Capabilities.tsx");
 
     expect(source).toContain(
+      "Fully integrated & securely on-prem.",
+    );
+    expect(source).not.toContain(
       "Built to be fully integrated & securely on-prem.",
     );
     expect(source).not.toContain(

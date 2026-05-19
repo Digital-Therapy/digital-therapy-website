@@ -243,7 +243,7 @@ export default function Capabilities() {
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <SectionLabel>Delivery architecture</SectionLabel>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.92] tracking-[-0.06em]">
-                Built to be fully integrated & securely on-prem.
+                Fully integrated & securely on-prem.
               </h2>
               <div className="mt-9 grid gap-4 sm:grid-cols-2">
                 {deliveryLayers.map((layer, index) => {
