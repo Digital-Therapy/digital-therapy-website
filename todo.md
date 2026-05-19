@@ -372,3 +372,12 @@
 - [x] Update `server/home.page.test.ts` so the legacy four-steps copy is forbidden and the new copy + 54px size are required.
 - [x] Validate with Vitest, TypeScript, and production build.
 - [x] Save a new checkpoint for the verified four-steps edits.
+
+# Home Automation-Section Visual-Edit Reconciliation
+
+- [x] Inspect Home.tsx automation section to confirm which of the 11 intents (h2, intro, four bullets) landed.
+- [x] Reconcile the chained bullet rewrites into one coherent end state per the most recent intent for each visible bullet.
+- [x] Apply h2 "Grow Revenue - Not Headcount.", new intro paragraph, and the four reconciled bullets manually if not already in source.
+- [x] Update `server/home.page.test.ts` so the legacy h2 + intro + every legacy bullet are forbidden and the new copy is required.
+- [x] Validate with Vitest, TypeScript, and production build.
+- [x] Save a new checkpoint for the verified automation-section edits.

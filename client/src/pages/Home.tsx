@@ -92,10 +92,10 @@ const fusionTeam = [
 ];
 
 const automationUseCases = [
-  "AI document agents for capital calls, notices, invoices, statements, and reports.",
-  "Conversational assistants that answer approved stakeholder questions from governed data.",
-  "One-click reconciliation across positions, cash flows, documents, and accounting records.",
-  "Workflow orchestration that routes approvals, exceptions, tasks, and recurring follow-ups.",
+  "Connect entities, accounts, investments, ownership stakes, and asset classes into a usable operating view.",
+  "Pull structured and unstructured information from statements, portals, documents, emails, and internal systems into a trusted data layer (Warehouse).",
+  "Improve close, reconciliation, accounts payable, accounts receivable, general ledger, and approval workflows.",
+  "Deliver powerful, insightful dashboards, recurring reports & insight summaries tailored to stakeholder roles & clearance.",
 ];
 
 const securityPrinciples = [
@@ -317,10 +317,10 @@ export default function Home() {
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <SectionLabel>Automation and AI</SectionLabel>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.92] tracking-[-0.06em]">
-                Scale the office without scaling headcount.
+                Grow Revenue - Not Headcount.
               </h2>
               <p className="mt-6 text-lg leading-8 text-black/62">
-                Digital Therapy converts manual collection, reconciliation, document processing, and reporting production into governed workflows that remain under the family office’s control.
+                Digital Therapy converts fragmented Family Office operations into a coherent, private, and automated operating system.
               </p>
               <div className="mt-8 space-y-3">
                 {automationUseCases.map((useCase) => (

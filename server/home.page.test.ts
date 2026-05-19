@@ -213,4 +213,49 @@ describe("Home page content updates", () => {
     expect(homeSource).not.toContain("Reporting foundation");
     expect(homeSource).not.toContain("Governance foundation");
   });
+
+  it("renders the reconciled automation section with the new growth-focused copy", () => {
+    const homeSource = readProjectFile("client/src/pages/Home.tsx");
+
+    const sectionLabelIndex = homeSource.indexOf("<SectionLabel>Automation and AI</SectionLabel>");
+    const headlineIndex = homeSource.indexOf("Grow Revenue - Not Headcount.", sectionLabelIndex);
+    const introIndex = homeSource.indexOf(
+      "Digital Therapy converts fragmented Family Office operations into a coherent, private, and automated operating system.",
+      headlineIndex,
+    );
+
+    expect(sectionLabelIndex).toBeGreaterThanOrEqual(0);
+    expect(headlineIndex).toBeGreaterThan(sectionLabelIndex);
+    expect(introIndex).toBeGreaterThan(headlineIndex);
+
+    expect(homeSource).toContain(
+      "Connect entities, accounts, investments, ownership stakes, and asset classes into a usable operating view.",
+    );
+    expect(homeSource).toContain(
+      "Pull structured and unstructured information from statements, portals, documents, emails, and internal systems into a trusted data layer (Warehouse).",
+    );
+    expect(homeSource).toContain(
+      "Improve close, reconciliation, accounts payable, accounts receivable, general ledger, and approval workflows.",
+    );
+    expect(homeSource).toContain(
+      "Deliver powerful, insightful dashboards, recurring reports & insight summaries tailored to stakeholder roles & clearance.",
+    );
+
+    expect(homeSource).not.toContain("Scale the office without scaling headcount.");
+    expect(homeSource).not.toContain(
+      "Digital Therapy converts manual collection, reconciliation, document processing, and reporting production into governed workflows that remain under the family office\u2019s control.",
+    );
+    expect(homeSource).not.toContain(
+      "AI document agents for capital calls, notices, invoices, statements, and reports.",
+    );
+    expect(homeSource).not.toContain(
+      "Conversational assistants that answer approved stakeholder questions from governed data.",
+    );
+    expect(homeSource).not.toContain(
+      "One-click reconciliation across positions, cash flows, documents, and accounting records.",
+    );
+    expect(homeSource).not.toContain(
+      "Workflow orchestration that routes approvals, exceptions, tasks, and recurring follow-ups.",
+    );
+  });
 });
