@@ -45,7 +45,7 @@ export default function SiteFooter() {
         <div className="grid gap-10 lg:grid-cols-[1.05fr_1.35fr] lg:gap-16">
           <div>
             <a href="/" className="inline-flex items-center" aria-label="Digital Therapy home">
-              <img src={logoUrl} alt="Digital Therapy" className="h-10 w-auto object-contain" />
+              <img src={logoUrl} alt="Digital Therapy" className="h-40 w-auto object-contain" />
             </a>
             <p className="mt-6 max-w-md text-base leading-7 text-black/62">
               Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices and their advisors.

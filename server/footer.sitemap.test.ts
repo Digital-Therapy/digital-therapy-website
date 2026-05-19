@@ -143,6 +143,17 @@ describe("Site footer sitemap", () => {
     expect(footerSource).not.toContain("Understand our approach");
   });
 
+  it("renders the footer Digital Therapy logo at 4x the previous size (h-40)", () => {
+    const footerSource = readProjectFile("client/src/components/SiteFooter.tsx");
+
+    expect(footerSource).toContain(
+      '<img src={logoUrl} alt="Digital Therapy" className="h-40 w-auto object-contain" />',
+    );
+    expect(footerSource).not.toContain(
+      '<img src={logoUrl} alt="Digital Therapy" className="h-10 w-auto object-contain" />',
+    );
+  });
+
   it("keeps routed public pages free of legacy page-specific footers", () => {
     publicPagePaths.forEach((relativePath) => {
       const pageSource = readProjectFile(relativePath);
