@@ -188,6 +188,13 @@ describe("Site footer sitemap", () => {
     expect(footerSource).not.toContain("Understand our approach");
   });
 
+  it("uses the off-white #f8f8f7 footer background", () => {
+    const footerSource = readProjectFile("client/src/components/SiteFooter.tsx");
+
+    expect(footerSource).toContain('bg-[#f8f8f7] text-[#111111]');
+    expect(footerSource).not.toContain('bg-[#EFEAE1]');
+  });
+
   it("renders the footer Digital Therapy logo at 4x the previous size (h-40)", () => {
     const footerSource = readProjectFile("client/src/components/SiteFooter.tsx");
 

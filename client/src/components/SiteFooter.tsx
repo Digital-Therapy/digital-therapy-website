@@ -40,7 +40,7 @@ const sitemapGroups = [
 
 export default function SiteFooter() {
   return (
-    <footer aria-labelledby="footer-sitemap-heading" className="border-t border-black/10 bg-[#EFEAE1] text-[#111111]">
+    <footer aria-labelledby="footer-sitemap-heading" className="border-t border-black/10 bg-[#f8f8f7] text-[#111111]">
       <div className="container py-14 lg:py-18">
         <div className="grid gap-10 lg:grid-cols-[1.05fr_1.35fr] lg:gap-16">
           <div>
