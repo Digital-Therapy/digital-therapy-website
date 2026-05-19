@@ -93,6 +93,22 @@ describe("Home page content updates", () => {
     expect(homeSource).not.toContain("Complexity creates hidden operating costs.");
   });
 
+  it("replaces the first complexity-points bullet with the legacy-systems framing", () => {
+    const homeSource = readProjectFile("client/src/pages/Home.tsx");
+
+    const constIndex = homeSource.indexOf("const complexityPoints = [");
+    const newBulletIndex = homeSource.indexOf(
+      'Legacy systems can\\u2019t easily send or receive data or files.',
+      constIndex,
+    );
+
+    expect(constIndex).toBeGreaterThanOrEqual(0);
+    expect(newBulletIndex).toBeGreaterThan(constIndex);
+    expect(homeSource).not.toContain(
+      "Assets, entities, trusts, accounts, and documents live in separate systems.",
+    );
+  });
+
   it("renders the new hero headline, paragraph, and tightened font-size clamp", () => {
     const homeSource = readProjectFile("client/src/pages/Home.tsx");
 

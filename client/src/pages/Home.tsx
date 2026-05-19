@@ -44,7 +44,7 @@ const navItems = [
 ];
 
 const complexityPoints = [
-  "Assets, entities, trusts, accounts, and documents live in separate systems.",
+  "Legacy systems can\u2019t easily send or receive data or files.",
   "Lean teams spend too much time collecting, reconciling, and reformatting information.",
   "Principals and advisors expect faster answers without compromising privacy or control.",
 ];
