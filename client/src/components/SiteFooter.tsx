@@ -48,7 +48,7 @@ export default function SiteFooter() {
               <img src={logoUrl} alt="Digital Therapy" className="h-40 w-auto object-contain" />
             </a>
             <p className="mt-6 max-w-md text-base leading-7 text-black/62">
-              Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices and their advisors.
+              Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & family office operated businesses.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <BookingWidgetDialog label="Book 30 Min" icon="arrow" />

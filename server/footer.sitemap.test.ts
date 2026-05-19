@@ -133,12 +133,15 @@ describe("Site footer sitemap", () => {
       "Contact",
       "Book 30 Min",
       "footer sitemap inquiry",
-      "Digital Therapy builds private data, workflow, reporting, and automation systems",
+      "Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & family office operated businesses.",
       "Understand our process",
     ].forEach((footerText) => {
       expect(footerSource).toContain(footerText);
     });
 
+    expect(footerSource).not.toContain(
+      "Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices and their advisors.",
+    );
     expect(footerSource).not.toContain('{ label: "Our Approach", href: "/approach" }');
     expect(footerSource).not.toContain("Understand our approach");
   });
