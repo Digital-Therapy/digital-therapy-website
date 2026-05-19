@@ -135,8 +135,8 @@ export default function Home() {
           <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-10 py-20 lg:grid-cols-[0.92fr_1.08fr] lg:py-28">
             <motion.div {...fadeUp}>
               <SectionLabel>Private family-office operating layer</SectionLabel>
-              <h1 className="max-w-4xl font-display text-[clamp(2.6rem,5.4vw,4.7rem)] leading-[0.92] tracking-[-0.06em] text-[#111111]">
-                Tech, Ops + Accounting Solutions for Family Offices.
+              <h1 className="max-w-4xl font-display text-[60px] leading-[0.92] tracking-[-0.06em] text-[#111111]">
+                Tech, Ops &amp; Accounting Solutions for Family Offices.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
                 We deliver the value you wish you got from accounting firms. We spend the time to truly comprehend your eco-system and unique nuances. Achieving collective understanding is the key to delivery success. We&rsquo;ll typically send a team to work on-site the first two&ndash;four weeks of new engagements.

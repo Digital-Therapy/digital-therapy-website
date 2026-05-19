@@ -96,7 +96,7 @@ describe("Home page content updates", () => {
   it("renders the new hero headline, paragraph, and tightened font-size clamp", () => {
     const homeSource = readProjectFile("client/src/pages/Home.tsx");
 
-    const headlineIndex = homeSource.indexOf("Tech, Ops + Accounting Solutions for Family Offices.");
+    const headlineIndex = homeSource.indexOf("Tech, Ops &amp; Accounting Solutions for Family Offices.");
     const paragraphLeadIndex = homeSource.indexOf("We deliver the value you wish you got from accounting firms.");
     const ecosystemIndex = homeSource.indexOf("truly comprehend your eco-system and unique nuances", paragraphLeadIndex);
     const collectiveIndex = homeSource.indexOf("Achieving collective understanding is the key to delivery success.", ecosystemIndex);
@@ -107,7 +107,9 @@ describe("Home page content updates", () => {
     expect(ecosystemIndex).toBeGreaterThan(paragraphLeadIndex);
     expect(collectiveIndex).toBeGreaterThan(ecosystemIndex);
     expect(onSiteIndex).toBeGreaterThan(collectiveIndex);
-    expect(homeSource).toContain("text-[clamp(2.6rem,5.4vw,4.7rem)] leading-[0.92] tracking-[-0.06em]");
+    expect(homeSource).toContain("max-w-4xl font-display text-[60px] leading-[0.92] tracking-[-0.06em] text-[#111111]");
+    expect(homeSource).not.toContain("text-[clamp(2.6rem,5.4vw,4.7rem)] leading-[0.92] tracking-[-0.06em]");
+    expect(homeSource).not.toContain("Tech, Ops + Accounting Solutions for Family Offices.");
     expect(homeSource).not.toContain("Private data solutions that empower family offices.");
     expect(homeSource).not.toContain("text-[clamp(3.4rem,7vw,7.7rem)]");
   });
