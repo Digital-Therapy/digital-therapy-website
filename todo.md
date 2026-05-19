@@ -390,3 +390,17 @@
 - [x] Update `server/home.page.test.ts` so legacy h2/paragraph/step-indices/link size are forbidden and the new copy + sizes are required.
 - [x] Validate with Vitest, TypeScript, and production build.
 - [x] Save a new checkpoint for the verified Collaboration-section edits.
+
+
+# Thesis Page Visual-Edit Reconciliation
+- [ ] Inspect Thesis.tsx to verify which of the 20 visual-editor intents landed; reconcile chained intents into a single end state.
+- [ ] Apply hero h1 "The practice-based firm falls short." at fixed `text-[60px]`.
+- [ ] Apply hero paragraph rewrite ("Most transformation initiatives fail - not because firms lack smart people - because firm structure & culture rewards silo behavior...").
+- [ ] Apply SectionLabel renames: "Traditional consulting vs. Fusion Teams" -> "Traditional Advisory vs. Fusion Teams"; "The thesis in one line" -> "Your fusion team can do it" (final value after the chain).
+- [ ] Apply h2 renames: "Consulting firms are designed to prevent true collaboration." -> "Firm architecture prevents collaboration."; "One integrated unit - not collaborating practice groups." -> "One trained team - not collaborating practice groups."; "Fragmented advisors cannot solve one shared operating reality." -> "Fragmented advisors isn't the road to success." at `text-[55px]`; "The structural difference changes everything." -> "Small changes. Big Impact." at `text-[54px]`.
+- [ ] Update the three failure-mode tile labels ("Misaligned incentives" stays, "Poor technology adoption" -> "Poor adoption", "Weak accountability" -> "Incomplete Discovery").
+- [ ] Restyle the three failure-mode tile body paragraphs from `text-xs font-bold` to `text-[20px] font-normal`.
+- [ ] Apply h2 "Family offices, you need one team to tackle one systems problem." -> "Family offices, you need one team to tackle one fused problem."
+- [ ] Update `server/thesis.page.test.ts` so legacy copy + sizes are forbidden and the new copy + sizes are required.
+- [ ] Validate with Vitest, TypeScript, and production build.
+- [ ] Save a new checkpoint for the verified Thesis-page edits.

@@ -46,8 +46,8 @@ const problemSignals = [
   "Slow execution",
   "Political friction",
   "Misaligned incentives",
-  "Weak accountability",
-  "Poor technology adoption",
+  "Incomplete Discovery",
+  "Poor adoption",
 ];
 
 const structuralFailures = [
@@ -134,11 +134,11 @@ export default function Thesis() {
           <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-12 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:py-28">
             <motion.div {...fadeUp}>
               <SectionLabel>The Digital Therapy thesis</SectionLabel>
-              <h1 className="max-w-4xl font-display text-[clamp(3.3rem,7vw,7.6rem)] leading-[0.88] tracking-[-0.07em] text-[#111111]">
-                The old consulting model is structurally broken.
+              <h1 className="max-w-4xl font-display text-[60px] leading-[0.88] tracking-[-0.07em] text-[#111111]">
+                The practice-based firm falls short.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
-                Most transformation work fails to reach its potential not because advisory firms lack smart people, but because their organizational structure rewards silo behavior. Digital Therapy replaces that fragmentation with one Fusion Team — custom built and trained to understand and overcome even the most complex business and data challenges that touch operations, accounting, and technology. And these days, that includes basically everything.
+                Most transformation initiatives fail — not because firms lack smart people — because firm structure & culture rewards silo behavior & disincentivizes cross-functional collaboration. Digital Therapy solves this fragmentation with a “Fusion Team” — custom built & trained to understand & overcome complex business & data challenges touching Operations, Accounting, & Technology. These days, that’s just about everything.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <PrivateBriefingButton />
@@ -194,14 +194,14 @@ export default function Thesis() {
             <motion.div {...fadeUp} className="sticky top-28">
               <SectionLabel>The problem</SectionLabel>
               <h2 className="max-w-3xl font-display text-[clamp(2.7rem,5vw,5.4rem)] leading-[0.9] tracking-[-0.06em]">
-                Consulting firms are designed to prevent true collaboration.
+                Firm architecture prevents collaboration.
               </h2>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-black/62">
                 Accounting practices operate independently from engineering teams. Operations consultants work separately from finance. Each group protects its own revenue, utilization, and client control, producing predictable delivery failures for clients with one shared systems problem.
               </p>
               <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {problemSignals.map((signal) => (
-                  <div key={signal} className="rounded-full border border-black/10 bg-[#F7F4EE] px-4 py-3 text-center text-xs font-bold uppercase tracking-[0.14em] text-black/62">
+                  <div key={signal} className="rounded-full border border-black/10 bg-[#F7F4EE] px-4 py-3 text-center text-[20px] font-normal uppercase tracking-[0.14em] text-black/62">
                     {signal}
                   </div>
                 ))}
@@ -242,7 +242,7 @@ export default function Thesis() {
             <motion.div {...fadeUp} className="mx-auto max-w-4xl text-center">
               <SectionLabel>DT's solution</SectionLabel>
               <h2 className="font-display text-[clamp(2.8rem,5.5vw,6.1rem)] leading-[0.9] tracking-[-0.065em]">
-                One integrated unit — not “collaborating” practice groups.
+                One trained team — not “collaborating” practice groups.
               </h2>
               <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-black/62">
                 Digital Therapy’s Fusion Team model was built to eliminate structural failure at the root. Rather than assembling temporary teams from competing departments, the Fusion Team is a permanent leadership layer composed of deeply aligned operations, accounting, and technology disciplines.
@@ -296,8 +296,8 @@ export default function Thesis() {
 
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <SectionLabel>Why family offices need this</SectionLabel>
-              <h2 className="font-display text-[clamp(2.8rem,5vw,5.6rem)] leading-[0.9] tracking-[-0.06em]">
-                Fragmented advisors cannot solve one shared operating reality.
+              <h2 className="font-display text-[55px] leading-[0.9] tracking-[-0.06em]">
+                Fragmented advisors isn’t the road to success.
               </h2>
               <p className="mt-7 text-lg leading-8 text-black/62">
                 Family-office leaders need one team that can see the full architecture: process, controls, data, workflow, automation, AI, integrations, and execution discipline. The Fusion Team succeeds or fails together, so collaboration is no longer optional; it is the operating model itself.
@@ -326,9 +326,9 @@ export default function Thesis() {
           <div className="container">
             <motion.div {...fadeUp} className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
               <div>
-                <SectionLabel>Traditional consulting vs. Fusion Teams</SectionLabel>
-                <h2 className="font-display text-[clamp(2.7rem,5vw,5.4rem)] leading-[0.9] tracking-[-0.06em]">
-                  The structural difference changes everything.
+                <SectionLabel>Traditional Advisory vs. Fusion Teams</SectionLabel>
+                <h2 className="font-display text-[54px] leading-[0.9] tracking-[-0.06em]">
+                  Small changes. Big Impact.
                 </h2>
                 <p className="mt-7 text-lg leading-8 text-white/62">
                   Traditional firms attempt collaboration between competing departments. Fusion Teams eliminate the competition entirely by creating one shared mission and one accountable delivery structure.
@@ -357,9 +357,9 @@ export default function Thesis() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(10,101,255,0.10),transparent_30%)]" />
           <div className="container relative text-center">
             <motion.div {...fadeUp} className="mx-auto max-w-4xl">
-              <SectionLabel>The thesis in one line</SectionLabel>
+              <SectionLabel>Your fusion team can do it</SectionLabel>
               <h2 className="font-display text-[clamp(3rem,6vw,6.4rem)] leading-[0.88] tracking-[-0.07em]">
-                Family offices, you need one team to tackle one systems problem.
+                Family offices, you need one team to tackle one fused problem.
               </h2>
               <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-black/62">
                 Digital Therapy delivers one team, one aligned incentive structure, one operating model, and one shared mission for transformation that moves beyond advice into accountable execution.
