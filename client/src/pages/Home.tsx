@@ -421,7 +421,7 @@ export default function Home() {
                 <PrivateBriefingButton />
                 <ContactFormDialog
                   variant="secondary"
-                  label="Discuss our pain points"
+                  label="Let’s talk pain points."
                   context="family office pain-point conversation"
                 />
               </div>

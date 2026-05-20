@@ -184,6 +184,10 @@ describe("Home page content updates", () => {
     expect(homeSource).not.toContain(
       '<h2 className="mt-9 font-display text-[clamp(3rem,6vw,6.6rem)] leading-[0.88] tracking-[-0.07em]">',
     );
+
+    // Contact trigger button under the CTA copy is renamed to the new conversational label.
+    expect(homeSource).toContain('label="Let\u2019s talk pain points."');
+    expect(homeSource).not.toContain('label="Discuss our pain points"');
   });
 
   it("updates the operating-layer section to the requested Data Empowerment four-step copy", () => {
