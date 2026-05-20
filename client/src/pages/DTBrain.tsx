@@ -126,7 +126,7 @@ export default function DTBrain() {
             <motion.div {...fadeUp}>
               <SectionLabel>DT Brain hardware</SectionLabel>
               <h1 className="max-w-4xl font-display text-[clamp(3.6rem,7vw,7.8rem)] leading-[0.88] tracking-[-0.07em] text-[#111111]">
-                Your secure automation hub.
+                On-prem automation hub.
               </h1>
               <p className="mt-8 max-w-2xl text-2xl font-semibold leading-9 tracking-[-0.035em] text-[#0A65FF]">
                 It runs in your own office. On your own hardware. In your actual control.
