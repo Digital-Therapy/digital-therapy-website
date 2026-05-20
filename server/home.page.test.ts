@@ -176,6 +176,14 @@ describe("Home page content updates", () => {
     expect(partnersIndex).toBeGreaterThanOrEqual(0);
     expect(ctaIndex).toBeGreaterThan(partnersIndex);
     expect(homeSource).not.toContain("Book 30 minutes to find the first high-value win.");
+
+    // CTA h2 is pinned to 54px to align with the other h2 sizes in the same composition.
+    expect(homeSource).toContain(
+      '<h2 className="mt-9 font-display text-[54px] leading-[0.92] tracking-[-0.06em]">',
+    );
+    expect(homeSource).not.toContain(
+      '<h2 className="mt-9 font-display text-[clamp(3rem,6vw,6.6rem)] leading-[0.88] tracking-[-0.07em]">',
+    );
   });
 
   it("updates the operating-layer section to the requested Data Empowerment four-step copy", () => {

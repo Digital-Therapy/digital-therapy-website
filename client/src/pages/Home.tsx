@@ -412,7 +412,7 @@ export default function Home() {
           <div className="container grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr]">
             <motion.div {...fadeUp}>
               <img src={markUrl} alt="Digital Therapy picture mark" className="h-14 w-14 object-contain" />
-              <h2 className="mt-9 font-display text-[clamp(3rem,6vw,6.6rem)] leading-[0.88] tracking-[-0.07em]">
+              <h2 className="mt-9 font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
                 Book 20 min. Let’s find the first win !
               </h2>
               <p className="mt-7 max-w-2xl text-xl leading-8 text-black/62">
