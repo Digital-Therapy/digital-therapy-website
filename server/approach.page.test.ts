@@ -200,6 +200,13 @@ describe("Our Approach page implementation", () => {
     );
   });
 
+  it("renames the contact dialog title from 'Tell us where the friction is.' to 'Tell us where it hurts.'", () => {
+    const contactSource = readProjectFile("client/src/components/ContactBooking.tsx");
+
+    expect(contactSource).toContain("Tell us where it hurts.");
+    expect(contactSource).not.toContain("Tell us where the friction is.");
+  });
+
   it("prevents the hero right-side card from being squeezed by giving each grid track a minmax(0,...) base", () => {
     const approachSource = readProjectFile("client/src/pages/OurApproach.tsx");
 

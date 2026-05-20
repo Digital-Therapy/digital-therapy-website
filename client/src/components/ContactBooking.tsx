@@ -171,7 +171,7 @@ export function ContactFormDialog({
                 <MessageSquareText className="h-5 w-5" />
               </div>
               <DialogTitle className="font-display text-4xl leading-[0.94] tracking-[-0.06em] text-[#111111]">
-                Tell us where the friction is.
+                Tell us where it hurts.
               </DialogTitle>
               <DialogDescription className="pt-4 text-base leading-7 text-black/62">
                 Share a few details and Digital Therapy will route the conversation around your operating pain points, urgency, and best first-value opportunity.
