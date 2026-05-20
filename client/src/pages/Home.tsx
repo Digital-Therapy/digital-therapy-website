@@ -93,7 +93,6 @@ const fusionTeam = [
 const automationUseCases = [
   "Connect entities, accounts, investments, ownership stakes, and asset classes into a usable operating view.",
   "Pull structured and unstructured information from statements, portals, documents, emails, and internal systems into a trusted data layer (Warehouse).",
-  "Improve close, reconciliation, accounts payable, accounts receivable, general ledger, and approval workflows.",
   "Deliver powerful, insightful dashboards, recurring reports & insight summaries tailored to stakeholder roles & clearance.",
 ];
 

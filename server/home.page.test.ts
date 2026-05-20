@@ -270,10 +270,10 @@ describe("Home page content updates", () => {
       "Pull structured and unstructured information from statements, portals, documents, emails, and internal systems into a trusted data layer (Warehouse).",
     );
     expect(homeSource).toContain(
-      "Improve close, reconciliation, accounts payable, accounts receivable, general ledger, and approval workflows.",
-    );
-    expect(homeSource).toContain(
       "Deliver powerful, insightful dashboards, recurring reports & insight summaries tailored to stakeholder roles & clearance.",
+    );
+    expect(homeSource).not.toContain(
+      "Improve close, reconciliation, accounts payable, accounts receivable, general ledger, and approval workflows.",
     );
 
     expect(homeSource).not.toContain("Scale the office without scaling headcount.");
