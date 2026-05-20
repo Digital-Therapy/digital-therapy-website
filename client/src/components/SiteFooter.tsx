@@ -43,26 +43,28 @@ export default function SiteFooter() {
     <footer aria-labelledby="footer-sitemap-heading" className="border-t border-black/10 bg-[#f8f8f7] text-[#111111]">
       <div className="container py-14 lg:py-18">
         <div className="grid gap-10 lg:grid-cols-[1.05fr_1.35fr] lg:gap-16">
-          <div>
-            <a href="/" className="inline-flex items-center" aria-label="Digital Therapy home">
+          <div className="flex flex-col">
+            <a href="/" className="-mt-3 block leading-none" aria-label="Digital Therapy home">
               <img src={logoUrl} alt="Digital Therapy" className="h-40 w-auto object-contain" />
             </a>
-            <p className="mt-6 max-w-md text-base leading-7 text-black/62">
-              Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & family office operated businesses.
-            </p>
-            <div className="mt-7 flex flex-col gap-2 text-base text-black/72">
-              <a
-                href="mailto:hello@digitaltherapy.io"
-                className="font-medium transition-colors duration-300 hover:text-[#0A65FF]"
-              >
-                hello@digitaltherapy.io
-              </a>
-              <a
-                href="tel:+19174950455"
-                className="font-medium transition-colors duration-300 hover:text-[#0A65FF]"
-              >
-                1 (917) 495-0455
-              </a>
+            <div className="mt-3 flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
+              <p className="max-w-md text-base leading-7 text-black/62">
+                Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & family office operated businesses.
+              </p>
+              <div className="flex flex-col gap-1.5 text-base text-black/72 sm:pt-0.5">
+                <a
+                  href="mailto:hello@digitaltherapy.io"
+                  className="font-medium transition-colors duration-300 hover:text-[#0A65FF]"
+                >
+                  hello@digitaltherapy.io
+                </a>
+                <a
+                  href="tel:+19174950455"
+                  className="font-medium transition-colors duration-300 hover:text-[#0A65FF]"
+                >
+                  1 (917) 495-0455
+                </a>
+              </div>
             </div>
           </div>
 
