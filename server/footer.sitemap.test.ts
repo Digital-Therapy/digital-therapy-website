@@ -104,32 +104,41 @@ describe("Site footer sitemap", () => {
     expect(homeSource).not.toContain("hello@digitaltherapy.io · 1 (917) 495-0455");
     expect(homeSource).not.toContain("font-display text-[clamp(1.45rem,2.2vw,2.35rem)]");
 
-    // Footer renders both as actionable mailto/tel links beneath the tagline paragraph.
+    // Footer renders both as actionable mailto/tel links beneath the tagline paragraph,
+    // each prefixed by a circular blue icon. Phone is shown first, formatted with spaces.
     expect(footerSource).toContain('href="mailto:hello@digitaltherapy.io"');
-    expect(footerSource).toContain(">\n                  hello@digitaltherapy.io\n                </a>");
     expect(footerSource).toContain('href="tel:+19174950455"');
-    expect(footerSource).toContain(">\n                  1 (917) 495-0455\n                </a>");
+    expect(footerSource).toContain("917 - 495 - 0455");
+    expect(footerSource).not.toContain("1 (917) 495-0455");
+
+    // The phone and email rows are inside the same stacked icon block.
+    expect(footerSource).toContain('<div className="mt-7 flex flex-col gap-4 text-base font-semibold text-[#111111]">');
+    expect(footerSource).toContain('<Phone className="h-3.5 w-3.5" aria-hidden="true" />');
+    expect(footerSource).toContain('<Mail className="h-3.5 w-3.5" aria-hidden="true" />');
 
     const taglineIdx = footerSource.indexOf(
       "Digital Therapy builds private data, workflow, reporting, and automation systems",
     );
-    const emailIdx = footerSource.indexOf('href="mailto:hello@digitaltherapy.io"');
     const phoneIdx = footerSource.indexOf('href="tel:+19174950455"');
+    const emailIdx = footerSource.indexOf('href="mailto:hello@digitaltherapy.io"');
     expect(taglineIdx).toBeGreaterThanOrEqual(0);
-    expect(emailIdx).toBeGreaterThan(taglineIdx);
-    expect(phoneIdx).toBeGreaterThan(emailIdx);
+    expect(phoneIdx).toBeGreaterThan(taglineIdx);
+    expect(emailIdx).toBeGreaterThan(phoneIdx);
   });
 
-  it("renders Book 30 Min and Contact as full button variants under Team in the Company column", () => {
+  it("renders Book 20 min and Contact as full button variants under Team in the Company column", () => {
     const footerSource = readProjectFile("client/src/components/SiteFooter.tsx");
 
-    // Standalone button block (previously rendered next to the logo paragraph) is gone.
+    // Standalone button block (previously rendered next to the logo paragraph) is gone,
+    // and the legacy "Book 30 Min" label has been replaced with "Book 20 min".
     expect(footerSource).not.toMatch(
-      /<div className="mt-7 flex flex-col gap-3 sm:flex-row">[\s\S]*?<BookingWidgetDialog label="Book 30 Min" icon="arrow" \/>/,
+      /<div className="mt-7 flex flex-col gap-3 sm:flex-row">[\s\S]*?<BookingWidgetDialog label="Book 20 min" icon="arrow" \/>/,
     );
     expect(footerSource).not.toContain(
-      '<BookingWidgetDialog label="Book 30 Min" icon="arrow" />',
+      '<BookingWidgetDialog label="Book 20 min" icon="arrow" />',
     );
+    expect(footerSource).not.toContain('label: "Book 30 Min"');
+    expect(footerSource).toContain('label: "Book 20 min"');
 
     // Company-column rows now render the prominent button variants in place of the text link counterparts.
     expect(footerSource).toMatch(
@@ -144,12 +153,12 @@ describe("Site footer sitemap", () => {
     expect(footerSource).not.toContain('context="footer sitemap contact link"');
     expect(footerSource).not.toContain("className={footerDialogLinkClasses}");
 
-    // Team still appears immediately before Contact and Book 30 Min in the Company group.
+    // Team still appears immediately before Contact and Book 20 min in the Company group.
     const companyGroup = footerSource.match(/title: "Company",[\s\S]*?\],/)?.[0] ?? "";
     expect(companyGroup).toBeTruthy();
     const teamIdx = companyGroup.indexOf('label: "Team"');
     const contactIdx = companyGroup.indexOf('label: "Contact"');
-    const bookIdx = companyGroup.indexOf('label: "Book 30 Min"');
+    const bookIdx = companyGroup.indexOf('label: "Book 20 min"');
     expect(teamIdx).toBeGreaterThanOrEqual(0);
     expect(contactIdx).toBeGreaterThan(teamIdx);
     expect(bookIdx).toBeGreaterThan(contactIdx);
@@ -173,7 +182,7 @@ describe("Site footer sitemap", () => {
       "DT Brain",
       "Team",
       "Contact",
-      "Book 30 Min",
+      "Book 20 min",
       "footer sitemap inquiry",
       "Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & family office operated businesses.",
       "Understand our process",
@@ -214,27 +223,19 @@ describe("Site footer sitemap", () => {
     expect(footerSource).toContain(
       '<a href="/" className="-mt-3 block leading-none" aria-label="Digital Therapy home">',
     );
-    // Tagline + contact block sit side-by-side beneath the logo, with the contact block to the right of the tagline.
+    // Tagline copy stacks directly beneath the logo, with the icon-prefixed phone/email rows below it.
+    expect(footerSource).toContain('<p className="mt-3 max-w-md text-base leading-7 text-black/62">');
     expect(footerSource).toContain(
-      '<div className="mt-3 flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">',
-    );
-    expect(footerSource).toContain('<p className="max-w-md text-base leading-7 text-black/62">');
-    expect(footerSource).toContain(
-      '<div className="flex flex-col gap-1.5 text-base text-black/72 sm:pt-0.5">',
+      '<div className="mt-7 flex flex-col gap-4 text-base font-semibold text-[#111111]">',
     );
 
-    // Tagline must precede the contact block (i.e. tagline is on the left).
-    const taglineIdx = footerSource.indexOf(
-      'Digital Therapy builds private data, workflow, reporting, and automation systems',
-    );
-    const emailIdx = footerSource.indexOf('href="mailto:hello@digitaltherapy.io"');
-    expect(taglineIdx).toBeGreaterThanOrEqual(0);
-    expect(emailIdx).toBeGreaterThan(taglineIdx);
+    // The side-by-side wrapper from the prior iteration is no longer used.
+    expect(footerSource).not.toContain('sm:flex-row sm:items-start sm:gap-8');
+    expect(footerSource).not.toContain('sm:pt-0.5');
 
-    // Legacy stacked layouts are gone.
+    // Legacy stacked spacing forms are also gone.
     expect(footerSource).not.toContain('className="inline-flex items-center" aria-label="Digital Therapy home"');
     expect(footerSource).not.toContain('<p className="mt-6 max-w-md text-base leading-7 text-black/62">');
-    expect(footerSource).not.toContain('<p className="mt-3 max-w-md text-base leading-7 text-black/62">');
     expect(footerSource).not.toContain('<div className="mt-7 flex flex-col gap-2 text-base text-black/72">');
     expect(footerSource).not.toContain('<div className="mt-4 flex flex-col gap-1.5 text-base text-black/72">');
   });

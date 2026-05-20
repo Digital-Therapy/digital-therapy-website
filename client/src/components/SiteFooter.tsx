@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Mail, Phone } from "lucide-react";
 import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
@@ -33,7 +33,7 @@ const sitemapGroups = [
     links: [
       { label: "Team", href: "/team" },
       { label: "Contact", href: "#contact" },
-      { label: "Book 30 Min", href: "#book" },
+      { label: "Book 20 min", href: "#book" },
     ],
   },
 ];
@@ -47,24 +47,28 @@ export default function SiteFooter() {
             <a href="/" className="-mt-3 block leading-none" aria-label="Digital Therapy home">
               <img src={logoUrl} alt="Digital Therapy" className="h-40 w-auto object-contain" />
             </a>
-            <div className="mt-3 flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
-              <p className="max-w-md text-base leading-7 text-black/62">
-                Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & family office operated businesses.
-              </p>
-              <div className="flex flex-col gap-1.5 text-base text-black/72 sm:pt-0.5">
-                <a
-                  href="mailto:hello@digitaltherapy.io"
-                  className="font-medium transition-colors duration-300 hover:text-[#0A65FF]"
-                >
-                  hello@digitaltherapy.io
-                </a>
-                <a
-                  href="tel:+19174950455"
-                  className="font-medium transition-colors duration-300 hover:text-[#0A65FF]"
-                >
-                  1 (917) 495-0455
-                </a>
-              </div>
+            <p className="mt-3 max-w-md text-base leading-7 text-black/62">
+              Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & family office operated businesses.
+            </p>
+            <div className="mt-7 flex flex-col gap-4 text-base font-semibold text-[#111111]">
+              <a
+                href="tel:+19174950455"
+                className="group inline-flex items-center gap-3 transition-colors duration-300 hover:text-[#0A65FF]"
+              >
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#0A65FF] text-white transition-transform duration-300 group-hover:scale-105">
+                  <Phone className="h-3.5 w-3.5" aria-hidden="true" />
+                </span>
+                917 - 495 - 0455
+              </a>
+              <a
+                href="mailto:hello@digitaltherapy.io"
+                className="group inline-flex items-center gap-3 transition-colors duration-300 hover:text-[#0A65FF]"
+              >
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#0A65FF] text-white transition-transform duration-300 group-hover:scale-105">
+                  <Mail className="h-3.5 w-3.5" aria-hidden="true" />
+                </span>
+                hello@digitaltherapy.io
+              </a>
             </div>
           </div>
 
