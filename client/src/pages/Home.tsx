@@ -134,7 +134,7 @@ export default function Home() {
             <motion.div {...fadeUp}>
               <SectionLabel>secure family office automation</SectionLabel>
               <h1 className="max-w-4xl font-display text-[60px] leading-[0.92] tracking-[-0.06em] text-[#111111]">
-                Tech, Ops &amp; Accounting Solutions for Family Offices.
+                Family Office transformation. Done right.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
                 We spend time to learn your eco-system, unique attributes &amp; processes. Collective understanding is the key to success. That&rsquo;s why Fusion Teams work on-site for the first month of new engagements.
