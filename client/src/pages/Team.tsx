@@ -206,7 +206,7 @@ function FounderStoryDialog({ leader, children }: { leader: TeamPerson; children
                 Founder &amp; CEO, Digital Therapy
               </DialogDescription>
             </DialogHeader>
-            <div className="mt-6 space-y-4 text-sm leading-7 text-black/68">
+            <div className="mt-6 space-y-4 text-sm leading-7 text-black/85">
               <p>
                 Jon Kobrin is the founder of Digital Therapy, a firm often referred to as the accounting firm of the future. With a background in entrepreneurship and software development, Jon brings a unique perspective to transformation projects.
               </p>
@@ -217,7 +217,7 @@ function FounderStoryDialog({ leader, children }: { leader: TeamPerson; children
                 Fusion Teams begin with three SMEs &mdash; one Finance &amp; Accounting SME, one Technology SME, and one Operations &amp; Process SME. These experts don&apos;t have natural pathways to work with one another inside a typical practice-based firm architecture. Together, they can tackle and overcome the most complex transformation challenges, and the right team mix solves roughly 95% of project friction.
               </p>
             </div>
-            <p className="mt-6 rounded-[1rem] border border-black/8 bg-white/70 p-4 text-xs leading-6 text-black/60">
+            <p className="mt-6 rounded-[1rem] border border-black/8 bg-white/70 p-4 text-xs leading-6 text-black/80">
               These three functions used to be siloed departments, each governed by a dedicated leader. But the work has become knotted &mdash; no one function easily separates from another. In this transitional period, all three minds must cooperate and be re-trained to approach projects collectively, so each role can bridge the gaps for the others. It may seem like a small twist, but it makes for an incredibly capable solution team that delivers big &mdash; the type of impact clients deserve but rarely experience.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -269,7 +269,7 @@ export default function Team() {
               <h1 className="max-w-4xl font-display text-[clamp(3.3rem,7vw,7.3rem)] leading-[0.88] tracking-[-0.07em] text-[#111111]">
                 Fusion teams for family-office transformation.
               </h1>
-              <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
+              <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
                 Digital Therapy brings technology, operations, and accounting specialists into one coordinated team so family offices can move from diagnostic insight to implemented workflows with fewer handoffs.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
@@ -297,7 +297,7 @@ export default function Team() {
                     <img src={markUrl} alt="" className="mt-1 h-9 w-9 object-contain" />
                     <div>
                       <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">One accountable team</p>
-                      <p className="mt-2 text-sm leading-6 text-black/66">Technology, accounting, operations, automation, and advisors aligned around measurable operating outcomes.</p>
+                      <p className="mt-2 text-sm leading-6 text-black/82">Technology, accounting, operations, automation, and advisors aligned around measurable operating outcomes.</p>
                     </div>
                   </div>
                 </div>
@@ -328,7 +328,7 @@ export default function Team() {
                     )}
                     <p className={`${leader.imageUrl ? "mt-0" : "mt-8"} text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]`}>{leader.role}</p>
                     <h3 className="mt-3 font-display text-4xl leading-none tracking-[-0.05em]">{leader.name}</h3>
-                    <p className="mt-5 text-sm leading-6 text-black/58">{leader.specialty}</p>
+                    <p className="mt-5 text-sm leading-6 text-black/78">{leader.specialty}</p>
                     {leader.isFounder ? (
                       <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#0A65FF] transition-transform duration-300 group-hover:translate-x-1">
                         Read founder story
@@ -377,7 +377,7 @@ export default function Team() {
               <h2 className="font-display text-[clamp(2.4rem,4.8vw,4.8rem)] leading-[0.95] tracking-[-0.06em]">
                 Built for the way family-office work really crosses functions.
               </h2>
-              <p className="mt-7 text-lg leading-8 text-black/62">
+              <p className="mt-7 text-lg leading-8 text-black/80">
                 The team page source positions Digital Therapy around three core capabilities: Technology, Operations, and Accounting. This page presents that model as a coordinated operating team for family offices and partner firms.
               </p>
               <div className="mt-9 overflow-hidden rounded-[1.8rem] border border-black/8 bg-white p-3 shadow-[0_20px_60px_rgba(17,17,17,0.07)]">
@@ -399,7 +399,7 @@ export default function Team() {
                     </div>
                     <div>
                       <h3 className="font-display text-3xl tracking-[-0.05em]">{principle.title}</h3>
-                      <p className="mt-3 text-sm leading-6 text-black/60">{principle.copy}</p>
+                      <p className="mt-3 text-sm leading-6 text-black/80">{principle.copy}</p>
                     </div>
                   </motion.article>
                 );
@@ -417,7 +417,7 @@ export default function Team() {
                   The right expertise comes into the room at the right time.
                 </h2>
               </div>
-              <p className="max-w-md text-base leading-7 text-black/58">
+              <p className="max-w-md text-base leading-7 text-black/78">
                 Team members are organized around the disciplines required to modernize close cycles, reporting workflows, automation, digital experiences, and secure family-office operations.
               </p>
             </motion.div>
@@ -438,7 +438,7 @@ export default function Team() {
                           <Icon className="h-6 w-6" />
                         </div>
                         <h3 className="mt-7 font-display text-4xl tracking-[-0.055em]">{group.label}</h3>
-                        <p className="mt-4 max-w-md text-sm leading-6 text-black/58">{group.description}</p>
+                        <p className="mt-4 max-w-md text-sm leading-6 text-black/78">{group.description}</p>
                       </div>
                       <div className="grid gap-3 sm:grid-cols-2">
                         {group.members.map((member) => (
@@ -454,7 +454,7 @@ export default function Team() {
                                 <p className="mt-2 text-xs font-bold uppercase tracking-[0.16em] text-black/44">{member.role}</p>
                               </div>
                             </div>
-                            {member.bio ? <p className="mt-4 text-sm leading-6 text-black/56">{member.bio}</p> : null}
+                            {member.bio ? <p className="mt-4 text-sm leading-6 text-black/75">{member.bio}</p> : null}
                           </article>
                         ))}
                       </div>

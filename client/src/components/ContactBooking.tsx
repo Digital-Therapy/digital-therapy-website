@@ -14,7 +14,7 @@ const buttonBaseClasses =
 const variantClasses = {
   primary: "bg-[#0A65FF] text-white shadow-[0_18px_45px_rgba(10,101,255,0.22)] hover:bg-[#004ed1]",
   secondary: "border border-black/15 bg-white/60 text-[#111111] hover:border-[#0A65FF]/60 hover:text-[#0A65FF]",
-  text: "px-0 py-0 text-black/60 hover:text-[#0A65FF]",
+  text: "px-0 py-0 text-black/80 hover:text-[#0A65FF]",
 } as const;
 
 type ButtonVariant = keyof typeof variantClasses;
@@ -82,11 +82,11 @@ export function BookingWidgetDialog({
               <DialogTitle className="font-display text-4xl leading-[0.94] tracking-[-0.06em] text-[#111111]">
                 Schedule a focused 30-minute briefing.
               </DialogTitle>
-              <DialogDescription className="pt-4 text-base leading-7 text-black/62">
+              <DialogDescription className="pt-4 text-base leading-7 text-black/80">
                 Choose a time with Jonathan Kobrin to discuss your family-office pain points, identify the first high-value win, and see how Digital Therapy approaches custom solution delivery.
               </DialogDescription>
             </DialogHeader>
-            <div className="mt-8 space-y-4 text-sm leading-6 text-black/64">
+            <div className="mt-8 space-y-4 text-sm leading-6 text-black/82">
               {["Pain-point discovery", "First-value prioritization", "Tour of relevant deployed solutions"].map((item) => (
                 <div key={item} className="flex gap-3 border-t border-black/10 pt-4">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#0A65FF]" />
@@ -112,7 +112,7 @@ export function BookingWidgetDialog({
                 allow="clipboard-write; fullscreen; payment"
               />
             </div>
-            <p className="mt-4 text-sm leading-6 text-black/52">
+            <p className="mt-4 text-sm leading-6 text-black/72">
               If the embedded scheduler is blocked by browser privacy settings, use “Open full page” above. It opens Apollo directly rather than launching email.
             </p>
           </div>
@@ -173,14 +173,14 @@ export function ContactFormDialog({
               <DialogTitle className="font-display text-4xl leading-[0.94] tracking-[-0.06em] text-[#111111]">
                 Tell us where it hurts.
               </DialogTitle>
-              <DialogDescription className="pt-4 text-base leading-7 text-black/62">
+              <DialogDescription className="pt-4 text-base leading-7 text-black/80">
                 Share a few details and Digital Therapy will route the conversation around your operating pain points, urgency, and best first-value opportunity.
               </DialogDescription>
             </DialogHeader>
             <div className="mt-8 rounded-[1.35rem] border border-[#0A65FF]/15 bg-[#0A65FF]/8 p-5">
               <div className="flex gap-3">
                 <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#0A65FF]" />
-                <p className="text-sm leading-6 text-black/62">
+                <p className="text-sm leading-6 text-black/80">
                   This form submits inside the site. It does not open the visitor’s email client.
                 </p>
               </div>

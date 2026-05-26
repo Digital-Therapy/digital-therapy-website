@@ -136,7 +136,7 @@ export default function Capabilities() {
               <h1 className="max-w-4xl font-display text-[60px] leading-[0.88] tracking-[-0.07em] text-[#111111]">
                 Get real time answers & insights from your data.
               </h1>
-              <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
+              <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
                 Digital Therapy builds private data, automation, accounting, and reporting capabilities for family offices that need confidence across sensitive information, complex assets, and lean operating teams.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
@@ -164,7 +164,7 @@ export default function Capabilities() {
                     <img src={markUrl} alt="" className="mt-1 h-10 w-10 object-contain" />
                     <div>
                       <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">One governed view</div>
-                      <p className="mt-2 text-sm leading-6 text-black/66">Assets, documents, workflows, and owner questions connected through a secure operating layer.</p>
+                      <p className="mt-2 text-sm leading-6 text-black/82">Assets, documents, workflows, and owner questions connected through a secure operating layer.</p>
                     </div>
                   </div>
                 </div>
@@ -180,7 +180,7 @@ export default function Capabilities() {
               <h2 className="font-display text-[60px] leading-[0.92] tracking-[-0.06em]">
                 Family offices typically want..
               </h2>
-              <p className="mt-6 text-lg leading-8 text-black/62">
+              <p className="mt-6 text-lg leading-8 text-black/80">
                 These requests show the practical outcomes family offices want: trust, control, self-service intelligence, lower operating burden, and automation that respects the sensitivity of the data.
               </p>
             </motion.div>
@@ -196,7 +196,7 @@ export default function Capabilities() {
                     <span className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0A65FF] text-white">
                       <Check className="h-4 w-4" />
                     </span>
-                    <p className="text-base leading-7 text-black/70">{request}</p>
+                    <p className="text-base leading-7 text-black/85">{request}</p>
                   </div>
                 </motion.div>
               ))}
@@ -227,7 +227,7 @@ export default function Capabilities() {
                       <Icon className="h-6 w-6 text-black/48 transition-colors duration-300 group-hover:text-[#0A65FF]" />
                     </div>
                     <h3 className="mt-16 text-2xl font-semibold tracking-[-0.04em]">{capability.title}</h3>
-                    <p className="mt-4 leading-7 text-black/58">{capability.copy}</p>
+                    <p className="mt-4 leading-7 text-black/78">{capability.copy}</p>
                   </motion.article>
                 );
               })}
@@ -260,7 +260,7 @@ export default function Capabilities() {
                         <Icon className="h-5 w-5 text-black/42" />
                       </div>
                       <h3 className="mt-5 text-xl font-semibold tracking-[-0.04em]">{layer.title}</h3>
-                      <p className="mt-3 text-sm leading-6 text-black/60">{layer.copy}</p>
+                      <p className="mt-3 text-sm leading-6 text-black/80">{layer.copy}</p>
                     </motion.div>
                   );
                 })}

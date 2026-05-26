@@ -191,7 +191,7 @@ export default function OurApproach() {
                     <img src={markUrl} alt="" className="mt-1 h-9 w-9 object-contain" />
                     <div>
                       <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Two parallel tracks</p>
-                      <p className="mt-2 text-sm leading-6 text-black/66">
+                      <p className="mt-2 text-sm leading-6 text-black/82">
                         Technology Discovery and Finance &amp; Accounting Discovery run side by side, with the Operations &amp; Process SME splitting time across both before implementation begins.
                       </p>
                     </div>
@@ -210,7 +210,7 @@ export default function OurApproach() {
                 Discovery runs as two parallel tracks.
               </h2>
               <p className="mt-6 text-xl font-semibold tracking-[-0.02em] text-[#0A65FF]">Diagnostics-First, on-site for 2–4 weeks</p>
-              <p className="mt-6 text-lg leading-8 text-black/62">
+              <p className="mt-6 text-lg leading-8 text-black/80">
                 All three Fusion Team SMEs deploy on-site with the client and stay present in every kickoff, internal review, and stakeholder readout. The Technology SME and the Finance + Accounting SME each lead a parallel Discovery track. The Operations &amp; Process SME splits time across both, pulled in to unpack any current-state process complex enough to warrant its own swim-lane analysis.
               </p>
             </motion.div>
@@ -228,16 +228,16 @@ export default function OurApproach() {
                       <div>
                         <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">{track.label}</p>
                         <h3 className="mt-4 text-3xl font-semibold leading-tight tracking-[-0.04em] text-[#111111]">{track.title}</h3>
-                        <p className="mt-2 text-sm font-semibold uppercase tracking-[0.18em] text-black/52">{track.lead}</p>
+                        <p className="mt-2 text-sm font-semibold uppercase tracking-[0.18em] text-black/72">{track.lead}</p>
                       </div>
                       <div className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-[#0A65FF]">
                         <Icon className="h-5 w-5" />
                       </div>
                     </div>
-                    <p className="mt-6 text-base leading-7 text-black/64">{track.copy}</p>
+                    <p className="mt-6 text-base leading-7 text-black/82">{track.copy}</p>
                     <div className="mt-6 space-y-3">
                       {track.focus.map((item) => (
-                        <div key={item} className="grid grid-cols-[1rem_1fr] gap-3 text-sm leading-6 text-black/68">
+                        <div key={item} className="grid grid-cols-[1rem_1fr] gap-3 text-sm leading-6 text-black/85">
                           <Database className="mt-1 h-3.5 w-3.5 text-[#0A65FF]" />
                           <span>{item}</span>
                         </div>
@@ -335,13 +335,13 @@ export default function OurApproach() {
                 </h2>
               </div>
               <div className="max-w-3xl">
-                <p className="text-lg leading-8 text-black/64">
+                <p className="text-lg leading-8 text-black/82">
                   After Discovery, Digital Therapy dives into AP &amp; AR. Our clients often operate 15 to 30+ days behind, so we help them redesign close systems &amp; processes and often build custom tools to reduce the monthly close burden.
                 </p>
                 <div className="mt-7 inline-flex flex-wrap items-center gap-3 border-y border-black/10 py-4">
                   <span className="text-xs font-bold uppercase tracking-[0.22em] text-black/45">Target close</span>
                   <span className="font-display text-4xl leading-none tracking-[-0.06em] text-[#0A65FF]">3 - 5 days</span>
-                  <span className="text-sm font-semibold leading-6 text-black/58">of the next month</span>
+                  <span className="text-sm font-semibold leading-6 text-black/78">of the next month</span>
                 </div>
               </div>
             </motion.div>
@@ -360,7 +360,7 @@ export default function OurApproach() {
                         <Icon className="h-5 w-5" />
                       </div>
                     </div>
-                    <p className="mt-6 text-base leading-7 text-black/62">{pillar.copy}</p>
+                    <p className="mt-6 text-base leading-7 text-black/80">{pillar.copy}</p>
                   </motion.div>
                 );
               })}
@@ -390,26 +390,26 @@ export default function OurApproach() {
                   <h3 className="mt-4 font-display text-[clamp(2rem,3vw,3.2rem)] leading-[0.94] tracking-[-0.06em] text-[#111111]">
                     From close backlog to first-week operating rhythm.
                   </h3>
-                  <p className="mt-5 text-sm leading-7 text-black/56">
+                  <p className="mt-5 text-sm leading-7 text-black/75">
                     Example scenario, not a quoted client result: a multi-entity family office enters each month 20+ days behind, with AP approvals, AR follow-up, reconciliations, and reporting evidence scattered across inboxes, spreadsheets, and accounting exports.
                   </p>
                 </div>
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="border-l border-black/10 pl-5">
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-black/42">Before</p>
-                    <p className="mt-3 text-sm leading-7 text-black/62">
+                    <p className="mt-3 text-sm leading-7 text-black/80">
                       Month-end remains unresolved deep into the following month, limiting timely visibility into cash, vendor obligations, receivables, and entity-level performance.
                     </p>
                   </div>
                   <div className="border-l border-black/10 pl-5">
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-black/42">DT intervention</p>
-                    <p className="mt-3 text-sm leading-7 text-black/62">
+                    <p className="mt-3 text-sm leading-7 text-black/80">
                       Digital Therapy maps the close, redesigns ownership and checkpoints, then builds lightweight exception dashboards and approval tooling around the accounting system.
                     </p>
                   </div>
                   <div className="border-l border-[#0A65FF]/35 pl-5">
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0A65FF]">Impact</p>
-                    <p className="mt-3 text-sm leading-7 text-black/62">
+                    <p className="mt-3 text-sm leading-7 text-black/80">
                       The office shifts from reactive cleanup to a managed close calendar, giving leaders a practical path toward the first 3 - 5 days of the next month target.
                     </p>
                   </div>

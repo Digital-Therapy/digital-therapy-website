@@ -10,7 +10,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
+const logoUrl = "/dtlogo.png";
 
 const primaryNavItems = [
   { label: "Thesis", href: "/thesis" },
@@ -34,7 +34,7 @@ type PublicHeaderProps = {
 function navClassName(label: string, activeLabel?: string) {
   return label === activeLabel
     ? "text-base font-normal text-[#0A65FF]"
-    : "text-base font-normal text-black/60 transition-colors duration-300 hover:text-black";
+    : "text-base font-normal text-black/80 transition-colors duration-300 hover:text-black";
 }
 
 function getNavHref(item: (typeof primaryNavItems)[number], useHomeAnchorLinks?: boolean) {
@@ -43,8 +43,8 @@ function getNavHref(item: (typeof primaryNavItems)[number], useHomeAnchorLinks?:
 
 function MainSiteLink({ mobile = false }: { mobile?: boolean }) {
   const className = mobile
-    ? "inline-flex items-center gap-2 rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm font-semibold text-black/70"
-    : "inline-flex items-center gap-2 text-sm font-semibold text-black/60 transition-colors duration-300 hover:text-[#0A65FF]";
+    ? "inline-flex items-center gap-2 rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm font-semibold text-black/85"
+    : "inline-flex items-center gap-2 text-sm font-semibold text-black/80 transition-colors duration-300 hover:text-[#0A65FF]";
 
   return (
     <a href="/" className={className}>
@@ -96,7 +96,7 @@ export default function PublicHeader({
           <SheetTrigger asChild>
             <button
               type="button"
-              className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-black/12 bg-white/90 px-4 text-sm font-semibold text-black/70 shadow-[0_10px_30px_rgba(16,24,40,0.08)] transition-colors duration-300 hover:border-[#0A65FF]/45 hover:text-[#0A65FF] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/50 lg:hidden"
+              className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-black/12 bg-white/90 px-4 text-sm font-semibold text-black/85 shadow-[0_10px_30px_rgba(16,24,40,0.08)] transition-colors duration-300 hover:border-[#0A65FF]/45 hover:text-[#0A65FF] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/50 lg:hidden"
               aria-label="Open primary navigation menu"
             >
               <Menu className="h-4 w-4" />
@@ -120,7 +120,7 @@ export default function PublicHeader({
                       className={`rounded-2xl px-4 py-3 text-lg tracking-[-0.02em] ${
                         item.label === activeLabel
                           ? "bg-[#0A65FF]/10 font-semibold text-[#0A65FF]"
-                          : "font-medium text-black/68 hover:bg-white/70 hover:text-black"
+                          : "font-medium text-black/85 hover:bg-white/70 hover:text-black"
                       }`}
                     >
                       {item.label}
@@ -133,7 +133,7 @@ export default function PublicHeader({
                   <SheetClose asChild>
                     <a
                       href="/"
-                      className="inline-flex items-center gap-2 rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm font-semibold text-black/70"
+                      className="inline-flex items-center gap-2 rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm font-semibold text-black/85"
                     >
                       <ChevronLeft className="h-4 w-4" />
                       Main site

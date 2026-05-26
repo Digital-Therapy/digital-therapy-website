@@ -132,12 +132,12 @@ export default function Home() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_10%,rgba(10,101,255,0.09),transparent_32%),linear-gradient(115deg,#F7F4EE_0%,#FFFFFF_50%,#EEF4FF_100%)]" />
           <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-10 py-20 lg:grid-cols-[0.92fr_1.08fr] lg:py-28">
             <motion.div {...fadeUp}>
-              <SectionLabel>Private family-office operating layer</SectionLabel>
+              <SectionLabel>secure family office automation</SectionLabel>
               <h1 className="max-w-4xl font-display text-[60px] leading-[0.92] tracking-[-0.06em] text-[#111111]">
                 Tech, Ops &amp; Accounting Solutions for Family Offices.
               </h1>
-              <p className="mt-8 max-w-2xl text-xl leading-8 text-black/62">
-                We deliver the value you wish you got from accounting firms. We spend the time to truly comprehend your eco-system and unique nuances. Achieving collective understanding is the key to delivery success. We&rsquo;ll typically send a team to work on-site the first two&ndash;four weeks of new engagements.
+              <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
+                We spend time to learn your eco-system, unique attributes &amp; processes. Collective understanding is the key to success. That&rsquo;s why Fusion Teams work on-site for the first month of new engagements.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <a
@@ -154,18 +154,6 @@ export default function Home() {
                   What is DT Brain?
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
-              </div>
-              <div className="mt-12 grid max-w-xl grid-cols-3 gap-5 border-t border-black/10 pt-6">
-                {[
-                  ["Assets", "mapped"],
-                  ["Workflows", "automated"],
-                  ["Reporting", "governed"],
-                ].map(([top, bottom]) => (
-                  <div key={top}>
-                    <div className="font-display text-2xl leading-none tracking-[-0.04em]">{top}</div>
-                    <div className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-black/45">{bottom}</div>
-                  </div>
-                ))}
               </div>
             </motion.div>
             <motion.div
@@ -185,7 +173,7 @@ export default function Home() {
                   ].map(([title, copy]) => (
                     <div key={title} className="border-l border-black/10 pl-3 first:border-l-0 first:pl-0">
                       <div className="text-sm font-bold">{title}</div>
-                      <div className="mt-1 text-xs text-black/52">{copy}</div>
+                      <div className="mt-1 text-xs text-black/72">{copy}</div>
                     </div>
                   ))}
                 </div>
@@ -205,17 +193,17 @@ export default function Home() {
           <div className="container grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.11)]">
               <img src={boardroomVisual} alt="Modern family office boardroom" className="aspect-[16/11] w-full object-cover" />
-              <div className="absolute left-5 top-5 rounded-full border border-white/70 bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-black/58 backdrop-blur-xl">
+              <div className="absolute left-5 top-5 rounded-full border border-white/70 bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-black/78 backdrop-blur-xl">
                 Modern wealth is an operating company
               </div>
             </motion.div>
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <SectionLabel>Why the back office breaks</SectionLabel>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.4rem)] leading-[0.92] tracking-[-0.06em]">
-                Complexity creates cost.
+                Complexity is cost.
               </h2>
-              <p className="mt-6 text-lg leading-8 text-black/62">
-                The most sophisticated family offices now coordinate far more than investments. Digital Therapy targets the everyday friction that compounds across accounting, reporting, technology, and governance.
+              <p className="mt-6 text-lg leading-8 text-black/80">
+                Mature family offices coordinate more than investments. Digital Therapy targets the everyday friction that compounds across accounting, reporting, technology, and governance.
               </p>
               <div className="mt-9 space-y-4">
                 {complexityPoints.map((point) => (
@@ -223,7 +211,7 @@ export default function Home() {
                     <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#0A65FF] text-white">
                       <Check className="h-3.5 w-3.5" />
                     </span>
-                    <p className="text-base leading-7 text-black/70">{point}</p>
+                    <p className="text-base leading-7 text-black/85">{point}</p>
                   </div>
                 ))}
               </div>
@@ -235,7 +223,7 @@ export default function Home() {
           <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_70%_40%,rgba(10,101,255,0.12),transparent_44%)]" />
           <div className="container relative">
             <motion.div {...fadeUp} className="max-w-4xl">
-              <SectionLabel>What Digital Therapy builds</SectionLabel>
+              <SectionLabel>Data Culture &amp; SOP Transformation</SectionLabel>
               <h2 className="font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
                 Four steps to Data Empowerment.
               </h2>
@@ -255,7 +243,7 @@ export default function Home() {
                       <Icon className="h-5 w-5 text-black/48 transition-colors duration-300 group-hover:text-[#0A65FF] sm:h-6 sm:w-6" />
                     </div>
                     <h3 className="mt-10 text-xl font-semibold tracking-[-0.04em] sm:mt-12 sm:text-2xl lg:mt-16">{layer.title}</h3>
-                    <p className="mt-3 text-[0.95rem] leading-6 text-black/58 sm:mt-4 sm:leading-7">{layer.copy}</p>
+                    <p className="mt-3 text-[0.95rem] leading-6 text-black/78 sm:mt-4 sm:leading-7">{layer.copy}</p>
                   </motion.article>
                 );
               })}
@@ -267,14 +255,14 @@ export default function Home() {
           <div className="container">
             <motion.div {...fadeUp} className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
               <div>
-                <SectionLabel>Fusion Team model</SectionLabel>
+                <SectionLabel>Fusion Team Concept</SectionLabel>
                 <h2 className="font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
                   Collaboration can’t be an afterthought.
                 </h2>
               </div>
               <div className="max-w-3xl lg:pb-2">
-                <p className="text-lg leading-8 text-black/62">
-                  Accountants work with accountants &mdash; Engineers with engineers. There’s no organic pathway for these experts to come together &amp; learn to collaborate effectively.
+                <p className="text-lg leading-8 text-black/80">
+                  Accountants work with accountants &mdash; Engineers with engineers. There’s no organic pathway for these experts to come together &amp; learn to collaborate effectively. So we created the solution ourselves &mdash; a team management nucleus containing three SME leaders who work together as the rule, not the exception.
                 </p>
                 <a
                   href="/thesis"
@@ -298,7 +286,7 @@ export default function Home() {
                     <div className="text-[30px] font-normal tracking-[-0.02em] text-[#0A65FF]">{String(index + 1).padStart(2, "0")}</div>
                     <div className="mt-14">
                       <h3 className="text-2xl font-semibold tracking-[-0.05em]">{member.title}</h3>
-                      <p className="mt-5 text-[0.95rem] leading-7 text-black/64">{member.copy}</p>
+                      <p className="mt-5 text-[0.95rem] leading-7 text-black/82">{member.copy}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -317,14 +305,14 @@ export default function Home() {
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.92] tracking-[-0.06em]">
                 Grow Revenue - Not Headcount.
               </h2>
-              <p className="mt-6 text-lg leading-8 text-black/62">
+              <p className="mt-6 text-lg leading-8 text-black/80">
                 Digital Therapy converts fragmented Family Office operations into a coherent, private, and automated operating system.
               </p>
               <div className="mt-8 space-y-3">
                 {automationUseCases.map((useCase) => (
                   <div key={useCase} className="flex gap-4 rounded-2xl border border-black/8 bg-[#F7F4EE]/70 p-4">
                     <Bot className="mt-1 h-5 w-5 shrink-0 text-[#0A65FF]" />
-                    <p className="leading-7 text-black/66">{useCase}</p>
+                    <p className="leading-7 text-black/82">{useCase}</p>
                   </div>
                 ))}
               </div>
@@ -368,7 +356,7 @@ export default function Home() {
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.06em]">
                 A confidential implementation partner for complex clients.
               </h2>
-              <p className="mt-6 text-lg leading-8 text-black/62">
+              <p className="mt-6 text-lg leading-8 text-black/80">
                 Digital Therapy helps private banks, multifamily offices, and wealth advisory firms solve client operating complexity without replacing the trusted advisory relationship.
               </p>
               <div className="mt-8">
@@ -389,7 +377,7 @@ export default function Home() {
                 ].map((item) => (
                   <div key={item} className="flex gap-3 border-t border-black/10 pt-4">
                     <UsersRound className="mt-1 h-5 w-5 shrink-0 text-[#0A65FF]" />
-                    <p className="leading-7 text-black/66">{item}</p>
+                    <p className="leading-7 text-black/82">{item}</p>
                   </div>
                 ))}
               </div>
@@ -412,10 +400,10 @@ export default function Home() {
             <motion.div {...fadeUp}>
               <img src={markUrl} alt="Digital Therapy picture mark" className="h-14 w-14 object-contain" />
               <h2 className="mt-9 font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
-                Book 20 min. Let’s find the first win !
+                Let’s find the first win !
               </h2>
-              <p className="mt-7 max-w-2xl text-xl leading-8 text-black/62">
-                Family-office leaders and advisors can use one focused conversation to surface pain points, identify where Digital Therapy can deliver meaningful value first, and tour custom operating-layer solutions already deployed for some of New York City’s largest and most discerning family offices.
+              <p className="mt-7 max-w-2xl text-xl leading-8 text-black/80">
+                In 20 minutes, we can explore current pain points, identify how Digital Therapy can deliver meaningful value, and tour one or two custom solutions deployed for existing clients.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <PrivateBriefingButton />

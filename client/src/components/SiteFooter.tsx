@@ -1,11 +1,11 @@
 import { ArrowUpRight, Mail, Phone } from "lucide-react";
 import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
 
-const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const markUrl = "/manus-storage/DTLOGO_PICMARKpng_2cf51494.png";
+const logoUrl = "/dtlogo.png";
+const markUrl = "/dtlogo.png";
 
 const footerLinkClasses =
-  "group flex w-full items-center justify-between gap-4 text-left text-sm font-medium text-black/58 transition-colors duration-300 hover:text-[#0A65FF]";
+  "group flex w-full items-center justify-between gap-4 text-left text-sm font-medium text-black/78 transition-colors duration-300 hover:text-[#0A65FF]";
 
 const footerDialogLinkClasses = `${footerLinkClasses} !justify-between after:h-3.5 after:w-3.5 after:content-['']`;
 
@@ -47,7 +47,7 @@ export default function SiteFooter() {
             <a href="/" className="-mt-3 block leading-none" aria-label="Digital Therapy home">
               <img src={logoUrl} alt="Digital Therapy" className="h-40 w-auto object-contain" />
             </a>
-            <p className="mt-3 max-w-md text-base leading-7 text-black/62">
+            <p className="mt-3 max-w-md text-base leading-7 text-black/80">
               Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & family office operated businesses.
             </p>
             <div className="mt-7 flex flex-col gap-4 text-base font-semibold text-[#111111]">
@@ -129,7 +129,7 @@ export default function SiteFooter() {
             <img src={markUrl} alt="" aria-hidden="true" className="h-6 w-6 object-contain" />
             <span>© {new Date().getFullYear()} Digital Therapy. Private operating systems for family offices.</span>
           </div>
-          <a href="/approach" className="inline-flex items-center gap-2 font-semibold text-black/56 transition-colors duration-300 hover:text-[#0A65FF]">
+          <a href="/approach" className="inline-flex items-center gap-2 font-semibold text-black/75 transition-colors duration-300 hover:text-[#0A65FF]">
             Understand our process
             <ArrowUpRight className="h-3.5 w-3.5" />
           </a>

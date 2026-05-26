@@ -131,7 +131,7 @@ export default function DTBrain() {
               <p className="mt-8 max-w-2xl text-2xl font-semibold leading-9 tracking-[-0.035em] text-[#0A65FF]">
                 It runs in your own office. On your own hardware. In your actual control.
               </p>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-black/62">
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-black/80">
                 Digital Therapy sets up a private, on-premises automation environment powered by Apple M4 Pro. No cloud dependency. No data leaves your ecosystem. That is real security and true privacy.
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -199,7 +199,7 @@ export default function DTBrain() {
               <h2 className="max-w-3xl font-display text-[clamp(2.8rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.06em]">
                 Private infrastructure for sensitive automation.
               </h2>
-              <p className="mt-7 max-w-xl text-lg leading-8 text-black/62">
+              <p className="mt-7 max-w-xl text-lg leading-8 text-black/80">
                 DT Brain gives the office a controlled local environment for AI workflows, document intelligence, scripting, robotic process automation, and integration testing before automations touch live operations.
               </p>
               <div className="mt-9 grid gap-3">
@@ -223,7 +223,7 @@ export default function DTBrain() {
                     <div className="text-xs font-bold uppercase tracking-[0.24em] text-[#0A65FF]">DT Brain core</div>
                     <div className="mt-2 text-3xl font-semibold tracking-[-0.05em]">Apple M4 Pro automation hub</div>
                   </div>
-                  <div className="rounded-full border border-black/10 bg-white/70 px-4 py-2 text-sm font-bold text-black/58">1 Gbps Ethernet</div>
+                  <div className="rounded-full border border-black/10 bg-white/70 px-4 py-2 text-sm font-bold text-black/78">1 Gbps Ethernet</div>
                 </div>
 
                 <div className="mt-8 grid gap-5 lg:grid-cols-2">
@@ -240,7 +240,7 @@ export default function DTBrain() {
                           <div key={item.title} className="border-t border-black/8 pt-4">
                             <div className="flex items-center gap-2 text-sm font-bold text-[#0A65FF]"><Icon className="h-4 w-4" />{item.label}</div>
                             <div className="mt-1 font-semibold tracking-[-0.02em]">{item.title}</div>
-                            <p className="mt-1 text-sm leading-6 text-black/55">{item.copy}</p>
+                            <p className="mt-1 text-sm leading-6 text-black/72">{item.copy}</p>
                           </div>
                         );
                       })}
@@ -260,7 +260,7 @@ export default function DTBrain() {
                           <div key={item.title} className="border-t border-black/8 pt-4">
                             <div className="flex items-center gap-2 text-sm font-bold text-[#0A65FF]"><Icon className="h-4 w-4" />{item.label}</div>
                             <div className="mt-1 font-semibold tracking-[-0.02em]">{item.title}</div>
-                            <p className="mt-1 text-sm leading-6 text-black/55">{item.copy}</p>
+                            <p className="mt-1 text-sm leading-6 text-black/72">{item.copy}</p>
                           </div>
                         );
                       })}
@@ -274,7 +274,7 @@ export default function DTBrain() {
                       <ShieldCheck className="h-6 w-6 text-[#0A65FF]" />
                       <div>
                         <div className="font-semibold tracking-[-0.02em]">VPN via Tailscale</div>
-                        <div className="text-sm text-black/55">Encrypted traffic and identity-based access around the secure perimeter.</div>
+                        <div className="text-sm text-black/72">Encrypted traffic and identity-based access around the secure perimeter.</div>
                       </div>
                     </div>
                     <div className="text-sm font-bold uppercase tracking-[0.18em] text-[#0A65FF]">Secure perimeter</div>
@@ -306,7 +306,7 @@ export default function DTBrain() {
               <h2 className="max-w-3xl font-display text-[clamp(2.8rem,5vw,5.4rem)] leading-[0.92] tracking-[-0.06em]">
                 Your data. Your hardware. Your rules.
               </h2>
-              <p className="mt-7 max-w-xl text-lg leading-8 text-black/62">
+              <p className="mt-7 max-w-xl text-lg leading-8 text-black/80">
                 DT Brain is designed for family offices that want the productivity of AI automation without surrendering sensitive documents, workflows, and operational context to uncontrolled infrastructure.
               </p>
               <div className="mt-10 grid gap-4 sm:grid-cols-2">
@@ -316,7 +316,7 @@ export default function DTBrain() {
                     <div key={item.title} className="border-t border-black/10 pt-5">
                       <Icon className="h-6 w-6 text-[#0A65FF]" />
                       <div className="mt-4 text-xl font-semibold tracking-[-0.04em]">{item.title}</div>
-                      <p className="mt-2 text-sm leading-6 text-black/58">{item.copy}</p>
+                      <p className="mt-2 text-sm leading-6 text-black/78">{item.copy}</p>
                     </div>
                   );
                 })}
