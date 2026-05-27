@@ -22,7 +22,6 @@ import {
   Code2,
   Compass,
   Landmark,
-  Layers3,
   Paintbrush,
   Search,
   ShieldCheck,
@@ -34,9 +33,6 @@ const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
 const markUrl = "/dt-mark.png";
 const boardroomVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_family_office_boardroom-UvecEVLEaVqpouVEhEb9mw.webp";
-const wealthMapVisual =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_wealth_map_visual-TmSmhqHi8pgacxaNwHMRxs.webp";
-
 const headshots = {
   harryDublinsky: "/manus-storage/harry-dublinsky_16bc2837.png",
   bruceDitman: "/manus-storage/bruce-ditman_6bc44f86.png",
@@ -141,24 +137,6 @@ const extendedNetwork: Array<TeamPerson & { group: string; icon: typeof Landmark
   { name: "Geoff Horn", role: "Payments", group: "Alliances", icon: Landmark, imageUrl: headshots.geoffHorn },
   { name: "Bruce Ditman", role: "Advisor", group: "Advisors", icon: BadgeCheck, imageUrl: headshots.bruceDitman },
   { name: "Liron David", role: "Advisor", group: "Advisors", icon: BadgeCheck, imageUrl: headshots.lironDavid },
-];
-
-const principles = [
-  {
-    title: "Technology",
-    copy: "Architecture, automation, secure infrastructure, AI workflows, and integration logic are designed together rather than bolted on later.",
-    icon: Code2,
-  },
-  {
-    title: "Operations",
-    copy: "Processes, handoffs, approvals, and exception paths are mapped against how the family office actually runs.",
-    icon: Layers3,
-  },
-  {
-    title: "Accounting",
-    copy: "Financial controls, close routines, reporting evidence, and accounting expertise remain embedded in every transformation decision.",
-    icon: CircleDollarSign,
-  },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -311,7 +289,7 @@ export default function Team() {
             <motion.div {...fadeUp} className="max-w-3xl">
               <SectionLabel>Leadership</SectionLabel>
               <h2 className="font-display text-[clamp(2.6rem,5vw,5.2rem)] leading-[0.95] tracking-[-0.06em]">
-                Senior leads across transformation, technology, and finance.
+                Senior leads across transformation,<br />technology, and finance.
               </h2>
             </motion.div>
             <div className="mt-14 grid gap-6 lg:grid-cols-3">
@@ -370,44 +348,6 @@ export default function Team() {
           </div>
         </section>
 
-        <section className="border-b border-black/8 bg-[#F7F4EE] py-24">
-          <div className="container grid gap-12 lg:grid-cols-[0.82fr_1.18fr]">
-            <motion.div {...fadeUp} className="lg:sticky lg:top-28 lg:self-start">
-              <SectionLabel>Fusion model</SectionLabel>
-              <h2 className="font-display text-[clamp(2.4rem,4.8vw,4.8rem)] leading-[0.95] tracking-[-0.06em]">
-                Built for the way family-office work really crosses functions.
-              </h2>
-              <p className="mt-7 text-lg leading-8 text-black/80">
-                The team page source positions Digital Therapy around three core capabilities: Technology, Operations, and Accounting. This page presents that model as a coordinated operating team for family offices and partner firms.
-              </p>
-              <div className="mt-9 overflow-hidden rounded-[1.8rem] border border-black/8 bg-white p-3 shadow-[0_20px_60px_rgba(17,17,17,0.07)]">
-                <img src={wealthMapVisual} alt="Family-office operating map" className="h-64 w-full rounded-[1.35rem] object-cover" />
-              </div>
-            </motion.div>
-            <div className="space-y-5">
-              {principles.map((principle, index) => {
-                const Icon = principle.icon;
-                return (
-                  <motion.article
-                    key={principle.title}
-                    {...fadeUp}
-                    transition={{ ...fadeUp.transition, delay: index * 0.06 }}
-                    className="grid gap-6 rounded-[2rem] border border-black/8 bg-white p-7 shadow-[0_18px_50px_rgba(17,17,17,0.05)] sm:grid-cols-[auto_1fr]"
-                  >
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0A65FF]/10 text-[#0A65FF]">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-display text-3xl tracking-[-0.05em]">{principle.title}</h3>
-                      <p className="mt-3 text-sm leading-6 text-black/80">{principle.copy}</p>
-                    </div>
-                  </motion.article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
         <section className="border-b border-black/8 bg-white py-24">
           <div className="container">
             <motion.div {...fadeUp} className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
@@ -417,9 +357,6 @@ export default function Team() {
                   The right expertise comes into the room at the right time.
                 </h2>
               </div>
-              <p className="max-w-md text-base leading-7 text-black/78">
-                Team members are organized around the disciplines required to modernize close cycles, reporting workflows, automation, digital experiences, and secure family-office operations.
-              </p>
             </motion.div>
 
             <div className="mt-14 grid gap-7">
