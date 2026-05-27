@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
+import { ChatWidget } from "./components/ChatWidget";
 import ErrorBoundary from "./components/ErrorBoundary";
 import SiteFooter from "./components/SiteFooter";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -11,7 +12,10 @@ import Team from "./pages/Team";
 import Thesis from "./pages/Thesis";
 import Capabilities from "./pages/Capabilities";
 import OurApproach from "./pages/OurApproach";
+import Accessibility from "./pages/Accessibility";
 import Partners from "./pages/Partners";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import Vendors from "./pages/Vendors";
 
 function Router() {
@@ -25,6 +29,9 @@ function Router() {
       <Route path={"/process"} component={OurApproach} />
       <Route path={"/partners"} component={Partners} />
       <Route path={"/vendors"} component={Vendors} />
+      <Route path={"/terms"} component={Terms} />
+      <Route path={"/privacy"} component={Privacy} />
+      <Route path={"/accessibility"} component={Accessibility} />
       <Route path={"/team"} component={Team} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
@@ -49,6 +56,7 @@ function App() {
           <Toaster />
           <Router />
           <SiteFooter />
+          <ChatWidget />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

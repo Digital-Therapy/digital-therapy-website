@@ -6,7 +6,25 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 
-const APOLLO_BOOKING_URL = "https://app.apollo.io/#/meet/jonathan_kobrin_67f/30-min";
+const APOLLO_BOOKING_URLS = {
+  "30-min": "https://app.apollo.io/#/meet/digitaltherapy",
+  "20-min": "https://app.apollo.io/#/meet/digitaltherapy",
+} as const;
+
+type BookingDuration = keyof typeof APOLLO_BOOKING_URLS;
+
+const DURATION_LABELS: Record<BookingDuration, { minutes: string; title: string; aria: string }> = {
+  "30-min": {
+    minutes: "30",
+    title: "Schedule a focused 30-minute briefing.",
+    aria: "Book 30 minutes with Digital Therapy",
+  },
+  "20-min": {
+    minutes: "20",
+    title: "Schedule a focused 20-minute briefing.",
+    aria: "Book 20 minutes with Digital Therapy",
+  },
+};
 
 const buttonBaseClasses =
   "group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-normal tracking-[-0.01em] transition-all duration-300";
@@ -41,6 +59,7 @@ type ActionButtonProps = {
   label?: string;
   context?: string;
   icon?: "arrow" | "calendar" | "message" | "none";
+  duration?: BookingDuration;
 };
 
 function ActionIcon({ icon }: { icon: NonNullable<ActionButtonProps["icon"]> }) {
@@ -59,13 +78,16 @@ export function BookingWidgetDialog({
   className = "",
   label = "Book 30 Min",
   icon = "arrow",
+  duration = "30-min",
 }: ActionButtonProps) {
+  const bookingUrl = APOLLO_BOOKING_URLS[duration];
+  const labels = DURATION_LABELS[duration];
   return (
     <Dialog>
       <DialogTrigger asChild>
         <button
           type="button"
-          aria-label="Book 30 minutes with Digital Therapy"
+          aria-label={labels.aria}
           className={`${buttonBaseClasses} ${variantClasses[variant]} ${className}`}
         >
           {label}
@@ -80,7 +102,7 @@ export function BookingWidgetDialog({
                 <CalendarDays className="h-5 w-5" />
               </div>
               <DialogTitle className="font-display text-4xl leading-[0.94] tracking-[-0.06em] text-[#111111]">
-                Schedule a focused 30-minute briefing.
+                {labels.title}
               </DialogTitle>
               <DialogDescription className="pt-4 text-base leading-7 text-black/80">
                 Choose a time with Jonathan Kobrin to discuss your family-office pain points, identify the first high-value win, and see how Digital Therapy approaches custom solution delivery.
@@ -95,26 +117,31 @@ export function BookingWidgetDialog({
               ))}
             </div>
           </div>
-          <div className="bg-white p-4 sm:p-5 lg:p-6">
-            <div className="mb-3 flex items-center justify-between gap-4 text-xs font-bold uppercase tracking-[0.18em] text-black/42">
-              <span>Apollo booking widget</span>
-              <a href={APOLLO_BOOKING_URL} target="_blank" rel="noreferrer" className="text-[#0A65FF] hover:text-[#004ed1]">
-                Open full page
+          <div className="flex flex-col justify-center bg-white p-8 sm:p-10 lg:p-12">
+            <div className="mx-auto flex max-w-md flex-col items-center text-center">
+              <div className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-[#0A65FF]/8 text-[#0A65FF]">
+                <CalendarDays className="h-10 w-10" />
+              </div>
+              <h3 className="mt-7 font-display text-3xl leading-[1.05] tracking-[-0.04em] text-[#111111]">
+                Pick a time on the live calendar.
+              </h3>
+              <p className="mt-3 text-base leading-7 text-black/75">
+                Your {labels.minutes}-minute booking opens in a new tab on Apollo, where you can see real-time availability and confirm instantly.
+              </p>
+              <a
+                href={bookingUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="group mt-7 inline-flex items-center gap-2 rounded-full bg-[#0A65FF] px-7 py-4 text-base font-semibold text-white shadow-[0_18px_45px_rgba(10,101,255,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#004ed1]"
+              >
+                <CalendarDays className="h-4 w-4" />
+                Open booking calendar
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </a>
+              <p className="mt-5 break-all text-xs leading-5 text-black/50">
+                {bookingUrl}
+              </p>
             </div>
-            <div className="overflow-hidden rounded-[1.35rem] border border-black/10 bg-[#F7F4EE]">
-              <iframe
-                title="Digital Therapy 30 minute booking calendar"
-                src={APOLLO_BOOKING_URL}
-                className="h-[680px] w-full bg-white"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                allow="clipboard-write; fullscreen; payment"
-              />
-            </div>
-            <p className="mt-4 text-sm leading-6 text-black/72">
-              If the embedded scheduler is blocked by browser privacy settings, use “Open full page” above. It opens Apollo directly rather than launching email.
-            </p>
           </div>
         </div>
       </DialogContent>

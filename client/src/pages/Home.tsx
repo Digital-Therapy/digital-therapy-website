@@ -139,11 +139,11 @@ export default function Home() {
           <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-10 py-20 lg:grid-cols-[0.92fr_1.08fr] lg:py-28">
             <motion.div {...fadeUp}>
               <SectionLabel>secure family office automation</SectionLabel>
-              <h1 className="max-w-4xl font-display text-[60px] leading-[0.92] tracking-[-0.06em] text-[#111111]">
+              <h1 className="max-w-4xl font-display text-[70px] leading-[0.92] tracking-[-0.06em] text-[#111111]">
                 Family office<br />transformation<br />that works.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
-                We spend time to learn your eco-system, unique attributes &amp; processes. Collective understanding is the key to success. That&rsquo;s why Fusion Teams work on-site for the first month of new engagements.
+                We spend time to learn your eco-system, unique attributes &amp; processes because collective understanding is the keystone of transformation success. That&rsquo;s why Fusion Teams typically work on-site for the first month of new engagements.
               </p>
               <p className="mt-10 text-base font-bold leading-7 text-black/90">
                 Would you like to learn more about our
@@ -173,19 +173,14 @@ export default function Home() {
               transition={{ duration: 0.9, ease: "easeOut" as const }}
               className="relative lg:-mt-24 xl:-mt-16"
             >
-              <div className="absolute -inset-6 rounded-[2.6rem] bg-[#0A65FF]/10 blur-3xl" />
+              <div className="pointer-events-none absolute -inset-6 rounded-[2.6rem] bg-[#0A65FF]/10 blur-3xl" />
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
                 <img src={welcomeVisual} alt="Welcome to Digital Therapy" className="aspect-[16/8] w-full object-cover object-[center_58%]" />
               </div>
               <div className="relative mt-5 grid gap-3 rounded-[1.35rem] border border-black/10 bg-white p-4 shadow-[0_18px_45px_rgba(16,24,40,0.08)] sm:grid-cols-3">
-                {[
-                  ["Source of truth", "Connected data"],
-                  ["AI agents", "Document logic"],
-                  ["Owner answers", "Live intelligence"],
-                ].map(([title, copy]) => (
+                {["Save Time", "Reduce Burn", "Make more money"].map((title) => (
                   <div key={title} className="border-l border-black/10 pl-3 first:border-l-0 first:pl-0">
                     <div className="text-sm font-bold">{title}</div>
-                    <div className="mt-1 text-xs text-black/72">{copy}</div>
                   </div>
                 ))}
               </div>

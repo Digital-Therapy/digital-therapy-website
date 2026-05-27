@@ -1,5 +1,5 @@
 import { ArrowUpRight, Mail, Phone } from "lucide-react";
-import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
+import { ContactFormDialog } from "@/components/ContactBooking";
 
 const logoUrl = "/dtlogo.png";
 const markUrl = "/dt-mark.png";
@@ -22,7 +22,6 @@ const sitemapGroups = [
   {
     title: "Solutions",
     links: [
-      { label: "Operating Layer", href: "/#operating-layer" },
       { label: "Partner Model", href: "/partners" },
       { label: "DT Brain", href: "/dt-brain" },
     ],
@@ -32,7 +31,6 @@ const sitemapGroups = [
     links: [
       { label: "Team", href: "/team" },
       { label: "Contact", href: "#contact" },
-      { label: "Book 20 min", href: "#book" },
     ],
   },
 ];
@@ -112,17 +110,6 @@ export default function SiteFooter() {
                       );
                     }
 
-                    if (link.href === "#book") {
-                      return (
-                        <BookingWidgetDialog
-                          key={link.label}
-                          label={link.label}
-                          icon="arrow"
-                          className="w-full justify-center"
-                        />
-                      );
-                    }
-
                     return (
                       <a
                         key={link.href}
@@ -140,15 +127,22 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-5 border-t border-black/10 pt-7 text-sm text-black/70 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-3 border-t border-black/10 pt-7 text-sm text-black/70 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <img src={markUrl} alt="" aria-hidden="true" className="h-6 w-6 object-contain" />
             <span>© {new Date().getFullYear()} Digital Therapy, LLC. All Rights Reserved.</span>
           </div>
-          <a href="/process" className="inline-flex items-center gap-2 font-semibold text-black/75 transition-colors duration-300 hover:text-[#0A65FF]">
-            Understand our process
-            <ArrowUpRight className="h-3.5 w-3.5" />
-          </a>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium text-black/65">
+            <a href="/terms" className="transition-colors duration-200 hover:text-[#0A65FF]">
+              Terms &amp; Conditions
+            </a>
+            <a href="/privacy" className="transition-colors duration-200 hover:text-[#0A65FF]">
+              Privacy Policy
+            </a>
+            <a href="/accessibility" className="transition-colors duration-200 hover:text-[#0A65FF]">
+              Accessibility
+            </a>
+          </div>
         </div>
       </div>
     </footer>
