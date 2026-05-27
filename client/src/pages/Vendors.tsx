@@ -15,6 +15,28 @@ const fadeUp = {
   transition: { duration: 0.65, ease: "easeOut" },
 } as const;
 
+const marketingSkillGroups: SkillGroup[] = [
+  { label: "CRM", items: ["Salesforce", "Hubspot", "Zoho", "MS Dynamics 365"] },
+  { label: "CMS & No-code Web", items: ["Wordpress", "Squarespace", "Shopify", "Bubble"] },
+  { label: "Wix Ecosystem", items: ["WiX Studio", "WiX Velo", "WiX Blocks", "WiX Bookings"] },
+  { label: "Cold Email", items: ["Instantly", "Lemlist", "Maildoso", "Salesloft", "Gong", "Salesforge", "Smartlead", "Snovio"] },
+  { label: "List Building", items: ["List Kit", "Apollo", "Clay", "Zoom Info"] },
+  { label: "LinkedIn DM", items: ["Sales Navigator", "Linkedhelper"] },
+  { label: "Workflow Automation", items: ["N8N", "Make", "Other"] },
+  { label: "SEO / GEO", items: ["Semrush", "AHRef", "Screaming Frog", "SE Ranking", "The Hoth"] },
+  { label: "Google", items: ["Google Ads", "Google Maps", "Google Local", "Google Analytics", "Google Tag Manager", "Google Campaign Manager 360"] },
+  { label: "Email", items: ["Constant Contact", "Mailchimp", "Honeybook", "Hive"] },
+  { label: "Newsletter", items: ["Beehiv"] },
+  { label: "Community Monetization", items: ["Circle", "Kajabi"] },
+];
+
+const familyOfficeSkillGroups: SkillGroup[] = [
+  {
+    label: "Family Office Platforms",
+    items: ["Addepar", "Mastro", "Canoe", "Asora", "Eton", "Aleta", "Asseta AI", "Copia"],
+  },
+];
+
 const financeAccountingSkillGroups: SkillGroup[] = [
   { label: "Primary", items: ["Individual Tax Return", "Corporate Tax Return", "Tax Strategy", "Bookkeeping"] },
   { label: "Tax Prep", items: ["Walters Kluwyer", "CCH", "La Certe", "Drake", "Tax Act", "Ultra Tax"] },
@@ -57,6 +79,7 @@ const vendorTypes = [
     icon: Briefcase,
     context: "vendor application: Marketing SME",
     buttonLabel: "Apply as Marketing SME",
+    skillGroups: marketingSkillGroups,
   },
   {
     title: "Family Office SMEs",
@@ -66,6 +89,7 @@ const vendorTypes = [
     icon: Landmark,
     context: "vendor application: Family Office SME",
     buttonLabel: "Apply as Family Office SME",
+    skillGroups: familyOfficeSkillGroups,
   },
 ];
 
