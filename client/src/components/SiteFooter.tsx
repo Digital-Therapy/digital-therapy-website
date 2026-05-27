@@ -40,7 +40,24 @@ const sitemapGroups = [
 export default function SiteFooter() {
   return (
     <footer aria-labelledby="footer-sitemap-heading" className="border-t border-black/10 bg-[#f8f8f7] text-[#111111]">
-      <div className="container py-14 lg:py-18">
+      <div className="container pt-10 lg:pt-12">
+        <a
+          href="/vendors"
+          className="group flex flex-col items-center justify-between gap-4 rounded-[1.6rem] border border-[#0A65FF]/25 bg-[#0A65FF]/8 px-6 py-6 transition-all duration-300 hover:border-[#0A65FF]/50 hover:bg-[#0A65FF]/12 sm:flex-row sm:gap-6 sm:px-8 sm:py-7"
+        >
+          <div>
+            <p className="text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">For specialists</p>
+            <p className="mt-2 font-display text-2xl leading-tight tracking-[-0.03em] text-[#111111] sm:text-3xl">
+              Become a Digital Therapy vendor.
+            </p>
+          </div>
+          <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#0A65FF] px-6 py-3 text-sm font-semibold text-white shadow-[0_14px_35px_rgba(10,101,255,0.28)] transition-transform duration-300 group-hover:-translate-y-0.5 sm:px-7 sm:py-3.5 sm:text-base">
+            Become a vendor
+            <ArrowUpRight className="h-4 w-4" />
+          </span>
+        </a>
+      </div>
+      <div className="container pb-14 pt-12 lg:pb-18">
         <div className="grid gap-10 lg:grid-cols-[1.05fr_1.35fr] lg:gap-16">
           <div className="flex flex-col">
             <a href="/" className="-mt-3 block leading-none" aria-label="Digital Therapy home">

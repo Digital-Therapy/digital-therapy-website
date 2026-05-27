@@ -78,14 +78,20 @@ const operatingLayers = [
 const fusionTeam = [
   {
     title: "Operations Expert",
+    image: "/process-sme.png",
+    imageAlt: "Hand-drawn blue sketch of Digital Therapy's Operations & Process SME",
     copy: "The Operations SME focuses on people, process & delivery. This expert prizes efficiency, productivity, playbooks, KPIs & SOPs. They turn swirling chaos into digestible organization and reduce complex systems into the right size bites to plan effectively & ensure collective understanding by visualizing workflows to clarify how a business operation occurs now (Current State), highlighting weaknesses (like bottlenecks & redundancies) and optimizing a new process design (or Future State).",
   },
   {
     title: "Accounting Expert",
+    image: "/arap-sme.png",
+    imageAlt: "Hand-drawn blue sketch of Hunter, Digital Therapy's Finance & Accounting SME",
     copy: "This SME is not your typical accountant. He does not fear technology & he voraciously embraces automation. They are masters of close acceleration and can tame the most complex AP & AR processes out there. They work intimately with engineers and they’re acutely aware of how they need to support technical team members to assure success as well as what limitations they have and where they need support from tech leaders.",
   },
   {
     title: "Technology Expert",
+    image: "/tech-sme.png",
+    imageAlt: "Hand-drawn blue sketch of Milton Rodas, Digital Therapy's Technology SME",
     copy: "The Technology SME is not an easy resource to find. They need to be trained for a purpose with intention & vigor to achieve the breadth & depth of skills necessary to fill the shoes of this daunting role — They are full stack engineers, data scientists, artists of Robotic Process Automation and masters of AI of the highest order.",
   },
 ];
@@ -275,7 +281,7 @@ export default function Home() {
               <div>
                 <SectionLabel>Fusion Team Concept</SectionLabel>
                 <h2 className="font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
-                  Collaboration can’t be an afterthought.
+                  Collaboration takes commitment. It can’t be an afterthought.
                 </h2>
               </div>
               <div className="max-w-3xl lg:pb-2">
@@ -301,9 +307,23 @@ export default function Home() {
                 >
                   <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#0A65FF]/10 blur-2xl" />
                   <div className="relative flex h-full flex-col">
-                    <div className="text-[30px] font-normal tracking-[-0.02em] text-[#0A65FF]">{String(index + 1).padStart(2, "0")}</div>
-                    <div className="mt-14">
-                      <h3 className="text-2xl font-semibold tracking-[-0.05em]">{member.title}</h3>
+                    <img
+                      src={member.image}
+                      alt={member.imageAlt}
+                      className="mx-auto h-24 w-24 shrink-0 rounded-[1.4rem] border border-black/10 bg-white object-cover shadow-[0_16px_35px_rgba(10,101,255,0.10)]"
+                    />
+                    <div className="mt-8">
+                      <h3 className="text-center text-2xl font-semibold tracking-[-0.05em]">
+                        {(() => {
+                          const [firstWord, ...rest] = member.title.split(" ");
+                          return (
+                            <>
+                              <span className="text-[#0A65FF]">{firstWord}</span>
+                              {rest.length ? ` ${rest.join(" ")}` : null}
+                            </>
+                          );
+                        })()}
+                      </h3>
                       <p className="mt-5 text-[0.95rem] leading-7 text-black/82">{member.copy}</p>
                     </div>
                   </div>

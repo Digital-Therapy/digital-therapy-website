@@ -76,18 +76,24 @@ const fusionDisciplines = [
     role: "Process architecture, workflow optimization, SOPs, playbooks, KPI design, delivery systems, and organizational clarity.",
     outcome: "Transforms operational chaos into structured, scalable systems by mapping current-state workflows, identifying bottlenecks, and designing future-state processes.",
     icon: Workflow,
+    image: "/process-sme.png",
+    imageAlt: "Hand-drawn blue sketch of Digital Therapy's Operations & Process SME",
   },
   {
     title: "Accounting Expert",
     role: "Automation-forward accounting operations, AP and AR transformation, close acceleration, data integrity, workflow sequencing, AI, and RPA.",
     outcome: "Connects finance, operations, and technology so controls, reporting evidence, system dependencies, and implementation realities are designed together.",
     icon: ClipboardCheck,
+    image: "/arap-sme.png",
+    imageAlt: "Hand-drawn blue sketch of Hunter, Digital Therapy's Finance & Accounting SME",
   },
   {
     title: "Technology Expert",
     role: "Full-stack engineering, data architecture, AI systems, integrations, robotic process automation, and technical execution.",
     outcome: "Acts as a systems architect who understands operational and financial realities alongside engineering requirements.",
     icon: Code2,
+    image: "/tech-sme.png",
+    imageAlt: "Hand-drawn blue sketch of Milton Rodas, Digital Therapy's Technology SME",
   },
 ];
 
@@ -134,10 +140,10 @@ export default function Thesis() {
             <motion.div {...fadeUp}>
               <SectionLabel>The Digital Therapy thesis</SectionLabel>
               <h1 className="max-w-4xl font-display text-[60px] leading-[0.88] tracking-[-0.07em] text-[#111111]">
-                The practice-based firm falls short.
+                Practice based firms fall short.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
-                Most transformation initiatives fail — not because firms lack smart people — because firm structure & culture rewards silo behavior & disincentivizes cross-functional collaboration. Digital Therapy solves this fragmentation with a “Fusion Team” — custom built & trained to understand & overcome complex business & data challenges touching Operations, Accounting, & Technology. These days, that’s just about everything.
+                Most transformation initiatives fail — not because firms lack smart people — because firm structure & culture rewards silo behavior & disincentivizes cross-functional collaboration. Digital Therapy solves this fragmentation with a “Fusion Team” — custom built & trained to overcome complex business & data challenges touching Operations, Accounting, & Technology. These days, that’s just about everything.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <PrivateBriefingButton />
@@ -148,18 +154,6 @@ export default function Thesis() {
                   See the solution
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
-              </div>
-              <div className="mt-12 grid max-w-xl grid-cols-3 gap-5 border-t border-black/10 pt-6">
-                {[
-                  ["Silos", "removed"],
-                  ["Incentives", "aligned"],
-                  ["Delivery", "unified"],
-                ].map(([top, bottom]) => (
-                  <div key={top}>
-                    <div className="font-display text-2xl leading-none tracking-[-0.04em]">{top}</div>
-                    <div className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-black/45">{bottom}</div>
-                  </div>
-                ))}
               </div>
             </motion.div>
 
@@ -268,7 +262,6 @@ export default function Thesis() {
 
             <div className="mt-16 grid gap-6 lg:grid-cols-3">
               {fusionDisciplines.map((discipline, index) => {
-                const Icon = discipline.icon;
                 return (
                   <motion.article
                     key={discipline.title}
@@ -276,12 +269,23 @@ export default function Thesis() {
                     transition={{ ...fadeUp.transition, delay: index * 0.08 }}
                     className="rounded-[2rem] border border-black/8 bg-white p-7 shadow-[0_30px_80px_rgba(17,17,17,0.08)]"
                   >
-                    <div className="flex h-14 w-14 items-center justify-center rounded-[1.2rem] bg-[#0A65FF] text-white shadow-[0_16px_35px_rgba(10,101,255,0.22)]">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <h3 className="mt-6 font-display text-3xl tracking-[-0.05em]">{discipline.title}</h3>
-                    <p className="mt-4 text-sm font-bold uppercase tracking-[0.16em] text-[#0A65FF]">Embedded capability</p>
-                    <p className="mt-3 text-base leading-7 text-black/80">{discipline.role}</p>
+                    <img
+                      src={discipline.image}
+                      alt={discipline.imageAlt}
+                      className="h-24 w-24 shrink-0 rounded-[1.4rem] border border-black/10 bg-white object-cover shadow-[0_16px_35px_rgba(10,101,255,0.10)]"
+                    />
+                    <h3 className="mt-6 font-display text-3xl tracking-[-0.05em]">
+                      {(() => {
+                        const [firstWord, ...rest] = discipline.title.split(" ");
+                        return (
+                          <>
+                            <span className="text-[#0A65FF]">{firstWord}</span>
+                            {rest.length ? ` ${rest.join(" ")}` : null}
+                          </>
+                        );
+                      })()}
+                    </h3>
+                    <p className="mt-4 text-base leading-7 text-black/80">{discipline.role}</p>
                     <p className="mt-5 border-t border-black/10 pt-5 text-base leading-7 text-black/85">{discipline.outcome}</p>
                   </motion.article>
                 );

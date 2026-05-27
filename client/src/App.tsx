@@ -12,6 +12,7 @@ import Thesis from "./pages/Thesis";
 import Capabilities from "./pages/Capabilities";
 import OurApproach from "./pages/OurApproach";
 import Partners from "./pages/Partners";
+import Vendors from "./pages/Vendors";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -23,6 +24,7 @@ function Router() {
       <Route path={"/capabilities"} component={Capabilities} />
       <Route path={"/process"} component={OurApproach} />
       <Route path={"/partners"} component={Partners} />
+      <Route path={"/vendors"} component={Vendors} />
       <Route path={"/team"} component={Team} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
