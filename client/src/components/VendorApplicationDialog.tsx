@@ -76,7 +76,9 @@ const sectors = [
   "Real Estate",
 ];
 
-const skillGroups: { label: string; items: string[] }[] = [
+export type SkillGroup = { label: string; items: string[] };
+
+const defaultSkillGroups: SkillGroup[] = [
   { label: "Databases & Data", items: ["SQL", "Sequel Server", "DBA", "Data Warehouse", "MongoDB"] },
   { label: "Cloud Platforms", items: ["AWS", "Azure"] },
   { label: "Analytics & BI", items: ["Data Analytics", "Data Integrity", "Power BI", "Tableau", "Domo"] },
@@ -122,6 +124,7 @@ type VendorApplicationDialogProps = {
   triggerLabel: string;
   variant?: Variant;
   className?: string;
+  skillGroups?: SkillGroup[];
 };
 
 export function VendorApplicationDialog({
@@ -130,6 +133,7 @@ export function VendorApplicationDialog({
   triggerLabel,
   variant = "secondary",
   className = "",
+  skillGroups = defaultSkillGroups,
 }: VendorApplicationDialogProps) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<VendorFormState>(initialForm);

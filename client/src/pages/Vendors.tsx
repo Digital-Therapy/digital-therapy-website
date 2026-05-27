@@ -4,9 +4,9 @@
  * context so submissions are routed appropriately.
  */
 import PublicHeader from "@/components/PublicHeader";
-import { VendorApplicationDialog } from "@/components/VendorApplicationDialog";
+import { VendorApplicationDialog, type SkillGroup } from "@/components/VendorApplicationDialog";
 import { motion } from "framer-motion";
-import { BarChart3, Briefcase, Code2, Cog, Landmark } from "lucide-react";
+import { BarChart3, Briefcase, Code2, Landmark } from "lucide-react";
 
 const fadeUp = {
   initial: { opacity: 0, y: 28 },
@@ -14,6 +14,20 @@ const fadeUp = {
   viewport: { once: true, margin: "-90px" },
   transition: { duration: 0.65, ease: "easeOut" },
 } as const;
+
+const financeAccountingSkillGroups: SkillGroup[] = [
+  { label: "Primary", items: ["Individual Tax Return", "Corporate Tax Return", "Tax Strategy", "Bookkeeping"] },
+  { label: "Tax Prep", items: ["Walters Kluwyer", "CCH", "La Certe", "Drake", "Tax Act", "Ultra Tax"] },
+  { label: "General Ledger", items: ["QBD", "QBO", "Xero", "Puzzle.io", "Freshbooks", "Zoho Books", "Acumatica"] },
+  { label: "Practice Management", items: ["Karbon", "Netsuite", "Sage", "SAP", "Canopy", "Tax Dome", "Keeper", "Campfire", "Client Hub"] },
+  { label: "Property Accounting", items: ["Yardi", "Real Pages", "Appfolio", "MRI", "MDS", "Rent Manager"] },
+  { label: "Payroll", items: ["Paylocity", "ADP", "Paychex", "UKG", "Insperity", "Iris", "Gusto"] },
+  { label: "AI + Automation", items: ["Soraban", "Tax GPT", "CoPilot", "N8N", "Make"] },
+  { label: "AP/AR", items: ["Bill.com", "RAMP", "DEEL", "WISE"] },
+  { label: "Real Estate Investor Management Portal", items: ["Juniper Square", "Agora", "Appfolio"] },
+  { label: "Hosting", items: ["Verito", "Ace Hosting", "Rightworks"] },
+  { label: "Sales Tax", items: ["Stripe", "Avalera", "Numeral"] },
+];
 
 const vendorTypes = [
   {
@@ -33,15 +47,7 @@ const vendorTypes = [
     icon: BarChart3,
     context: "vendor application: Finance & Accounting SME",
     buttonLabel: "Apply as Finance & Accounting SME",
-  },
-  {
-    title: "Operations & Process SMEs",
-    highlightedWords: ["Operations", "Process"],
-    summary:
-      "Process architects, SOP designers, workflow & swim-lane specialists, KPI and playbook builders.",
-    icon: Cog,
-    context: "vendor application: Operations & Process SME",
-    buttonLabel: "Apply as Operations & Process SME",
+    skillGroups: financeAccountingSkillGroups,
   },
   {
     title: "Marketing SMEs",
@@ -125,6 +131,7 @@ export default function Vendors() {
                         triggerLabel={vendor.buttonLabel}
                         variant="secondary"
                         className="w-full justify-center bg-[#F7F4EE]"
+                        skillGroups={vendor.skillGroups}
                       />
                     </div>
                   </motion.article>
