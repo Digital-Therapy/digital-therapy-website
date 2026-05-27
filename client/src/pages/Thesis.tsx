@@ -31,8 +31,7 @@ const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
 const markUrl = "/dt-mark.png";
 const boardroomVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_family_office_boardroom-UvecEVLEaVqpouVEhEb9mw.webp";
-const wealthMapVisual =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_wealth_map_visual-TmSmhqHi8pgacxaNwHMRxs.webp";
+const wealthMapVisual = "/fragmented-route.png";
 
 const fadeUp = {
   initial: { opacity: 0, y: 28 },
@@ -294,7 +293,7 @@ export default function Thesis() {
         <section className="bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2.2rem] border border-black/8 bg-[#F7F4EE] p-3 shadow-[0_30px_90px_rgba(17,17,17,0.10)]">
-              <img src={wealthMapVisual} alt="Connected data and workflow map" className="h-[560px] w-full rounded-[1.75rem] object-cover" />
+              <img src={wealthMapVisual} alt="Diagram of the fragmented advisory route family offices take" className="h-[560px] w-full rounded-[1.75rem] object-cover" />
               <div className="absolute bottom-8 left-8 right-8 rounded-[1.45rem] border border-white/70 bg-white/78 p-5 backdrop-blur-xl">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">One systems problem</p>
                 <p className="mt-2 text-sm leading-6 text-black/82">
