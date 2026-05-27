@@ -23,7 +23,6 @@ const sitemapGroups = [
     title: "Solutions",
     links: [
       { label: "Operating Layer", href: "/#operating-layer" },
-      { label: "Security", href: "/#security" },
       { label: "Partner Model", href: "/#partners" },
       { label: "DT Brain", href: "/dt-brain" },
     ],
@@ -124,10 +123,10 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-5 border-t border-black/10 pt-7 text-sm text-black/46 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-5 border-t border-black/10 pt-7 text-sm text-black/70 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <img src={markUrl} alt="" aria-hidden="true" className="h-6 w-6 object-contain" />
-            <span>© {new Date().getFullYear()} Digital Therapy. Private operating systems for family offices.</span>
+            <span>© {new Date().getFullYear()} Digital Therapy, LLC. All Rights Reserved.</span>
           </div>
           <a href="/approach" className="inline-flex items-center gap-2 font-semibold text-black/75 transition-colors duration-300 hover:text-[#0A65FF]">
             Understand our process

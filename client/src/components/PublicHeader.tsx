@@ -17,7 +17,6 @@ const primaryNavItems = [
   { label: "Capabilities", href: "/capabilities" },
   { label: "Process", href: "/approach" },
   { label: "DT Brain", href: "/dt-brain" },
-  { label: "Security", href: "/#security", homeHref: "#security" },
   { label: "Team", href: "/team" },
 ] as const;
 
@@ -66,7 +65,7 @@ export default function PublicHeader({
   return (
     <header className={`fixed left-0 right-0 top-0 z-50 border-b border-black/8 ${headerClassName} backdrop-blur-xl`}>
       <div className="mx-auto flex h-20 w-full max-w-[1280px] items-center justify-start gap-4 px-4 sm:px-6 lg:justify-between lg:px-8">
-        <a href={logoHref} className="flex shrink-0 items-center gap-3" aria-label="Digital Therapy home">
+        <a href={logoHref} className="-ml-3 flex shrink-0 items-center gap-3" aria-label="Digital Therapy home">
           <img src={logoUrl} alt="Digital Therapy" className="h-[60px] w-auto object-contain lg:h-[66px]" />
         </a>
 

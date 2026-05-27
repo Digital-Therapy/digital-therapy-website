@@ -91,9 +91,9 @@ const fusionTeam = [
 ];
 
 const automationUseCases = [
-  "Connect entities, accounts, investments, ownership stakes, and asset classes into a usable operating view.",
-  "Pull structured and unstructured information from statements, portals, documents, emails, and internal systems into a trusted data layer (Warehouse).",
-  "Deliver powerful, insightful dashboards, recurring reports & insight summaries tailored to stakeholder roles & clearance.",
+  "Custom software & internal tools purpose-built for the work your team actually does — not bloated SaaS retrofitted to fit.",
+  "Redesigned process flows that remove bottlenecks, clarify handoffs, and let lean teams handle higher volume without adding headcount.",
+  "Targeted automation across intake, reconciliation, reporting & approvals — replacing the repetitive work that would otherwise require another hire.",
 ];
 
 const securityPrinciples = [
@@ -134,7 +134,7 @@ export default function Home() {
             <motion.div {...fadeUp}>
               <SectionLabel>secure family office automation</SectionLabel>
               <h1 className="max-w-4xl font-display text-[60px] leading-[0.92] tracking-[-0.06em] text-[#111111]">
-                Family Office transformation. Done right.
+                Family office<br />transformation<br />that works.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
                 We spend time to learn your eco-system, unique attributes &amp; processes. Collective understanding is the key to success. That&rsquo;s why Fusion Teams work on-site for the first month of new engagements.
@@ -144,7 +144,7 @@ export default function Home() {
                   href="/capabilities"
                   className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/50 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
                 >
-                  See what DT can do
+                  View Capabilities
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
                 <a
@@ -306,7 +306,7 @@ export default function Home() {
                 Grow Revenue.<br />Not Headcount.
               </h2>
               <p className="mt-6 text-lg leading-8 text-black/80">
-                Digital Therapy converts fragmented Family Office operations into a coherent, private, and automated operating system.
+                Digital Therapy builds software, process flows &amp; automations that multiply the capacity of your workforce.
               </p>
               <div className="mt-8 space-y-3">
                 {automationUseCases.map((useCase) => (
