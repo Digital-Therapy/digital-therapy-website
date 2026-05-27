@@ -48,30 +48,45 @@ const complexityPoints = [
   "Leadership expects fast answers without compromising privacy.",
 ];
 
-const operatingLayers = [
+const operatingLayers: {
+  eyebrow: string;
+  title: string;
+  copy: string;
+  icon: typeof Database;
+  image?: string;
+  imageAlt?: string;
+}[] = [
   {
     eyebrow: "01",
     title: "Search + Find",
     copy: "Locate critical records, accounts, entities, and documents across every system before decisions are made.",
     icon: Database,
+    image: "/sigmund-search.png",
+    imageAlt: "Sigmund searching for records",
   },
   {
     eyebrow: "02",
     title: "Connect + Pull",
     copy: "Bring approved source data into one governed workflow without forcing teams to chase down files manually.",
     icon: Workflow,
+    image: "/sigmund-connect.png",
+    imageAlt: "Sigmund connecting and pulling data from multiple sources",
   },
   {
     eyebrow: "03",
     title: "Format + Clean",
     copy: "Format, reconcile & clean data so it can be used as trusted operating intelligence.",
     icon: BarChart3,
+    image: "/sigmund-clean.png",
+    imageAlt: "Sigmund cleaning and organizing data",
   },
   {
     eyebrow: "04",
     title: "Query + Report",
-    copy: "Turn structured data into reporting, automation, and AI-enabled answers leaders can use.",
+    copy: "Turn structured data into reporting, automation, and AI-enhanced insights that leaders can use to win.",
     icon: ShieldCheck,
+    image: "/sigmund-report.png",
+    imageAlt: "Sigmund delivering a report",
   },
 ];
 
@@ -259,7 +274,15 @@ export default function Home() {
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-[30px] font-light uppercase tracking-[0.22em] text-[#58B8FF]">{layer.eyebrow}</span>
-                      <Icon className="h-5 w-5 text-white/45 transition-colors duration-300 group-hover:text-[#58B8FF] sm:h-6 sm:w-6" />
+                      {layer.image ? (
+                        <img
+                          src={layer.image}
+                          alt={layer.imageAlt ?? ""}
+                          className="h-14 w-14 shrink-0 rounded-[1rem] border border-white/15 bg-white object-cover sm:h-16 sm:w-16"
+                        />
+                      ) : (
+                        <Icon className="h-5 w-5 text-white/45 transition-colors duration-300 group-hover:text-[#58B8FF] sm:h-6 sm:w-6" />
+                      )}
                     </div>
                     <h3 className="mt-10 text-xl font-semibold tracking-[-0.04em] text-white sm:mt-12 sm:text-2xl lg:mt-16">{layer.title}</h3>
                     <p className="mt-3 text-[0.95rem] leading-6 text-white/78 sm:mt-4 sm:leading-7">{layer.copy}</p>
