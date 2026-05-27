@@ -25,7 +25,6 @@ import {
   Paintbrush,
   Search,
   ShieldCheck,
-  Sparkles,
   UsersRound,
 } from "lucide-react";
 
@@ -34,18 +33,19 @@ const markUrl = "/dt-mark.png";
 const boardroomVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_family_office_boardroom-UvecEVLEaVqpouVEhEb9mw.webp";
 const headshots = {
-  harryDublinsky: "/manus-storage/harry-dublinsky_16bc2837.png",
-  bruceDitman: "/manus-storage/bruce-ditman_6bc44f86.png",
-  lironDavid: "/manus-storage/liron-david_5e58795c.png",
-  jonathanKobrin: "/manus-storage/jonathan-kobrin_ccc4cf34.png",
-  hunterAtkins: "/manus-storage/hunter-atkins_72901b2f.png",
-  miltonRodas: "/manus-storage/milton-rodas_07ab6aa9.png",
-  kennedyKraner: "/manus-storage/kennedy-kraner_a4421e21.png",
-  rickToussaint: "/manus-storage/rick-toussaint_fcf58b84.png",
-  stanGretov: "/manus-storage/stan-gretov_df6e2dbc.png",
-  vadimLitvak: "/manus-storage/vadim-litvak_99842098.png",
-  valerioMirof: "/manus-storage/valerio-mirof_c4f41ca3.png",
-  geoffHorn: "/manus-storage/geoff-horn_7dc6f1b3.png",
+  harryDublinsky: "/team/harry.avif",
+  bruceDitman: "/team/bruce.avif",
+  lironDavid: "/team/liron.avif",
+  jonathanKobrin: "/team/jon.avif",
+  hunterAtkins: "/team/hunter.png",
+  miltonRodas: "/team/milton.png",
+  kennedyKraner: "/team/kennedy.avif",
+  rickToussaint: "/team/rick.avif",
+  stanGretov: "/team/stan.png",
+  vadimLitvak: "/team/vadim.avif",
+  valerioMirof: "/team/valerio.avif",
+  geoffHorn: "/team/geoff.avif",
+  dariaShulenko: "/team/daria.avif",
 };
 
 const fadeUp = {
@@ -77,12 +77,14 @@ const leaders: TeamPerson[] = [
     role: "Chief Solution Engineer",
     specialty: "Systems architecture, integration, and technical execution.",
     imageUrl: headshots.miltonRodas,
+    bio: "Former Tesla and Stellantis Lead Project Architect + Automation Engineer.",
   },
   {
     name: "Hunter Atkins, CPA",
     role: "CPA",
     specialty: "Accounting leadership, financial controls, and reporting operations.",
     imageUrl: headshots.hunterAtkins,
+    bio: "Hunter Atkins is a licensed CPA and MBA specializing in accounting transformation, process automation, and AI-driven workflow design.\n\nAt Digital Therapy, he leads engagements for family office and small business clients, including ERP migrations, custom-built accounts-payable automation platforms, consolidated investment reporting dashboards, and fractional controllership.\n\nHe has also delivered multiple courses and educational series on AI and automation for accounting professionals.\n\nHunter brings over five years of prior experience in cost accounting, financial reporting, and month-end close management across manufacturing and public accounting environments.",
   },
 ];
 
@@ -112,23 +114,20 @@ const groups: Array<{
     description: "The technology bench supports websites, search visibility, product design, engineering, and digital infrastructure required for durable systems.",
     icon: Code2,
     members: [
-      { name: "Stan Gretov", role: "Team Lead: Websites + BPO", imageUrl: headshots.stanGretov },
+      {
+        name: "Stan Gretov",
+        role: "Team Lead: Websites + BPO",
+        imageUrl: headshots.stanGretov,
+        bio: "Web design, development and marketing expert with over 10 years of experience in the tech industry.\n\nConstantly looking to expand our reach in the world of web and digital marketing.",
+      },
       { name: "Vadim Litvak", role: "Director of SEO", imageUrl: headshots.vadimLitvak },
-      { name: "Daria Shulenko", role: "Designer" },
-      { name: "Valerio Mirof", role: "Engineer", imageUrl: headshots.valerioMirof },
-    ],
-  },
-  {
-    label: "Transformation & Automation",
-    description: "The implementation bench converts operating pain points into workflows, automations, product improvements, and managed delivery routines.",
-    icon: Sparkles,
-    members: [
-      { name: "Abby", role: "Automation" },
-      { name: "Jeanne", role: "PM" },
-      { name: "David", role: "Developer" },
-      { name: "Nestor", role: "Developer" },
-      { name: "Valerio", role: "Developer" },
-      { name: "Edwin", role: "Developer" },
+      { name: "Daria Shulenko", role: "Designer", imageUrl: headshots.dariaShulenko },
+      {
+        name: "Valerio Mirof",
+        role: "Engineer",
+        imageUrl: headshots.valerioMirof,
+        bio: "Valerio applies his deep knowledge of MES, ERP, & cloud platforms (like AWS) to modernize & automate legacy technology stacks.\n\nValerio's expertise includes REST API development, cross-platform interfaces, and secure infrastructure deployment, enabling clients to scale operations while reducing manual overhead.\n\nValerio is truly a force multiplier.",
+      },
     ],
   },
 ];
@@ -158,32 +157,34 @@ function FounderStoryDialog({ leader, children }: { leader: TeamPerson; children
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
         data-testid="founder-story-dialog"
-        className="max-h-[88vh] overflow-y-auto rounded-[1.6rem] border-black/10 bg-[#F7F4EE] p-0 text-[#111111] sm:max-w-2xl"
+        className="max-h-[88vh] w-full max-w-[95vw] overflow-y-auto rounded-[1.6rem] border-black/10 bg-[#F7F4EE] p-0 text-[#111111] sm:max-w-[960px]"
       >
-        <div className="grid gap-0 sm:grid-cols-[0.42fr_0.58fr]">
+        <div className="grid gap-0 sm:grid-cols-[320px_1fr]">
           {leader.imageUrl ? (
-            <div className="relative hidden bg-[#0A65FF]/8 sm:block">
-              <img
-                src={leader.imageUrl}
-                alt={leader.name}
-                className="h-full w-full object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0A65FF]/15 via-transparent to-transparent" />
+            <div className="self-start">
+              <div className="relative bg-[#0A65FF]/8">
+                <img
+                  src={leader.imageUrl}
+                  alt={leader.name}
+                  className="aspect-[4/5] w-full object-cover object-top"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0A65FF]/10 via-transparent to-transparent" />
+              </div>
+              <DialogHeader className="space-y-1 px-6 pb-6 pt-5 text-left sm:px-7">
+                <DialogTitle className="font-display text-3xl leading-[1.02] tracking-[-0.04em] text-[#111111]">
+                  {leader.name}
+                </DialogTitle>
+                <DialogDescription className="text-sm font-semibold text-[#0A65FF]">
+                  Founder &amp; CEO, Digital Therapy
+                </DialogDescription>
+              </DialogHeader>
             </div>
           ) : null}
           <div className="px-6 py-7 sm:px-8 sm:py-9">
-            <DialogHeader className="space-y-3 text-left">
-              <div className="inline-flex w-fit items-center gap-2 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
-                <span className="h-px w-8 bg-[#0A65FF]" />
-                Founder story
-              </div>
-              <DialogTitle className="font-display text-4xl leading-[0.95] tracking-[-0.05em] text-[#111111] sm:text-5xl">
-                {leader.name}
-              </DialogTitle>
-              <DialogDescription className="text-sm font-semibold text-[#0A65FF]">
-                Founder &amp; CEO, Digital Therapy
-              </DialogDescription>
-            </DialogHeader>
+            <div className="mb-5 inline-flex w-fit items-center gap-2 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+              <span className="h-px w-8 bg-[#0A65FF]" />
+              Founder story
+            </div>
             <div className="mt-6 space-y-4 text-sm leading-7 text-black/85">
               <p>
                 Jon Kobrin is the founder of Digital Therapy, a firm often referred to as the accounting firm of the future. With a background in entrepreneurship and software development, Jon brings a unique perspective to transformation projects.
@@ -195,14 +196,61 @@ function FounderStoryDialog({ leader, children }: { leader: TeamPerson; children
                 Fusion Teams begin with three SMEs &mdash; one Finance &amp; Accounting SME, one Technology SME, and one Operations &amp; Process SME. These experts don&apos;t have natural pathways to work with one another inside a typical practice-based firm architecture. Together, they can tackle and overcome the most complex transformation challenges, and the right team mix solves roughly 95% of project friction.
               </p>
             </div>
-            <p className="mt-6 rounded-[1rem] border border-black/8 bg-white/70 p-4 text-xs leading-6 text-black/80">
-              These three functions used to be siloed departments, each governed by a dedicated leader. But the work has become knotted &mdash; no one function easily separates from another. In this transitional period, all three minds must cooperate and be re-trained to approach projects collectively, so each role can bridge the gaps for the others. It may seem like a small twist, but it makes for an incredibly capable solution team that delivers big &mdash; the type of impact clients deserve but rarely experience.
+            <p className="mt-6 rounded-[1rem] border border-black/8 bg-white/70 p-4 text-xs leading-6 text-black/95">
+              These three functions used to live in separate silos, each with its own leader. The work has since knotted them together &mdash; no one function separates cleanly from another. Cross-training is the only way through: each role learning enough of the others to close the gaps no single discipline can close alone. A small structural shift &mdash; but it delivers the kind of impact clients deserve and rarely receive.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
               <BookingWidgetDialog context="team page founder story booking" />
-              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-black/45">
-                Press Esc to close
-              </span>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function MemberBioDialog({ member, children }: { member: TeamPerson; children: React.ReactNode }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent
+        className="max-h-[88vh] w-full max-w-[95vw] overflow-y-auto rounded-[1.6rem] border-black/10 bg-[#F7F4EE] p-0 text-[#111111] sm:max-w-[920px]"
+      >
+        <div className="grid gap-0 sm:grid-cols-[320px_1fr]">
+          {member.imageUrl ? (
+            <div className="self-start">
+              <div className="relative bg-[#0A65FF]/8">
+                <img
+                  src={member.imageUrl}
+                  alt={member.name}
+                  className="aspect-[4/5] w-full object-cover object-top"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0A65FF]/10 via-transparent to-transparent" />
+              </div>
+              <DialogHeader className="space-y-1 px-6 pb-6 pt-5 text-left sm:px-7">
+                <DialogTitle className="font-display text-3xl leading-[1.02] tracking-[-0.04em] text-[#111111]">
+                  {member.name}
+                </DialogTitle>
+                <DialogDescription className="text-sm font-semibold text-[#0A65FF]">
+                  {member.role}
+                </DialogDescription>
+              </DialogHeader>
+            </div>
+          ) : null}
+          <div className="px-6 py-7 sm:px-8 sm:py-9">
+            <div className="mb-5 inline-flex w-fit items-center gap-2 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+              <span className="h-px w-8 bg-[#0A65FF]" />
+              Team profile
+            </div>
+            <div className="space-y-4 text-sm leading-7 text-black/95">
+              {(member.bio ?? "")
+                .split(/\n\s*\n/)
+                .map((paragraph, paragraphIndex) => (
+                  <p key={paragraphIndex}>{paragraph}</p>
+                ))}
+            </div>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <BookingWidgetDialog context="team page member profile booking" />
             </div>
           </div>
         </div>
@@ -289,10 +337,10 @@ export default function Team() {
             <motion.div {...fadeUp} className="max-w-3xl">
               <SectionLabel>Leadership</SectionLabel>
               <h2 className="font-display text-[clamp(2.6rem,5vw,5.2rem)] leading-[0.95] tracking-[-0.06em]">
-                Senior leads across transformation,<br />technology, and finance.
+                Leaders
               </h2>
             </motion.div>
-            <div className="mt-14 grid gap-6 lg:grid-cols-3">
+            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {leaders.map((leader, index) => {
                 const cardInner = (
                   <>
@@ -333,6 +381,22 @@ export default function Team() {
                   );
                 }
 
+                if (leader.bio) {
+                  return (
+                    <MemberBioDialog key={leader.name} member={leader}>
+                      <motion.button
+                        type="button"
+                        aria-label={`Read profile: ${leader.name}`}
+                        {...fadeUp}
+                        transition={{ ...fadeUp.transition, delay: index * 0.08 }}
+                        className="group relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] p-7 text-left shadow-[0_20px_55px_rgba(17,17,17,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE]"
+                      >
+                        {cardInner}
+                      </motion.button>
+                    </MemberBioDialog>
+                  );
+                }
+
                 return (
                   <motion.article
                     key={leader.name}
@@ -354,7 +418,7 @@ export default function Team() {
               <div className="max-w-3xl">
                 <SectionLabel>Specialist benches</SectionLabel>
                 <h2 className="font-display text-[clamp(2.5rem,5vw,5rem)] leading-[0.95] tracking-[-0.06em]">
-                  The right expertise comes into the room at the right time.
+                  The right expertise at the right time.
                 </h2>
               </div>
             </motion.div>
@@ -378,8 +442,8 @@ export default function Team() {
                         <p className="mt-4 max-w-md text-sm leading-6 text-black/78">{group.description}</p>
                       </div>
                       <div className="grid gap-3 sm:grid-cols-2">
-                        {group.members.map((member) => (
-                          <article key={`${group.label}-${member.name}-${member.role}`} className="rounded-[1.4rem] border border-black/7 bg-white p-5">
+                        {group.members.map((member) => {
+                          const cardInner = (
                             <div className="flex items-center gap-4">
                               {member.imageUrl ? (
                                 <img src={member.imageUrl} alt={member.name} className="h-20 w-20 shrink-0 rounded-[1.35rem] border border-black/8 object-cover object-center shadow-[0_18px_45px_rgba(17,17,17,0.08)]" />
@@ -391,9 +455,28 @@ export default function Team() {
                                 <p className="mt-2 text-xs font-bold uppercase tracking-[0.16em] text-black/44">{member.role}</p>
                               </div>
                             </div>
-                            {member.bio ? <p className="mt-4 text-sm leading-6 text-black/75">{member.bio}</p> : null}
-                          </article>
-                        ))}
+                          );
+
+                          if (member.bio) {
+                            return (
+                              <MemberBioDialog key={`${group.label}-${member.name}-${member.role}`} member={member}>
+                                <button
+                                  type="button"
+                                  aria-label={`Read profile: ${member.name}`}
+                                  className="w-full rounded-[1.4rem] border border-black/7 bg-white p-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_18px_45px_rgba(17,17,17,0.06)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                                >
+                                  {cardInner}
+                                </button>
+                              </MemberBioDialog>
+                            );
+                          }
+
+                          return (
+                            <article key={`${group.label}-${member.name}-${member.role}`} className="rounded-[1.4rem] border border-black/7 bg-white p-5">
+                              {cardInner}
+                            </article>
+                          );
+                        })}
                       </div>
                     </div>
                   </motion.section>
@@ -408,19 +491,14 @@ export default function Team() {
             <motion.div {...fadeUp} className="max-w-3xl">
               <SectionLabel>Alliances & advisors</SectionLabel>
               <h2 className="font-display text-[clamp(2.5rem,5vw,4.8rem)] leading-[0.96] tracking-[-0.06em]">
-                A broader network for payments, advisory judgment, and specialist context.
+                Alliances
               </h2>
             </motion.div>
-            <div className="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {extendedNetwork.map((person, index) => {
                 const Icon = person.icon;
-                return (
-                  <motion.article
-                    key={`${person.group}-${person.name}`}
-                    {...fadeUp}
-                    transition={{ ...fadeUp.transition, delay: index * 0.05 }}
-                    className="overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 shadow-[0_18px_45px_rgba(17,17,17,0.05)]"
-                  >
+                const cardBody = (
+                  <>
                     {person.imageUrl ? (
                       <div className="-mx-2 -mt-2 mb-5 overflow-hidden rounded-[1.35rem] bg-[#0A65FF]/8">
                         <img src={person.imageUrl} alt={person.name} className="h-56 w-full object-cover object-center" />
@@ -434,6 +512,33 @@ export default function Team() {
                     </div>
                     <h3 className="mt-7 font-display text-3xl tracking-[-0.05em]">{person.name}</h3>
                     <p className="mt-2 text-sm font-semibold text-[#0A65FF]">{person.role}</p>
+                  </>
+                );
+
+                if (person.bio) {
+                  return (
+                    <MemberBioDialog key={`${person.group}-${person.name}`} member={person}>
+                      <motion.button
+                        type="button"
+                        aria-label={`Read profile: ${person.name}`}
+                        {...fadeUp}
+                        transition={{ ...fadeUp.transition, delay: index * 0.05 }}
+                        className="overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 text-left shadow-[0_18px_45px_rgba(17,17,17,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                      >
+                        {cardBody}
+                      </motion.button>
+                    </MemberBioDialog>
+                  );
+                }
+
+                return (
+                  <motion.article
+                    key={`${person.group}-${person.name}`}
+                    {...fadeUp}
+                    transition={{ ...fadeUp.transition, delay: index * 0.05 }}
+                    className="overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 shadow-[0_18px_45px_rgba(17,17,17,0.05)]"
+                  >
+                    {cardBody}
                   </motion.article>
                 );
               })}
