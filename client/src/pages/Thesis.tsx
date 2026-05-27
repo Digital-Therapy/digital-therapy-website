@@ -200,11 +200,20 @@ export default function Thesis() {
                 Accounting practices operate independently from engineering teams. Operations consultants work separately from finance. Each group protects its own revenue, utilization, and client control, producing predictable delivery failures for clients with one shared systems problem.
               </p>
               <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {problemSignals.map((signal) => (
-                  <div key={signal} className="rounded-full border border-black/10 bg-[#F7F4EE] px-4 py-3 text-center text-[14px] font-medium uppercase tracking-[0.14em] text-black/80">
-                    {signal}
-                  </div>
-                ))}
+                {problemSignals.map((signal) => {
+                  const [firstWord, ...restWords] = signal.split(" ");
+                  return (
+                    <div key={signal} className="rounded-full border border-black/10 bg-[#F7F4EE] px-4 py-3 text-center text-[14px] font-medium uppercase leading-tight tracking-[0.14em] text-black/80">
+                      {firstWord}
+                      {restWords.length ? (
+                        <>
+                          <br />
+                          {restWords.join(" ")}
+                        </>
+                      ) : null}
+                    </div>
+                  );
+                })}
               </div>
             </motion.div>
 
@@ -242,7 +251,7 @@ export default function Thesis() {
             <motion.div {...fadeUp} className="mx-auto max-w-4xl text-center">
               <SectionLabel>Fusion teams by digital therapy</SectionLabel>
               <h2 className="font-display text-[55px] leading-[0.9] tracking-[-0.065em]">
-                One trained team — Not “collaborating” practice groups.
+                One trained team.<br />Not “collaborating” practices.
               </h2>
               <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-black/80">
                 Digital Therapy’s Fusion Team model was built to eliminate structural failure at the root. Rather than assembling temporary teams from competing departments, the Fusion Team is a permanent leadership layer composed of deeply aligned operations, accounting, and technology disciplines.
@@ -328,7 +337,7 @@ export default function Thesis() {
               <div>
                 <SectionLabel>Traditional Advisory vs. Fusion Teams</SectionLabel>
                 <h2 className="font-display text-[54px] leading-[0.9] tracking-[-0.06em]">
-                  Small changes. Big Impact.
+                  Small changes.<br />Big Impact.
                 </h2>
                 <p className="mt-7 text-lg leading-8 text-white/62">
                   Traditional firms attempt collaboration between competing departments. Fusion Teams eliminate the competition entirely by creating one shared mission and one accountable delivery structure.
@@ -359,15 +368,15 @@ export default function Thesis() {
             <motion.div {...fadeUp} className="mx-auto max-w-4xl">
               <SectionLabel>Your fusion team can do it</SectionLabel>
               <h2 className="font-display text-[55px] leading-[0.88] tracking-[-0.07em]">
-                Family offices, you need one team to tackle one fused problem.
+                Family offices need one solution team<br />for one fused problem.
               </h2>
               <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-black/80">
-                Digital Therapy delivers one team, one aligned incentive structure, one operating model, and one shared mission for transformation that moves beyond advice into accountable execution.
+                Digital Therapy delivers one team, one aligned incentive structure, one operating model, and one shared mission for transformation.
               </p>
               <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
                 <PrivateBriefingButton />
                 <a
-                  href="/approach"
+                  href="/process"
                   className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/60 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
                 >
                   Understand our process.

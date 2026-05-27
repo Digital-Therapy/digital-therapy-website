@@ -15,8 +15,9 @@ const logoUrl = "/dtlogo.png";
 const primaryNavItems = [
   { label: "Thesis", href: "/thesis" },
   { label: "Capabilities", href: "/capabilities" },
-  { label: "Process", href: "/approach" },
+  { label: "Process", href: "/process" },
   { label: "DT Brain", href: "/dt-brain" },
+  { label: "Partners", href: "/partners" },
   { label: "Team", href: "/team" },
 ] as const;
 

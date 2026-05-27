@@ -14,12 +14,12 @@ import {
   Database,
   LockKeyhole,
   ShieldCheck,
-  UsersRound,
   Workflow,
 } from "lucide-react";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
 const markUrl = "/dt-mark.png";
+const welcomeVisual = "/welcome-hero.png";
 const heroVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_hero_operating_layer-TEdtu9wcNJkxBt4PK2JKyo.webp";
 const boardroomVisual =
@@ -139,21 +139,26 @@ export default function Home() {
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
                 We spend time to learn your eco-system, unique attributes &amp; processes. Collective understanding is the key to success. That&rsquo;s why Fusion Teams work on-site for the first month of new engagements.
               </p>
-              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+              <p className="mt-10 text-base font-bold leading-7 text-black/90">
+                Would you like to learn more about our
+              </p>
+              <div className="mt-3 flex flex-wrap items-center gap-3">
                 <a
                   href="/capabilities"
                   className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/50 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
                 >
-                  View Capabilities
+                  Capabilities
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
+                <span className="text-base font-medium text-black/70">or</span>
                 <a
-                  href="/dt-brain"
+                  href="/process"
                   className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#0A65FF]/25 bg-[#0A65FF]/8 px-6 py-3 text-sm font-semibold text-[#0A65FF] transition-all duration-300 hover:border-[#0A65FF]/55 hover:bg-[#0A65FF]/12"
                 >
-                  What is DT Brain?
+                  Process
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
+                <span className="text-base font-medium text-black/70">?</span>
               </div>
             </motion.div>
             <motion.div
@@ -164,19 +169,19 @@ export default function Home() {
             >
               <div className="absolute -inset-6 rounded-[2.6rem] bg-[#0A65FF]/10 blur-3xl" />
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
-                <img src={heroVisual} alt="Abstract private operating layer visualization" className="aspect-[16/8] w-full object-cover" />
-                <div className="absolute bottom-5 left-5 right-5 grid gap-3 rounded-[1.35rem] border border-white/70 bg-white/72 p-4 backdrop-blur-xl sm:grid-cols-3">
-                  {[
-                    ["Source of truth", "Connected data"],
-                    ["AI agents", "Document logic"],
-                    ["Owner answers", "Live intelligence"],
-                  ].map(([title, copy]) => (
-                    <div key={title} className="border-l border-black/10 pl-3 first:border-l-0 first:pl-0">
-                      <div className="text-sm font-bold">{title}</div>
-                      <div className="mt-1 text-xs text-black/72">{copy}</div>
-                    </div>
-                  ))}
-                </div>
+                <img src={welcomeVisual} alt="Welcome to Digital Therapy" className="aspect-[16/8] w-full object-cover object-[center_58%]" />
+              </div>
+              <div className="relative mt-5 grid gap-3 rounded-[1.35rem] border border-black/10 bg-white p-4 shadow-[0_18px_45px_rgba(16,24,40,0.08)] sm:grid-cols-3">
+                {[
+                  ["Source of truth", "Connected data"],
+                  ["AI agents", "Document logic"],
+                  ["Owner answers", "Live intelligence"],
+                ].map(([title, copy]) => (
+                  <div key={title} className="border-l border-black/10 pl-3 first:border-l-0 first:pl-0">
+                    <div className="text-sm font-bold">{title}</div>
+                    <div className="mt-1 text-xs text-black/72">{copy}</div>
+                  </div>
+                ))}
               </div>
               <div className="mt-6 flex justify-center lg:justify-end">
                 <BookingWidgetDialog
@@ -229,12 +234,15 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="operating-layer" className="relative overflow-hidden bg-[#F7F4EE] py-24 lg:py-32">
-          <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_70%_40%,rgba(10,101,255,0.12),transparent_44%)]" />
+        <section id="operating-layer" className="relative overflow-hidden bg-[#111111] py-24 text-white lg:py-32">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(10,101,255,0.32),transparent_35%),linear-gradient(135deg,#111111_0%,#1C1C1C_100%)]" />
           <div className="container relative">
             <motion.div {...fadeUp} className="max-w-4xl">
-              <SectionLabel>Data Culture &amp; SOP Transformation</SectionLabel>
-              <h2 className="font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
+              <div className="mb-5 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[#58B8FF]">
+                <span className="h-px w-8 bg-[#58B8FF]" />
+                Data Culture &amp; SOP Transformation
+              </div>
+              <h2 className="font-display text-[54px] leading-[0.92] tracking-[-0.06em] text-white">
                 Four steps to Data Empowerment.
               </h2>
             </motion.div>
@@ -246,14 +254,14 @@ export default function Home() {
                     key={layer.title}
                     {...fadeUp}
                     transition={{ ...fadeUp.transition, delay: index * 0.06 }}
-                    className="group min-h-[230px] border border-black/10 bg-white/72 p-5 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-[#0A65FF]/35 hover:bg-white sm:min-h-[270px] sm:p-6 lg:min-h-[330px] lg:p-7"
+                    className="group min-h-[230px] border border-white/12 bg-white/[0.06] p-5 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-[#58B8FF]/35 hover:bg-white/[0.10] sm:min-h-[270px] sm:p-6 lg:min-h-[330px] lg:p-7"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-[30px] font-light uppercase tracking-[0.22em] text-[#0A65FF]">{layer.eyebrow}</span>
-                      <Icon className="h-5 w-5 text-black/48 transition-colors duration-300 group-hover:text-[#0A65FF] sm:h-6 sm:w-6" />
+                      <span className="text-[30px] font-light uppercase tracking-[0.22em] text-[#58B8FF]">{layer.eyebrow}</span>
+                      <Icon className="h-5 w-5 text-white/45 transition-colors duration-300 group-hover:text-[#58B8FF] sm:h-6 sm:w-6" />
                     </div>
-                    <h3 className="mt-10 text-xl font-semibold tracking-[-0.04em] sm:mt-12 sm:text-2xl lg:mt-16">{layer.title}</h3>
-                    <p className="mt-3 text-[0.95rem] leading-6 text-black/78 sm:mt-4 sm:leading-7">{layer.copy}</p>
+                    <h3 className="mt-10 text-xl font-semibold tracking-[-0.04em] text-white sm:mt-12 sm:text-2xl lg:mt-16">{layer.title}</h3>
+                    <p className="mt-3 text-[0.95rem] leading-6 text-white/78 sm:mt-4 sm:leading-7">{layer.copy}</p>
                   </motion.article>
                 );
               })}
@@ -358,52 +366,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        <section id="partners" className="bg-[#F7F4EE] py-24 lg:py-32">
-          <div className="container grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-            <motion.div {...fadeUp}>
-              <SectionLabel>For private banks and advisors</SectionLabel>
-              <h2 className="font-display text-[clamp(2.7rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.06em]">
-                A confidential implementation partner for complex clients.
-              </h2>
-              <p className="mt-6 text-lg leading-8 text-black/80">
-                Digital Therapy helps private banks, multifamily offices, and wealth advisory firms solve client operating complexity without replacing the trusted advisory relationship.
-              </p>
-              <div className="mt-8">
-                <ContactFormDialog
-                  variant="secondary"
-                  label="Partner model"
-                  context="partner model discussion"
-                  icon="message"
-                  className="bg-white/74"
-                />
-              </div>
-              <div className="mt-9 grid gap-4 sm:grid-cols-2">
-                {[
-                  "Works behind the scenes or in joint delivery models.",
-                  "Adds operating transformation without competing for the advisory mandate.",
-                  "Creates diagnostics, pilots, and implementation roadmaps partners can introduce.",
-                  "Reduces implementation risk through one accountable cross-functional pod.",
-                ].map((item) => (
-                  <div key={item} className="flex gap-3 border-t border-black/10 pt-4">
-                    <UsersRound className="mt-1 h-5 w-5 shrink-0 text-[#0A65FF]" />
-                    <p className="leading-7 text-black/82">{item}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-            <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
-              <img src={boardroomVisual} alt="Advisor partnership discussion setting" className="aspect-[4/5] w-full object-cover" />
-              <div className="absolute bottom-5 left-5 right-5 rounded-[1.4rem] border border-white/70 bg-white/78 p-5 backdrop-blur-xl">
-                <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Partner-ready</div>
-                <p className="mt-2 text-lg font-semibold tracking-[-0.03em] text-black">
-                  Introduce Digital Therapy when a client needs a practical operating blueprint, not another abstract strategy deck.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
 
         <section className="relative overflow-hidden bg-[#F7F4EE] py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr]">

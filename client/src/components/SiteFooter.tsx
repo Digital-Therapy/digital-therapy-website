@@ -14,7 +14,7 @@ const sitemapGroups = [
     title: "Sitemap",
     links: [
       { label: "Home", href: "/" },
-      { label: "Process", href: "/approach" },
+      { label: "Process", href: "/process" },
       { label: "Capabilities", href: "/capabilities" },
       { label: "Thesis", href: "/thesis" },
     ],
@@ -23,7 +23,7 @@ const sitemapGroups = [
     title: "Solutions",
     links: [
       { label: "Operating Layer", href: "/#operating-layer" },
-      { label: "Partner Model", href: "/#partners" },
+      { label: "Partner Model", href: "/partners" },
       { label: "DT Brain", href: "/dt-brain" },
     ],
   },
@@ -128,7 +128,7 @@ export default function SiteFooter() {
             <img src={markUrl} alt="" aria-hidden="true" className="h-6 w-6 object-contain" />
             <span>© {new Date().getFullYear()} Digital Therapy, LLC. All Rights Reserved.</span>
           </div>
-          <a href="/approach" className="inline-flex items-center gap-2 font-semibold text-black/75 transition-colors duration-300 hover:text-[#0A65FF]">
+          <a href="/process" className="inline-flex items-center gap-2 font-semibold text-black/75 transition-colors duration-300 hover:text-[#0A65FF]">
             Understand our process
             <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
