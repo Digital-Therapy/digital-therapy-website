@@ -44,8 +44,8 @@ const navItems = [
 
 const complexityPoints = [
   "Legacy systems can\u2019t easily send or receive data or files.",
-  "Lean teams spend too much time collecting, reconciling, and reformatting information.",
-  "Principals and advisors expect faster answers without compromising privacy or control.",
+  "Teams waste time collecting, reconciling, & reformatting data.",
+  "Leadership expects fast answers without compromising privacy.",
 ];
 
 const operatingLayers = [
@@ -200,10 +200,20 @@ export default function Home() {
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <SectionLabel>Why the back office breaks</SectionLabel>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.4rem)] leading-[0.92] tracking-[-0.06em]">
-                Complexity is cost.
+                <span className="text-[1.15em] font-bold text-[#0A65FF]">C</span>
+                <span className="font-sans text-[0.78em] italic text-black/55">o</span>
+                <span className="font-bold underline decoration-2 underline-offset-4">m</span>
+                <span className="text-[1.35em] font-light">p</span>
+                <span className="align-super text-[0.55em] italic text-[#0A65FF]">L</span>
+                <span className="font-sans text-[0.9em] font-bold italic text-[#58B8FF]">e</span>
+                <span className="text-[1.3em] font-light italic">x</span>
+                <span className="align-sub text-[0.7em] font-bold">i</span>
+                <span className="font-sans font-light underline decoration-2 underline-offset-4">T</span>
+                <span className="text-[0.85em] italic text-[#0A65FF]">y</span>
+                {" = Cost"}
               </h2>
               <p className="mt-6 text-lg leading-8 text-black/80">
-                Mature family offices coordinate more than investments. Digital Therapy targets the everyday friction that compounds across accounting, reporting, technology, and governance.
+                Mature family offices coordinate more than investments. Digital Therapy targets Complexity Friction that compounds across accounting, reporting, technology, and governance.
               </p>
               <div className="mt-9 space-y-4">
                 {complexityPoints.map((point) => (
