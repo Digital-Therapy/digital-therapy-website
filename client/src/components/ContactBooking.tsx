@@ -72,7 +72,7 @@ export function BookingWidgetDialog({
           <ActionIcon icon={icon} />
         </button>
       </DialogTrigger>
-      <DialogContent className="max-h-[92vh] max-w-5xl overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:rounded-[2rem]">
+      <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[1100px] sm:rounded-[2rem]">
         <div className="grid gap-0 lg:grid-cols-[0.76fr_1.24fr]">
           <div className="border-b border-black/10 bg-white/72 p-8 lg:border-b-0 lg:border-r lg:p-9">
             <DialogHeader>
@@ -163,11 +163,11 @@ export function ContactFormDialog({
           <ActionIcon icon={icon} />
         </button>
       </DialogTrigger>
-      <DialogContent className="max-h-[92vh] max-w-3xl overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:rounded-[2rem]">
-        <div className="grid gap-0 lg:grid-cols-[0.88fr_1.12fr]">
-          <div className="border-b border-black/10 bg-white/72 p-8 lg:border-b-0 lg:border-r lg:p-9">
+      <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[1100px] sm:rounded-[2rem]">
+        <div className="grid gap-0 lg:grid-cols-[0.78fr_1.22fr]">
+          <div className="border-b border-black/10 bg-white/72 p-9 lg:border-b-0 lg:border-r lg:p-11">
             <DialogHeader>
-              <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#0A65FF] text-white">
+              <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#0A65FF] text-white">
                 <MessageSquareText className="h-5 w-5" />
               </div>
               <DialogTitle className="font-display text-4xl leading-[0.94] tracking-[-0.06em] text-[#111111]">
@@ -177,58 +177,67 @@ export function ContactFormDialog({
                 Share a few details and Digital Therapy will route the conversation around your operating pain points, urgency, and best first-value opportunity.
               </DialogDescription>
             </DialogHeader>
+            <div className="mt-8 space-y-4 text-sm leading-6 text-black/82">
+              {["Operating pain points & priorities", "Best first-value opportunity", "Privacy & deployment requirements"].map((item) => (
+                <div key={item} className="flex gap-3 border-t border-black/10 pt-4">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#0A65FF]" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
             <div className="mt-8 rounded-[1.35rem] border border-[#0A65FF]/15 bg-[#0A65FF]/8 p-5">
               <div className="flex gap-3">
                 <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#0A65FF]" />
                 <p className="text-sm leading-6 text-black/80">
-                  This form submits inside the site. It does not open the visitor’s email client.
+                  This form submits inside the site. It does not open your email client.
                 </p>
               </div>
             </div>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-5 bg-white p-8 lg:p-9">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="space-y-2 text-sm font-semibold text-black/74">
-                Name
-                <Input value={form.name} onChange={(event) => updateField("name", event.target.value)} required minLength={2} placeholder="Your name" />
-              </label>
-              <label className="space-y-2 text-sm font-semibold text-black/74">
-                Work email
-                <Input value={form.email} onChange={(event) => updateField("email", event.target.value)} required type="email" placeholder="name@firm.com" />
-              </label>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="space-y-2 text-sm font-semibold text-black/74">
-                Organization
-                <Input value={form.organization} onChange={(event) => updateField("organization", event.target.value)} placeholder="Family office or firm" />
-              </label>
-              <label className="space-y-2 text-sm font-semibold text-black/74">
-                Role
-                <Input value={form.role} onChange={(event) => updateField("role", event.target.value)} placeholder="Leader, advisor, COO..." />
-              </label>
-            </div>
-            <label className="space-y-2 text-sm font-semibold text-black/74">
-              What should we understand first?
+          <form onSubmit={handleSubmit} className="space-y-8 bg-white p-9 lg:p-11">
+            <fieldset className="space-y-5">
+              <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">About you</legend>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <label className="space-y-2 text-sm font-semibold text-black/74">
+                  Name
+                  <Input value={form.name} onChange={(event) => updateField("name", event.target.value)} required minLength={2} placeholder="Your name" className="h-11" />
+                </label>
+                <label className="space-y-2 text-sm font-semibold text-black/74">
+                  Work email
+                  <Input value={form.email} onChange={(event) => updateField("email", event.target.value)} required type="email" placeholder="name@firm.com" className="h-11" />
+                </label>
+                <label className="space-y-2 text-sm font-semibold text-black/74">
+                  Organization
+                  <Input value={form.organization} onChange={(event) => updateField("organization", event.target.value)} placeholder="Family office or firm" className="h-11" />
+                </label>
+                <label className="space-y-2 text-sm font-semibold text-black/74">
+                  Role
+                  <Input value={form.role} onChange={(event) => updateField("role", event.target.value)} placeholder="Leader, advisor, COO..." className="h-11" />
+                </label>
+              </div>
+            </fieldset>
+            <fieldset className="space-y-3">
+              <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">What should we understand first?</legend>
               <Textarea
                 value={form.message}
                 onChange={(event) => updateField("message", event.target.value)}
                 required
                 minLength={20}
                 placeholder="Briefly describe the pain points, workflows, reporting needs, or first-value opportunity you want to discuss."
-                className="min-h-[150px] resize-none"
+                className="min-h-[200px] resize-none"
               />
-            </label>
+              <p className="text-xs leading-5 text-black/55">
+                Minimum 20 characters. For sensitive information, keep the message high-level — we can arrange a private follow-up.
+              </p>
+            </fieldset>
             <button
               type="submit"
               disabled={submitContact.isPending}
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#0A65FF] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_45px_rgba(10,101,255,0.22)] transition-all duration-300 hover:bg-[#004ed1] disabled:cursor-not-allowed disabled:opacity-60"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#0A65FF] px-6 py-4 text-base font-semibold text-white shadow-[0_18px_45px_rgba(10,101,255,0.22)] transition-all duration-300 hover:bg-[#004ed1] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitContact.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
               Submit contact form
             </button>
-            <p className="text-xs leading-5 text-black/42">
-              For sensitive information, keep the message high-level. Digital Therapy can arrange a private follow-up process once we understand the request.
-            </p>
           </form>
         </div>
       </DialogContent>

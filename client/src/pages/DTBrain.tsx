@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const markUrl = "/manus-storage/DTLOGO_PICMARKpng_2cf51494.png";
+const markUrl = "/dt-mark.png";
 const securityVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_security_automation-Z4CfAdsU9T8pybHF6A7NLi.webp";
 const heroVisual =
@@ -125,7 +125,7 @@ export default function DTBrain() {
           <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-12 py-20 lg:grid-cols-[0.88fr_1.12fr] lg:py-28">
             <motion.div {...fadeUp}>
               <SectionLabel>DT Brain hardware</SectionLabel>
-              <h1 className="max-w-4xl font-display text-[clamp(3.6rem,7vw,7.8rem)] leading-[0.88] tracking-[-0.07em] text-[#111111]">
+              <h1 className="max-w-4xl font-display text-[64px] leading-[0.95] tracking-[-0.04em] text-[#111111]">
                 On-prem automation hub.
               </h1>
               <p className="mt-8 max-w-2xl text-2xl font-semibold leading-9 tracking-[-0.035em] text-[#0A65FF]">
@@ -196,8 +196,8 @@ export default function DTBrain() {
           <div className="container relative grid items-start gap-14 lg:grid-cols-[0.78fr_1.22fr]">
             <motion.div {...fadeUp}>
               <SectionLabel>Secure on-premises architecture</SectionLabel>
-              <h2 className="max-w-3xl font-display text-[clamp(2.8rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.06em]">
-                Private infrastructure for sensitive automation.
+              <h2 className="max-w-3xl font-display text-[54px] leading-[0.95] tracking-[-0.04em]">
+                Secure infrastructure for private automation.
               </h2>
               <p className="mt-7 max-w-xl text-lg leading-8 text-black/80">
                 DT Brain gives the office a controlled local environment for AI workflows, document intelligence, scripting, robotic process automation, and integration testing before automations touch live operations.
@@ -303,8 +303,9 @@ export default function DTBrain() {
 
             <motion.div {...fadeUp}>
               <SectionLabel>Control outcomes</SectionLabel>
-              <h2 className="max-w-3xl font-display text-[clamp(2.8rem,5vw,5.4rem)] leading-[0.92] tracking-[-0.06em]">
-                Your data. Your hardware. Your rules.
+              <h2 className="max-w-3xl font-display text-[60px] leading-[0.95] tracking-[-0.04em]">
+                Your data. Your hardware.<br />
+                Your rules.
               </h2>
               <p className="mt-7 max-w-xl text-lg leading-8 text-black/80">
                 DT Brain is designed for family offices that want the productivity of AI automation without surrendering sensitive documents, workflows, and operational context to uncontrolled infrastructure.

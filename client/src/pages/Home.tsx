@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const markUrl = "/manus-storage/DTLOGO_PICMARKpng_2cf51494.png";
+const markUrl = "/dt-mark.png";
 const heroVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_hero_operating_layer-TEdtu9wcNJkxBt4PK2JKyo.webp";
 const boardroomVisual =
@@ -298,12 +298,12 @@ export default function Home() {
         <section className="bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
-              <img src={securityVisual} alt="Secure automation and AI workflow visualization" className="aspect-[16/12] w-full object-cover" />
+              <img src="/aicutsheads.png" alt="AI automation reducing headcount and growing revenue" className="aspect-[3/2] w-full object-cover" />
             </motion.div>
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <SectionLabel>Automation and AI</SectionLabel>
-              <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.92] tracking-[-0.06em]">
-                Grow Revenue - Not Headcount.
+              <h2 className="font-display text-[64px] leading-[0.95] tracking-[-0.04em]">
+                Grow Revenue.<br />Not Headcount.
               </h2>
               <p className="mt-6 text-lg leading-8 text-black/80">
                 Digital Therapy converts fragmented Family Office operations into a coherent, private, and automated operating system.
@@ -326,7 +326,7 @@ export default function Home() {
             <motion.div {...fadeUp}>
               <SectionLabel>Security and control</SectionLabel>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.92] tracking-[-0.06em] text-white">
-                If privacy &amp; security are top priority..
+                Privacy &amp; security are top priority.
               </h2>
               <p className="mt-6 text-lg leading-8 text-white/62">
                 Digital Therapy designs the operating layer so sensitive family-office data, reports, documents, and workflows remain governed by the office’s access model, infrastructure requirements and data privacy policies.

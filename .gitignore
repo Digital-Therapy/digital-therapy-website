@@ -112,6 +112,18 @@ temp/
 # Manus version file (auto-generated, not part of source)
 client/public/__manus__/version.json
 
-# Local working files (not part of source)
+# Local working files (not part of source) — the real assets live in client/public/
 /DT LOGO_OFFICIAL.png
+/DT LOGO_PIC MARKpng.png
+/DT_Talk to your data.png
+/Talk to your data V2.png
+/What's more important scale.png
+/Discovery program.png
+/discoprogram1612.png
+/ Tech SME.png
+/Milton - born to code.png
+/ARAP SME.png
+/ARAP-Hunter.png
+/Process Guy.png
+/Aicutsheads.png
 

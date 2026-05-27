@@ -13,14 +13,12 @@ import {
   ClipboardCheck,
   Database,
   Network,
-  UsersRound,
   Workflow,
 } from "lucide-react";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const markUrl = "/manus-storage/DTLOGO_PICMARKpng_2cf51494.png";
-const wealthMapVisual =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_wealth_map_visual-TmSmhqHi8pgacxaNwHMRxs.webp";
+const markUrl = "/dt-mark.png";
+const wealthMapVisual = "/discovery-program.png";
 
 const fadeUp = {
   initial: { opacity: 0, y: 28 },
@@ -31,9 +29,9 @@ const fadeUp = {
 
 const discoveryTracks = [
   {
-    label: "Track A",
+    label: "Track 1",
     title: "Technology Discovery",
-    lead: "Lead: Technology SME",
+    lead: "Lead by: Technology SME",
     copy: "Inventories and maps the client's technology footprint — systems, tools, integrations, data flows, user access, and current-state architecture — then frames the future-state platform and automation strategy.",
     focus: [
       "Systems, tools, and integrations inventory",
@@ -42,11 +40,13 @@ const discoveryTracks = [
       "Integration requirements and data exchange design",
     ],
     icon: Network,
+    image: "/tech-sme.png",
+    imageAlt: "Hand-drawn blue sketch portrait of Milton Rodas, Digital Therapy's Technology SME, wearing a 'Born to code.' t-shirt",
   },
   {
-    label: "Track B",
+    label: "Track 2",
     title: "Finance & Accounting Discovery",
-    lead: "Lead: Finance + Accounting SME",
+    lead: "Lead by: Finance + Accounting SME",
     copy: "Maps AR, AP, the close cycle, and the broader accounting operating model — systems, processes, controls, and tools — to surface where finance is operating behind and where redesign will compound.",
     focus: [
       "AR, AP, and GL workflow analysis",
@@ -55,6 +55,8 @@ const discoveryTracks = [
       "Finance optimization and tooling priorities",
     ],
     icon: ClipboardCheck,
+    image: "/arap-sme.png",
+    imageAlt: "Hand-drawn blue sketch portrait of Hunter, Digital Therapy's Finance & Accounting SME",
   },
 ];
 
@@ -142,10 +144,14 @@ export default function OurApproach() {
             <motion.div {...fadeUp}>
               <SectionLabel>Our process</SectionLabel>
               <h1 className="max-w-4xl font-display text-[60px] leading-[0.88] tracking-[-0.07em] text-[#111111]">
-                The difference one month can make.
+                The difference a month makes.
               </h1>
               <p className="mt-8 max-w-2xl text-[16px] font-light leading-8 text-[#3e3c3c]">
-                Digital Therapy breaks transformation into a sequenced operating process. Phase 1 is Discovery — and we do it twice (sorry but it&apos;s worth it). We evaluate two parallel functional tracks: Track 1 - Technology Discovery led by a Technology SME, and Track 2 - Finance &amp; Accounting Discovery led by a Finance + Accounting SME. All three Fusion Team SMEs deploy on-site for 2 - 4 weeks.
+                Digital Therapy breaks transformation into a sequenced operating process.<br />
+                <strong className="font-bold text-[#111111]">Phase 1</strong> - <strong className="font-bold text-[#111111]">Discovery</strong>: We evaluate two parallel functional tracks.<br />
+                <strong className="font-bold text-[#111111]">Track 1</strong> - Technology Discovery led by a Technology SME<br />
+                <strong className="font-bold text-[#111111]">Track 2</strong> - Finance &amp; Accounting Discovery led by a Finance + Accounting SME.<br />
+                <em><strong className="font-bold text-[#111111]">All three Fusion Team SMEs deploy on site for 4 weeks.</strong></em>
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <a
@@ -163,18 +169,6 @@ export default function OurApproach() {
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
               </div>
-              <div className="mt-12 grid max-w-xl grid-cols-3 gap-5 border-t border-black/10 pt-6">
-                {[
-                  ["Phase 1", "Discover"],
-                  ["2 Tracks", "Technology +Finance"],
-                  ["3 SMEs", "2–4 weeks"],
-                ].map(([top, bottom]) => (
-                  <div key={bottom}>
-                    <div className="font-display text-2xl leading-none tracking-[-0.04em]">{top}</div>
-                    <div className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#525151]">{bottom}</div>
-                  </div>
-                ))}
-              </div>
             </motion.div>
 
             <motion.div
@@ -185,14 +179,14 @@ export default function OurApproach() {
             >
               <div className="absolute -inset-6 rounded-[2.6rem] bg-[#0A65FF]/10 blur-3xl" />
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
-                <img src={wealthMapVisual} alt="Diagnostics map for family-office transformation" className="aspect-[16/12] w-full object-cover" />
-                <div className="absolute bottom-5 left-5 right-5 rounded-[1.35rem] border border-white/70 bg-white/78 p-5 backdrop-blur-xl">
+                <img src={wealthMapVisual} alt="Diagram of the Digital Therapy Discovery program" className="aspect-[16/12] w-full object-cover" />
+                <div className="m-5 rounded-[1.35rem] border border-black/10 bg-[#F7F4EE] p-5">
                   <div className="flex items-start gap-4">
                     <img src={markUrl} alt="" className="mt-1 h-9 w-9 object-contain" />
                     <div>
                       <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Two parallel tracks</p>
                       <p className="mt-2 text-sm leading-6 text-black/82">
-                        Technology Discovery and Finance &amp; Accounting Discovery run side by side, with the Operations &amp; Process SME splitting time across both before implementation begins.
+                        Technology Discovery runs side by side with Finance &amp; Accounting Discovery. The Operations &amp; Process SME splits time between both discovery programs.
                       </p>
                     </div>
                   </div>
@@ -207,17 +201,19 @@ export default function OurApproach() {
             <motion.div {...fadeUp} className="mx-auto max-w-4xl text-center">
               <SectionLabel>Section 1</SectionLabel>
               <h2 className="font-display text-[clamp(2.8rem,5vw,5.6rem)] leading-[0.9] tracking-[-0.06em] text-[#111111]">
-                Discovery runs as two parallel tracks.
+                Two Track Discovery
               </h2>
-              <p className="mt-6 text-xl font-semibold tracking-[-0.02em] text-[#0A65FF]">Diagnostics-First, on-site for 2–4 weeks</p>
+              <p className="mt-6 text-xl font-semibold tracking-[-0.02em] text-[#0A65FF]">Conducted on site | Four Weeks</p>
               <p className="mt-6 text-lg leading-8 text-black/80">
-                All three Fusion Team SMEs deploy on-site with the client and stay present in every kickoff, internal review, and stakeholder readout. The Technology SME and the Finance + Accounting SME each lead a parallel Discovery track. The Operations &amp; Process SME splits time across both, pulled in to unpack any current-state process complex enough to warrant its own swim-lane analysis.
+                The Technology &amp; Accounting SMEs lead parallel Discovery tracks while the Operations &amp; Process SME divides time between the two discovery programs to unpack &amp; visualize current-state systems &amp; processes by mapping workflows over swim lanes.
               </p>
             </motion.div>
 
             <div className="mt-16 grid gap-5 lg:grid-cols-2">
               {discoveryTracks.map((track) => {
                 const Icon = track.icon;
+                const trackImage = "image" in track ? (track as { image?: string }).image : undefined;
+                const trackImageAlt = "imageAlt" in track ? (track as { imageAlt?: string }).imageAlt : undefined;
                 return (
                   <motion.div
                     key={track.title}
@@ -230,9 +226,17 @@ export default function OurApproach() {
                         <h3 className="mt-4 text-3xl font-semibold leading-tight tracking-[-0.04em] text-[#111111]">{track.title}</h3>
                         <p className="mt-2 text-sm font-semibold uppercase tracking-[0.18em] text-black/72">{track.lead}</p>
                       </div>
-                      <div className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-[#0A65FF]">
-                        <Icon className="h-5 w-5" />
-                      </div>
+                      {trackImage ? (
+                        <img
+                          src={trackImage}
+                          alt={trackImageAlt ?? ""}
+                          className="h-20 w-20 shrink-0 rounded-2xl border border-black/10 bg-white object-cover"
+                        />
+                      ) : (
+                        <div className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-[#0A65FF]">
+                          <Icon className="h-5 w-5" />
+                        </div>
+                      )}
                     </div>
                     <p className="mt-6 text-base leading-7 text-black/82">{track.copy}</p>
                     <div className="mt-6 space-y-3">
@@ -253,13 +257,15 @@ export default function OurApproach() {
               className="mt-10 grid gap-8 border border-black/10 bg-[#111111] p-8 text-white lg:grid-cols-[0.82fr_1.18fr] lg:p-10"
             >
               <div>
-                <div className="inline-flex items-center gap-3">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/18 bg-white/10 text-[#58B8FF]">
-                    <UsersRound className="h-5 w-5" />
-                  </div>
+                <div className="inline-flex items-center gap-4">
+                  <img
+                    src="/process-sme.png"
+                    alt="Hand-drawn blue sketch portrait of Digital Therapy's Operations & Process SME"
+                    className="h-20 w-20 shrink-0 rounded-2xl border border-white/15 bg-white object-cover"
+                  />
                   <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#58B8FF]">Shared across both tracks</p>
                 </div>
-                <h3 className="mt-6 font-display text-[clamp(2rem,3.4vw,3.4rem)] leading-[0.94] tracking-[-0.06em]">
+                <h3 className="mt-6 text-3xl font-semibold leading-tight tracking-[-0.04em]">
                   Operations &amp; Process SME splits time across both Discoveries.
                 </h3>
               </div>
@@ -279,9 +285,12 @@ export default function OurApproach() {
           <div className="container">
             <motion.div {...fadeUp} className="grid items-end gap-10 lg:grid-cols-[0.82fr_1.18fr]">
               <div>
-                <SectionLabel>Output</SectionLabel>
-                <h2 className="font-display text-[clamp(2.6rem,4.8vw,5.2rem)] leading-[0.9] tracking-[-0.06em]">
-                  Discovery produces three implementation-ready deliverables.
+                <div className="mb-5 inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[#58B8FF]">
+                  <span className="h-px w-8 bg-[#58B8FF]" />
+                  Roadmap
+                </div>
+                <h2 className="font-display text-[56px] leading-[0.95] tracking-[-0.04em]">
+                  Three Discovery deliverables form the plan for Phase 2.
                 </h2>
               </div>
               <p className="max-w-3xl text-lg leading-8 text-white">
@@ -303,10 +312,10 @@ export default function OurApproach() {
                         <Icon className="h-5 w-5" />
                       </div>
                     </div>
-                    <p className="mt-6 text-sm leading-7 text-white/64">{output.copy}</p>
+                    <p className="mt-6 text-sm leading-7 text-white/85">{output.copy}</p>
                     <div className="mt-6 space-y-4">
                       {output.details.map((detail) => (
-                        <div key={detail} className="grid grid-cols-[1rem_1fr] gap-3 text-sm leading-6 text-white/72">
+                        <div key={detail} className="grid grid-cols-[1rem_1fr] gap-3 text-sm leading-6 text-white/90">
                           <Database className="mt-1 h-3.5 w-3.5 text-[#58B8FF]" />
                           <span>{detail}</span>
                         </div>
@@ -341,7 +350,6 @@ export default function OurApproach() {
                 <div className="mt-7 inline-flex flex-wrap items-center gap-3 border-y border-black/10 py-4">
                   <span className="text-xs font-bold uppercase tracking-[0.22em] text-black/45">Target close</span>
                   <span className="font-display text-4xl leading-none tracking-[-0.06em] text-[#0A65FF]">3 - 5 days</span>
-                  <span className="text-sm font-semibold leading-6 text-black/78">of the next month</span>
                 </div>
               </div>
             </motion.div>
@@ -370,7 +378,7 @@ export default function OurApproach() {
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#58B8FF]">Operating outcome</p>
                 <h3 className="mt-5 font-display text-[clamp(2.2rem,4vw,4.2rem)] leading-[0.9] tracking-[-0.06em]">
-                  Close in 05 days. Perhaps, even 03.
+                  Close in five days. Perhaps, even three.
                 </h3>
               </div>
               <div className="grid gap-4 text-sm leading-7 text-white/68 sm:grid-cols-2">
@@ -396,13 +404,13 @@ export default function OurApproach() {
                 </div>
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="border-l border-black/10 pl-5">
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-black/42">Before</p>
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-black/42">Original State</p>
                     <p className="mt-3 text-sm leading-7 text-black/80">
                       Month-end remains unresolved deep into the following month, limiting timely visibility into cash, vendor obligations, receivables, and entity-level performance.
                     </p>
                   </div>
                   <div className="border-l border-black/10 pl-5">
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-black/42">DT intervention</p>
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-black/42">Delivery State</p>
                     <p className="mt-3 text-sm leading-7 text-black/80">
                       Digital Therapy maps the close, redesigns ownership and checkpoints, then builds lightweight exception dashboards and approval tooling around the accounting system.
                     </p>

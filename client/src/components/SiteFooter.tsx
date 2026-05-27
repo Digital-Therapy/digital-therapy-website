@@ -2,7 +2,7 @@ import { ArrowUpRight, Mail, Phone } from "lucide-react";
 import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
 
 const logoUrl = "/dtlogo.png";
-const markUrl = "/dtlogo.png";
+const markUrl = "/dt-mark.png";
 
 const footerLinkClasses =
   "group flex w-full items-center justify-between gap-4 text-left text-sm font-medium text-black/78 transition-colors duration-300 hover:text-[#0A65FF]";
@@ -48,7 +48,7 @@ export default function SiteFooter() {
               <img src={logoUrl} alt="Digital Therapy" className="h-40 w-auto object-contain" />
             </a>
             <p className="mt-3 max-w-md text-base leading-7 text-black/80">
-              Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & family office operated businesses.
+              Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & operated businesses.
             </p>
             <div className="mt-7 flex flex-col gap-4 text-base font-semibold text-[#111111]">
               <a

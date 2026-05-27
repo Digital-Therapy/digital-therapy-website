@@ -31,7 +31,7 @@ import {
 } from "lucide-react";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const markUrl = "/manus-storage/DTLOGO_PICMARKpng_2cf51494.png";
+const markUrl = "/dt-mark.png";
 const boardroomVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_family_office_boardroom-UvecEVLEaVqpouVEhEb9mw.webp";
 const wealthMapVisual =
