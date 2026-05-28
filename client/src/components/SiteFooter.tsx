@@ -132,7 +132,7 @@ export default function SiteFooter() {
             <img src={markUrl} alt="" aria-hidden="true" className="h-6 w-6 object-contain" />
             <span>© {new Date().getFullYear()} Digital Therapy, LLC. All Rights Reserved.</span>
           </div>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium text-black/65">
+          <div className="mr-[18px] flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium text-black/65">
             <a href="/terms" className="transition-colors duration-200 hover:text-[#0A65FF]">
               Terms &amp; Conditions
             </a>

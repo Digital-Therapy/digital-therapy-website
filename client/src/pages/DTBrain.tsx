@@ -126,7 +126,7 @@ export default function DTBrain() {
             <motion.div {...fadeUp}>
               <SectionLabel>DT Brain hardware</SectionLabel>
               <h1 className="max-w-4xl font-display text-[64px] leading-[0.95] tracking-[-0.04em] text-[#111111]">
-                On-prem automation hub.
+                On-prem<br />automation hub.
               </h1>
               <p className="mt-8 max-w-2xl text-2xl font-semibold leading-9 tracking-[-0.035em] text-[#0A65FF]">
                 It runs in your own office. On your own hardware. In your actual control.
@@ -304,7 +304,8 @@ export default function DTBrain() {
             <motion.div {...fadeUp}>
               <SectionLabel>Control outcomes</SectionLabel>
               <h2 className="max-w-3xl font-display text-[60px] leading-[0.95] tracking-[-0.04em]">
-                Your data. Your hardware.<br />
+                Your data.<br />
+                Your hardware.<br />
                 Your rules.
               </h2>
               <p className="mt-7 max-w-xl text-lg leading-8 text-black/80">
