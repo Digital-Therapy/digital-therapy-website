@@ -140,7 +140,7 @@ export default function Thesis() {
             <motion.div {...fadeUp}>
               <SectionLabel>The Digital Therapy thesis</SectionLabel>
               <h1 className="max-w-4xl font-display text-[60px] leading-[0.88] tracking-[-0.07em] text-[#111111]">
-                Practice based firms fall short.
+                Practice based firms<br />fall short.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
                 Most transformation initiatives fail — not because firms lack smart people — because firm structure & culture rewards silo behavior & disincentivizes cross-functional collaboration. Digital Therapy solves this fragmentation with a “Fusion Team” — custom built & trained to overcome complex business & data challenges touching Operations, Accounting, & Technology. These days, that’s just about everything.

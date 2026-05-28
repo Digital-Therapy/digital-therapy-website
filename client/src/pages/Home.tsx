@@ -158,7 +158,7 @@ export default function Home() {
                 Family office<br />transformation<br />that works.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
-                We spend time to learn your eco-system, unique attributes &amp; processes because collective understanding is the keystone of transformation success. That&rsquo;s why Fusion Teams typically work on-site for the first month of new engagements.
+                We spend time to learn your eco-system, unique attributes, people &amp; processes. We believe collective understanding is the key to transformation success. That&rsquo;s why we typically work on-site for the first month of a new engagement.
               </p>
               <p className="mt-10 text-base font-bold leading-7 text-black/90">
                 Would you like to learn more about our
@@ -215,7 +215,7 @@ export default function Home() {
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.11)]">
               <img src={boardroomVisual} alt="Modern family office boardroom" className="aspect-[16/11] w-full object-cover" />
               <div className="absolute left-5 top-5 rounded-full border border-white/70 bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-black/78 backdrop-blur-xl">
-                Modern wealth is an operating company
+                Great wealth requires great infrastructure.
               </div>
             </motion.div>
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
@@ -385,7 +385,7 @@ export default function Home() {
                 Privacy &amp; security are top priority.
               </h2>
               <p className="mt-6 text-lg leading-8 text-white/62">
-                Digital Therapy designs the operating layer so sensitive family-office data, reports, documents, and workflows remain governed by the office’s access model, infrastructure requirements and data privacy policies.
+                Digital Therapy builds secure systems to keep family office data private, organized, and accessible only to the right people.
               </p>
             </motion.div>
             <div className="grid gap-4 sm:grid-cols-2">
