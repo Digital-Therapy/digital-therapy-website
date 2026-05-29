@@ -1,10 +1,10 @@
 /**
  * VendorApplicationDialog
  * Long-form vendor application: about you, bio, availability, documents.
- * Text fields submit through the existing contact endpoint with a vendor-type
- * context. File pickers capture filename/size metadata in the submission body —
- * actual file storage requires backend env vars (BUILT_IN_FORGE_API_*) that are
- * not configured yet, so for now the form notes that files should follow by email.
+ * Submits through the `vendor.submit` tRPC mutation, which forwards the
+ * structured application plus the Resume / W9 / headshot uploads to the DT
+ * Portal (apps.dtapps.io), where they are stored as a VendorApplication row
+ * with linked File records.
  */
 import { FormEvent, useState } from "react";
 import { ArrowRight, Loader2, Paperclip, Plus, UserPlus, X } from "lucide-react";
@@ -99,12 +99,24 @@ type FileMeta = {
   name: string;
   sizeBytes: number;
   type: string;
+  file: File;
 } | null;
 
-function describeFile(file: FileMeta): string {
-  if (!file) return "(not provided)";
-  const sizeKb = Math.round(file.sizeBytes / 1024);
-  return `${file.name} — ${sizeKb} KB (${file.type || "unknown type"})`;
+// 8 MB raw cap per file -- matches the server's base64 limit with headroom.
+const MAX_FILE_BYTES = 8 * 1024 * 1024;
+
+// Read a File into a bare base64 string (no data: prefix) for tRPC transport.
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = typeof reader.result === "string" ? reader.result : "";
+      const comma = result.indexOf(",");
+      resolve(comma >= 0 ? result.slice(comma + 1) : result);
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
 }
 
 function formatBytes(bytes: number): string {
@@ -184,7 +196,7 @@ export function VendorApplicationDialog({
     });
   };
 
-  const submitContact = trpc.contact.submit.useMutation({
+  const submitVendor = trpc.vendor.submit.useMutation({
     onSuccess: () => {
       setForm(initialForm);
       setResumeFile(null);
@@ -195,7 +207,7 @@ export function VendorApplicationDialog({
       setCertifications([]);
       setOpen(false);
       toast.success(
-        `Application received. Please email Resume, W9, and headshot to hello@digitaltherapy.io to complete the ${vendorTypeLabel} application.`,
+        `Application and documents received. Digital Therapy will review your ${vendorTypeLabel} application and follow up directly.`,
       );
     },
     onError: (error) => {
@@ -214,72 +226,70 @@ export function VendorApplicationDialog({
         setter(null);
         return;
       }
-      setter({ name: file.name, sizeBytes: file.size, type: file.type });
+      if (file.size > MAX_FILE_BYTES) {
+        toast.error(`${file.name} is too large. Max ${MAX_FILE_BYTES / (1024 * 1024)}MB per file.`);
+        event.target.value = "";
+        setter(null);
+        return;
+      }
+      setter({ name: file.name, sizeBytes: file.size, type: file.type, file });
     };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const skillsByGroup = skillGroups
-      .map((group) => {
-        const picked = group.items.filter((item) => selectedSkills.has(item));
-        return picked.length ? `  ${group.label}: ${picked.join(", ")}` : null;
-      })
-      .filter(Boolean);
+    const selectedSkillList = skillGroups
+      .flatMap((group) => group.items)
+      .filter((item) => selectedSkills.has(item));
 
-    const messageLines = [
-      `=== VENDOR APPLICATION: ${vendorTypeLabel} ===`,
-      "",
-      "PERSONAL BIO:",
-      form.personalBio || "(not provided)",
-      "",
-      "COMPANY CV:",
-      form.companyCv || "(not provided)",
-      "",
-      `HOURLY RATE: ${form.hourlyRate || "(not provided)"}`,
-      `AVAILABLE HOURS / MONTH: ${form.hoursPerMonth || "(not provided)"}`,
-      "",
-      "UNIQUE AVAILABILITY NOTES:",
-      form.availabilityNotes || "(none)",
-      "",
-      `SECTOR EXPERIENCE (${selectedSectors.size} selected):`,
-      selectedSectors.size ? `  ${Array.from(selectedSectors).join(", ")}` : "  (none selected)",
-      "",
-      `SKILLS (${selectedSkills.size} selected):`,
-      ...(skillsByGroup.length ? skillsByGroup : ["  (none selected)"]),
-      "",
-      "ADDITIONAL PLATFORMS / CODING LANGUAGES:",
-      form.additionalSkills || "(none listed)",
-      "",
-      `CERTIFICATIONS (${certifications.length} listed):`,
-      ...(certifications.length
-        ? certifications.map(
-            (cert, i) =>
-              `  ${i + 1}. ${cert.name || "(unnamed)"} — ${cert.isCurrent ? "Current" : "Expired"} — Provider: ${cert.provider || "(not specified)"}`,
-          )
-        : ["  (none listed)"]),
-      "",
-      "DOCUMENTS (metadata captured — files must be emailed separately):",
-      `- Resume: ${describeFile(resumeFile)}`,
-      `- W9: ${describeFile(w9File)}`,
-      `- Headshot: ${describeFile(headshotFile)}`,
-      "",
-      "CONSENT:",
-      `- Marketing-data use: ${form.marketingConsent ? "GRANTED" : "NOT GRANTED"}`,
-      `- Name & likeness in sales materials / RFPs (not on digitaltherapy.io): ${form.nameUsageConsent ? "GRANTED" : "NOT GRANTED"}`,
-      "",
-      `SIGNATURE: ${form.signature || "(not signed)"}`,
-      `SIGNED AT: ${new Date().toISOString()}`,
+    // Read any attached documents into base64 for transport.
+    const fileEntries: { field: "resume" | "w9" | "headshot"; meta: FileMeta }[] = [
+      { field: "resume", meta: resumeFile },
+      { field: "w9", meta: w9File },
+      { field: "headshot", meta: headshotFile },
     ];
 
-    submitContact.mutate({
+    let files: { field: "resume" | "w9" | "headshot"; filename: string; mimeType: string; dataBase64: string }[];
+    try {
+      files = await Promise.all(
+        fileEntries
+          .filter((e): e is { field: "resume" | "w9" | "headshot"; meta: NonNullable<FileMeta> } => e.meta !== null)
+          .map(async (e) => ({
+            field: e.field,
+            filename: e.meta.name,
+            mimeType: e.meta.type || "application/octet-stream",
+            dataBase64: await fileToBase64(e.meta.file),
+          })),
+      );
+    } catch {
+      toast.error("We could not read one of your files. Please re-select and try again.");
+      return;
+    }
+
+    submitVendor.mutate({
+      vendorTypeLabel,
       name: form.name,
       email: form.email,
-      organization: "", // not collected separately on this form
       role: form.role,
-      message: messageLines.join("\n"),
+      personalBio: form.personalBio,
+      companyCv: form.companyCv,
+      hourlyRate: form.hourlyRate,
+      hoursPerMonth: form.hoursPerMonth,
+      availabilityNotes: form.availabilityNotes,
+      additionalSkills: form.additionalSkills,
+      sectors: Array.from(selectedSectors),
+      skills: selectedSkillList,
+      certifications: certifications.map((c) => ({
+        name: c.name,
+        isCurrent: c.isCurrent,
+        provider: c.provider,
+      })),
+      marketingConsent: form.marketingConsent,
+      nameUsageConsent: form.nameUsageConsent,
+      signature: form.signature,
       context,
       sourcePage: getSourcePage(),
+      files,
     });
   };
 
@@ -311,11 +321,12 @@ export function VendorApplicationDialog({
                 <div className="text-sm leading-6 text-black/85">
                   <p className="font-semibold">Documents</p>
                   <p className="mt-1 text-black/78">
-                    Select your Resume, W9, and headshot below. After you submit, email the actual files to{" "}
+                    Attach your Resume, W9, and headshot below &mdash; they upload securely with your
+                    application (up to 8MB each). Questions? Reach us at{" "}
                     <a className="font-semibold text-[#0A65FF] underline" href="mailto:hello@digitaltherapy.io">
                       hello@digitaltherapy.io
-                    </a>{" "}
-                    referencing your name &amp; the vendor type.
+                    </a>
+                    .
                   </p>
                 </div>
               </div>
@@ -545,7 +556,7 @@ export function VendorApplicationDialog({
             <fieldset className="space-y-5">
               <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">Documents</legend>
               <p className="-mt-2 text-xs text-black/60">
-                Select each file to record its filename. After submitting, email the actual files to <span className="font-semibold">hello@digitaltherapy.io</span>.
+                Attach each file (up to 8MB) &mdash; they upload securely with your application.
               </p>
               <div className="grid gap-4 sm:grid-cols-3">
                 {[
@@ -618,10 +629,10 @@ export function VendorApplicationDialog({
 
             <button
               type="submit"
-              disabled={submitContact.isPending}
+              disabled={submitVendor.isPending}
               className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#0A65FF] px-6 py-4 text-base font-semibold text-white shadow-[0_18px_45px_rgba(10,101,255,0.22)] transition-all duration-300 hover:bg-[#004ed1] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {submitContact.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+              {submitVendor.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
               Submit application
             </button>
           </form>
