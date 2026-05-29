@@ -59,7 +59,7 @@ const structuralFailures = [
   {
     eyebrow: "02",
     title: "Misaligned incentives",
-    copy: "Traditional advisory firms often reward originating revenue, protecting client ownership, and maximizing practice utilization. They rarely reward cross-functional collaboration, which turns transformation into a political process instead of an accountable operating model.",
+    copy: "“Eat what you kill” compensation models reward partners for bringing in business — not for collaborating. Service line leaders are unmotivated to cross-sell from different departments for fear of losing control over their clients. Cross-selling becomes a reactive scramble for revenue.",
     icon: GitBranch,
   },
   {
@@ -235,6 +235,31 @@ export default function Thesis() {
                 );
               })}
             </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-24 lg:py-32">
+          <div className="container">
+            <motion.div {...fadeUp} className="mx-auto max-w-4xl">
+              <SectionLabel>How Digital Therapy works</SectionLabel>
+              <h2 className="font-display text-[55px] leading-[0.92] tracking-[-0.065em] text-[#111111]">
+                Built to work differently.
+              </h2>
+              <div className="mt-10 space-y-6 text-lg leading-8 text-black/85">
+                <p>
+                  Most transformation programs fail because the team doing the work never bothers to learn how the business actually runs. They optimize in a vacuum, automate broken processes, and hand over solutions that don&rsquo;t survive first contact with real operations.
+                </p>
+                <p>
+                  Digital Therapy was built to work differently. We focus on the intersection of technology, operations, and accounting &mdash; three functions that have to move together for transformation to stick. Before we touch a system, we learn the business: how it makes money, where the bottlenecks live, how leadership makes decisions, and what the team on the ground actually deals with day to day.
+                </p>
+                <p>
+                  That diagnostic-first approach is what allows us to deliver outcomes that hold, not just impressive demos that collapse after the first month. Our team brings backgrounds that don&rsquo;t naturally converge in the market: senior technologists, finance operators, and process designers working as a single unit, not siloed workstreams trading handoffs and playing pass the buck.
+                </p>
+              </div>
+              <p className="mt-8 border-l-2 border-[#0A65FF] pl-6 font-display text-2xl leading-[1.3] tracking-[-0.02em] text-[#111111]">
+                The result is modernization you control &mdash; with infrastructure, processes, and reporting that scale on your terms.
+              </p>
+            </motion.div>
           </div>
         </section>
 

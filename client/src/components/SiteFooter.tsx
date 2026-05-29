@@ -45,7 +45,7 @@ export default function SiteFooter() {
         >
           <div>
             <p className="text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">For specialists</p>
-            <p className="mt-2 font-display text-2xl leading-tight tracking-[-0.03em] text-[#111111] sm:whitespace-nowrap sm:text-3xl">
+            <p className="mt-2 whitespace-nowrap font-display text-[clamp(1.05rem,2.6vw,1.875rem)] leading-tight tracking-[-0.03em] text-[#111111]">
               Become a Digital Therapy vendor.
             </p>
           </div>

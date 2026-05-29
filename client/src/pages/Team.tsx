@@ -46,6 +46,7 @@ const headshots = {
   valerioMirof: "/team/valerio.avif",
   geoffHorn: "/team/geoff.avif",
   dariaShulenko: "/team/daria.avif",
+  dougGray: "/team/doug-blue.png",
 };
 
 const fadeUp = {
@@ -132,10 +133,30 @@ const groups: Array<{
   },
 ];
 
-const extendedNetwork: Array<TeamPerson & { group: string; icon: typeof Landmark }> = [
-  { name: "Geoff Horn", role: "Payments", group: "Alliances", icon: Landmark, imageUrl: headshots.geoffHorn },
-  { name: "Bruce Ditman", role: "Advisor", group: "Advisors", icon: BadgeCheck, imageUrl: headshots.bruceDitman },
+const extendedNetwork: Array<
+  TeamPerson & { group: string; icon: typeof Landmark; imageClassName?: string; imageContainerClassName?: string }
+> = [
+  {
+    name: "Geoff Horn",
+    role: "Payments",
+    group: "Alliances",
+    icon: Landmark,
+    imageUrl: headshots.geoffHorn,
+    // Match Doug & Liron's framing: solid brand-blue surround with the photo scaled down inside it.
+    imageContainerClassName: "-mx-2 -mt-2 mb-5 overflow-hidden rounded-[1.35rem] bg-[#0A65FF]",
+    imageClassName: "h-56 w-full object-contain object-center p-4",
+  },
+  {
+    name: "Bruce Ditman",
+    role: "Advisor",
+    group: "Advisors",
+    icon: BadgeCheck,
+    imageUrl: headshots.bruceDitman,
+    imageContainerClassName: "-mx-2 -mt-2 mb-5 overflow-hidden rounded-[1.35rem] bg-[#0A65FF]",
+    imageClassName: "h-56 w-full object-contain object-center p-4",
+  },
   { name: "Liron David", role: "Advisor", group: "Advisors", icon: BadgeCheck, imageUrl: headshots.lironDavid },
+  { name: "Doug Gray", role: "Advisor", group: "Advisors", icon: BadgeCheck, imageUrl: headshots.dougGray },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -340,7 +361,7 @@ export default function Team() {
                 Leaders
               </h2>
             </motion.div>
-            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-12 flex flex-wrap justify-center gap-15 sm:justify-start">
               {leaders.map((leader, index) => {
                 const cardInner = (
                   <>
@@ -355,25 +376,29 @@ export default function Team() {
                     <p className={`${leader.imageUrl ? "mt-0" : "mt-8"} text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]`}>{leader.role}</p>
                     <h3 className="mt-3 font-display text-4xl leading-none tracking-[-0.05em]">{leader.name}</h3>
                     <p className="mt-5 text-sm leading-6 text-black/78">{leader.specialty}</p>
-                    {leader.isFounder ? (
+                    {leader.isFounder || leader.bio ? (
                       <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#0A65FF] transition-transform duration-300 group-hover:translate-x-1">
-                        Read founder story
+                        Read bio
                         <ChevronRight className="h-4 w-4" />
                       </span>
                     ) : null}
                   </>
                 );
 
+                // Match the Alliances card sizing: cards lock at ~280px wide and never grow with the browser.
+                const cardBaseClasses =
+                  "group relative w-full max-w-[300px] sm:w-[280px] overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] p-7 shadow-[0_20px_55px_rgba(17,17,17,0.06)]";
+
                 if (leader.isFounder) {
                   return (
                     <FounderStoryDialog key={leader.name} leader={leader}>
                       <motion.button
                         type="button"
-                        aria-label={`Read founder story: ${leader.name}`}
+                        aria-label={`Read bio: ${leader.name}`}
                         data-testid="founder-card-trigger"
                         {...fadeUp}
                         transition={{ ...fadeUp.transition, delay: index * 0.08 }}
-                        className="group relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] p-7 text-left shadow-[0_20px_55px_rgba(17,17,17,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE]"
+                        className={`${cardBaseClasses} text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE]`}
                       >
                         {cardInner}
                       </motion.button>
@@ -389,7 +414,7 @@ export default function Team() {
                         aria-label={`Read profile: ${leader.name}`}
                         {...fadeUp}
                         transition={{ ...fadeUp.transition, delay: index * 0.08 }}
-                        className="group relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] p-7 text-left shadow-[0_20px_55px_rgba(17,17,17,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE]"
+                        className={`${cardBaseClasses} text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE]`}
                       >
                         {cardInner}
                       </motion.button>
@@ -402,7 +427,7 @@ export default function Team() {
                     key={leader.name}
                     {...fadeUp}
                     transition={{ ...fadeUp.transition, delay: index * 0.08 }}
-                    className="group relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] p-7 shadow-[0_20px_55px_rgba(17,17,17,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)]"
+                    className={`${cardBaseClasses} transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)]`}
                   >
                     {cardInner}
                   </motion.article>
@@ -494,14 +519,23 @@ export default function Team() {
                 Alliances
               </h2>
             </motion.div>
-            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-12 flex flex-wrap justify-center gap-15 sm:justify-start">
               {extendedNetwork.map((person, index) => {
                 const Icon = person.icon;
                 const cardBody = (
                   <>
                     {person.imageUrl ? (
-                      <div className="-mx-2 -mt-2 mb-5 overflow-hidden rounded-[1.35rem] bg-[#0A65FF]/8">
-                        <img src={person.imageUrl} alt={person.name} className="h-56 w-full object-cover object-center" />
+                      <div
+                        className={
+                          person.imageContainerClassName ??
+                          "-mx-2 -mt-2 mb-5 overflow-hidden rounded-[1.35rem] bg-[#0A65FF]/8"
+                        }
+                      >
+                        <img
+                          src={person.imageUrl}
+                          alt={person.name}
+                          className={person.imageClassName ?? "h-56 w-full object-cover object-center"}
+                        />
                       </div>
                     ) : null}
                     <div className="flex items-center justify-between gap-4">
@@ -515,6 +549,10 @@ export default function Team() {
                   </>
                 );
 
+                // Cards locked to a fixed ~280px width so photos don't stretch / over-zoom on wider screens.
+                const cardClasses =
+                  "w-full max-w-[300px] sm:w-[280px] overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 text-left shadow-[0_18px_45px_rgba(17,17,17,0.05)]";
+
                 if (person.bio) {
                   return (
                     <MemberBioDialog key={`${person.group}-${person.name}`} member={person}>
@@ -523,7 +561,7 @@ export default function Team() {
                         aria-label={`Read profile: ${person.name}`}
                         {...fadeUp}
                         transition={{ ...fadeUp.transition, delay: index * 0.05 }}
-                        className="overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 text-left shadow-[0_18px_45px_rgba(17,17,17,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                        className={`${cardClasses} transition-all duration-300 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2`}
                       >
                         {cardBody}
                       </motion.button>
@@ -536,7 +574,7 @@ export default function Team() {
                     key={`${person.group}-${person.name}`}
                     {...fadeUp}
                     transition={{ ...fadeUp.transition, delay: index * 0.05 }}
-                    className="overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 shadow-[0_18px_45px_rgba(17,17,17,0.05)]"
+                    className={cardClasses}
                   >
                     {cardBody}
                   </motion.article>

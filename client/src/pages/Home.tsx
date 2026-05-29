@@ -5,7 +5,10 @@
  */
 import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
 import PublicHeader from "@/components/PublicHeader";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { caseStudies } from "@/data/caseStudies";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import {
   BarChart3,
   Bot,
@@ -139,6 +142,9 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 export default function Home() {
+  const [openCaseStudyIndex, setOpenCaseStudyIndex] = useState<number | null>(null);
+  const activeCaseStudy = openCaseStudyIndex !== null ? caseStudies[openCaseStudyIndex] : null;
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#111111] selection:bg-[#0A65FF] selection:text-white">
       <PublicHeader
@@ -192,11 +198,17 @@ export default function Home() {
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
                 <img src={welcomeVisual} alt="Welcome to Digital Therapy" className="aspect-[16/8] w-full object-cover object-[center_58%]" />
               </div>
-              <div className="relative mt-5 grid gap-3 rounded-[1.35rem] border border-black/10 bg-white p-4 shadow-[0_18px_45px_rgba(16,24,40,0.08)] sm:grid-cols-3">
-                {["Save Time", "Reduce Burn", "Make more money"].map((title) => (
-                  <div key={title} className="border-l border-black/10 pl-3 first:border-l-0 first:pl-0">
-                    <div className="text-sm font-bold">{title}</div>
-                  </div>
+              <div className="relative mt-5 grid gap-1 overflow-hidden rounded-[1.35rem] border border-black/10 bg-white p-1 shadow-[0_18px_45px_rgba(16,24,40,0.08)] sm:grid-cols-3">
+                {caseStudies.map((study, index) => (
+                  <button
+                    key={study.label}
+                    type="button"
+                    onClick={() => setOpenCaseStudyIndex(index)}
+                    aria-label={`See the ${study.label} case study`}
+                    className="group flex items-center justify-center rounded-[1rem] px-3 py-3 text-sm font-bold text-[#111111] transition-colors duration-200 hover:bg-[#0A65FF] hover:text-white focus:outline-none focus-visible:bg-[#0A65FF] focus-visible:text-white focus-visible:ring-2 focus-visible:ring-[#0A65FF]/50 focus-visible:ring-offset-2"
+                  >
+                    {study.label}
+                  </button>
                 ))}
               </div>
               <div className="mt-6 flex justify-center lg:justify-end">
@@ -410,7 +422,7 @@ export default function Home() {
             <motion.div {...fadeUp}>
               <img src={markUrl} alt="Digital Therapy picture mark" className="h-14 w-14 object-contain" />
               <h2 className="mt-9 font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
-                Let’s find the first win !
+                Let’s get started.
               </h2>
               <p className="mt-7 max-w-2xl text-xl leading-8 text-black/80">
                 In 20 minutes, we can explore current pain points, identify how Digital Therapy can deliver meaningful value, and tour one or two custom solutions deployed for existing clients.
@@ -430,6 +442,40 @@ export default function Home() {
           </div>
         </section>
       </main>
+
+      {/* Case-study lightbox: opens when a Save Time / Reduce Burn / Make more money pill is clicked */}
+      <Dialog open={openCaseStudyIndex !== null} onOpenChange={(v) => !v && setOpenCaseStudyIndex(null)}>
+        <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[1100px] sm:rounded-[2rem]">
+          {activeCaseStudy ? (
+            <>
+              <DialogHeader className="border-b border-black/10 bg-white px-8 pb-7 pt-8 text-left sm:px-10 sm:pt-10">
+                <p className="text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                  Case Study · {activeCaseStudy.label}
+                </p>
+                <DialogTitle className="mt-3 font-display text-3xl leading-[1.1] tracking-[-0.03em] text-[#111111] sm:text-4xl">
+                  {activeCaseStudy.title}
+                </DialogTitle>
+                <p className="mt-3 text-xs italic text-black/55">
+                  Case studies anonymized in respect of client privacy.
+                </p>
+              </DialogHeader>
+              <div className="grid gap-px overflow-hidden bg-black/10 sm:grid-cols-2">
+                {[
+                  { label: "Project Description", body: activeCaseStudy.projectDescription },
+                  { label: "Problem State", body: activeCaseStudy.problemState },
+                  { label: "Solution State", body: activeCaseStudy.solutionState },
+                  { label: "Impact", body: activeCaseStudy.impact },
+                ].map((quadrant) => (
+                  <div key={quadrant.label} className="bg-[#F7F4EE] px-8 py-7 sm:px-10 sm:py-9">
+                    <p className="text-[0.65rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">{quadrant.label}</p>
+                    <p className="mt-3 text-base leading-7 text-black/85">{quadrant.body}</p>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : null}
+        </DialogContent>
+      </Dialog>
 
     </div>
   );

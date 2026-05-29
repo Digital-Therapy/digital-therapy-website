@@ -116,7 +116,7 @@ export default function DTBrain() {
       <PublicHeader
         activeLabel="DT Brain"
         bookingContext="DT Brain private AI booking"
-        showMainSiteLink
+        contactContext="DT Brain page navigation contact"
       />
 
       <main className="pt-20">

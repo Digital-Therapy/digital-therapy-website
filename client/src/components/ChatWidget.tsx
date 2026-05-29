@@ -28,8 +28,28 @@ type BotRoute = {
 };
 
 // Heuristic routing — every keyword listed here is matched case-insensitively
-// against the visitor's message. First matching route wins.
+// against the visitor's message. First matching route wins, so more specific
+// routes (e.g. specific people) MUST come before more general ones (e.g. team).
 const routes: BotRoute[] = [
+  // Person-specific routes — must come before the general "team" route
+  {
+    keywords: ["jonathan kobrin", "jon kobrin", "kobrin", "who is jonathan", "who is jon"],
+    reply: "Jonathan Kobrin is Digital Therapy's Founder & CEO. He created the Fusion Team concept and brought it to market through Digital Therapy. Tap below to read his full bio.",
+    url: "/team",
+    ctaLabel: "Read Jonathan's bio",
+  },
+  {
+    keywords: ["milton rodas", "milton", "rodas", "who is milton", "chief solution engineer"],
+    reply: "Milton Rodas is our Chief Solution Engineer — a former Tesla and Stellantis Lead Project Architect & Automation Engineer. He owns systems architecture, integration, and technical execution. Tap below for his full bio.",
+    url: "/team",
+    ctaLabel: "Read Milton's bio",
+  },
+  {
+    keywords: ["hunter atkins", "hunter", "atkins", "who is hunter"],
+    reply: "Hunter Atkins, CPA is a licensed CPA and MBA who leads our Finance & Accounting work — accounting transformation, AP automation, ERP migrations, consolidated investment reporting, and fractional controllership. Tap below for his full bio.",
+    url: "/team",
+    ctaLabel: "Read Hunter's bio",
+  },
   {
     keywords: ["capabilit", "what do you do", "services", "what can", "offerings", "solutions"],
     reply: "We build software, process flows, and automations that multiply the capacity of your workforce. Here's a tour of our Capabilities:",

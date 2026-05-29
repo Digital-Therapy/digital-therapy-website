@@ -6,13 +6,12 @@
 import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
 import PublicHeader from "@/components/PublicHeader";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { caseStudies } from "@/data/caseStudies";
 import { motion } from "framer-motion";
 import {
-  AlertCircle,
   BarChart3,
   Bot,
   Building2,
-  Check,
   ChevronRight,
   ClipboardCheck,
   Database,
@@ -39,62 +38,51 @@ const fadeUp = {
 
 const capabilities = [
   {
-    title: "Entity + Revenue mapping",
+    title: "Entity + Cashflow Mapping",
     copy: "Entity, trust, account, investment, real-estate, and operating-company views organized into one trusted map.",
     icon: Network,
+    tool: "/entity-cashflow-mapping.png",
+    toolAlt: "Entity + Cashflow Mapping tool diagram",
   },
   {
-    title: "AI Data-Aggregation",
+    title: "Warehouse & Data-Aggregation",
     copy: "Unify your data by connecting every source to your DT On-Prem central warehouse. We can migrate any data repository including legacy mainframe & green screen systems.",
     icon: Sparkles,
+    tool: "/warehouse.png",
+    toolAlt: "Digital Therapy data warehouse diagram",
+    toolButtonLabel: "See warehouse diagram",
   },
   {
     title: "Accounting Systems",
     copy: "Close acceleration, AP and AR workflow improvement, reporting evidence, control design, and automation-forward accounting support.",
     icon: ClipboardCheck,
+    tool: "/close-faster.png",
+    toolAlt: "Squeeze your month-end-close down to a week — four-phase framework",
+    toolButtonLabel: "See close framework",
   },
   {
-    title: "Alternatives workflows",
+    title: "Single pane of glass",
     copy: "Capital calls, notices, statements, subscriptions, document intake, investment data capture, and exception handling for private investments.",
     icon: Building2,
+    tool: "/consolidated-financials.png",
+    toolAlt: "Single-pane-of-glass consolidated financial view",
+    toolButtonLabel: "See consolidated view",
   },
   {
     title: "Document automation",
     copy: "AI document agents that classify, extract, route, summarize, and preserve source evidence for sensitive family-office materials.",
     icon: FileSearch,
+    tool: "/invoice-ocr-ai.png",
+    toolAlt: "Invoice OCR + AI document automation case study",
+    toolButtonLabel: "See case study",
   },
   {
-    title: "Custom reporting",
+    title: "Insights & Reporting",
     copy: "Dashboards, ad-hoc owner questions, scheduled reporting, narrative commentary, and self-serve views tailored to each stakeholder.",
     icon: BarChart3,
-  },
-];
-
-// PLACEHOLDER PROBLEM STATEMENTS — inferred from each solution. Replace with brand-voice copy.
-const problemSolutionPairs = [
-  {
-    problem: "Sensitive data is scattered across systems with no clear source of truth.",
-    solution: "A unified, secure system they can trust with their most sensitive data.",
-  },
-  {
-    problem: "Generic SaaS tools force lean teams to wrestle with bloated workflows.",
-    solution: "Personalized, flexible solutions enabling lean teams to manage volume and complexity.",
-  },
-  {
-    problem: "Manual, repetitive tasks consume hours that should go to higher-value work.",
-    solution: "Automation to supplant tedious processes and dramatically save time.",
-  },
-  {
-    problem: "Big Firm tax & accounting fees keep rising while internal overhead grows.",
-    solution: "Reduced Big Firm tax bills and internal accounting burden.",
-  },
-  {
-    problem: "Cloud LLMs expose family-office data to third parties and external risk.",
-    solution: "On-premise deployment — LLMs offline, data fully within their control.",
-  },
-  {
-    problem: "Ad-hoc questions require chasing analysts and waiting for one-off reports.",
-    solution: "Rich, 24/7 self-serve ad-hoc reporting on any asset, project, or investment.",
+    tool: "/insights.png",
+    toolAlt: "Digital Therapy insights and reporting tool",
+    toolButtonLabel: "More on Insights",
   },
 ];
 
@@ -139,8 +127,9 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 export default function Capabilities() {
-  const [openPairIndex, setOpenPairIndex] = useState<number | null>(null);
-  const activePair = openPairIndex !== null ? problemSolutionPairs[openPairIndex] : null;
+  const [openCaseStudyIndex, setOpenCaseStudyIndex] = useState<number | null>(null);
+  const [openTool, setOpenTool] = useState<{ src: string; alt: string; title: string } | null>(null);
+  const activeCaseStudy = openCaseStudyIndex !== null ? caseStudies[openCaseStudyIndex] : null;
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#111111] selection:bg-[#0A65FF] selection:text-white">
@@ -197,93 +186,100 @@ export default function Capabilities() {
         </section>
 
         <section id="typical-requests" className="bg-white py-24 lg:py-32">
-          <div className="container grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
-            <motion.div {...fadeUp}>
-              <SectionLabel>Typical Family Office Solutions</SectionLabel>
+          <div className="container">
+            <motion.div {...fadeUp} className="max-w-4xl">
+              <SectionLabel>Outcomes for family offices</SectionLabel>
               <h2 className="font-display text-[60px] leading-[0.92] tracking-[-0.06em]">
-                Problems + Solutions
+                Transformation Case Studies
               </h2>
               <p className="mt-6 text-lg leading-8 text-black/80">
-                Family offices seek practical outcomes. They tend to choose solutions that prioritize:
-              </p>
-              <ol className="mt-4 list-decimal space-y-2 pl-6 text-lg leading-8 text-black/80 marker:font-semibold marker:text-[#0A65FF]">
-                <li>Security</li>
-                <li>Privacy</li>
-                <li>Control</li>
-                <li>Independence</li>
-                <li>Reduce operational burden</li>
-                <li>Increase speed by automation</li>
-              </ol>
-              <p className="mt-6 text-lg leading-8 text-black/80">
-                As long as their preferences &amp; priorities aren&rsquo;t compromised in the process.
+                Three real Digital Therapy engagements — anonymized in respect of client privacy. Click any card for the full Project Description, Problem State, Solution State, and Impact.
               </p>
             </motion.div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {problemSolutionPairs.map((pair, index) => (
+
+            <div className="mt-12 grid gap-5 lg:grid-cols-3">
+              {caseStudies.map((study, index) => (
                 <motion.button
                   type="button"
-                  key={pair.solution}
-                  onClick={() => setOpenPairIndex(index)}
+                  key={study.label}
+                  onClick={() => setOpenCaseStudyIndex(index)}
                   {...fadeUp}
-                  transition={{ ...fadeUp.transition, delay: index * 0.05 }}
-                  aria-label={`Open problem and solution detail for: ${pair.problem}`}
-                  className="group relative min-h-[190px] overflow-hidden border border-black/10 bg-[#F7F4EE] p-6 text-left transition-all duration-500 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/50"
+                  transition={{ ...fadeUp.transition, delay: index * 0.06 }}
+                  aria-label={`Open ${study.label} case study`}
+                  className="group relative flex min-h-[320px] flex-col overflow-hidden rounded-[1.6rem] border border-black/10 bg-[#F7F4EE] p-7 text-left shadow-[0_18px_50px_rgba(17,17,17,0.05)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#0A65FF] hover:shadow-[0_28px_70px_rgba(10,101,255,0.30)] focus:outline-none focus-visible:bg-[#0A65FF] focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
                 >
-                  {/* Problem — default state */}
-                  <div className="flex items-start gap-4 transition-opacity duration-300 group-hover:opacity-0">
-                    <span className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black/80 text-white">
-                      <AlertCircle className="h-4 w-4" />
-                    </span>
-                    <div>
-                      <div className="text-[0.65rem] font-bold uppercase tracking-[0.22em] text-black/55">Problem</div>
-                      <p className="mt-2 text-base leading-7 text-black/85">{pair.problem}</p>
-                    </div>
-                  </div>
-                  {/* Solution — revealed on hover */}
-                  <div className="absolute inset-0 flex items-start gap-4 bg-white p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    <span className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0A65FF] text-white">
-                      <Check className="h-4 w-4" />
-                    </span>
-                    <div>
-                      <div className="text-[0.65rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">Solution</div>
-                      <p className="mt-2 text-base leading-7 text-black/85">{pair.solution}</p>
-                    </div>
-                  </div>
+                  <span className="inline-flex w-fit items-center gap-2 rounded-full bg-[#0A65FF] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-white transition-colors duration-300 group-hover:bg-white group-hover:text-[#0A65FF] group-focus-visible:bg-white group-focus-visible:text-[#0A65FF]">
+                    {study.label}
+                  </span>
+                  <h3 className="mt-6 font-display text-2xl leading-[1.2] tracking-[-0.03em] text-[#111111] transition-colors duration-300 group-hover:text-white group-focus-visible:text-white">
+                    {study.title}
+                  </h3>
+                  <p className="mt-4 text-base leading-7 text-black/80 transition-colors duration-300 group-hover:text-white/90 group-focus-visible:text-white/90">
+                    {study.projectDescription}
+                  </p>
+                  <span className="mt-auto inline-flex items-center gap-1.5 pt-6 text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF] transition-colors duration-300 group-hover:text-white group-focus-visible:text-white">
+                    Read case study
+                    <ChevronRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
                 </motion.button>
               ))}
             </div>
           </div>
 
-          <Dialog open={openPairIndex !== null} onOpenChange={(v) => !v && setOpenPairIndex(null)}>
-            <DialogContent className="max-w-4xl">
-              <DialogHeader>
-                <DialogTitle className="font-display text-3xl tracking-[-0.04em]">Problem &amp; Solution</DialogTitle>
-              </DialogHeader>
-              {activePair && (
-                <div className="mt-2 grid gap-4 md:grid-cols-2">
-                  <div className="rounded-2xl border border-black/10 bg-[#F7F4EE] p-6">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black/80 text-white">
-                        <AlertCircle className="h-4 w-4" />
-                      </span>
-                      <div className="text-[0.65rem] font-bold uppercase tracking-[0.22em] text-black/55">Problem</div>
-                    </div>
-                    <p className="mt-4 text-lg leading-8 text-black/85">{activePair.problem}</p>
+          {/* Case-study modal: 4-quadrant layout (Project Description / Problem State / Solution State / Impact) */}
+          <Dialog open={openCaseStudyIndex !== null} onOpenChange={(v) => !v && setOpenCaseStudyIndex(null)}>
+            <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[1100px] sm:rounded-[2rem]">
+              {activeCaseStudy ? (
+                <>
+                  <DialogHeader className="border-b border-black/10 bg-white px-8 pb-7 pt-8 text-left sm:px-10 sm:pt-10">
+                    <p className="text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                      Case Study · {activeCaseStudy.label}
+                    </p>
+                    <DialogTitle className="mt-3 font-display text-3xl leading-[1.1] tracking-[-0.03em] text-[#111111] sm:text-4xl">
+                      {activeCaseStudy.title}
+                    </DialogTitle>
+                    <p className="mt-3 text-xs italic text-black/55">
+                      Case studies anonymized in respect of client privacy.
+                    </p>
+                  </DialogHeader>
+                  <div className="grid gap-px overflow-hidden bg-black/10 sm:grid-cols-2">
+                    {[
+                      { label: "Project Description", body: activeCaseStudy.projectDescription },
+                      { label: "Problem State", body: activeCaseStudy.problemState },
+                      { label: "Solution State", body: activeCaseStudy.solutionState },
+                      { label: "Impact", body: activeCaseStudy.impact },
+                    ].map((quadrant) => (
+                      <div key={quadrant.label} className="bg-[#F7F4EE] px-8 py-7 sm:px-10 sm:py-9">
+                        <p className="text-[0.65rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">{quadrant.label}</p>
+                        <p className="mt-3 text-base leading-7 text-black/85">{quadrant.body}</p>
+                      </div>
+                    ))}
                   </div>
-                  <div className="rounded-2xl border border-[#0A65FF]/25 bg-[#0A65FF]/8 p-6">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0A65FF] text-white">
-                        <Check className="h-4 w-4" />
-                      </span>
-                      <div className="text-[0.65rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">Solution</div>
-                    </div>
-                    <p className="mt-4 text-lg leading-8 text-black/85">{activePair.solution}</p>
-                  </div>
-                </div>
-              )}
+                </>
+              ) : null}
             </DialogContent>
           </Dialog>
         </section>
+
+        {/* Tool lightbox — opens when "See the tool" is clicked on any capability card */}
+        <Dialog open={openTool !== null} onOpenChange={(v) => !v && setOpenTool(null)}>
+          <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[1280px] sm:rounded-[2rem]">
+            {openTool ? (
+              <>
+                <DialogHeader className="px-8 pt-8 sm:px-10 sm:pt-10">
+                  <DialogTitle className="font-display text-3xl tracking-[-0.04em] sm:text-4xl">{openTool.title}</DialogTitle>
+                </DialogHeader>
+                <div className="px-8 pb-8 pt-6 sm:px-10 sm:pb-10">
+                  <img
+                    src={openTool.src}
+                    alt={openTool.alt}
+                    className="block w-full rounded-2xl border border-black/10 bg-white"
+                  />
+                </div>
+              </>
+            ) : null}
+          </DialogContent>
+        </Dialog>
 
         <section className="bg-[#F7F4EE] py-24 lg:py-32">
           <div className="container">
@@ -296,12 +292,15 @@ export default function Capabilities() {
             <div className="mt-14 grid gap-5 lg:grid-cols-3">
               {capabilities.map((capability, index) => {
                 const Icon = capability.icon;
+                const tool = "tool" in capability ? (capability as { tool?: string; toolAlt?: string; toolButtonLabel?: string }).tool : undefined;
+                const toolAlt = "toolAlt" in capability ? (capability as { tool?: string; toolAlt?: string; toolButtonLabel?: string }).toolAlt : undefined;
+                const toolButtonLabel = "toolButtonLabel" in capability ? (capability as { tool?: string; toolAlt?: string; toolButtonLabel?: string }).toolButtonLabel : undefined;
                 return (
                   <motion.article
                     key={capability.title}
                     {...fadeUp}
                     transition={{ ...fadeUp.transition, delay: index * 0.06 }}
-                    className="group min-h-[330px] border border-black/10 bg-white/72 p-7 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-[#0A65FF]/35 hover:bg-white"
+                    className="group relative min-h-[330px] border border-black/10 bg-white/72 p-7 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-[#0A65FF]/35 hover:bg-white"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">0{index + 1}</span>
@@ -309,6 +308,16 @@ export default function Capabilities() {
                     </div>
                     <h3 className="mt-16 text-2xl font-semibold tracking-[-0.04em]">{capability.title}</h3>
                     <p className="mt-4 leading-7 text-black/78">{capability.copy}</p>
+                    {tool ? (
+                      <button
+                        type="button"
+                        onClick={() => setOpenTool({ src: tool, alt: toolAlt ?? capability.title, title: capability.title })}
+                        className="absolute bottom-6 right-6 inline-flex items-center gap-1.5 rounded-full bg-[#0A65FF] px-4 py-2 text-xs font-semibold text-white opacity-0 shadow-[0_12px_30px_rgba(10,101,255,0.30)] transition-all duration-300 group-hover:opacity-100 group-focus-within:opacity-100 hover:bg-[#004ed1] focus:outline-none focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                      >
+                        {toolButtonLabel ?? "See the tool"}
+                        <ChevronRight className="h-3.5 w-3.5" />
+                      </button>
+                    ) : null}
                   </motion.article>
                 );
               })}
