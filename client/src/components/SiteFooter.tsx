@@ -127,12 +127,12 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-black/10 pt-7 text-sm text-black/70 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
+        <div className="mt-12 grid grid-cols-1 items-center gap-4 border-t border-black/10 pt-7 text-sm text-black/70 sm:grid-cols-[1fr_auto_1fr]">
+          <div className="flex items-center gap-3 sm:justify-self-start">
             <img src={markUrl} alt="" aria-hidden="true" className="h-6 w-6 object-contain" />
             <span>© {new Date().getFullYear()} Digital Therapy, LLC. All Rights Reserved.</span>
           </div>
-          <div className="mr-[18px] flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium text-black/65">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm font-medium text-black/65">
             <a href="/terms" className="transition-colors duration-200 hover:text-[#0A65FF]">
               Terms &amp; Conditions
             </a>
@@ -143,6 +143,7 @@ export default function SiteFooter() {
               Accessibility
             </a>
           </div>
+          <div aria-hidden="true" className="hidden sm:block" />
         </div>
       </div>
     </footer>

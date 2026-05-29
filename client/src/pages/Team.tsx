@@ -34,7 +34,7 @@ const boardroomVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_family_office_boardroom-UvecEVLEaVqpouVEhEb9mw.webp";
 const headshots = {
   harryDublinsky: "/team/harry.avif",
-  bruceDitman: "/team/bruce.avif",
+  bruceDitman: "/team/bruce-blue.png",
   lironDavid: "/team/liron.avif",
   jonathanKobrin: "/team/jon.avif",
   hunterAtkins: "/team/hunter.png",
@@ -44,7 +44,7 @@ const headshots = {
   stanGretov: "/team/stan.png",
   vadimLitvak: "/team/vadim.avif",
   valerioMirof: "/team/valerio.avif",
-  geoffHorn: "/team/geoff.avif",
+  geoffHorn: "/team/geoff-blue.png",
   dariaShulenko: "/team/daria.avif",
   dougGray: "/team/doug-blue.png",
 };
@@ -136,27 +136,10 @@ const groups: Array<{
 const extendedNetwork: Array<
   TeamPerson & { group: string; icon: typeof Landmark; imageClassName?: string; imageContainerClassName?: string }
 > = [
-  {
-    name: "Geoff Horn",
-    role: "Payments",
-    group: "Alliances",
-    icon: Landmark,
-    imageUrl: headshots.geoffHorn,
-    // Match Doug & Liron's framing: solid brand-blue surround with the photo scaled down inside it.
-    imageContainerClassName: "-mx-2 -mt-2 mb-5 overflow-hidden rounded-[1.35rem] bg-[#0A65FF]",
-    imageClassName: "h-56 w-full object-contain object-center p-4",
-  },
-  {
-    name: "Bruce Ditman",
-    role: "Advisor",
-    group: "Advisors",
-    icon: BadgeCheck,
-    imageUrl: headshots.bruceDitman,
-    imageContainerClassName: "-mx-2 -mt-2 mb-5 overflow-hidden rounded-[1.35rem] bg-[#0A65FF]",
-    imageClassName: "h-56 w-full object-contain object-center p-4",
-  },
-  { name: "Liron David", role: "Advisor", group: "Advisors", icon: BadgeCheck, imageUrl: headshots.lironDavid },
-  { name: "Doug Gray", role: "Advisor", group: "Advisors", icon: BadgeCheck, imageUrl: headshots.dougGray },
+  { name: "Geoff Horn", role: "Payments", group: "Alliance", icon: Landmark, imageUrl: headshots.geoffHorn },
+  { name: "Bruce Ditman", role: "Advisor", group: "Advisor", icon: BadgeCheck, imageUrl: headshots.bruceDitman },
+  { name: "Liron David", role: "Advisor", group: "Advisor", icon: BadgeCheck, imageUrl: headshots.lironDavid },
+  { name: "Doug Gray", role: "Advisor", group: "Advisor", icon: BadgeCheck, imageUrl: headshots.dougGray },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -385,9 +368,9 @@ export default function Team() {
                   </>
                 );
 
-                // Match the Alliances card sizing: cards lock at ~280px wide and never grow with the browser.
+                // Leader cards lock at ~336px wide (20% wider than the Alliance cards) and never grow with the browser.
                 const cardBaseClasses =
-                  "group relative w-full max-w-[300px] sm:w-[280px] overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] p-7 shadow-[0_20px_55px_rgba(17,17,17,0.06)]";
+                  "group relative w-full max-w-[360px] sm:w-[336px] overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] p-7 shadow-[0_20px_55px_rgba(17,17,17,0.06)]";
 
                 if (leader.isFounder) {
                   return (
