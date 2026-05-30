@@ -48,6 +48,17 @@
         ]
       }
     </script>
+
+    <!--
+      Umami analytics (self-hosted at analytics.dtapps.io). data-domains limits
+      tracking to the production host, so the build-time prerender (which loads
+      pages on 127.0.0.1) self-disables and never sends build hits.
+    -->
+    <script
+      defer
+      src="https://analytics.dtapps.io/script.js"
+      data-website-id="0b1f9eb0-c190-4c70-8b28-9985e1c3cb07"
+      data-domains="dt.dtapps.io"></script>
   </head>
 
   <body>
