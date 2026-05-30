@@ -26,7 +26,8 @@ const buttonBaseClasses =
 
 const variantClasses = {
   primary: "bg-[#0A65FF] text-white shadow-[0_18px_45px_rgba(10,101,255,0.22)] hover:bg-[#004ed1]",
-  secondary: "border border-black/15 bg-white/60 text-[#111111] hover:border-[#0A65FF]/60 hover:text-[#0A65FF]",
+  secondary:
+    "border border-black/15 bg-white/60 text-[#111111] hover:border-[#0A65FF] hover:bg-[#0A65FF] hover:text-white",
 } as const;
 
 type Variant = keyof typeof variantClasses;

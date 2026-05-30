@@ -40,6 +40,8 @@ type ButtonVariant = keyof typeof variantClasses;
 type ContactFormState = {
   name: string;
   email: string;
+  phone: string;
+  website: string;
   organization: string;
   role: string;
   message: string;
@@ -48,6 +50,8 @@ type ContactFormState = {
 const initialContactForm: ContactFormState = {
   name: "",
   email: "",
+  phone: "",
+  website: "",
   organization: "",
   role: "",
   message: "",
@@ -149,14 +153,196 @@ export function BookingWidgetDialog({
   );
 }
 
+type MessageToMemberDialogProps = ActionButtonProps & {
+  memberName: string;
+  memberRole?: string;
+};
+
+/**
+ * Variant of ContactFormDialog used on the Team page for non-leader cards.
+ * Pre-tags the submission with a recipient name so the intake inbox knows
+ * who the message is addressed to and can notify them directly.
+ */
+export function MessageToMemberDialog({
+  variant = "primary",
+  className = "",
+  label = "Send a message",
+  context = "team page message to team member",
+  icon = "message",
+  memberName,
+  memberRole,
+}: MessageToMemberDialogProps) {
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState<ContactFormState>(initialContactForm);
+  const submitContact = trpc.contact.submit.useMutation({
+    onSuccess: () => {
+      setForm(initialContactForm);
+      setOpen(false);
+      toast.success(`Message received. ${memberName} will be notified that you reached out.`);
+    },
+    onError: (error) => {
+      toast.error(error.message || "We could not send the message. Please try again.");
+    },
+  });
+
+  const updateField = (field: keyof ContactFormState, value: string) => {
+    setForm((current) => ({ ...current, [field]: value }));
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    submitContact.mutate({
+      ...form,
+      context: `${context}: ${memberName}`,
+      sourcePage: getSourcePage(),
+      recipientName: memberName,
+      recipientRole: memberRole ?? "",
+    });
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <button type="button" aria-label={`Send a message to ${memberName}`} className={`${buttonBaseClasses} ${variantClasses[variant]} ${className}`}>
+          {label}
+          <ActionIcon icon={icon} />
+        </button>
+      </DialogTrigger>
+      <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[1100px] sm:rounded-[2rem]">
+        <div className="grid gap-0 lg:grid-cols-[0.78fr_1.22fr]">
+          <div className="border-b border-black/10 bg-white/72 p-9 lg:border-b-0 lg:border-r lg:p-11">
+            <DialogHeader>
+              <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#0A65FF] text-white">
+                <MessageSquareText className="h-5 w-5" />
+              </div>
+              <DialogTitle className="font-display text-4xl leading-[0.94] tracking-[-0.06em] text-[#111111]">
+                Send {memberName.split(" ")[0]} a message.
+              </DialogTitle>
+              <DialogDescription className="pt-4 text-base leading-7 text-black/80">
+                Your message routes to <span className="font-semibold text-[#0A65FF]">intake@digitaltherapy.io</span>, and {memberName.split(" ")[0]} will be notified that you reached out to them directly.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="mt-7 inline-flex items-center gap-2 rounded-full border border-[#0A65FF]/25 bg-[#0A65FF]/8 px-4 py-2">
+              <span className="h-2 w-2 rounded-full bg-[#0A65FF]" aria-hidden="true" />
+              <span className="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[#0A65FF]">
+                To · {memberName}
+              </span>
+              {memberRole ? (
+                <span className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-black/55">
+                  · {memberRole}
+                </span>
+              ) : null}
+            </div>
+            <div className="mt-8 space-y-4 text-sm leading-6 text-black/82">
+              {[
+                "Pick the topic, scope, or question you want to put in front of them",
+                "Mention your firm and any timing constraints",
+                "Share enough context for a useful first reply",
+              ].map((item) => (
+                <div key={item} className="flex gap-3 border-t border-black/10 pt-4">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#0A65FF]" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-8 rounded-[1.35rem] border border-[#0A65FF]/15 bg-[#0A65FF]/8 p-5">
+              <div className="flex gap-3">
+                <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#0A65FF]" />
+                <p className="text-sm leading-6 text-black/80">
+                  This form submits inside the site. It does not open your email client.
+                </p>
+              </div>
+            </div>
+          </div>
+          <form onSubmit={handleSubmit} className="space-y-8 bg-white p-9 lg:p-11">
+            <fieldset className="space-y-5">
+              <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">About you</legend>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <label className="space-y-2 text-sm font-semibold text-black/74">
+                  Name
+                  <Input value={form.name} onChange={(event) => updateField("name", event.target.value)} required minLength={2} placeholder="Your name" className="h-11" />
+                </label>
+                <label className="space-y-2 text-sm font-semibold text-black/74">
+                  Work email
+                  <Input value={form.email} onChange={(event) => updateField("email", event.target.value)} required type="email" placeholder="name@firm.com" className="h-11" />
+                </label>
+                <label className="space-y-2 text-sm font-semibold text-black/74">
+                  Phone
+                  <Input value={form.phone} onChange={(event) => updateField("phone", event.target.value)} type="tel" autoComplete="tel" inputMode="tel" placeholder="+1 (555) 123-4567" className="h-11" />
+                </label>
+                <label className="space-y-2 text-sm font-semibold text-black/74">
+                  Website
+                  <Input value={form.website} onChange={(event) => updateField("website", event.target.value)} type="url" autoComplete="url" inputMode="url" placeholder="firm.com" className="h-11" />
+                </label>
+                <label className="space-y-2 text-sm font-semibold text-black/74">
+                  Organization
+                  <Input value={form.organization} onChange={(event) => updateField("organization", event.target.value)} placeholder="Family office or firm" className="h-11" />
+                </label>
+                <label className="space-y-2 text-sm font-semibold text-black/74">
+                  Role
+                  <Input value={form.role} onChange={(event) => updateField("role", event.target.value)} placeholder="Leader, advisor, COO..." className="h-11" />
+                </label>
+              </div>
+            </fieldset>
+            <fieldset className="space-y-3">
+              <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                Message for {memberName}
+              </legend>
+              <Textarea
+                value={form.message}
+                onChange={(event) => updateField("message", event.target.value)}
+                required
+                minLength={20}
+                placeholder={`Briefly describe what you want to put in front of ${memberName.split(" ")[0]} — a question, a project, an introduction, anything specific to their expertise.`}
+                className="min-h-[200px] resize-none"
+              />
+              <p className="text-xs leading-5 text-black/55">
+                Minimum 20 characters. For sensitive information, keep it high-level — they can arrange a private follow-up.
+              </p>
+            </fieldset>
+            <button
+              type="submit"
+              disabled={submitContact.isPending}
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#0A65FF] px-6 py-4 text-base font-semibold text-white shadow-[0_18px_45px_rgba(10,101,255,0.22)] transition-all duration-300 hover:bg-[#004ed1] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {submitContact.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+              Send message to {memberName.split(" ")[0]}
+            </button>
+          </form>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+type ContactFormDialogProps = ActionButtonProps & {
+  // Controlled-mode props: when these are passed, the parent owns the
+  // open/closed state and can drive it programmatically (e.g. from the
+  // Sigmund chat widget's "Send a message" button).
+  open?: boolean;
+  onOpenChange?: (value: boolean) => void;
+  // When true the default trigger button is not rendered (parent supplies
+  // its own trigger or opens the dialog via controlled state).
+  hideTrigger?: boolean;
+};
+
 export function ContactFormDialog({
   variant = "secondary",
   className = "",
   label = "Contact",
   context = "general inquiry",
   icon = "message",
-}: ActionButtonProps) {
-  const [open, setOpen] = useState(false);
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+  hideTrigger = false,
+}: ContactFormDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = (value: boolean) => {
+    if (isControlled) controlledOnOpenChange?.(value);
+    else setInternalOpen(value);
+  };
   const [form, setForm] = useState<ContactFormState>(initialContactForm);
   const submitContact = trpc.contact.submit.useMutation({
     onSuccess: () => {
@@ -184,12 +370,14 @@ export function ContactFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <button type="button" className={`${buttonBaseClasses} ${variantClasses[variant]} ${className}`}>
-          {label}
-          <ActionIcon icon={icon} />
-        </button>
-      </DialogTrigger>
+      {hideTrigger ? null : (
+        <DialogTrigger asChild>
+          <button type="button" className={`${buttonBaseClasses} ${variantClasses[variant]} ${className}`}>
+            {label}
+            <ActionIcon icon={icon} />
+          </button>
+        </DialogTrigger>
+      )}
       <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[1100px] sm:rounded-[2rem]">
         <div className="grid gap-0 lg:grid-cols-[0.78fr_1.22fr]">
           <div className="border-b border-black/10 bg-white/72 p-9 lg:border-b-0 lg:border-r lg:p-11">
@@ -232,6 +420,14 @@ export function ContactFormDialog({
                 <label className="space-y-2 text-sm font-semibold text-black/74">
                   Work email
                   <Input value={form.email} onChange={(event) => updateField("email", event.target.value)} required type="email" placeholder="name@firm.com" className="h-11" />
+                </label>
+                <label className="space-y-2 text-sm font-semibold text-black/74">
+                  Phone
+                  <Input value={form.phone} onChange={(event) => updateField("phone", event.target.value)} type="tel" autoComplete="tel" inputMode="tel" placeholder="+1 (555) 123-4567" className="h-11" />
+                </label>
+                <label className="space-y-2 text-sm font-semibold text-black/74">
+                  Website
+                  <Input value={form.website} onChange={(event) => updateField("website", event.target.value)} type="url" autoComplete="url" inputMode="url" placeholder="firm.com" className="h-11" />
                 </label>
                 <label className="space-y-2 text-sm font-semibold text-black/74">
                   Organization

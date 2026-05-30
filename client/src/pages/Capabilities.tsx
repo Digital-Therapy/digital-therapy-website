@@ -300,7 +300,7 @@ export default function Capabilities() {
                     key={capability.title}
                     {...fadeUp}
                     transition={{ ...fadeUp.transition, delay: index * 0.06 }}
-                    className="group relative min-h-[330px] border border-black/10 bg-white/72 p-7 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-[#0A65FF]/35 hover:bg-white"
+                    className="group relative min-h-[330px] border border-black/10 bg-white/72 p-7 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-[#0A65FF] hover:bg-white hover:ring-2 hover:ring-[#0A65FF] hover:ring-offset-0"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">0{index + 1}</span>

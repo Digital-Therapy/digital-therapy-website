@@ -3,7 +3,7 @@
  * Preserve light ivory surfaces, charcoal typography, restrained Digital Therapy blue,
  * editorial spacing, and fusion-team positioning for family-office audiences.
  */
-import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
+import { BookingWidgetDialog, ContactFormDialog, MessageToMemberDialog } from "@/components/ContactBooking";
 import PublicHeader from "@/components/PublicHeader";
 import {
   Dialog,
@@ -213,7 +213,17 @@ function FounderStoryDialog({ leader, children }: { leader: TeamPerson; children
   );
 }
 
-function MemberBioDialog({ member, children }: { member: TeamPerson; children: React.ReactNode }) {
+function MemberBioDialog({
+  member,
+  children,
+  cta = "message",
+}: {
+  member: TeamPerson;
+  children: React.ReactNode;
+  // "booking" → Apollo 30-min calendar (leaders only).
+  // "message" → routed message to intake@digitaltherapy.io tagged to this individual.
+  cta?: "booking" | "message";
+}) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -254,7 +264,15 @@ function MemberBioDialog({ member, children }: { member: TeamPerson; children: R
                 ))}
             </div>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <BookingWidgetDialog context="team page member profile booking" />
+              {cta === "booking" ? (
+                <BookingWidgetDialog context="team page member profile booking" />
+              ) : (
+                <MessageToMemberDialog
+                  memberName={member.name}
+                  memberRole={member.role}
+                  context="team page member profile message"
+                />
+              )}
             </div>
           </div>
         </div>
@@ -391,7 +409,8 @@ export default function Team() {
 
                 if (leader.bio) {
                   return (
-                    <MemberBioDialog key={leader.name} member={leader}>
+                    // Leaders keep the Apollo 30-min booking CTA.
+                    <MemberBioDialog key={leader.name} member={leader} cta="booking">
                       <motion.button
                         type="button"
                         aria-label={`Read profile: ${leader.name}`}

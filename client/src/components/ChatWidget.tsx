@@ -13,18 +13,26 @@
  *   - WhatsApp forwarding via WhatsApp Business API / Twilio so the
  *     team can take over conversations
  */
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { CalendarDays, Send, X } from "lucide-react";
+import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
+import { CalendarDays, MessageSquareText, Send, X } from "lucide-react";
 import { toast } from "sonner";
+import { ContactFormDialog } from "@/components/ContactBooking";
 import { trpc } from "@/lib/trpc";
 
 const APOLLO_BOOKING_URL = "https://app.apollo.io/#/meet/digitaltherapy";
 
+type Cta =
+  | { kind: "link"; url: string; label: string }
+  | { kind: "message-form"; label: string };
+
 type BotRoute = {
   keywords: string[];
-  reply: string;
+  reply: ReactNode;
   url?: string;
   ctaLabel?: string;
+  // When provided, replaces the single-CTA default built from url + ctaLabel.
+  // Use for replies that need multiple call-to-action buttons.
+  ctas?: Cta[];
 };
 
 // Heuristic routing — every keyword listed here is matched case-insensitively
@@ -49,6 +57,49 @@ const routes: BotRoute[] = [
     reply: "Hunter Atkins, CPA is a licensed CPA and MBA who leads our Finance & Accounting work — accounting transformation, AP automation, ERP migrations, consolidated investment reporting, and fractional controllership. Tap below for his full bio.",
     url: "/team",
     ctaLabel: "Read Hunter's bio",
+  },
+  // "Is DT a good fit / should we hire them" — broad keyword coverage so we
+  // catch operate/leverage-data style questions before they fall through.
+  // Must come before the "thesis"/"capabilit" routes since this is more specific
+  // intent for the same underlying answer.
+  {
+    keywords: [
+      "good company",
+      "good fit",
+      "right fit",
+      "right for us",
+      "right firm",
+      "right partner",
+      "should we hire",
+      "should we engage",
+      "should we work with",
+      "should we use",
+      "should we choose",
+      "are you the right",
+      "are they the right",
+      "are you a good",
+      "why hire",
+      "why choose",
+      "hire to help",
+      "hire you",
+      "leverage our data",
+      "leverage data",
+      "improve how we operate",
+      "improve our operations",
+      "improve operations",
+      "improve operating",
+    ],
+    reply: (
+      <>
+        Digital Therapy boasts a highly experienced team in various areas of Technology, Accounting &amp; Operations.
+        Learn about their consulting <em className="font-bold italic">Thesis</em> or view
+        their <em className="font-bold italic">Capabilities</em>.
+      </>
+    ),
+    ctas: [
+      { kind: "link", url: "/thesis", label: "Read the Thesis" },
+      { kind: "link", url: "/capabilities", label: "View Capabilities" },
+    ],
   },
   {
     keywords: ["capabilit", "what do you do", "services", "what can", "offerings", "solutions"],
@@ -108,14 +159,14 @@ const routes: BotRoute[] = [
 
 type Message = {
   role: "bot" | "user";
-  content: string;
-  cta?: { url: string; label: string };
+  content: ReactNode;
+  ctas?: Cta[];
 };
 
 const greeting: Message = {
   role: "bot",
   content:
-    "Hi — I'm Sigmund, Digital Therapy's bot. Ask me about our Capabilities, Process, DT Brain, Team, or Vendor applications. If I can't help, I'll connect you with one of our team members directly.",
+    "Hi — I'm Sigmund. How can I help you today?",
 };
 
 function matchRoute(text: string): BotRoute | null {
@@ -133,6 +184,9 @@ export function ChatWidget() {
   const [draft, setDraft] = useState("");
   const [messages, setMessages] = useState<Message[]>([greeting]);
   const [bubbleVisible, setBubbleVisible] = useState(false);
+  // Controlled state for the "Send a message" contact-form popup that Sigmund's
+  // fallback reply offers alongside the booking link.
+  const [contactOpen, setContactOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   // Periodic speech bubble next to Sigmund — first nudge ~6s after mount,
@@ -183,12 +237,17 @@ export function ChatWidget() {
     // Bot reply — synthesize a reply via heuristic routing for now.
     setTimeout(() => {
       if (route) {
+        const ctas =
+          route.ctas ??
+          (route.url && route.ctaLabel
+            ? [{ kind: "link", url: route.url, label: route.ctaLabel } as Cta]
+            : undefined);
         setMessages((prev) => [
           ...prev,
           {
             role: "bot",
             content: route.reply,
-            cta: route.url && route.ctaLabel ? { url: route.url, label: route.ctaLabel } : undefined,
+            ctas,
           },
         ]);
       } else {
@@ -198,7 +257,10 @@ export function ChatWidget() {
             role: "bot",
             content:
               "I don't have an instant answer for that — let's set up a quick call with one of our team members to dig in. I've also passed your message along.",
-            cta: { url: APOLLO_BOOKING_URL, label: "Book 30 minutes" },
+            ctas: [
+              { kind: "link", url: APOLLO_BOOKING_URL, label: "Book 30 minutes" },
+              { kind: "message-form", label: "Send a message" },
+            ],
           },
         ]);
       }
@@ -304,18 +366,38 @@ export function ChatWidget() {
                   }
                 >
                   <p className="leading-6">{message.content}</p>
-                  {message.cta ? (
-                    <a
-                      href={message.cta.url}
-                      target={message.cta.url.startsWith("http") ? "_blank" : undefined}
-                      rel={message.cta.url.startsWith("http") ? "noreferrer" : undefined}
-                      className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#0A65FF] px-4 py-2 text-xs font-semibold text-white shadow-[0_8px_22px_rgba(10,101,255,0.25)] transition-transform duration-300 hover:-translate-y-0.5"
-                    >
-                      {message.cta.url === APOLLO_BOOKING_URL ? (
-                        <CalendarDays className="h-3.5 w-3.5" />
-                      ) : null}
-                      {message.cta.label}
-                    </a>
+                  {message.ctas && message.ctas.length > 0 ? (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {message.ctas.map((cta, ctaIndex) => {
+                        if (cta.kind === "link") {
+                          return (
+                            <a
+                              key={ctaIndex}
+                              href={cta.url}
+                              target={cta.url.startsWith("http") ? "_blank" : undefined}
+                              rel={cta.url.startsWith("http") ? "noreferrer" : undefined}
+                              className="inline-flex items-center gap-2 rounded-full bg-[#0A65FF] px-4 py-2 text-xs font-semibold text-white shadow-[0_8px_22px_rgba(10,101,255,0.25)] transition-transform duration-300 hover:-translate-y-0.5"
+                            >
+                              {cta.url === APOLLO_BOOKING_URL ? (
+                                <CalendarDays className="h-3.5 w-3.5" />
+                              ) : null}
+                              {cta.label}
+                            </a>
+                          );
+                        }
+                        return (
+                          <button
+                            key={ctaIndex}
+                            type="button"
+                            onClick={() => setContactOpen(true)}
+                            className="inline-flex items-center gap-2 rounded-full border border-[#0A65FF] bg-white px-4 py-2 text-xs font-semibold text-[#0A65FF] shadow-[0_8px_22px_rgba(10,101,255,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#0A65FF] hover:text-white"
+                          >
+                            <MessageSquareText className="h-3.5 w-3.5" />
+                            {cta.label}
+                          </button>
+                        );
+                      })}
+                    </div>
                   ) : null}
                 </div>
               </div>
@@ -344,6 +426,15 @@ export function ChatWidget() {
           </form>
         </div>
       ) : null}
+
+      {/* Mounted permanently so the chat-message "Send a message" button can open it
+          via controlled state. The trigger is hidden — opening is driven by setContactOpen. */}
+      <ContactFormDialog
+        hideTrigger
+        open={contactOpen}
+        onOpenChange={setContactOpen}
+        context="chat widget fallback send-a-message"
+      />
     </>
   );
 }

@@ -16,12 +16,22 @@ const contactSubmissionInput = z.object({
   email: z.string().trim().email("Please enter a valid work email.").max(320),
   organization: z.string().trim().max(240).optional().default(""),
   role: z.string().trim().max(160).optional().default(""),
-  // Server backstop is min(1): the real contact form enforces minLength=20
+  // Optional phone + website. Format is intentionally permissive — we don't want
+  // to reject international numbers or sites without a scheme. Both are routed
+  // through the notification email only (not persisted to the DB schema).
+  phone: z.string().trim().max(60).optional().default(""),
+  website: z.string().trim().max(500).optional().default(""),
+  // Server backstop is min(1): the formal contact forms enforce minLength=20
   // client-side, while the Sigmund chat widget legitimately sends short
   // messages that must still be captured.
   message: z.string().trim().min(1, "Please enter a message.").max(4000),
   context: z.string().trim().max(240).optional().default("general inquiry"),
   sourcePage: z.string().trim().max(500).optional().default("unknown"),
+  // When the message is addressed to a specific team member (Team page "Send a message" flow),
+  // recipientName is the person being tagged. Used only for the intake notification email
+  // (subject + body) so the intake inbox knows who to route the message to.
+  recipientName: z.string().trim().max(160).optional().default(""),
+  recipientRole: z.string().trim().max(160).optional().default(""),
 });
 
 // Per-file cap (base64-encoded). 8 MB raw ~= 10.7 MB base64; three files stay
@@ -68,9 +78,18 @@ const vendorApplicationInput = z.object({
 });
 
 export function formatContactNotification(input: z.infer<typeof contactSubmissionInput>) {
-  return [
+  const lines: string[] = [];
+  if (input.recipientName) {
+    lines.push(
+      `ATTN: ${oneLine(input.recipientName)}${input.recipientRole ? ` (${oneLine(input.recipientRole)})` : ""}`,
+      "",
+    );
+  }
+  lines.push(
     `Name: ${oneLine(input.name)}`,
     `Email: ${oneLine(input.email)}`,
+    `Phone: ${oneLine(input.phone) || "Not provided"}`,
+    `Website: ${oneLine(input.website) || "Not provided"}`,
     `Organization: ${oneLine(input.organization) || "Not provided"}`,
     `Role: ${oneLine(input.role) || "Not provided"}`,
     `Context: ${oneLine(input.context) || "general inquiry"}`,
@@ -78,7 +97,15 @@ export function formatContactNotification(input: z.infer<typeof contactSubmissio
     "",
     "Message:",
     input.message,
-  ].join("\n");
+  );
+  if (input.recipientName) {
+    lines.push(
+      "",
+      "--",
+      `Please route this message to ${oneLine(input.recipientName)} and notify them that ${oneLine(input.name)} (${oneLine(input.email)}) reached out via the Digital Therapy team page.`,
+    );
+  }
+  return lines.join("\n");
 }
 
 export const appRouter = router({
@@ -96,17 +123,28 @@ export const appRouter = router({
   }),
   contact: router({
     submit: publicProcedure.input(contactSubmissionInput).mutation(async ({ input }) => {
+      // recipientName / recipientRole / phone / website are notification-only — they do
+      // not live on the DB schema. Strip them off before persisting; the routing intent
+      // is captured in `context`, and phone/website travel via the notification email.
+      const {
+        recipientName: _recipientName,
+        recipientRole: _recipientRole,
+        phone: _phone,
+        website: _website,
+        ...persistable
+      } = input;
       const normalized = {
-        ...input,
-        organization: input.organization || null,
-        role: input.role || null,
-        context: input.context || "general inquiry",
-        sourcePage: input.sourcePage || "unknown",
+        ...persistable,
+        organization: persistable.organization || null,
+        role: persistable.role || null,
+        context: persistable.context || "general inquiry",
+        sourcePage: persistable.sourcePage || "unknown",
       };
 
       const saved = await createContactSubmission(normalized);
+      const titleSuffix = input.recipientName ? ` (Attn: ${input.recipientName})` : "";
       const notificationDelivered = await notifyOwner({
-        title: `New Digital Therapy contact form: ${oneLine(input.name)}`,
+        title: `New Digital Therapy contact form: ${oneLine(input.name)}${titleSuffix}`,
         content: formatContactNotification(input),
       }).catch((error) => {
         console.warn("[Contact] Owner notification failed:", error);
