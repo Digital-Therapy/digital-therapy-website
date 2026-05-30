@@ -59,6 +59,28 @@
       src="https://analytics.dtapps.io/script.js"
       data-website-id="0b1f9eb0-c190-4c70-8b28-9985e1c3cb07"
       data-domains="dt.dtapps.io"></script>
+
+    <!--
+      Squid (asksquid.ai). Guarded to the production host so the build-time
+      prerender (loads pages on 127.0.0.1) neither runs the loader nor bakes the
+      injected SDK <script> into the static HTML (which would double-load on real
+      visits). Logic is otherwise the vendor snippet verbatim.
+    -->
+    <script>
+      (function () {
+        if (location.hostname !== "dt.dtapps.io") return;
+        (function (squid) {
+          window.$quid || (window.$quid = {});
+          document.head.appendChild(
+            (function (s) {
+              s.src = "https://app.asksquid.ai/tfs/" + squid + "/sdk";
+              s.async = 1;
+              return s;
+            })(document.createElement("script"))
+          );
+        })("6a1a58c0bc45c0f13ab972cc");
+      })();
+    </script>
   </head>
 
   <body>
