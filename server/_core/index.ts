@@ -8,6 +8,7 @@ import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+import { registerPrerendered } from "../prerender-serve";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -48,6 +49,9 @@ async function startServer() {
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
   } else {
+    // Serve prerendered per-route HTML (no-slash crawler URLs) before the
+    // static/SPA fallback so /thesis etc. return baked HTML with correct meta.
+    registerPrerendered(app);
     serveStatic(app);
   }
 

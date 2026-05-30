@@ -3,6 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import { ChatWidget } from "./components/ChatWidget";
+import { RouteSeo } from "./components/RouteSeo";
 import ErrorBoundary from "./components/ErrorBoundary";
 import SiteFooter from "./components/SiteFooter";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -53,6 +54,7 @@ function App() {
         // switchable
       >
         <TooltipProvider>
+          <RouteSeo />
           <Toaster />
           <Router />
           <SiteFooter />
