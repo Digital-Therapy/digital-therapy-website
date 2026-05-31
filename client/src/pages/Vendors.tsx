@@ -3,10 +3,11 @@
  * Presents vendor-type cards; each opens the contact form with a vendor-type
  * context so submissions are routed appropriately.
  */
+import { Fragment, useState } from "react";
 import PublicHeader from "@/components/PublicHeader";
 import { VendorApplicationDialog, type SkillGroup } from "@/components/VendorApplicationDialog";
 import { motion } from "framer-motion";
-import { BarChart3, Briefcase, Code2, Landmark } from "lucide-react";
+import { ArrowRight, BarChart3, Briefcase, Code2, Landmark } from "lucide-react";
 
 const fadeUp = {
   initial: { opacity: 0, y: 28 },
@@ -103,6 +104,11 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 export default function Vendors() {
+  // Tracks which vendor card's application dialog is open. null = no dialog open.
+  // Lets us make the entire card the click target while reusing one
+  // VendorApplicationDialog per card driven by controlled state.
+  const [openVendorIndex, setOpenVendorIndex] = useState<number | null>(null);
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#111111] selection:bg-[#0A65FF] selection:text-white">
       <PublicHeader
@@ -127,38 +133,51 @@ export default function Vendors() {
               {vendorTypes.map((vendor, index) => {
                 const Icon = vendor.icon;
                 return (
-                  <motion.article
-                    key={vendor.title}
-                    {...fadeUp}
-                    transition={{ ...fadeUp.transition, delay: index * 0.06 }}
-                    className="flex min-h-full flex-col rounded-[1.6rem] border border-black/8 bg-white p-7 shadow-[0_18px_50px_rgba(17,17,17,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)]"
-                  >
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0A65FF]/10 text-[#0A65FF]">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <h2 className="mt-6 font-display text-3xl tracking-[-0.05em]">
-                      {vendor.title.split(" ").map((word, wordIndex) => {
-                        const isHighlighted = vendor.highlightedWords.includes(word);
-                        return (
-                          <span key={wordIndex} className={isHighlighted ? "text-[#0A65FF]" : undefined}>
-                            {wordIndex > 0 ? " " : ""}
-                            {word}
-                          </span>
-                        );
-                      })}
-                    </h2>
-                    <p className="mt-4 text-sm leading-6 text-black/80">{vendor.summary}</p>
-                    <div className="mt-auto pt-7">
-                      <VendorApplicationDialog
-                        vendorTypeLabel={vendor.title.replace(/s$/, "")}
-                        context={vendor.context}
-                        triggerLabel={vendor.buttonLabel}
-                        variant="secondary"
-                        className="w-full justify-center bg-[#F7F4EE]"
-                        skillGroups={vendor.skillGroups}
-                      />
-                    </div>
-                  </motion.article>
+                  <Fragment key={vendor.title}>
+                    {/*
+                      Entire card is the click target. The inner "Apply as..." pill
+                      stays for visual affordance, but it's a styled span (not a
+                      nested button) so the HTML stays valid. The pill reacts to
+                      parent hover via group-hover utilities.
+                    */}
+                    <motion.button
+                      type="button"
+                      onClick={() => setOpenVendorIndex(index)}
+                      aria-label={`Open ${vendor.title} application form`}
+                      {...fadeUp}
+                      transition={{ ...fadeUp.transition, delay: index * 0.06 }}
+                      className="group flex min-h-full flex-col rounded-[1.6rem] border border-black/8 bg-white p-7 text-left shadow-[0_18px_50px_rgba(17,17,17,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                    >
+                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0A65FF]/10 text-[#0A65FF] transition-colors duration-300 group-hover:bg-[#0A65FF] group-hover:text-white">
+                        <Icon className="h-6 w-6" />
+                      </div>
+                      <h2 className="mt-6 font-display text-3xl tracking-[-0.05em]">
+                        {vendor.title.split(" ").map((word, wordIndex) => {
+                          const isHighlighted = vendor.highlightedWords.includes(word);
+                          return (
+                            <span key={wordIndex} className={isHighlighted ? "text-[#0A65FF]" : undefined}>
+                              {wordIndex > 0 ? " " : ""}
+                              {word}
+                            </span>
+                          );
+                        })}
+                      </h2>
+                      <p className="mt-4 text-sm leading-6 text-black/80">{vendor.summary}</p>
+                      <span className="mt-auto inline-flex items-center justify-center gap-2 rounded-full border border-black/15 bg-[#F7F4EE] px-6 py-3 text-base font-normal tracking-[-0.01em] text-[#111111] transition-all duration-300 group-hover:border-[#0A65FF] group-hover:bg-[#0A65FF] group-hover:text-white">
+                        {vendor.buttonLabel}
+                        <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      </span>
+                    </motion.button>
+                    <VendorApplicationDialog
+                      hideTrigger
+                      open={openVendorIndex === index}
+                      onOpenChange={(v) => setOpenVendorIndex(v ? index : null)}
+                      vendorTypeLabel={vendor.title.replace(/s$/, "")}
+                      context={vendor.context}
+                      triggerLabel={vendor.buttonLabel}
+                      skillGroups={vendor.skillGroups}
+                    />
+                  </Fragment>
                 );
               })}
             </div>

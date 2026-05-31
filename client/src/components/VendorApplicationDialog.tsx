@@ -138,6 +138,12 @@ type VendorApplicationDialogProps = {
   variant?: Variant;
   className?: string;
   skillGroups?: SkillGroup[];
+  // Controlled-mode props mirror ContactFormDialog / BookingWidgetDialog so
+  // callers (e.g. the Vendors page card) can supply their own trigger and
+  // drive open/close state externally — used when the whole card is clickable.
+  open?: boolean;
+  onOpenChange?: (value: boolean) => void;
+  hideTrigger?: boolean;
 };
 
 export function VendorApplicationDialog({
@@ -147,8 +153,17 @@ export function VendorApplicationDialog({
   variant = "secondary",
   className = "",
   skillGroups = defaultSkillGroups,
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+  hideTrigger = false,
 }: VendorApplicationDialogProps) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = (value: boolean) => {
+    if (isControlled) controlledOnOpenChange?.(value);
+    else setInternalOpen(value);
+  };
   const [form, setForm] = useState<VendorFormState>(initialForm);
   const [resumeFile, setResumeFile] = useState<FileMeta>(null);
   const [w9File, setW9File] = useState<FileMeta>(null);
@@ -296,12 +311,14 @@ export function VendorApplicationDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <button type="button" className={`${buttonBaseClasses} ${variantClasses[variant]} ${className}`}>
-          {triggerLabel}
-          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-        </button>
-      </DialogTrigger>
+      {hideTrigger ? null : (
+        <DialogTrigger asChild>
+          <button type="button" className={`${buttonBaseClasses} ${variantClasses[variant]} ${className}`}>
+            {triggerLabel}
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </button>
+        </DialogTrigger>
+      )}
       <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[1100px] sm:rounded-[2rem]">
         <div className="grid gap-0 lg:grid-cols-[0.42fr_1.58fr]">
           <aside className="border-b border-black/10 bg-white/72 p-9 lg:border-b-0 lg:border-r lg:p-11">
