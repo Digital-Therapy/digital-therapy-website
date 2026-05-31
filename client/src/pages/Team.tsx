@@ -3,6 +3,7 @@
  * Preserve light ivory surfaces, charcoal typography, restrained Digital Therapy blue,
  * editorial spacing, and fusion-team positioning for family-office audiences.
  */
+import { useState } from "react";
 import { BookingWidgetDialog, ContactFormDialog, MessageToMemberDialog } from "@/components/ContactBooking";
 import PublicHeader from "@/components/PublicHeader";
 import {
@@ -17,6 +18,7 @@ import { motion } from "framer-motion";
 import {
   BadgeCheck,
   Building2,
+  ChevronDown,
   ChevronRight,
   CircleDollarSign,
   Code2,
@@ -96,7 +98,7 @@ const groups: Array<{
   members: TeamPerson[];
 }> = [
   {
-    label: "Accounting & Reporting",
+    label: "Tax & Accounting",
     description: "The finance bench brings bookkeeping, tax, public-company reporting, and real-estate accounting expertise into transformation work from day one.",
     icon: CircleDollarSign,
     members: [
@@ -300,6 +302,9 @@ function InitialMark({ name }: { name: string }) {
 }
 
 export default function Team() {
+  // Controls the contact-form popup launched from the dark "Work with us" closing CTA.
+  const [contactOpen, setContactOpen] = useState(false);
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#111111] selection:bg-[#0A65FF] selection:text-white">
       <PublicHeader
@@ -314,20 +319,26 @@ export default function Team() {
           <div className="container relative grid min-h-[720px] items-center gap-12 py-20 lg:grid-cols-[0.94fr_1.06fr] lg:py-28">
             <motion.div {...fadeUp}>
               <SectionLabel>Our team</SectionLabel>
-              <h1 className="max-w-4xl font-display text-[clamp(3.3rem,7vw,7.3rem)] leading-[0.88] tracking-[-0.07em] text-[#111111]">
-                Fusion teams for family-office transformation.
+              <h1 className="max-w-4xl font-display text-[70px] leading-[0.95] tracking-[-0.05em] text-[#111111]">
+                Purpose-built for<br />family-office transformation.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
-                Digital Therapy brings technology, operations, and accounting specialists into one coordinated team so family offices can move from diagnostic insight to implemented workflows with fewer handoffs.
+                Digital Therapy brings technology, operations, and accounting specialists into one coordinated team.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <PrimaryCta />
                 <a
-                  href="/dt-brain"
+                  href="#team-cards"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    document
+                      .getElementById("team-cards")
+                      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }}
                   className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/55 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
                 >
-                  Explore DT Brain
-                  <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  Meet the team.
+                  <ChevronDown className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-1" />
                 </a>
               </div>
             </motion.div>
@@ -354,7 +365,7 @@ export default function Team() {
           </div>
         </section>
 
-        <section className="border-b border-black/8 bg-white py-24">
+        <section id="team-cards" className="scroll-mt-24 border-b border-black/8 bg-white py-24">
           <div className="container">
             <motion.div {...fadeUp} className="max-w-3xl">
               <SectionLabel>Leadership</SectionLabel>
@@ -369,7 +380,18 @@ export default function Team() {
                     <div className="absolute right-0 top-0 h-28 w-28 rounded-bl-[4rem] bg-[#0A65FF]/8" />
                     {leader.imageUrl ? (
                       <div className="relative -m-3 mb-7 overflow-hidden rounded-[1.6rem] bg-[#0A65FF]/8">
-                        <img src={leader.imageUrl} alt={leader.name} className="h-64 w-full object-cover object-center" />
+                        <img
+                          src={leader.imageUrl}
+                          alt={leader.name}
+                          // Jonathan + Milton get object-top so their photos read with more
+                          // headroom (the top of the original frame stays visible, pushing
+                          // the head lower in the card). Hunter stays centered.
+                          className={`h-64 w-full object-cover ${
+                            leader.name === "Jonathan Kobrin" || leader.name === "Milton Rodas"
+                              ? "object-top"
+                              : "object-center"
+                          }`}
+                        />
                       </div>
                     ) : (
                       <InitialMark name={leader.name} />
@@ -445,7 +467,7 @@ export default function Team() {
               <div className="max-w-3xl">
                 <SectionLabel>Specialist benches</SectionLabel>
                 <h2 className="font-display text-[clamp(2.5rem,5vw,5rem)] leading-[0.95] tracking-[-0.06em]">
-                  The right expertise at the right time.
+                  The right expertise<br />at the right time.
                 </h2>
               </div>
             </motion.div>
@@ -473,7 +495,16 @@ export default function Team() {
                           const cardInner = (
                             <div className="flex items-center gap-4">
                               {member.imageUrl ? (
-                                <img src={member.imageUrl} alt={member.name} className="h-20 w-20 shrink-0 rounded-[1.35rem] border border-black/8 object-cover object-center shadow-[0_18px_45px_rgba(17,17,17,0.08)]" />
+                                <img
+                                  src={member.imageUrl}
+                                  alt={member.name}
+                                  // Valerio gets object-top so his headshot reads with more
+                                  // headroom in the small avatar tile, matching the lift on
+                                  // Jonathan + Milton's leader cards.
+                                  className={`h-20 w-20 shrink-0 rounded-[1.35rem] border border-black/8 object-cover shadow-[0_18px_45px_rgba(17,17,17,0.08)] ${
+                                    member.name === "Valerio Mirof" ? "object-top" : "object-center"
+                                  }`}
+                                />
                               ) : (
                                 <InitialMark name={member.name} />
                               )}
@@ -521,7 +552,7 @@ export default function Team() {
                 Alliances
               </h2>
             </motion.div>
-            <div className="mt-12 flex flex-wrap justify-center gap-15 sm:justify-start">
+            <div className="mt-12 flex flex-wrap justify-center gap-[42px] sm:justify-start">
               {extendedNetwork.map((person, index) => {
                 const Icon = person.icon;
                 const cardBody = (
@@ -595,20 +626,28 @@ export default function Team() {
                 Work with us
               </div>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.9] tracking-[-0.07em]">
-                Book 30 minutes with the team built to find your first high-value win.
+                Book 30 minutes with us. Transformation starts with a chat.
               </h2>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-white/64">
                 Bring us your pain points, see game-changing custom solutions already deployed for some of New York City’s largest and most discerning family offices, and leave with a practical view of where technology, operations, and accounting expertise can create value first.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <PrimaryCta />
-                <a
-                  href="/"
+                <button
+                  type="button"
+                  onClick={() => setContactOpen(true)}
                   className="group inline-flex items-center justify-center gap-2 rounded-full border border-white/18 bg-white/8 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-white/14"
                 >
-                  Return to homepage
+                  Send us a message
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
+                </button>
+                {/* Hidden controlled contact-form popup launched by the button above */}
+                <ContactFormDialog
+                  hideTrigger
+                  open={contactOpen}
+                  onOpenChange={setContactOpen}
+                  context="team page closing CTA — send us a message"
+                />
               </div>
             </motion.div>
             <motion.div {...fadeUp} className="grid gap-4 sm:grid-cols-2">

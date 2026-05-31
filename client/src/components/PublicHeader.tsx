@@ -1,4 +1,5 @@
-import { ChevronLeft, Menu } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, ChevronLeft, Menu } from "lucide-react";
 import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
 import {
   Sheet,
@@ -63,6 +64,12 @@ export default function PublicHeader({
   showMainSiteLink = false,
   headerClassName = "bg-[#F7F4EE]/84",
 }: PublicHeaderProps) {
+  // Both top-right CTAs drive their dialogs via controlled state so the visible
+  // buttons can use peer/peer-hover Tailwind utilities to coordinate the
+  // "blue pill slides from Book 30 Min to Contact" hover choreography.
+  const [contactOpen, setContactOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
+
   return (
     <header className={`fixed left-0 right-0 top-0 z-50 border-b border-black/8 ${headerClassName} backdrop-blur-xl`}>
       <div className="mx-auto flex h-20 w-full max-w-[1280px] items-center justify-start gap-4 px-4 sm:px-6 lg:justify-between lg:px-8">
@@ -80,16 +87,51 @@ export default function PublicHeader({
 
         <div className="hidden items-center gap-3 md:flex">
           {showMainSiteLink ? <MainSiteLink /> : null}
+          {/*
+            Coordinated hover choreography for the top-right CTA cluster:
+            - Contact button is the `peer`. On hover, it gains the blue pill
+              (bg + white text) — making the pill *appear* to slide onto it.
+            - Book 30 Min sits after Contact in the DOM, so `peer-hover:` can
+              react to Contact's hover state. When Contact is hovered, Book 30
+              Min sheds its blue pill — bg becomes transparent, text turns
+              black + bold, shadow is removed — so the visual "pill" looks
+              like it slid off Book 30 Min and landed on Contact.
+            Both buttons drive their dialogs via controlled state so the
+            visible triggers are styleable without fighting variant classes.
+          */}
+          {contactContext ? (
+            <button
+              type="button"
+              onClick={() => setContactOpen(true)}
+              className="peer group inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-black/85 transition-all duration-300 hover:bg-[#0A65FF] hover:text-white hover:shadow-[0_14px_32px_rgba(10,101,255,0.28)]"
+            >
+              Contact
+            </button>
+          ) : null}
+          <button
+            type="button"
+            onClick={() => setBookingOpen(true)}
+            aria-label="Book 30 minutes with Digital Therapy"
+            className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#0A65FF] px-6 py-3 text-base font-normal text-white shadow-[0_18px_45px_rgba(10,101,255,0.22)] transition-all duration-300 hover:bg-[#004ed1] peer-hover:bg-transparent peer-hover:font-bold peer-hover:text-black peer-hover:shadow-none"
+          >
+            Book 30 Min
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </button>
+          {/* Hidden controlled dialogs driven by the buttons above */}
           {contactContext ? (
             <ContactFormDialog
-              variant="text"
-              label="Contact"
+              hideTrigger
+              open={contactOpen}
+              onOpenChange={setContactOpen}
               context={contactContext}
-              icon="none"
-              className="text-sm font-medium transition-colors duration-300 hover:text-black"
             />
           ) : null}
-          <BookingWidgetDialog variant="primary" context={bookingContext} />
+          <BookingWidgetDialog
+            hideTrigger
+            open={bookingOpen}
+            onOpenChange={setBookingOpen}
+            context={bookingContext}
+          />
         </div>
 
         <Sheet>

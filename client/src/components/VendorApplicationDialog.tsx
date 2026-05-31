@@ -608,7 +608,7 @@ export function VendorApplicationDialog({
                     className="mt-1 h-4 w-4 shrink-0 cursor-pointer rounded border border-black/30 accent-[#0A65FF]"
                   />
                   <span>
-                    I grant permission to use my name &amp; likeness in targeted sales materials and RFPs, but not to be used on digitaltherapy.io.
+                    I grant permission to use my name &amp; likeness in targeted sales materials and RFPs.
                   </span>
                 </label>
               </div>

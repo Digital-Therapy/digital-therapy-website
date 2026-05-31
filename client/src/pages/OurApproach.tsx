@@ -2,7 +2,9 @@
  * Digital Therapy Our Approach page.
  * Introduces the sequential transformation process, beginning with Discovery.
  */
-import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
+// Booking + Contact CTAs were removed along with the closing "Start with
+// Discovery" section. Re-import from "@/components/ContactBooking" if a new
+// CTA placement is added below.
 import PublicHeader from "@/components/PublicHeader";
 import { motion } from "framer-motion";
 import {
@@ -114,10 +116,6 @@ const closeRedesignPillars = [
     icon: ClipboardCheck,
   },
 ];
-
-function PrivateBriefingButton({ variant = "primary" }: { variant?: "primary" | "secondary" }) {
-  return <BookingWidgetDialog variant={variant} context="our approach page family-office booking" />;
-}
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -432,20 +430,6 @@ export default function OurApproach() {
           </div>
         </section>
 
-        <section className="bg-[#F7F4EE] py-20 lg:py-24">
-          <div className="container flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">Start with Discovery</p>
-              <h2 className="mt-4 max-w-3xl font-display text-[clamp(2.4rem,4.2vw,4.6rem)] leading-[0.92] tracking-[-0.06em]">
-                Establish the operating facts before prescribing the system.
-              </h2>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <PrivateBriefingButton />
-              <ContactFormDialog variant="secondary" label="Contact" context="our approach page footer contact" />
-            </div>
-          </div>
-        </section>
       </main>
     </div>
   );
