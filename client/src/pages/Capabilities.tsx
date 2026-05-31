@@ -248,9 +248,14 @@ export default function Capabilities() {
                       { label: "Problem State", body: activeCaseStudy.problemState },
                       { label: "Solution State", body: activeCaseStudy.solutionState },
                       { label: "Impact", body: activeCaseStudy.impact },
-                    ].map((quadrant) => (
+                    ].map((quadrant, quadrantIndex) => (
                       <div key={quadrant.label} className="bg-[#F7F4EE] px-8 py-7 sm:px-10 sm:py-9">
-                        <p className="text-[0.65rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">{quadrant.label}</p>
+                        <p className="flex items-center gap-2.5 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                          <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#0A65FF] text-[0.75rem] font-bold text-white">
+                            {quadrantIndex + 1}
+                          </span>
+                          {quadrant.label}
+                        </p>
                         <p className="mt-3 text-base leading-7 text-black/85">{quadrant.body}</p>
                       </div>
                     ))}

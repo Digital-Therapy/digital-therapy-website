@@ -52,8 +52,8 @@ const problemSignals = [
 const structuralFailures = [
   {
     eyebrow: "01",
-    title: "Silo culture & professional bias",
-    copy: "Accountants, engineers, operations consultants, and finance teams often work beside each other rather than as one unit. Professional bias compounds the divide: CPAs may resist AI and automation, engineers may lack accounting fluency, and operators may lack the technical depth required to architect scalable systems.",
+    title: "So many silos",
+    copy: "Who's in charge? Who's responsible for controlling project outcomes? Who has the wherewithal to understand the players, layers, tech stack & experts needed to lead a transformation program effectively? Tech stacks generally comprise 10, 20 or more unique SaaS licenses. Each platform comes with its own tech team. Do tech teams from one software ever talk to their counterparts at another? What do you think?",
     icon: UsersRound,
   },
   {
@@ -138,7 +138,7 @@ export default function Thesis() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_12%,rgba(10,101,255,0.11),transparent_34%),linear-gradient(115deg,#F7F4EE_0%,#FFFFFF_52%,#EEF4FF_100%)]" />
           <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-12 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:py-28">
             <motion.div {...fadeUp}>
-              <SectionLabel>The Digital Therapy thesis</SectionLabel>
+              <SectionLabel>Why we exist</SectionLabel>
               <h1 className="max-w-4xl font-display text-[60px] leading-[0.88] tracking-[-0.07em] text-[#111111]">
                 Practice based firms<br />fall short.
               </h1>

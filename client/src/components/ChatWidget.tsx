@@ -296,7 +296,7 @@ export function ChatWidget() {
             : "pointer-events-none translate-x-3 opacity-0"
         }`}
       >
-        Hello there! Perhaps I could help you find information or schedule a meeting. Just click me when you&rsquo;re ready.
+        Hello there. Can I help you find anything? Or book a meeting? Click if you need me.
         <span
           aria-hidden="true"
           className="absolute right-[-9px] top-1/2 h-0 w-0 -translate-y-1/2 border-y-[10px] border-l-[10px] border-y-transparent border-l-white"

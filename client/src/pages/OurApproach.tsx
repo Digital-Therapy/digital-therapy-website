@@ -96,20 +96,20 @@ const discoveryOutputs = [
 
 const closeRedesignPillars = [
   {
-    eyebrow: "Current lag",
-    title: "15 to 30+ days behind",
+    eyebrow: "Common lag",
+    title: "15 - 45 days behind",
     copy: "Clients often operate 15 to 30+ days behind, which compresses management visibility, delays decisions, and keeps accounting teams in a permanent catch-up cycle.",
     icon: BarChart3,
   },
   {
     eyebrow: "System redesign",
-    title: "Redesign close systems & processes",
+    title: "Automate close procedures",
     copy: "DT helps redesign close systems & processes across AP, AR, reconciliations, approvals, entity workflows, data movement, and exception handling.",
     icon: Workflow,
   },
   {
     eyebrow: "Custom tooling",
-    title: "Reduce the monthly close burden",
+    title: "Reduce close anxiety",
     copy: "DT often builds custom tools to reduce the monthly close burden, replacing manual follow-up, spreadsheet-heavy reviews, and recurring data cleanup with governed workflows.",
     icon: ClipboardCheck,
   },
@@ -144,14 +144,19 @@ export default function OurApproach() {
             <motion.div {...fadeUp}>
               <SectionLabel>Our process</SectionLabel>
               <h1 className="max-w-4xl font-display text-[60px] leading-[0.88] tracking-[-0.07em] text-[#111111]">
-                The difference a month makes.
+                The difference<br />a month makes.
               </h1>
               <p className="mt-8 max-w-2xl text-[16px] font-light leading-8 text-[#3e3c3c]">
-                Digital Therapy breaks transformation into a sequenced operating process.<br />
-                <strong className="font-bold text-[#111111]">Phase 1</strong> - <strong className="font-bold text-[#111111]">Discovery</strong>: We evaluate two parallel functional tracks.<br />
-                <strong className="font-bold text-[#111111]">Track 1</strong> - Technology Discovery led by a Technology SME<br />
-                <strong className="font-bold text-[#111111]">Track 2</strong> - Finance &amp; Accounting Discovery led by a Finance + Accounting SME.<br />
-                <em><strong className="font-bold text-[#111111]">All three Fusion Team SMEs deploy on site for 4 weeks.</strong></em>
+                Digital Therapy follows a proven transformation process.<br />
+                <strong className="font-bold text-[#111111]">Phase 1</strong> - <strong className="font-bold text-[#111111]">Discovery</strong><br />
+                <span className="ml-6 inline-block">• We evaluate two parallel functional tracks:</span><br />
+                <span className="ml-12 inline-block">◦ <strong className="font-bold text-[#111111]">Track 1</strong> - <strong className="font-bold text-[#111111]">Technology Discovery</strong></span><br />
+                <span className="ml-20 inline-block">▪ Led by a Technology SME</span><br />
+                <span className="ml-12 inline-block">◦ <strong className="font-bold text-[#111111]">Track 2</strong> - <strong className="font-bold text-[#111111]">Finance &amp; Accounting Discovery</strong></span><br />
+                <span className="ml-20 inline-block">▪ Led by a Finance + Accounting SME</span><br />
+                <span className="ml-6 inline-block">• A third team member is the <strong className="font-bold text-[#111111]">Operations &amp; Process SME</strong></span><br />
+                <span className="ml-12 inline-block">◦ Splits time between the two Discovery Track Leaders</span><br />
+                <em className="mt-6 block w-fit rounded-[0.9rem] bg-white px-5 py-3 text-[20px] text-[#0A65FF] shadow-[0_10px_28px_rgba(10,101,255,0.10)]"><strong className="font-bold">All three SMEs are deployed on site for 4 weeks.</strong></em>
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <a
@@ -290,11 +295,11 @@ export default function OurApproach() {
                   Roadmap
                 </div>
                 <h2 className="font-display text-[56px] leading-[0.95] tracking-[-0.04em]">
-                  Three Discovery deliverables form the plan for Phase 2.
+                  Three deliverables form the plan for Phase Two.
                 </h2>
               </div>
               <p className="max-w-3xl text-lg leading-8 text-white">
-                The two Discovery tracks converge into one prioritized operating plan. Together, the Technology Discovery, the Finance &amp; Accounting Discovery, and the Operations &amp; Process swim-lane work convert interviews, system mapping, accounting analysis, and future-state architecture into a sequenced roadmap that can guide configuration, automation, integration, migration, testing, and onboarding.
+                The Discovery tracks culminate in a sequenced roadmap for Phase Two: configuration, automation, integration, migration, testing, and onboarding.
               </p>
             </motion.div>
 
@@ -340,7 +345,7 @@ export default function OurApproach() {
               <div>
                 <SectionLabel>Section 2</SectionLabel>
                 <h2 className="font-display text-[clamp(2.8rem,5vw,5.6rem)] leading-[0.9] tracking-[-0.06em] text-[#111111]">
-                  AP &amp; AR close-system redesign.
+                  Optimize &amp; automate AP &amp; AR processes.
                 </h2>
               </div>
               <div className="max-w-3xl">
@@ -378,7 +383,7 @@ export default function OurApproach() {
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#58B8FF]">Operating outcome</p>
                 <h3 className="mt-5 font-display text-[clamp(2.2rem,4vw,4.2rem)] leading-[0.9] tracking-[-0.06em]">
-                  Close in five days. Perhaps, even three.
+                  Close in 5 days. Even less!
                 </h3>
               </div>
               <div className="grid gap-4 text-sm leading-7 text-white/68 sm:grid-cols-2">
@@ -396,7 +401,7 @@ export default function OurApproach() {
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">Illustrative case example</p>
                   <h3 className="mt-4 font-display text-[clamp(2rem,3vw,3.2rem)] leading-[0.94] tracking-[-0.06em] text-[#111111]">
-                    From close backlog to first-week operating rhythm.
+                    From close backlog to rhythmic reliability.
                   </h3>
                   <p className="mt-5 text-sm leading-7 text-black/75">
                     Example scenario, not a quoted client result: a multi-entity family office enters each month 20+ days behind, with AP approvals, AR follow-up, reconciliations, and reporting evidence scattered across inboxes, spreadsheets, and accounting exports.
