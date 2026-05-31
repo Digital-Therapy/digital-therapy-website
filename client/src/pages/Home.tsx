@@ -149,6 +149,7 @@ export default function Home() {
     <div className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#111111] selection:bg-[#0A65FF] selection:text-white">
       <PublicHeader
         bookingContext="homepage family-office booking"
+        contactContext="homepage navigation contact"
         logoHref="#top"
         useHomeAnchorLinks
         headerClassName="bg-[#F7F4EE]/82"
