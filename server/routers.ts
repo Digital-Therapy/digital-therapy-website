@@ -72,6 +72,22 @@ const vendorApplicationInput = z.object({
   marketingConsent: z.boolean().default(false),
   nameUsageConsent: z.boolean().default(false),
   signature: z.string().trim().max(240).optional().default(""),
+  // Third-Party Vendor Confidentiality & Data Protection Agreement execution
+  // payload — required step before form submission on the client. The client
+  // gates submit so these fields should always be populated when this mutation
+  // runs; they are declared optional/default in case a non-UI caller submits a
+  // partial payload.
+  ndaBusinessName: z.string().trim().max(240).optional().default(""),
+  ndaEntityDescriptor: z.string().trim().max(240).optional().default(""),
+  ndaAddress: z.string().trim().max(500).optional().default(""),
+  ndaSignerName: z.string().trim().max(160).optional().default(""),
+  ndaSignerTitle: z.string().trim().max(160).optional().default(""),
+  ndaSignerPhone: z.string().trim().max(60).optional().default(""),
+  ndaSignerEmail: z.string().trim().max(320).optional().default(""),
+  ndaSignatureText: z.string().trim().max(160).optional().default(""),
+  ndaSignatureDate: z.string().trim().max(40).optional().default(""),
+  ndaEffectiveDate: z.string().trim().max(40).optional().default(""),
+  ndaRequestCopy: z.boolean().optional().default(false),
   context: z.string().trim().max(240).optional().default("vendor application"),
   sourcePage: z.string().trim().max(500).optional().default("unknown"),
   files: z.array(vendorFileInput).max(3).optional().default([]),
@@ -168,8 +184,27 @@ export const appRouter = router({
       const portalStored = await forwardVendorToPortal(payload, files);
 
       // Best-effort owner ping so the team is alerted even if the portal is down.
+      const ndaExecuted = Boolean(
+        input.ndaSignerName && input.ndaSignatureText && input.ndaSignatureDate,
+      );
+      const ndaLines = ndaExecuted
+        ? [
+            "",
+            "NDA EXECUTED — Third-Party Vendor Confidentiality & Data Protection Agreement",
+            `  Business name: ${oneLine(input.ndaBusinessName || "Not provided")}`,
+            `  Entity: ${oneLine(input.ndaEntityDescriptor || "Not provided")}`,
+            `  Address: ${oneLine(input.ndaAddress || "Not provided")}`,
+            `  Signer: ${oneLine(input.ndaSignerName)}${input.ndaSignerTitle ? ` (${oneLine(input.ndaSignerTitle)})` : ""}`,
+            `  Phone: ${oneLine(input.ndaSignerPhone || "Not provided")}`,
+            `  Email: ${oneLine(input.ndaSignerEmail || "Not provided")}`,
+            `  Typed signature: ${oneLine(input.ndaSignatureText)}`,
+            `  Sign date: ${oneLine(input.ndaSignatureDate)}`,
+            `  Effective date: ${oneLine(input.ndaEffectiveDate || input.ndaSignatureDate)}`,
+            `  Requested co-signed copy: ${input.ndaRequestCopy ? "YES — send executed copy" : "no"}`,
+          ]
+        : ["", "NDA: NOT EXECUTED — review immediately"];
       const notificationDelivered = await notifyOwner({
-        title: `New vendor application: ${oneLine(input.name)} (${oneLine(input.vendorTypeLabel)})`,
+        title: `New vendor application: ${oneLine(input.name)} (${oneLine(input.vendorTypeLabel)})${ndaExecuted ? "" : " — NDA MISSING"}`,
         content: [
           `Name: ${oneLine(input.name)}`,
           `Email: ${oneLine(input.email)}`,
@@ -177,6 +212,7 @@ export const appRouter = router({
           `Role: ${oneLine(input.role || "Not provided")}`,
           `Files attached: ${files.length}`,
           `Stored in portal: ${portalStored ? "yes" : "NO - check portal"}`,
+          ...ndaLines,
         ].join("\n"),
       }).catch((error) => {
         console.warn("[Vendor] Owner notification failed:", error);

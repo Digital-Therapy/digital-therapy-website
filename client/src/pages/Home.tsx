@@ -143,6 +143,8 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 export default function Home() {
   const [openCaseStudyIndex, setOpenCaseStudyIndex] = useState<number | null>(null);
+  // Controls the contact-form popup launched from the dark "Security and control" section CTA cluster.
+  const [contactOpen, setContactOpen] = useState(false);
   const activeCaseStudy = openCaseStudyIndex !== null ? caseStudies[openCaseStudyIndex] : null;
 
   return (
@@ -173,7 +175,7 @@ export default function Home() {
               <div className="mt-3 flex flex-wrap items-center gap-3">
                 <a
                   href="/capabilities"
-                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/50 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
+                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/50 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF] hover:bg-[#0A65FF] hover:text-white"
                 >
                   Capabilities
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -181,7 +183,7 @@ export default function Home() {
                 <span className="text-base font-medium text-black/70">or</span>
                 <a
                   href="/process"
-                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#0A65FF]/25 bg-[#0A65FF]/8 px-6 py-3 text-sm font-semibold text-[#0A65FF] transition-all duration-300 hover:border-[#0A65FF]/55 hover:bg-[#0A65FF]/12"
+                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-[#0A65FF]/25 bg-[#0A65FF]/8 px-6 py-3 text-sm font-semibold text-[#0A65FF] transition-all duration-300 hover:border-[#0A65FF] hover:bg-[#0A65FF] hover:text-white"
                 >
                   Process
                   <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -400,6 +402,32 @@ export default function Home() {
               <p className="mt-6 text-lg leading-8 text-white/62">
                 Digital Therapy builds secure systems to keep family office data private, organized, and accessible only to the right people.
               </p>
+              {/*
+                CTA cluster matches the Team page closing "Work with us" pattern:
+                - Primary brand-blue "Book 30 Min" button (BookingWidgetDialog)
+                - Secondary dark-theme glass "Send us a message" that opens a
+                  controlled ContactFormDialog mounted just below
+              */}
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+                <BookingWidgetDialog
+                  variant="primary"
+                  context="homepage security section booking"
+                />
+                <button
+                  type="button"
+                  onClick={() => setContactOpen(true)}
+                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-white/18 bg-white/8 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-white/14"
+                >
+                  Send us a message
+                  <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </button>
+              </div>
+              <ContactFormDialog
+                hideTrigger
+                open={contactOpen}
+                onOpenChange={setContactOpen}
+                context="homepage security section — send us a message"
+              />
             </motion.div>
             <div className="grid gap-4 sm:grid-cols-2">
               {securityPrinciples.map((principle, index) => (

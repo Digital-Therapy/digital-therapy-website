@@ -188,26 +188,86 @@ export function ChatWidget() {
   // fallback reply offers alongside the booking link.
   const [contactOpen, setContactOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  // Tracks whether the one-shot 45s welcome bubble has already fired. Persists
+  // across re-renders (and across opening/closing the chat) so the welcome
+  // bubble only ever shows once per page load.
+  const initialBubbleShownRef = useRef(false);
 
-  // Periodic speech bubble next to Sigmund — first nudge ~6s after mount,
-  // then every 45s. Each appearance stays for ~8s. Suppressed while chat is open.
+  // Sigmund speech bubble timing:
+  //   - First popup: ONE TIME, ~45s after page load (counts elapsed time,
+  //     ignores activity). Skipped if the user opens the chat sooner.
+  //   - After that: ONLY appears again after 45s of user inactivity (any
+  //     mousemove / keydown / scroll / touch / click resets the timer).
+  //   - Every appearance stays visible for ~8s.
+  //   - Always suppressed while the chat panel is open.
   useEffect(() => {
     if (open) {
       setBubbleVisible(false);
+      // Opening the chat consumes the welcome moment — never show the
+      // one-shot welcome bubble after this.
+      initialBubbleShownRef.current = true;
       return;
     }
+
+    const HIDE_AFTER_MS = 8000;
+    const INITIAL_DELAY_MS = 45_000;
+    const INACTIVITY_DELAY_MS = 45_000;
+
+    let initialTimer: ReturnType<typeof setTimeout> | undefined;
     let hideTimer: ReturnType<typeof setTimeout> | undefined;
-    const show = () => {
-      setBubbleVisible(true);
-      if (hideTimer) clearTimeout(hideTimer);
-      hideTimer = setTimeout(() => setBubbleVisible(false), 8000);
+    let inactivityTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const scheduleInactivityShow = () => {
+      if (inactivityTimer) clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(showBubble, INACTIVITY_DELAY_MS);
     };
-    const initialTimer = setTimeout(show, 6000);
-    const interval = setInterval(show, 45000);
-    return () => {
-      clearTimeout(initialTimer);
+
+    const showBubble = () => {
+      setBubbleVisible(true);
+      initialBubbleShownRef.current = true;
       if (hideTimer) clearTimeout(hideTimer);
-      clearInterval(interval);
+      hideTimer = setTimeout(() => {
+        setBubbleVisible(false);
+        // After hiding, start the inactivity countdown so the bubble can
+        // re-emerge after another 45s of stillness.
+        scheduleInactivityShow();
+      }, HIDE_AFTER_MS);
+    };
+
+    const handleActivity = () => {
+      // Activity matters only after the one-shot welcome has fired — before
+      // then we wait on raw elapsed time per spec.
+      if (!initialBubbleShownRef.current) return;
+      scheduleInactivityShow();
+    };
+
+    if (!initialBubbleShownRef.current) {
+      // Fresh page load — schedule the one-shot welcome.
+      initialTimer = setTimeout(showBubble, INITIAL_DELAY_MS);
+    } else {
+      // Welcome already happened — go straight into inactivity-watch mode.
+      scheduleInactivityShow();
+    }
+
+    const activityEvents: Array<keyof WindowEventMap> = [
+      "mousemove",
+      "mousedown",
+      "keydown",
+      "touchstart",
+      "scroll",
+      "click",
+    ];
+    activityEvents.forEach((evt) =>
+      window.addEventListener(evt, handleActivity, { passive: true }),
+    );
+
+    return () => {
+      if (initialTimer) clearTimeout(initialTimer);
+      if (hideTimer) clearTimeout(hideTimer);
+      if (inactivityTimer) clearTimeout(inactivityTimer);
+      activityEvents.forEach((evt) =>
+        window.removeEventListener(evt, handleActivity),
+      );
     };
   }, [open]);
 

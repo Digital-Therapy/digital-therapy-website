@@ -7,7 +7,7 @@
  * with linked File records.
  */
 import { FormEvent, useState } from "react";
-import { ArrowRight, Loader2, Paperclip, Plus, UserPlus, X } from "lucide-react";
+import { ArrowRight, CheckCircle2, Loader2, Paperclip, Plus, ShieldCheck, UserPlus, X } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { VendorNdaDialog, type VendorNdaData } from "@/components/VendorNdaDialog";
 import { trpc } from "@/lib/trpc";
 
 const buttonBaseClasses =
@@ -171,6 +172,9 @@ export function VendorApplicationDialog({
   const [selectedSkills, setSelectedSkills] = useState<Set<string>>(() => new Set());
   const [selectedSectors, setSelectedSectors] = useState<Set<string>>(() => new Set());
   const [certifications, setCertifications] = useState<{ name: string; isCurrent: boolean; provider: string }[]>([]);
+  // NDA execution state — vendor must execute the NDA before main form submit.
+  const [ndaOpen, setNdaOpen] = useState(false);
+  const [ndaData, setNdaData] = useState<VendorNdaData | null>(null);
 
   const addCertification = () => {
     setCertifications((current) => [...current, { name: "", isCurrent: true, provider: "" }]);
@@ -221,6 +225,7 @@ export function VendorApplicationDialog({
       setSelectedSkills(new Set());
       setSelectedSectors(new Set());
       setCertifications([]);
+      setNdaData(null);
       setOpen(false);
       toast.success(
         `Application and documents received. Digital Therapy will review your ${vendorTypeLabel} application and follow up directly.`,
@@ -253,6 +258,13 @@ export function VendorApplicationDialog({
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    // Hard gate: NDA must be executed before the application can be submitted.
+    if (!ndaData) {
+      toast.error("Please complete the Vendor NDA before submitting your application.");
+      setNdaOpen(true);
+      return;
+    }
 
     const selectedSkillList = skillGroups
       .flatMap((group) => group.items)
@@ -303,6 +315,18 @@ export function VendorApplicationDialog({
       marketingConsent: form.marketingConsent,
       nameUsageConsent: form.nameUsageConsent,
       signature: form.signature,
+      // NDA execution payload — populated above the guard so always present here.
+      ndaBusinessName: ndaData.businessName,
+      ndaEntityDescriptor: ndaData.entityDescriptor,
+      ndaAddress: ndaData.address,
+      ndaSignerName: ndaData.signerName,
+      ndaSignerTitle: ndaData.title,
+      ndaSignerPhone: ndaData.phone,
+      ndaSignerEmail: ndaData.email,
+      ndaSignatureText: ndaData.signatureText,
+      ndaSignatureDate: ndaData.signatureDate,
+      ndaEffectiveDate: ndaData.effectiveDate,
+      ndaRequestCopy: ndaData.requestCopy,
       context,
       sourcePage: getSourcePage(),
       files,
@@ -603,6 +627,59 @@ export function VendorApplicationDialog({
               </div>
             </fieldset>
 
+            {/*
+              NDA execution gate — a required step. Vendor cannot submit the
+              application until the NDA dialog has been completed. The button
+              changes state to reflect completion (filled vs outlined, label,
+              icon, and a small recap of who signed).
+            */}
+            <fieldset className="space-y-3">
+              <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">Vendor NDA · required</legend>
+              <div
+                className={`flex flex-col gap-4 rounded-[1rem] border p-5 transition-colors duration-300 sm:flex-row sm:items-center sm:justify-between ${
+                  ndaData ? "border-[#0A65FF]/30 bg-[#0A65FF]/8" : "border-black/15 bg-[#F7F4EE]/60"
+                }`}
+              >
+                <div className="flex-1">
+                  {ndaData ? (
+                    <>
+                      <div className="flex items-center gap-2 text-sm font-bold text-[#0A65FF]">
+                        <CheckCircle2 className="h-4 w-4" />
+                        NDA executed
+                      </div>
+                      <p className="mt-1 text-xs leading-5 text-black/65">
+                        Signed by <span className="font-semibold text-[#111111]">{ndaData.signerName}</span>
+                        {ndaData.businessName ? ` (${ndaData.businessName})` : ""} on{" "}
+                        {ndaData.signatureDate}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm font-semibold text-[#111111]">
+                        Execution of the Vendor NDA is required.
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-black/65">
+                        A short mutual non-disclosure agreement protects both parties before any
+                        Digital Therapy information is shared during the engagement evaluation.
+                      </p>
+                    </>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setNdaOpen(true)}
+                  className={`group inline-flex shrink-0 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 ${
+                    ndaData
+                      ? "border border-[#0A65FF]/40 bg-white text-[#0A65FF] hover:bg-[#0A65FF] hover:text-white"
+                      : "bg-[#0A65FF] text-white shadow-[0_14px_32px_rgba(10,101,255,0.22)] hover:bg-[#004ed1]"
+                  }`}
+                >
+                  <ShieldCheck className="h-4 w-4" />
+                  {ndaData ? "Review NDA" : "Complete Vendor NDA"}
+                </button>
+              </div>
+            </fieldset>
+
             <fieldset className="space-y-5">
               <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">Consent &amp; signature</legend>
               <div className="space-y-3">
@@ -645,16 +722,33 @@ export function VendorApplicationDialog({
               </label>
             </fieldset>
 
-            <button
-              type="submit"
-              disabled={submitVendor.isPending}
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#0A65FF] px-6 py-4 text-base font-semibold text-white shadow-[0_18px_45px_rgba(10,101,255,0.22)] transition-all duration-300 hover:bg-[#004ed1] disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {submitVendor.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
-              Submit application
-            </button>
+            <div className="space-y-2">
+              <button
+                type="submit"
+                disabled={submitVendor.isPending || !ndaData}
+                className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#0A65FF] px-6 py-4 text-base font-semibold text-white shadow-[0_18px_45px_rgba(10,101,255,0.22)] transition-all duration-300 hover:bg-[#004ed1] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {submitVendor.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+                Submit application
+              </button>
+              {!ndaData ? (
+                <p className="text-center text-xs italic text-black/55">
+                  Complete the Vendor NDA above to enable submission.
+                </p>
+              ) : null}
+            </div>
           </form>
         </div>
+        <VendorNdaDialog
+          open={ndaOpen}
+          onOpenChange={setNdaOpen}
+          existing={ndaData}
+          vendorTypeLabel={vendorTypeLabel}
+          onComplete={(data) => {
+            setNdaData(data);
+            toast.success(`NDA executed by ${data.signerName}. You can now submit your application.`);
+          }}
+        />
       </DialogContent>
     </Dialog>
   );
