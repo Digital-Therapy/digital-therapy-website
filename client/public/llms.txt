@@ -1,0 +1,59 @@
+# Digital Therapy
+
+> Private operating layer for modern family offices. Digital Therapy unifies data, workflows, reporting, automation, and security under one trained team — purpose-built for family-office transformation.
+
+Digital Therapy is a New York consulting firm that delivers family-office transformation through **Fusion Teams**: small, cross-disciplinary units combining Operations, Accounting, and Technology subject-matter experts who train and deploy as one accountable unit rather than as competing practice groups. The firm typically embeds on-site for four weeks during a Discovery phase before recommending or building anything.
+
+## Core pages
+
+- [Capabilities](https://www.digitaltherapy.io/capabilities): The toolbox built for complex wealth — entity + cashflow mapping, governed warehouse + data aggregation, accounting systems transformation, single pane of glass, document automation, and insights & reporting.
+- [Process](https://www.digitaltherapy.io/process): The transformation methodology. Phase 1 is Discovery: four weeks on-site with two parallel tracks (Technology Discovery led by Milton Rodas; Finance & Accounting Discovery led by Hunter Atkins, CPA) and a shared Operations & Process SME splitting time between them. Phase 2 executes from a sequenced roadmap.
+- [Thesis](https://www.digitaltherapy.io/thesis): Why family-office transformation needs one trained team rather than collaborating practices. Firm architecture itself prevents effective collaboration — competing departments, transfer pricing, and utilization politics produce predictable failures for clients with one shared systems problem.
+- [DT Brain](https://www.digitaltherapy.io/dt-brain): On-premises AI and automation hub running on Apple M4 Pro hardware. No cloud dependency, identity-based Tailscale VPN access, designed for family offices that cannot tolerate data leaving their ecosystem.
+- [Team](https://www.digitaltherapy.io/team): Leadership, specialist benches (Tax & Accounting; Engineering & Digital Growth), and external advisors + partners.
+
+## For specific audiences
+
+- [Partners](https://www.digitaltherapy.io/partners): Confidential white-label partner model for private banks and advisory firms bringing family-office transformation to their clients.
+- [Vendors](https://www.digitaltherapy.io/vendors): Specialist vendors apply to join the bench across Technology, Finance & Accounting, Marketing, and Family Office disciplines. Application includes a mutual Third-Party Vendor Confidentiality & Data Protection Agreement.
+
+## Leadership
+
+- **Jonathan Kobrin** — Founder & CEO. Created the Fusion Team concept while serving as Director of Software Solutions & Transformation at EisnerAmper (Top 20 accounting firm), and brought it to market through Digital Therapy. Background in entrepreneurship and software development.
+- **Milton Rodas** — Chief Solution Engineer. Former Lead Project Architect & Automation Engineer at Tesla and Stellantis. Owns systems architecture, integration, and technical execution.
+- **Hunter Atkins, CPA** — Finance & Accounting lead. Licensed CPA and MBA. Specializes in accounting transformation, AP automation, ERP migrations, consolidated investment reporting, and fractional controllership.
+
+## Key concepts
+
+- **Fusion Team**: A management nucleus of three SME leaders — Operations, Accounting, and Technology — trained together, deployed together, and accountable together as a permanent leadership layer beneath the CEO. The structural answer to the silo problem.
+- **DT Brain**: Digital Therapy's on-premises automation hub. Apple M4 Pro hardware (12-core CPU, 16-core GPU, 16-core Neural Engine, 48 GB memory, 2 TB SSD, 1 Gbps Ethernet). Encrypted access via Tailscale VPN.
+- **Discovery**: The first phase of every engagement. All three SMEs deployed on-site for four weeks. Outputs are three deliverables that form the plan for Phase Two: a Graded Priorities List, a Current → Future State Visualization, and an Implementation Roadmap covering configuration, automation, integration, migration, testing, and onboarding.
+- **Four Steps to Data Empowerment**: Search + Verify → Connect + Pull → Format + Clean → Query + Report. The operating layer Digital Therapy installs to give family offices governed data they can trust.
+
+## Proof / case studies
+
+All three case studies are anonymized in respect of client privacy.
+
+- **Save Time — Close Acceleration + Invoice OCR/AI**. A multi-entity family office's AP team was hand-keying every invoice into the GL. Digital Therapy built an OCR + AI pipeline (extract → classify → validate → route → post). Impact: **2,000 hours/year returned to the business**; two FTEs redeployed from rekey work to vendor management, cash forecasting, and close review.
+- **Reduce Burn — Payment Processing Transformation**. Merchant operation paying high credit-card fees on every transaction. Digital Therapy mapped the merchant stack, redesigned customer-facing pricing for a Dual Pricing / Cash Discount model, integrated the new flow into POS and billing, and validated regulatory compliance state by state. Impact: **$1.5M/year in processing costs removed from the P&L**, with no disruption to checkout or collections.
+- **Make More Money — Payroll Transformation + WOTC Capture**. Family-office portfolio company migrated off Paychex onto Paylocity. Onboarding workflow rebuilt to flag WOTC-eligible candidates automatically. Impact: **$1,200 to $9,600 per qualified hire** captured automatically via the Work Opportunity Tax Credit — federal money the company was already eligible for and now actually collects.
+
+## Security and infrastructure
+
+- **Private deployment** — on-premises, offline, or controlled infrastructure options when sensitivity requires it.
+- **Role-based access** — users see only the data, reports, and workflows appropriate to their mandate.
+- **Auditability** — workflows, changes, approvals, and data flows remain documented and reviewable.
+- **Secure integration** — encrypted access and controlled connection patterns reduce unnecessary exposure.
+
+## Contact
+
+- Email: hello@digitaltherapy.io
+- Phone: 917-495-0455
+- Address: 115 E 89th St Apt 9A, New York, NY 10128
+- Book a 30-minute Discovery briefing: https://app.apollo.io/#/meet/digitaltherapy
+
+## Legal
+
+- [Privacy Policy](https://www.digitaltherapy.io/privacy)
+- [Terms of Service](https://www.digitaltherapy.io/terms)
+- [Accessibility](https://www.digitaltherapy.io/accessibility)

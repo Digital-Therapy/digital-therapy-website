@@ -20,7 +20,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    <!-- Organization + WebSite structured data (always present in the shell). -->
+    <!--
+      Site-wide structured-data graph.
+      Includes Organization (with address + employees + offer catalog), WebSite,
+      Person nodes for the three leaders, and Service nodes for the six
+      capability pillars. Per-route BreadcrumbList JSON-LD is emitted from
+      RouteSeo.tsx so each page has its own breadcrumb trail.
+    -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -29,13 +35,48 @@
             "@type": "Organization",
             "@id": "https://www.digitaltherapy.io/#organization",
             "name": "Digital Therapy",
+            "legalName": "Digital Therapy, LLC",
             "url": "https://www.digitaltherapy.io/",
-            "logo": "https://www.digitaltherapy.io/dtlogo.png",
+            "logo": "https://www.digitaltherapy.io/dtlogo.webp",
+            "image": "https://www.digitaltherapy.io/dtlogo.webp",
             "description": "Digital Therapy builds private operating layers for modern family offices, unifying data, workflows, reporting, automation, and security.",
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "contactType": "sales",
-              "email": "hello@digitaltherapy.io"
+            "foundingDate": "2024",
+            "areaServed": "United States",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "115 E 89th St Apt 9A",
+              "addressLocality": "New York",
+              "addressRegion": "NY",
+              "postalCode": "10128",
+              "addressCountry": "US"
+            },
+            "contactPoint": [
+              {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "email": "hello@digitaltherapy.io",
+                "telephone": "+1-917-495-0455",
+                "areaServed": "US",
+                "availableLanguage": "English"
+              }
+            ],
+            "founder": { "@id": "https://www.digitaltherapy.io/team#jonathan-kobrin" },
+            "employee": [
+              { "@id": "https://www.digitaltherapy.io/team#jonathan-kobrin" },
+              { "@id": "https://www.digitaltherapy.io/team#milton-rodas" },
+              { "@id": "https://www.digitaltherapy.io/team#hunter-atkins" }
+            ],
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "Capabilities",
+              "itemListElement": [
+                { "@type": "Offer", "itemOffered": { "@id": "https://www.digitaltherapy.io/capabilities#entity-cashflow-mapping" } },
+                { "@type": "Offer", "itemOffered": { "@id": "https://www.digitaltherapy.io/capabilities#warehouse-data-aggregation" } },
+                { "@type": "Offer", "itemOffered": { "@id": "https://www.digitaltherapy.io/capabilities#accounting-systems-transformation" } },
+                { "@type": "Offer", "itemOffered": { "@id": "https://www.digitaltherapy.io/capabilities#single-pane-of-glass" } },
+                { "@type": "Offer", "itemOffered": { "@id": "https://www.digitaltherapy.io/capabilities#document-automation" } },
+                { "@type": "Offer", "itemOffered": { "@id": "https://www.digitaltherapy.io/capabilities#insights-reporting" } }
+              ]
             }
           },
           {
@@ -44,6 +85,113 @@
             "url": "https://www.digitaltherapy.io/",
             "name": "Digital Therapy",
             "publisher": { "@id": "https://www.digitaltherapy.io/#organization" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://www.digitaltherapy.io/team#jonathan-kobrin",
+            "name": "Jonathan Kobrin",
+            "jobTitle": "Founder & CEO",
+            "worksFor": { "@id": "https://www.digitaltherapy.io/#organization" },
+            "url": "https://www.digitaltherapy.io/team",
+            "image": "https://www.digitaltherapy.io/team/jon.avif",
+            "description": "Founder and CEO of Digital Therapy. Created the Fusion Team concept while serving as Director of Software Solutions and Transformation at EisnerAmper (Top 20 accounting firm) and brought it to market through Digital Therapy.",
+            "knowsAbout": [
+              "Family office operating models",
+              "Transformation strategy",
+              "Fusion Teams",
+              "Client leadership"
+            ]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://www.digitaltherapy.io/team#milton-rodas",
+            "name": "Milton Rodas",
+            "jobTitle": "Chief Solution Engineer",
+            "worksFor": { "@id": "https://www.digitaltherapy.io/#organization" },
+            "url": "https://www.digitaltherapy.io/team",
+            "image": "https://www.digitaltherapy.io/team/milton.webp",
+            "description": "Chief Solution Engineer at Digital Therapy. Former Lead Project Architect and Automation Engineer at Tesla and Stellantis. Owns systems architecture, integration, and technical execution.",
+            "knowsAbout": [
+              "Systems architecture",
+              "Software engineering",
+              "Automation",
+              "Robotic Process Automation",
+              "AI",
+              "Cloud platforms"
+            ]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://www.digitaltherapy.io/team#hunter-atkins",
+            "name": "Hunter Atkins",
+            "honorificSuffix": "CPA",
+            "jobTitle": "CPA, Finance & Accounting Lead",
+            "worksFor": { "@id": "https://www.digitaltherapy.io/#organization" },
+            "url": "https://www.digitaltherapy.io/team",
+            "image": "https://www.digitaltherapy.io/team/hunter.webp",
+            "description": "Licensed CPA and MBA at Digital Therapy. Specializes in accounting transformation, process automation, AI-driven workflow design, ERP migrations, AP automation, consolidated investment reporting, and fractional controllership.",
+            "knowsAbout": [
+              "Accounting transformation",
+              "AP automation",
+              "ERP migrations",
+              "Consolidated investment reporting",
+              "Fractional controllership",
+              "Month-end close acceleration"
+            ]
+          },
+          {
+            "@type": "Service",
+            "@id": "https://www.digitaltherapy.io/capabilities#entity-cashflow-mapping",
+            "name": "Entity + Cashflow Mapping",
+            "serviceType": "Family office data architecture",
+            "provider": { "@id": "https://www.digitaltherapy.io/#organization" },
+            "areaServed": "Family offices and operated portfolio companies",
+            "description": "See your entities and cash flow as one map. Visualize multi-entity ownership and cash movement to make smarter operating decisions."
+          },
+          {
+            "@type": "Service",
+            "@id": "https://www.digitaltherapy.io/capabilities#warehouse-data-aggregation",
+            "name": "Warehouse & Data Aggregation",
+            "serviceType": "Data warehouse and integration",
+            "provider": { "@id": "https://www.digitaltherapy.io/#organization" },
+            "areaServed": "Family offices and operated portfolio companies",
+            "description": "Every source, unified. Cleansed, standardized, and governed — one source of truth feeding every downstream application."
+          },
+          {
+            "@type": "Service",
+            "@id": "https://www.digitaltherapy.io/capabilities#accounting-systems-transformation",
+            "name": "Accounting Systems Transformation",
+            "serviceType": "Accounting transformation and close acceleration",
+            "provider": { "@id": "https://www.digitaltherapy.io/#organization" },
+            "areaServed": "Family offices and operated portfolio companies",
+            "description": "Close in five days, not thirty. AP and AR redesigned around clear ownership, automated intake, and exception visibility — month-end backlog becomes operating rhythm."
+          },
+          {
+            "@type": "Service",
+            "@id": "https://www.digitaltherapy.io/capabilities#single-pane-of-glass",
+            "name": "Single Pane of Glass",
+            "serviceType": "Unified operating dashboard",
+            "provider": { "@id": "https://www.digitaltherapy.io/#organization" },
+            "areaServed": "Family offices and operated portfolio companies",
+            "description": "All systems, all data, one operating dashboard for family-office principals and leadership."
+          },
+          {
+            "@type": "Service",
+            "@id": "https://www.digitaltherapy.io/capabilities#document-automation",
+            "name": "Document Automation",
+            "serviceType": "OCR and AI-driven document processing",
+            "provider": { "@id": "https://www.digitaltherapy.io/#organization" },
+            "areaServed": "Family offices and operated portfolio companies",
+            "description": "OCR + AI extract-to-post pipelines for AP, contracts, and operational document handling."
+          },
+          {
+            "@type": "Service",
+            "@id": "https://www.digitaltherapy.io/capabilities#insights-reporting",
+            "name": "Insights & Reporting",
+            "serviceType": "Business intelligence and reporting",
+            "provider": { "@id": "https://www.digitaltherapy.io/#organization" },
+            "areaServed": "Family offices and operated portfolio companies",
+            "description": "Ask your data anything. Decision-grade answers on demand from governed warehouse data."
           }
         ]
       }

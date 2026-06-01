@@ -129,7 +129,17 @@ export default function Vendors() {
               </p>
             </motion.div>
 
-            <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {/*
+              Vendor cards are locked at a fixed 387px width (18% wider than
+              the original 328px reference size) regardless of browser width.
+              The only responsive change is HOW MANY cards fit in a row
+              (1 → 2 → 3, capped at 3). Flex-wrap handles the count automatically
+              based on available width, and the parent max-w-[1201px] keeps the
+              grid from ever exceeding 3 cards across (3 × 387 + 2 × 20 gaps).
+              justify-start (instead of justify-center) ensures a lone 4th card
+              in Row 2 left-aligns to Column 1 rather than centering as Column 2.
+            */}
+            <div className="mx-auto mt-14 flex max-w-[1201px] flex-wrap justify-start gap-5">
               {vendorTypes.map((vendor, index) => {
                 const Icon = vendor.icon;
                 return (
@@ -146,7 +156,11 @@ export default function Vendors() {
                       aria-label={`Open ${vendor.title} application form`}
                       {...fadeUp}
                       transition={{ ...fadeUp.transition, delay: index * 0.06 }}
-                      className="group flex min-h-full flex-col rounded-[1.6rem] border border-black/8 bg-white p-7 text-left shadow-[0_18px_50px_rgba(17,17,17,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                      // min-h-[380px] guarantees every card is at least 380px
+                      // tall regardless of row, so mt-auto on the Apply pill
+                      // reliably pushes the button to the bottom with a
+                      // consistent gap below the description on every card.
+                      className="group flex min-h-[380px] w-full max-w-[387px] flex-col rounded-[1.6rem] border border-black/8 bg-white p-7 text-left shadow-[0_18px_50px_rgba(17,17,17,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2 sm:w-[387px]"
                     >
                       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0A65FF]/10 text-[#0A65FF] transition-colors duration-300 group-hover:bg-[#0A65FF] group-hover:text-white">
                         <Icon className="h-6 w-6" />

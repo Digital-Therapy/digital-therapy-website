@@ -364,29 +364,34 @@ export function VendorApplicationDialog({
                   <p className="font-semibold">Documents</p>
                   <p className="mt-1 text-black/78">
                     Attach your Resume, W9, and headshot below &mdash; they upload securely with your
-                    application (up to 8MB each). Questions? Reach us at{" "}
-                    <a className="font-semibold text-[#0A65FF] underline" href="mailto:hello@digitaltherapy.io">
-                      hello@digitaltherapy.io
+                    application (up to 8MB each). For questions, email us at{" "}
+                    <a className="font-semibold text-[#0A65FF] underline" href="mailto:Vendors@digitaltherapy.io">
+                      Vendors@digitaltherapy.io
                     </a>
-                    .
                   </p>
                 </div>
               </div>
             </div>
           </aside>
           <form onSubmit={handleSubmit} className="space-y-8 bg-white p-9 lg:p-11">
-            <fieldset className="space-y-5">
-              <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">About you</legend>
+            {/*
+              space-y-8 (32px) on this fieldset gives more breathing room
+              between the "About Vendor" eyebrow and the first row of fields
+              (Full name / Work email) — the previous space-y-5 (20px) felt
+              cramped with the legend sitting almost on top of the inputs.
+            */}
+            <fieldset className="space-y-8">
+              <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">About Vendor</legend>
               <div className="grid gap-5 sm:grid-cols-2">
-                <label className="space-y-2 text-sm font-semibold text-black/74">
+                <label className="flex flex-col gap-3 text-sm font-semibold text-black/74">
                   Full name
                   <Input value={form.name} onChange={(event) => updateField("name", event.target.value)} required minLength={2} placeholder="Your name" className="h-11" />
                 </label>
-                <label className="space-y-2 text-sm font-semibold text-black/74">
+                <label className="flex flex-col gap-3 text-sm font-semibold text-black/74">
                   Work email
                   <Input value={form.email} onChange={(event) => updateField("email", event.target.value)} required type="email" placeholder="name@firm.com" className="h-11" />
                 </label>
-                <label className="space-y-2 text-sm font-semibold text-black/74 sm:col-span-2">
+                <label className="flex flex-col gap-3 text-sm font-semibold text-black/74 sm:col-span-2">
                   Title / role
                   <Input value={form.role} onChange={(event) => updateField("role", event.target.value)} placeholder={`e.g. ${vendorTypeLabel}, Founder, Consultant`} className="h-11" />
                 </label>
@@ -395,7 +400,7 @@ export function VendorApplicationDialog({
 
             <fieldset className="space-y-5">
               <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">Bio</legend>
-              <label className="block space-y-2 text-sm font-semibold text-black/74">
+              <label className="block flex flex-col gap-3 text-sm font-semibold text-black/74">
                 Personal bio
                 <Textarea
                   value={form.personalBio}
@@ -406,7 +411,7 @@ export function VendorApplicationDialog({
                   className="min-h-[160px] resize-none"
                 />
               </label>
-              <label className="block space-y-2 text-sm font-semibold text-black/74">
+              <label className="block flex flex-col gap-3 text-sm font-semibold text-black/74">
                 Company CV
                 <Textarea
                   value={form.companyCv}
@@ -449,7 +454,7 @@ export function VendorApplicationDialog({
             <fieldset className="space-y-5">
               <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">Availability &amp; rate</legend>
               <div className="grid gap-5 sm:grid-cols-2">
-                <label className="space-y-2 text-sm font-semibold text-black/74">
+                <label className="flex flex-col gap-3 text-sm font-semibold text-black/74">
                   Hourly rate (USD)
                   <Input
                     value={form.hourlyRate}
@@ -459,7 +464,7 @@ export function VendorApplicationDialog({
                     className="h-11"
                   />
                 </label>
-                <label className="space-y-2 text-sm font-semibold text-black/74">
+                <label className="flex flex-col gap-3 text-sm font-semibold text-black/74">
                   Available hours / month
                   <Input
                     value={form.hoursPerMonth}
@@ -470,7 +475,7 @@ export function VendorApplicationDialog({
                   />
                 </label>
               </div>
-              <label className="block space-y-2 text-sm font-semibold text-black/74">
+              <label className="block flex flex-col gap-3 text-sm font-semibold text-black/74">
                 Unique availability scenarios
                 <Textarea
                   value={form.availabilityNotes}
@@ -515,7 +520,7 @@ export function VendorApplicationDialog({
                   </div>
                 ))}
               </div>
-              <label className="block space-y-2 text-sm font-semibold text-black/74">
+              <label className="block flex flex-col gap-3 text-sm font-semibold text-black/74">
                 Additional platforms / coding languages
                 <Textarea
                   value={form.additionalSkills}
@@ -706,7 +711,7 @@ export function VendorApplicationDialog({
                   </span>
                 </label>
               </div>
-              <label className="block space-y-2 text-sm font-semibold text-black/74">
+              <label className="block flex flex-col gap-3 text-sm font-semibold text-black/74">
                 Signature
                 <Input
                   value={form.signature}
