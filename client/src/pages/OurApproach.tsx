@@ -19,8 +19,8 @@ import {
 } from "lucide-react";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const markUrl = "/dt-mark.png";
-const wealthMapVisual = "/discovery-program.png";
+const markUrl = "/dt-mark.webp";
+const wealthMapVisual = "/discovery-program.webp";
 
 const fadeUp = {
   initial: { opacity: 0, y: 28 },
@@ -42,7 +42,7 @@ const discoveryTracks = [
       "Integration requirements and data exchange design",
     ],
     icon: Network,
-    image: "/tech-sme.png",
+    image: "/tech-sme.webp",
     imageAlt: "Hand-drawn blue sketch portrait of Milton Rodas, Digital Therapy's Technology SME, wearing a 'Born to code.' t-shirt",
   },
   {
@@ -57,7 +57,7 @@ const discoveryTracks = [
       "Finance optimization and tooling priorities",
     ],
     icon: ClipboardCheck,
-    image: "/arap-sme.png",
+    image: "/arap-sme.webp",
     imageAlt: "Hand-drawn blue sketch portrait of Hunter, Digital Therapy's Finance & Accounting SME",
   },
 ];
@@ -262,10 +262,9 @@ export default function OurApproach() {
               <div>
                 <div className="inline-flex items-center gap-4">
                   <img
-                    src="/process-sme.png"
+                    src="/process-sme.webp"
                     alt="Hand-drawn blue sketch portrait of Digital Therapy's Operations & Process SME"
-                    className="h-20 w-20 shrink-0 rounded-2xl border border-white/15 bg-white object-cover"
-                  />
+                    className="h-20 w-20 shrink-0 rounded-2xl border border-white/15 bg-white object-cover" loading="lazy" decoding="async" />
                   <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#58B8FF]">Shared across both tracks</p>
                 </div>
                 <h3 className="mt-6 text-3xl font-semibold leading-tight tracking-[-0.04em]">

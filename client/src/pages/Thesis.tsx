@@ -28,10 +28,10 @@ import {
 } from "lucide-react";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const markUrl = "/dt-mark.png";
+const markUrl = "/dt-mark.webp";
 const boardroomVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_family_office_boardroom-UvecEVLEaVqpouVEhEb9mw.webp";
-const wealthMapVisual = "/fragmented-route.png";
+const wealthMapVisual = "/fragmented-route.webp";
 
 const fadeUp = {
   initial: { opacity: 0, y: 28 },
@@ -76,7 +76,7 @@ const fusionDisciplines = [
     role: "Process architecture, workflow optimization, SOPs, playbooks, KPI design, delivery systems, and organizational clarity.",
     outcome: "Transforms operational chaos into structured, scalable systems by mapping current-state workflows, identifying bottlenecks, and designing future-state processes.",
     icon: Workflow,
-    image: "/process-sme.png",
+    image: "/process-sme.webp",
     imageAlt: "Hand-drawn blue sketch of Digital Therapy's Operations & Process SME",
   },
   {
@@ -84,7 +84,7 @@ const fusionDisciplines = [
     role: "Automation-forward accounting operations, AP and AR transformation, close acceleration, data integrity, workflow sequencing, AI, and RPA.",
     outcome: "Connects finance, operations, and technology so controls, reporting evidence, system dependencies, and implementation realities are designed together.",
     icon: ClipboardCheck,
-    image: "/arap-sme.png",
+    image: "/arap-sme.webp",
     imageAlt: "Hand-drawn blue sketch of Hunter, Digital Therapy's Finance & Accounting SME",
   },
   {
@@ -92,7 +92,7 @@ const fusionDisciplines = [
     role: "Full-stack engineering, data architecture, AI systems, integrations, robotic process automation, and technical execution.",
     outcome: "Acts as a systems architect who understands operational and financial realities alongside engineering requirements.",
     icon: Code2,
-    image: "/tech-sme.png",
+    image: "/tech-sme.webp",
     imageAlt: "Hand-drawn blue sketch of Milton Rodas, Digital Therapy's Technology SME",
   },
 ];

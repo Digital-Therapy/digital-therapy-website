@@ -24,8 +24,8 @@ import {
 import { useState } from "react";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const markUrl = "/dt-mark.png";
-const wealthMapVisual = "/dt-talk-to-your-data.png";
+const markUrl = "/dt-mark.webp";
+const wealthMapVisual = "/dt-talk-to-your-data.webp";
 const securityVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_security_automation-Z4CfAdsU9T8pybHF6A7NLi.webp";
 
@@ -41,14 +41,14 @@ const capabilities = [
     title: "Entity + Cashflow Mapping",
     copy: "Entity, trust, account, investment, real-estate, and operating-company views organized into one trusted map.",
     icon: Network,
-    tool: "/entity-cashflow-mapping.png",
+    tool: "/entity-cashflow-mapping.webp",
     toolAlt: "Entity + Cashflow Mapping tool diagram",
   },
   {
     title: "Warehouse & Data-Aggregation",
     copy: "Unify your data by connecting every source to your DT On-Prem central warehouse. We can migrate any data repository including legacy mainframe & green screen systems.",
     icon: Sparkles,
-    tool: "/warehouse.png",
+    tool: "/warehouse.webp",
     toolAlt: "Digital Therapy data warehouse diagram",
     toolButtonLabel: "See warehouse diagram",
   },
@@ -56,7 +56,7 @@ const capabilities = [
     title: "Accounting Systems",
     copy: "Close acceleration, AP and AR workflow improvement, reporting evidence, control design, and automation-forward accounting support.",
     icon: ClipboardCheck,
-    tool: "/close-faster.png",
+    tool: "/close-faster.webp",
     toolAlt: "Squeeze your month-end-close down to a week — four-phase framework",
     toolButtonLabel: "See close framework",
   },
@@ -64,7 +64,7 @@ const capabilities = [
     title: "Single pane of glass",
     copy: "Capital calls, notices, statements, subscriptions, document intake, investment data capture, and exception handling for private investments.",
     icon: Building2,
-    tool: "/consolidated-financials.png",
+    tool: "/consolidated-financials.webp",
     toolAlt: "Single-pane-of-glass consolidated financial view",
     toolButtonLabel: "See consolidated view",
   },
@@ -72,7 +72,7 @@ const capabilities = [
     title: "Document automation",
     copy: "AI document agents that classify, extract, route, summarize, and preserve source evidence for sensitive family-office materials.",
     icon: FileSearch,
-    tool: "/invoice-ocr-ai.png",
+    tool: "/invoice-ocr-ai.webp",
     toolAlt: "Invoice OCR + AI document automation case study",
     toolButtonLabel: "See case study",
   },
@@ -80,7 +80,7 @@ const capabilities = [
     title: "Insights & Reporting",
     copy: "Dashboards, ad-hoc owner questions, scheduled reporting, narrative commentary, and self-serve views tailored to each stakeholder.",
     icon: BarChart3,
-    tool: "/insights.png",
+    tool: "/insights.webp",
     toolAlt: "Digital Therapy insights and reporting tool",
     toolButtonLabel: "More on Insights",
   },
@@ -375,10 +375,9 @@ export default function Capabilities() {
                 How do you choose?
               </h2>
               <img
-                src="/balance-scale.png"
+                src="/balance-scale.webp"
                 alt="Balance scale weighing Speed & Intelligence against Security & Privacy, with the message: You need both. And we can give that to you."
-                className="mt-10 w-full rounded-2xl border border-white/10"
-              />
+                className="mt-10 w-full rounded-2xl border border-white/10" loading="lazy" decoding="async" />
             </motion.div>
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }} className="border border-white/12 bg-white/[0.06] p-8 backdrop-blur-xl">
               <p className="text-xl leading-9 text-white/70">

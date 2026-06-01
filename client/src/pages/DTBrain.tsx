@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const markUrl = "/dt-mark.png";
+const markUrl = "/dt-mark.webp";
 const securityVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_security_automation-Z4CfAdsU9T8pybHF6A7NLi.webp";
 const heroVisual =

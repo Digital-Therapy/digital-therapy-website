@@ -21,8 +21,8 @@ import {
 } from "lucide-react";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const markUrl = "/dt-mark.png";
-const welcomeVisual = "/welcome-hero.png";
+const markUrl = "/dt-mark.webp";
+const welcomeVisual = "/welcome-hero.webp";
 const heroVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_hero_operating_layer-TEdtu9wcNJkxBt4PK2JKyo.webp";
 const boardroomVisual =
@@ -64,7 +64,7 @@ const operatingLayers: {
     title: "Search + Verify",
     copy: "Locate critical records, accounts, entities, and documents across all connected & standalone systems. This includes external storage accounts, back-up systems and legacy systems no matter how old & hard to use.",
     icon: Database,
-    image: "/sigmund-search.png",
+    image: "/sigmund-search.webp",
     imageAlt: "Sigmund searching for records",
   },
   {
@@ -72,7 +72,7 @@ const operatingLayers: {
     title: "Connect + Pull",
     copy: "Aggregate final list of approved source data into Warehouse via API, RPA or other workflow automation. All the data must be centralized. If the data is too hard to pull in, we may suggest changing the root system(s).",
     icon: Workflow,
-    image: "/sigmund-connect.png",
+    image: "/sigmund-connect.webp",
     imageAlt: "Sigmund connecting and pulling data from multiple sources",
   },
   {
@@ -80,7 +80,7 @@ const operatingLayers: {
     title: "Format + Clean",
     copy: "Evaluate integrity and reconcile data across all systems. Understand & troubleshoot discrepancies & redundancies. Then organize into proper organizational (Table) structures. Once properly cleaned & formatted, the data can be made accessible to dashboard & reporting applications and other automation tools.",
     icon: BarChart3,
-    image: "/sigmund-clean.png",
+    image: "/sigmund-clean.webp",
     imageAlt: "Sigmund cleaning and organizing data",
   },
   {
@@ -88,7 +88,7 @@ const operatingLayers: {
     title: "Query + Report",
     copy: "Turn structured data into reporting, automation, and AI-enhanced insights that leaders can use to win.",
     icon: ShieldCheck,
-    image: "/sigmund-report.png",
+    image: "/sigmund-report.webp",
     imageAlt: "Sigmund delivering a report",
   },
 ];
@@ -96,19 +96,19 @@ const operatingLayers: {
 const fusionTeam = [
   {
     title: "Operations Expert",
-    image: "/process-sme.png",
+    image: "/process-sme.webp",
     imageAlt: "Hand-drawn blue sketch of Digital Therapy's Operations & Process SME",
     copy: "The Operations SME focuses on people, process & delivery. This expert prizes efficiency, productivity, playbooks, KPIs & SOPs. They turn swirling chaos into digestible organization and reduce complex systems into the right size bites to plan effectively & ensure collective understanding by visualizing workflows to clarify how a business operation occurs now (Current State), highlighting weaknesses (like bottlenecks & redundancies) and optimizing a new process design (or Future State).",
   },
   {
     title: "Accounting Expert",
-    image: "/arap-sme.png",
+    image: "/arap-sme.webp",
     imageAlt: "Hand-drawn blue sketch of Hunter, Digital Therapy's Finance & Accounting SME",
     copy: "This SME is not your typical accountant. He does not fear technology & he voraciously embraces automation. They are masters of close acceleration and can tame the most complex AP & AR processes out there. They work intimately with engineers and they’re acutely aware of how they need to support technical team members to assure success as well as what limitations they have and where they need support from tech leaders.",
   },
   {
     title: "Technology Expert",
-    image: "/tech-sme.png",
+    image: "/tech-sme.webp",
     imageAlt: "Hand-drawn blue sketch of Milton Rodas, Digital Therapy's Technology SME",
     copy: "The Technology SME is not an easy resource to find. They need to be trained for a purpose with intention & vigor to achieve the breadth & depth of skills necessary to fill the shoes of this daunting role — They are full stack engineers, data scientists, artists of Robotic Process Automation and masters of AI of the highest order.",
   },
@@ -369,7 +369,7 @@ export default function Home() {
         <section className="bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
-              <img src="/aicutsheads.png" alt="AI automation reducing headcount and growing revenue" className="aspect-[3/2] w-full object-cover" />
+              <img src="/aicutsheads.webp" alt="AI automation reducing headcount and growing revenue" className="aspect-[3/2] w-full object-cover" loading="lazy" decoding="async" />
             </motion.div>
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <SectionLabel>Automation and AI</SectionLabel>

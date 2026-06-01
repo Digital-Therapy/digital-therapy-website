@@ -31,24 +31,24 @@ import {
 } from "lucide-react";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const markUrl = "/dt-mark.png";
+const markUrl = "/dt-mark.webp";
 const boardroomVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_family_office_boardroom-UvecEVLEaVqpouVEhEb9mw.webp";
 const headshots = {
   harryDublinsky: "/team/harry.avif",
-  bruceDitman: "/team/bruce-blue.png",
+  bruceDitman: "/team/bruce-blue.webp",
   lironDavid: "/team/liron.avif",
   jonathanKobrin: "/team/jon.avif",
-  hunterAtkins: "/team/hunter.png",
-  miltonRodas: "/team/milton.png",
+  hunterAtkins: "/team/hunter.webp",
+  miltonRodas: "/team/milton.webp",
   kennedyKraner: "/team/kennedy.avif",
   rickToussaint: "/team/rick.avif",
-  stanGretov: "/team/stan.png",
+  stanGretov: "/team/stan.webp",
   vadimLitvak: "/team/vadim.avif",
   valerioMirof: "/team/valerio.avif",
-  geoffHorn: "/team/geoff-blue.png",
+  geoffHorn: "/team/geoff-blue.webp",
   dariaShulenko: "/team/daria.avif",
-  dougGray: "/team/doug-blue.png",
+  dougGray: "/team/doug-blue.webp",
 };
 
 const fadeUp = {

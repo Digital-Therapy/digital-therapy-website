@@ -1,8 +1,8 @@
 import { ArrowUpRight, Mail, Phone } from "lucide-react";
 import { ContactFormDialog } from "@/components/ContactBooking";
 
-const logoUrl = "/dtlogo.png";
-const markUrl = "/dt-mark.png";
+const logoUrl = "/dtlogo.webp";
+const markUrl = "/dt-mark.webp";
 
 const footerLinkClasses =
   "group flex w-full items-center justify-between gap-4 text-left text-sm font-medium text-black/78 transition-colors duration-300 hover:text-[#0A65FF]";

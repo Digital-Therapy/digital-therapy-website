@@ -11,7 +11,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-const logoUrl = "/dtlogo.png";
+const logoUrl = "/dtlogo.webp";
 
 const primaryNavItems = [
   { label: "Thesis", href: "/thesis" },
