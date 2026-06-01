@@ -61,8 +61,8 @@ const operatingLayers: {
 }[] = [
   {
     eyebrow: "01",
-    title: "Search + Find",
-    copy: "Locate critical records, accounts, entities, and documents across every system before decisions are made.",
+    title: "Search + Verify",
+    copy: "Locate critical records, accounts, entities, and documents across all connected & standalone systems. This includes external storage accounts, back-up systems and legacy systems no matter how old & hard to use.",
     icon: Database,
     image: "/sigmund-search.png",
     imageAlt: "Sigmund searching for records",
@@ -70,7 +70,7 @@ const operatingLayers: {
   {
     eyebrow: "02",
     title: "Connect + Pull",
-    copy: "Bring approved source data into one governed workflow without forcing teams to chase down files manually.",
+    copy: "Aggregate final list of approved source data into Warehouse via API, RPA or other workflow automation. All the data must be centralized. If the data is too hard to pull in, we may suggest changing the root system(s).",
     icon: Workflow,
     image: "/sigmund-connect.png",
     imageAlt: "Sigmund connecting and pulling data from multiple sources",
@@ -78,7 +78,7 @@ const operatingLayers: {
   {
     eyebrow: "03",
     title: "Format + Clean",
-    copy: "Format, reconcile & clean data so it can be used as trusted operating intelligence.",
+    copy: "Evaluate integrity and reconcile data across all systems. Understand & troubleshoot discrepancies & redundancies. Then organize into proper organizational (Table) structures. Once properly cleaned & formatted, the data can be made accessible to dashboard & reporting applications and other automation tools.",
     icon: BarChart3,
     image: "/sigmund-clean.png",
     imageAlt: "Sigmund cleaning and organizing data",
