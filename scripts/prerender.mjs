@@ -19,7 +19,7 @@ import { chromium } from "playwright";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = resolve(__dirname, "../dist/public");
-const SITE_URL = "https://dt.dtapps.io";
+const SITE_URL = "https://www.digitaltherapy.io";
 
 // Keep in sync with client/src/lib/seo.ts (ROUTE_META). Titles/descriptions
 // come from the rendered app; this list only drives which routes to prerender
