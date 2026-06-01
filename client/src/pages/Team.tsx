@@ -138,10 +138,10 @@ const groups: Array<{
 const extendedNetwork: Array<
   TeamPerson & { group: string; icon: typeof Landmark; imageClassName?: string; imageContainerClassName?: string }
 > = [
-  { name: "Geoff Horn", role: "Payments", group: "Alliance", icon: Landmark, imageUrl: headshots.geoffHorn },
   { name: "Bruce Ditman", role: "Advisor", group: "Advisor", icon: BadgeCheck, imageUrl: headshots.bruceDitman },
   { name: "Liron David", role: "Advisor", group: "Advisor", icon: BadgeCheck, imageUrl: headshots.lironDavid },
   { name: "Doug Gray", role: "Advisor", group: "Advisor", icon: BadgeCheck, imageUrl: headshots.dougGray },
+  { name: "Geoff Horn", role: "Payments Partner", group: "Partner", icon: Landmark, imageUrl: headshots.geoffHorn },
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -547,13 +547,24 @@ export default function Team() {
         <section className="border-b border-black/8 bg-[#F7F4EE] py-24">
           <div className="container">
             <motion.div {...fadeUp} className="max-w-3xl">
-              <SectionLabel>Alliances & advisors</SectionLabel>
-              <h2 className="font-display text-[clamp(2.5rem,5vw,4.8rem)] leading-[0.96] tracking-[-0.06em]">
-                Alliances
-              </h2>
+              <SectionLabel>Advisors &amp; Partners</SectionLabel>
             </motion.div>
-            <div className="mt-12 flex flex-wrap justify-center gap-[42px] sm:justify-start">
-              {extendedNetwork.map((person, index) => {
+
+            {/*
+              Section is now split into TWO sub-sections rendered in this order:
+              1. "Advisors" — every person in extendedNetwork with group === "Advisor".
+              2. "Partners" — every person in extendedNetwork with group === "Partner".
+              The card-rendering loop is shared between both via the renderPersonCard helper
+              defined below so behavior (image overrides, hover, dialog wrapping) stays in sync.
+            */}
+            {(() => {
+              const cardClasses =
+                "w-full max-w-[300px] sm:w-[280px] overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 text-left shadow-[0_18px_45px_rgba(17,17,17,0.05)]";
+
+              const renderPersonCard = (
+                person: (typeof extendedNetwork)[number],
+                index: number,
+              ) => {
                 const Icon = person.icon;
                 const cardBody = (
                   <>
@@ -582,10 +593,6 @@ export default function Team() {
                   </>
                 );
 
-                // Cards locked to a fixed ~280px width so photos don't stretch / over-zoom on wider screens.
-                const cardClasses =
-                  "w-full max-w-[300px] sm:w-[280px] overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 text-left shadow-[0_18px_45px_rgba(17,17,17,0.05)]";
-
                 if (person.bio) {
                   return (
                     <MemberBioDialog key={`${person.group}-${person.name}`} member={person}>
@@ -612,8 +619,33 @@ export default function Team() {
                     {cardBody}
                   </motion.article>
                 );
-              })}
-            </div>
+              };
+
+              const advisors = extendedNetwork.filter((p) => p.group === "Advisor");
+              const partners = extendedNetwork.filter((p) => p.group === "Partner");
+
+              return (
+                <>
+                  <div className="mt-6">
+                    <h2 className="font-display text-[clamp(2.5rem,5vw,4.8rem)] leading-[0.96] tracking-[-0.06em]">
+                      Advisors
+                    </h2>
+                    <div className="mt-12 flex flex-wrap justify-center gap-[42px] sm:justify-start">
+                      {advisors.map((person, index) => renderPersonCard(person, index))}
+                    </div>
+                  </div>
+
+                  <div className="mt-20">
+                    <h2 className="font-display text-[clamp(2.5rem,5vw,4.8rem)] leading-[0.96] tracking-[-0.06em]">
+                      Partners
+                    </h2>
+                    <div className="mt-12 flex flex-wrap justify-center gap-[42px] sm:justify-start">
+                      {partners.map((person, index) => renderPersonCard(person, index))}
+                    </div>
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </section>
 
