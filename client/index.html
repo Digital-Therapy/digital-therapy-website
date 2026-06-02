@@ -32,16 +32,33 @@
         "@context": "https://schema.org",
         "@graph": [
           {
-            "@type": "Organization",
+            "@type": ["Organization", "ProfessionalService"],
             "@id": "https://www.digitaltherapy.io/#organization",
             "name": "Digital Therapy",
             "legalName": "Digital Therapy, LLC",
+            "alternateName": "Digital Therapy LLC",
+            "slogan": "Private operating layer for modern family offices.",
             "url": "https://www.digitaltherapy.io/",
             "logo": "https://www.digitaltherapy.io/dtlogo.webp",
             "image": "https://www.digitaltherapy.io/dtlogo.webp",
             "description": "Digital Therapy builds private operating layers for modern family offices, unifying data, workflows, reporting, automation, and security.",
             "foundingDate": "2024",
-            "areaServed": "United States",
+            "areaServed": [
+              { "@type": "Country", "name": "United States" },
+              { "@type": "City", "name": "New York" }
+            ],
+            "priceRange": "$$$$",
+            "knowsAbout": [
+              "Family office transformation",
+              "Fusion Teams",
+              "Accounting transformation",
+              "AP and AR automation",
+              "Data warehousing",
+              "Entity and cashflow mapping",
+              "On-premises AI infrastructure",
+              "Robotic Process Automation",
+              "Close acceleration"
+            ],
             "address": {
               "@type": "PostalAddress",
               "streetAddress": "115 E 89th St Apt 9A",

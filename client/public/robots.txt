@@ -1,5 +1,83 @@
+# Digital Therapy — robots.txt
+#
+# Strategy: explicit allow for major search-engine crawlers AND major
+# AI/LLM crawlers. The deliberate trade-off is "training-data leakage" in
+# exchange for citation visibility inside ChatGPT, Claude, Perplexity,
+# Gemini Search Generative Experience, and Apple Intelligence. Family-office
+# prospects increasingly start research inside those tools, so being
+# crawlable is the strategic call.
+
+# Default policy — all bots welcome unless an explicit override below says
+# otherwise.
 User-agent: *
 Allow: /
 Disallow: /404
+
+# OpenAI — ChatGPT / GPTs
+User-agent: GPTBot
+Allow: /
+
+# OpenAI — ChatGPT browsing / Plugin retrieval
+User-agent: ChatGPT-User
+Allow: /
+
+# OpenAI — model training (legacy)
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic — Claude / claude.ai retrieval
+User-agent: ClaudeBot
+Allow: /
+
+# Anthropic — model training (legacy crawler name)
+User-agent: anthropic-ai
+Allow: /
+
+# Anthropic — Claude-Web (browsing on behalf of users)
+User-agent: Claude-Web
+Allow: /
+
+# Perplexity — answer engine
+User-agent: PerplexityBot
+Allow: /
+
+# Perplexity — user-triggered fetch
+User-agent: Perplexity-User
+Allow: /
+
+# Google — Gemini / SGE / AI Overviews training and answer-side fetch
+User-agent: Google-Extended
+Allow: /
+
+# Apple — Apple Intelligence / Siri retrieval
+User-agent: Applebot-Extended
+Allow: /
+
+# Meta — Meta AI / Llama training and retrieval
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# ByteDance — Doubao / TikTok answer surfaces
+User-agent: Bytespider
+Allow: /
+
+# Common Crawl — feeds many AI training datasets and downstream models
+User-agent: CCBot
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+# You.com
+User-agent: YouBot
+Allow: /
+
+# DuckDuckGo Assist
+User-agent: DuckAssistBot
+Allow: /
 
 Sitemap: https://www.digitaltherapy.io/sitemap.xml

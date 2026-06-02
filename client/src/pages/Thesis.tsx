@@ -124,9 +124,58 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
+// Article schema for /thesis. Rendered as a JSON-LD <script> tag below so
+// Google and AI crawlers treat the Thesis page as authored thought-leadership
+// (author + datePublished + publisher are what trigger Article rich results
+// and weight content as citable in LLM answers).
+const THESIS_ARTICLE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.digitaltherapy.io/thesis",
+  },
+  "headline": "Why family-office transformation needs one trained team",
+  "alternativeHeadline": "The Digital Therapy Thesis: Fusion Teams over Practice Groups",
+  "description":
+    "Firm architecture itself prevents effective collaboration. Accounting practices, engineering teams, and operations consultants compete for revenue and utilization — producing predictable failures for family-office clients with one shared systems problem. The Digital Therapy thesis lays out the structural alternative: Fusion Teams.",
+  "url": "https://www.digitaltherapy.io/thesis",
+  "datePublished": "2024-02-15",
+  "dateModified": "2026-06-01",
+  "author": {
+    "@id": "https://www.digitaltherapy.io/team#jonathan-kobrin",
+  },
+  "publisher": {
+    "@id": "https://www.digitaltherapy.io/#organization",
+  },
+  "image": "https://www.digitaltherapy.io/fragmented-route.webp",
+  "articleSection": "Thesis",
+  "inLanguage": "en-US",
+  "keywords": [
+    "Family office transformation",
+    "Fusion Team",
+    "Silo culture",
+    "Practice-based firms",
+    "Accounting transformation",
+    "Operating model",
+  ],
+  "about": [
+    { "@id": "https://www.digitaltherapy.io/team#jonathan-kobrin" },
+    { "@id": "https://www.digitaltherapy.io/#organization" },
+  ],
+};
+
 export default function Thesis() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#111111] selection:bg-[#0A65FF] selection:text-white">
+      {/* Per-route Article JSON-LD — React 19 mounts this script in the DOM
+          and the build-time prerender (scripts/prerender.mjs) captures it into
+          the static HTML so non-JS crawlers see it on first load. */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(THESIS_ARTICLE_SCHEMA) }}
+      />
       <PublicHeader
         activeLabel="Thesis"
         bookingContext="thesis page family-office booking"
