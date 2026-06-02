@@ -167,6 +167,10 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    // Ship source maps for production bundles so error reporting tools,
+    // browser devtools, and Lighthouse can debug minified code. Cost is
+    // small (separate .map files, served on demand and never blocking).
+    sourcemap: true,
   },
   server: {
     host: true,

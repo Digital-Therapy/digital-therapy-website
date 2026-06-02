@@ -51,7 +51,13 @@ export default function SiteFooter() {
             className="group flex flex-col items-center justify-between gap-4 rounded-[1.6rem] border border-[#0A65FF]/25 bg-[#0A65FF]/8 px-6 py-6 transition-all duration-300 hover:border-[#0A65FF]/50 hover:bg-[#0A65FF]/12 sm:flex-row sm:gap-6 sm:px-8 sm:py-7"
           >
             <div>
-              <p className="text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">For specialists</p>
+              {/*
+                Eyebrow uses a darker brand blue (#0040c9) than the standard
+                #0A65FF so it passes WCAG AA contrast (4.5:1) on this card's
+                light blue tint background at the 0.7rem small-caps size.
+                The standard #0A65FF reads at only 4.09:1 here.
+              */}
+              <p className="text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0040c9]">For specialists</p>
               <p className="mt-2 whitespace-nowrap font-display text-[clamp(1.05rem,2.6vw,1.875rem)] leading-tight tracking-[-0.03em] text-[#111111]">
                 Become a Digital Therapy vendor.
               </p>

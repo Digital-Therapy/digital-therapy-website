@@ -3,9 +3,10 @@
 
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <!-- maximum-scale=1 removed: disabling pinch-zoom hurts users with low
+         vision who rely on screen magnification, and trips an a11y Lighthouse
+         audit. The 1.0 initial scale is enough for our typography. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0A65FF" />
     <!--
       Per-page <title>, description, canonical, Open Graph and Twitter tags are
@@ -16,6 +17,22 @@
     -->
     <link rel="icon" type="image/png" href="/dt-mark.png" />
     <link rel="apple-touch-icon" href="/dt-mark.png" />
+
+    <!--
+      Search-engine ownership verification tags. Once you have completed the
+      verification handshake in Google Search Console + Bing Webmaster Tools,
+      paste the content token between the quotes below and remove the
+      surrounding placeholder comment. Both can coexist; both are silent on
+      the public page.
+
+      Google Search Console: https://search.google.com/search-console
+        Settings -> Ownership verification -> HTML tag -> copy the content="..."
+      Bing Webmaster Tools: https://www.bing.com/webmasters
+        Settings -> Verify ownership -> HTML Meta Tag -> copy the content="..."
+    -->
+    <!-- <meta name="google-site-verification" content="PASTE_GSC_TOKEN_HERE" /> -->
+    <!-- <meta name="msvalidate.01" content="PASTE_BING_TOKEN_HERE" /> -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
