@@ -157,7 +157,7 @@ export default function DTBrain() {
             >
               <div className="absolute -inset-6 rounded-[2.8rem] bg-[#0A65FF]/12 blur-3xl" />
               <div className="relative overflow-hidden rounded-[2.25rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
-                <img src={securityVisual} alt="Abstract secure automation environment" className="aspect-[16/11] w-full object-cover" />
+                <img src={securityVisual} alt="Abstract secure automation environment" className="aspect-[16/11] w-full object-cover" width={1920} height={1080}/>
                 <div className="absolute inset-x-5 bottom-5 rounded-[1.4rem] border border-white/70 bg-white/82 p-5 shadow-[0_18px_50px_rgba(16,24,40,0.12)] backdrop-blur-xl">
                   <div className="flex items-center justify-between gap-4">
                     <div>
@@ -288,11 +288,11 @@ export default function DTBrain() {
         <section className="border-y border-black/8 bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_30px_90px_rgba(16,24,40,0.10)]">
-              <img src={heroVisual} alt="Abstract Digital Therapy automation layer" className="aspect-[16/12] w-full object-cover opacity-90" />
+              <img src={heroVisual} alt="Abstract Digital Therapy automation layer" className="aspect-[16/12] w-full object-cover opacity-90" width={1920} height={1080}/>
               <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_40%,rgba(247,244,238,0.92)_100%)]" />
               <div className="absolute bottom-6 left-6 right-6 rounded-[1.35rem] border border-white/70 bg-white/82 p-5 backdrop-blur-xl">
                 <div className="flex items-center gap-3">
-                  <img src={markUrl} alt="Digital Therapy mark" className="h-9 w-9 object-contain" />
+                  <img src={markUrl} alt="Digital Therapy" className="h-9 w-9 object-contain" width={197} height={227}/>
                   <div>
                     <div className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">DT Brain</div>
                     <div className="text-xl font-semibold tracking-[-0.04em]">Built for controlled family-office automation</div>

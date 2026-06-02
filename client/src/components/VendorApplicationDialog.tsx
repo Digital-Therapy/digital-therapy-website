@@ -94,7 +94,21 @@ const defaultSkillGroups: SkillGroup[] = [
   { label: "CMS & No-code Web", items: ["Wordpress", "Squarespace", "Shopify", "Bubble"] },
   { label: "Wix Ecosystem", items: ["WiX Studio", "WiX Velo", "WiX Blocks", "WiX Bookings"] },
   { label: "Real Estate Tech", items: ["Yardi", "Real Pages", "Appfolio", "MRI", "MDS", "Agora", "Rent Manager", "Timberline"] },
-  { label: "Automation & AI", items: ["UI Path", "Blue Prism", "Chat GPT", "Gemini"] },
+  {
+    label: "Automation | AI & RPA",
+    items: [
+      "UI Path",
+      "Blue Prism",
+      "Chat GPT",
+      "Gemini",
+      "Claude",
+      "Base44",
+      "Manus",
+      "Open Claw",
+      "Hermes",
+      "Co-Pilot",
+    ],
+  },
 ];
 
 type FileMeta = {

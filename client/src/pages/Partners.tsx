@@ -72,7 +72,7 @@ export default function Partners() {
               </div>
             </motion.div>
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
-              <img src={boardroomVisual} alt="Advisor partnership discussion setting" className="aspect-[4/5] w-full object-cover" />
+              <img src={boardroomVisual} alt="Advisor partnership discussion setting" className="aspect-[4/5] w-full object-cover" width={1920} height={1080}/>
               <div className="absolute bottom-5 left-5 right-5 rounded-[1.4rem] border border-white/70 bg-white/78 p-5 backdrop-blur-xl">
                 <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Partner-ready</div>
                 <p className="mt-2 text-lg font-semibold tracking-[-0.03em] text-black">

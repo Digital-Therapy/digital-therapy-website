@@ -170,10 +170,10 @@ export default function Capabilities() {
             >
               <div className="absolute -inset-6 rounded-[2.8rem] bg-[#0A65FF]/10 blur-3xl" />
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
-                <img src={wealthMapVisual} alt="Executive talking to a dashboard via voice — sales analytics responding in real time" className="aspect-[16/12] w-full object-cover" />
+                <img src={wealthMapVisual} alt="Executive talking to a dashboard via voice — sales analytics responding in real time" className="aspect-[16/12] w-full object-cover" width={1536} height={1024}/>
                 <div className="absolute bottom-5 left-5 right-5 rounded-[1.35rem] border border-white/70 bg-white/76 p-5 backdrop-blur-xl">
                   <div className="flex items-start gap-4">
-                    <img src={markUrl} alt="" className="mt-1 h-10 w-10 object-contain" />
+                    <img src={markUrl} alt="" className="mt-1 h-10 w-10 object-contain" width={197} height={227}/>
                     <div>
                       <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Talk to your data</div>
                       <p className="mt-2 text-sm leading-6 text-black/82">Once your data is unified &amp; configured, query your collective database by just asking questions.</p>
@@ -278,8 +278,7 @@ export default function Capabilities() {
                   <img
                     src={openTool.src}
                     alt={openTool.alt}
-                    className="block w-full rounded-2xl border border-black/10 bg-white"
-                  />
+                    className="block w-full rounded-2xl border border-black/10 bg-white" width={1536} height={1024}/>
                 </div>
               </>
             ) : null}
@@ -333,7 +332,7 @@ export default function Capabilities() {
         <section className="bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
-              <img src={securityVisual} alt="Secure automation and AI workflow visualization" className="aspect-[16/12] w-full object-cover" />
+              <img src={securityVisual} alt="Secure automation and AI workflow visualization" className="aspect-[16/12] w-full object-cover" width={1920} height={1080}/>
             </motion.div>
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <SectionLabel>Delivery architecture</SectionLabel>
@@ -377,7 +376,7 @@ export default function Capabilities() {
               <img
                 src="/balance-scale.webp"
                 alt="Balance scale weighing Speed & Intelligence against Security & Privacy, with the message: You need both. And we can give that to you."
-                className="mt-10 w-full rounded-2xl border border-white/10" loading="lazy" decoding="async" />
+                className="mt-10 w-full rounded-2xl border border-white/10" loading="lazy" decoding="async" width={1200} height={800}/>
             </motion.div>
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }} className="border border-white/12 bg-white/[0.06] p-8 backdrop-blur-xl">
               <p className="text-xl leading-9 text-white/70">

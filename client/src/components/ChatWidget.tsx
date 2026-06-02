@@ -375,7 +375,7 @@ export function ChatWidget() {
           <img
             src="/sigmund-bot.webp"
             alt="Sigmund, the Digital Therapy bot"
-            className="relative h-full w-full object-cover" loading="lazy" decoding="async" />
+            className="relative h-full w-full object-cover" loading="lazy" decoding="async" width={400} height={400}/>
           <span className="pointer-events-none absolute -top-2 -right-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] font-bold text-[#0A65FF] shadow">
             1
           </span>
@@ -393,7 +393,7 @@ export function ChatWidget() {
           <div className="flex items-center justify-between gap-3 border-b border-black/10 bg-[#0A65FF] px-5 py-4 text-white">
             <div className="flex items-center gap-3">
               <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-2 ring-white/40">
-                <img src="/sigmund-bot.webp" alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                <img src="/sigmund-bot.webp" alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" width={400} height={400}/>
               </span>
               <div>
                 <p className="text-sm font-bold">Sigmund · DT Bot</p>

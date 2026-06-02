@@ -170,7 +170,7 @@ export default function Home() {
                 We spend time to learn your eco-system, unique attributes, people &amp; processes. We believe collective understanding is the key to transformation success. That&rsquo;s why we typically work on-site for the first month of a new engagement.
               </p>
               <p className="mt-10 text-base font-bold leading-7 text-black/90">
-                Would you like to learn more about our
+                Learn more about our
               </p>
               <div className="mt-3 flex flex-wrap items-center gap-3">
                 <a
@@ -199,7 +199,7 @@ export default function Home() {
             >
               <div className="pointer-events-none absolute -inset-6 rounded-[2.6rem] bg-[#0A65FF]/10 blur-3xl" />
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
-                <img src={welcomeVisual} alt="Welcome to Digital Therapy" className="aspect-[16/8] w-full object-cover object-[center_58%]" />
+                <img src={welcomeVisual} alt="Digital Therapy welcome hero — modern family office operating layer surfacing data, workflows, reporting, and automation behind one unified team" className="aspect-[16/8] w-full object-cover object-[center_58%]" width={1536} height={1024}/>
               </div>
               <div className="relative mt-5 grid gap-1 overflow-hidden rounded-[1.35rem] border border-black/10 bg-white p-1 shadow-[0_18px_45px_rgba(16,24,40,0.08)] sm:grid-cols-3">
                 {caseStudies.map((study, index) => (
@@ -228,7 +228,7 @@ export default function Home() {
         <section id="complexity" className="bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.11)]">
-              <img src={boardroomVisual} alt="Modern family office boardroom" className="aspect-[16/11] w-full object-cover" />
+              <img src={boardroomVisual} alt="Modern family office boardroom" className="aspect-[16/11] w-full object-cover" width={1920} height={1080}/>
               <div className="absolute left-5 top-5 rounded-full border border-white/70 bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-black/78 backdrop-blur-xl">
                 Great wealth requires great infrastructure.
               </div>
@@ -293,8 +293,7 @@ export default function Home() {
                         <img
                           src={layer.image}
                           alt={layer.imageAlt ?? ""}
-                          className="h-14 w-14 shrink-0 rounded-[1rem] border border-white/15 bg-white object-cover sm:h-16 sm:w-16"
-                        />
+                          className="h-14 w-14 shrink-0 rounded-[1rem] border border-white/15 bg-white object-cover sm:h-16 sm:w-16" width={400} height={400}/>
                       ) : (
                         <Icon className="h-5 w-5 text-white/45 transition-colors duration-300 group-hover:text-[#58B8FF] sm:h-6 sm:w-6" />
                       )}
@@ -343,8 +342,7 @@ export default function Home() {
                     <img
                       src={member.image}
                       alt={member.imageAlt}
-                      className="mx-auto h-24 w-24 shrink-0 rounded-[1.4rem] border border-black/10 bg-white object-cover shadow-[0_16px_35px_rgba(10,101,255,0.10)]"
-                    />
+                      className="mx-auto h-24 w-24 shrink-0 rounded-[1.4rem] border border-black/10 bg-white object-cover shadow-[0_16px_35px_rgba(10,101,255,0.10)]" width={600} height={600}/>
                     <div className="mt-8">
                       <h3 className="text-center text-2xl font-semibold tracking-[-0.05em]">
                         {(() => {
@@ -369,7 +367,7 @@ export default function Home() {
         <section className="bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
-              <img src="/aicutsheads.webp" alt="AI automation reducing headcount and growing revenue" className="aspect-[3/2] w-full object-cover" loading="lazy" decoding="async" />
+              <img src="/aicutsheads.webp" alt="AI automation reducing headcount and growing revenue" className="aspect-[3/2] w-full object-cover" loading="lazy" decoding="async" width={1200} height={800}/>
             </motion.div>
             <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <SectionLabel>Automation and AI</SectionLabel>
@@ -449,7 +447,7 @@ export default function Home() {
         <section className="relative overflow-hidden bg-[#F7F4EE] py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr]">
             <motion.div {...fadeUp}>
-              <img src={markUrl} alt="Digital Therapy picture mark" className="h-14 w-14 object-contain" />
+              <img src={markUrl} alt="Digital Therapy" className="h-14 w-14 object-contain" width={197} height={227}/>
               <h2 className="mt-9 font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
                 Let’s get started.
               </h2>
@@ -466,7 +464,7 @@ export default function Home() {
               </div>
             </motion.div>
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
-              <img src={heroVisual} alt="Digital Therapy abstract operating layer" className="aspect-[16/11] w-full object-cover" />
+              <img src={heroVisual} alt="Digital Therapy abstract operating layer" className="aspect-[16/11] w-full object-cover" width={1920} height={1080}/>
             </motion.div>
           </div>
         </section>

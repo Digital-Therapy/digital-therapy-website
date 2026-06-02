@@ -172,8 +172,7 @@ function FounderStoryDialog({ leader, children }: { leader: TeamPerson; children
                 <img
                   src={leader.imageUrl}
                   alt={leader.name}
-                  className="aspect-[4/5] w-full object-cover object-top"
-                />
+                  className="aspect-[4/5] w-full object-cover object-top" width={800} height={800}/>
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0A65FF]/10 via-transparent to-transparent" />
               </div>
               <DialogHeader className="space-y-1 px-6 pb-6 pt-5 text-left sm:px-7">
@@ -239,8 +238,7 @@ function MemberBioDialog({
                 <img
                   src={member.imageUrl}
                   alt={member.name}
-                  className="aspect-[4/5] w-full object-cover object-top"
-                />
+                  className="aspect-[4/5] w-full object-cover object-top" width={800} height={800}/>
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0A65FF]/10 via-transparent to-transparent" />
               </div>
               <DialogHeader className="space-y-1 px-6 pb-6 pt-5 text-left sm:px-7">
@@ -350,10 +348,10 @@ export default function Team() {
             >
               <div className="absolute -left-8 -top-8 h-32 w-32 rounded-full bg-[#0A65FF]/10 blur-2xl" />
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white/50 p-3 shadow-[0_30px_90px_rgba(17,17,17,0.13)] backdrop-blur">
-                <img src={boardroomVisual} alt="Digital Therapy team collaboration" className="h-[500px] w-full rounded-[1.75rem] object-cover" />
+                <img src={boardroomVisual} alt="Digital Therapy team collaboration" className="h-[500px] w-full rounded-[1.75rem] object-cover" width={1920} height={1080}/>
                 <div className="absolute bottom-7 left-7 right-7 rounded-[1.45rem] border border-white/60 bg-white/78 p-5 shadow-[0_18px_45px_rgba(17,17,17,0.10)] backdrop-blur-xl">
                   <div className="flex items-start gap-4">
-                    <img src={markUrl} alt="" className="mt-1 h-9 w-9 object-contain" />
+                    <img src={markUrl} alt="" className="mt-1 h-9 w-9 object-contain" width={197} height={227}/>
                     <div>
                       <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">One accountable team</p>
                       <p className="mt-2 text-sm leading-6 text-black/82">Technology, accounting, operations, automation, and advisors aligned around measurable operating outcomes.</p>
@@ -390,8 +388,7 @@ export default function Team() {
                             leader.name === "Jonathan Kobrin" || leader.name === "Milton Rodas"
                               ? "object-top"
                               : "object-center"
-                          }`}
-                        />
+                          }`} width={800} height={800}/>
                       </div>
                     ) : (
                       <InitialMark name={leader.name} />
@@ -503,8 +500,7 @@ export default function Team() {
                                   // Jonathan + Milton's leader cards.
                                   className={`h-20 w-20 shrink-0 rounded-[1.35rem] border border-black/8 object-cover shadow-[0_18px_45px_rgba(17,17,17,0.08)] ${
                                     member.name === "Valerio Mirof" ? "object-top" : "object-center"
-                                  }`}
-                                />
+                                  }`} width={800} height={800}/>
                               ) : (
                                 <InitialMark name={member.name} />
                               )}
@@ -578,8 +574,7 @@ export default function Team() {
                         <img
                           src={person.imageUrl}
                           alt={person.name}
-                          className={person.imageClassName ?? "h-56 w-full object-cover object-center"}
-                        />
+                          className={person.imageClassName ?? "h-56 w-full object-cover object-center"} width={800} height={800}/>
                       </div>
                     ) : null}
                     <div className="flex items-center justify-between gap-4">

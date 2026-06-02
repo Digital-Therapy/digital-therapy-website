@@ -182,10 +182,10 @@ export default function OurApproach() {
             >
               <div className="absolute -inset-6 rounded-[2.6rem] bg-[#0A65FF]/10 blur-3xl" />
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
-                <img src={wealthMapVisual} alt="Diagram of the Digital Therapy Discovery program" className="aspect-[16/12] w-full object-cover" />
+                <img src={wealthMapVisual} alt="Diagram of the Digital Therapy Discovery program" className="aspect-[16/12] w-full object-cover" width={1448} height={1086}/>
                 <div className="m-5 rounded-[1.35rem] border border-black/10 bg-[#F7F4EE] p-5">
                   <div className="flex items-start gap-4">
-                    <img src={markUrl} alt="" className="mt-1 h-9 w-9 object-contain" />
+                    <img src={markUrl} alt="" className="mt-1 h-9 w-9 object-contain" width={197} height={227}/>
                     <div>
                       <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Two parallel tracks</p>
                       <p className="mt-2 text-sm leading-6 text-black/82">
@@ -233,8 +233,7 @@ export default function OurApproach() {
                         <img
                           src={trackImage}
                           alt={trackImageAlt ?? ""}
-                          className="h-20 w-20 shrink-0 rounded-2xl border border-black/10 bg-white object-cover"
-                        />
+                          className="h-20 w-20 shrink-0 rounded-2xl border border-black/10 bg-white object-cover" width={600} height={600}/>
                       ) : (
                         <div className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-[#0A65FF]">
                           <Icon className="h-5 w-5" />
@@ -264,7 +263,7 @@ export default function OurApproach() {
                   <img
                     src="/process-sme.webp"
                     alt="Hand-drawn blue sketch portrait of Digital Therapy's Operations & Process SME"
-                    className="h-20 w-20 shrink-0 rounded-2xl border border-white/15 bg-white object-cover" loading="lazy" decoding="async" />
+                    className="h-20 w-20 shrink-0 rounded-2xl border border-white/15 bg-white object-cover" loading="lazy" decoding="async" width={600} height={600}/>
                   <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#58B8FF]">Shared across both tracks</p>
                 </div>
                 <h3 className="mt-6 text-3xl font-semibold leading-tight tracking-[-0.04em]">

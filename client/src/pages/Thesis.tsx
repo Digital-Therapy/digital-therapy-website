@@ -165,10 +165,10 @@ export default function Thesis() {
             >
               <div className="absolute -inset-6 rounded-[2.6rem] bg-[#0A65FF]/10 blur-3xl" />
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
-                <img src={boardroomVisual} alt="Integrated advisory team strategy session" className="aspect-[16/12] w-full object-cover" />
+                <img src={boardroomVisual} alt="Integrated advisory team strategy session" className="aspect-[16/12] w-full object-cover" width={1920} height={1080}/>
                 <div className="absolute bottom-5 left-5 right-5 rounded-[1.35rem] border border-white/70 bg-white/76 p-5 backdrop-blur-xl">
                   <div className="flex items-start gap-4">
-                    <img src={markUrl} alt="" className="mt-1 h-9 w-9 object-contain" />
+                    <img src={markUrl} alt="" className="mt-1 h-9 w-9 object-contain" width={197} height={227}/>
                     <div>
                       <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Fusion Team model</p>
                       <p className="mt-2 text-sm leading-6 text-black/82">
@@ -297,8 +297,7 @@ export default function Thesis() {
                     <img
                       src={discipline.image}
                       alt={discipline.imageAlt}
-                      className="h-24 w-24 shrink-0 rounded-[1.4rem] border border-black/10 bg-white object-cover shadow-[0_16px_35px_rgba(10,101,255,0.10)]"
-                    />
+                      className="h-24 w-24 shrink-0 rounded-[1.4rem] border border-black/10 bg-white object-cover shadow-[0_16px_35px_rgba(10,101,255,0.10)]" width={600} height={600}/>
                     <h3 className="mt-6 font-display text-3xl tracking-[-0.05em]">
                       {(() => {
                         const [firstWord, ...rest] = discipline.title.split(" ");
@@ -322,7 +321,7 @@ export default function Thesis() {
         <section className="bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
             <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2.2rem] border border-black/8 bg-[#F7F4EE] p-3 shadow-[0_30px_90px_rgba(17,17,17,0.10)]">
-              <img src={wealthMapVisual} alt="Diagram of the fragmented advisory route family offices take" className="h-[560px] w-full rounded-[1.75rem] object-cover" />
+              <img src={wealthMapVisual} alt="Diagram of the fragmented advisory route family offices take" className="h-[560px] w-full rounded-[1.75rem] object-cover" width={1200} height={800}/>
               <div className="absolute bottom-8 left-8 right-8 rounded-[1.45rem] border border-white/70 bg-white/78 p-5 backdrop-blur-xl">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">One systems problem</p>
                 <p className="mt-2 text-sm leading-6 text-black/82">
