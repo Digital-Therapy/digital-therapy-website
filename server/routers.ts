@@ -56,6 +56,23 @@ const vendorApplicationInput = z.object({
   hoursPerMonth: z.string().trim().max(120).optional().default(""),
   availabilityNotes: z.string().trim().max(4000).optional().default(""),
   additionalSkills: z.string().trim().max(4000).optional().default(""),
+  // Team composition — `teamSize` is the human-readable dial selection
+  // ("Just me", "5", "More than 10"); `teamMembers` holds one lockup per
+  // additional teammate beyond the applicant.
+  teamSize: z.string().trim().max(40).optional().default(""),
+  teamMembers: z
+    .array(
+      z.object({
+        fullName: z.string().trim().max(160).default(""),
+        title: z.string().trim().max(160).default(""),
+        roleSkills: z.string().trim().max(500).default(""),
+        location: z.string().trim().max(160).default(""),
+        yearsTogether: z.string().trim().max(60).default(""),
+      })
+    )
+    .max(50)
+    .optional()
+    .default([]),
   sectors: z.array(z.string().trim().max(120)).max(50).optional().default([]),
   skills: z.array(z.string().trim().max(120)).max(200).optional().default([]),
   certifications: z
@@ -203,6 +220,21 @@ export const appRouter = router({
             `  Requested co-signed copy: ${input.ndaRequestCopy ? "YES — send executed copy" : "no"}`,
           ]
         : ["", "NDA: NOT EXECUTED — review immediately"];
+      const teamLines =
+        input.teamMembers.length > 0
+          ? [
+              "",
+              `Team members (${input.teamMembers.length} beyond applicant):`,
+              ...input.teamMembers.map(
+                (m, i) =>
+                  `  ${i + 2}. ${oneLine(m.fullName) || "Unnamed"}` +
+                  `${m.title ? ` — ${oneLine(m.title)}` : ""}` +
+                  `${m.roleSkills ? ` | Role/Skills: ${oneLine(m.roleSkills)}` : ""}` +
+                  `${m.location ? ` | ${oneLine(m.location)}` : ""}` +
+                  `${m.yearsTogether ? ` | ${oneLine(m.yearsTogether)} yr(s) together` : ""}`,
+              ),
+            ]
+          : [];
       const notificationDelivered = await notifyOwner({
         title: `New vendor application: ${oneLine(input.name)} (${oneLine(input.vendorTypeLabel)})${ndaExecuted ? "" : " — NDA MISSING"}`,
         content: [
@@ -210,8 +242,10 @@ export const appRouter = router({
           `Email: ${oneLine(input.email)}`,
           `Vendor type: ${oneLine(input.vendorTypeLabel)}`,
           `Role: ${oneLine(input.role || "Not provided")}`,
+          `Team size: ${oneLine(input.teamSize || "Not provided")}`,
           `Files attached: ${files.length}`,
           `Stored in portal: ${portalStored ? "yes" : "NO - check portal"}`,
+          ...teamLines,
           ...ndaLines,
         ].join("\n"),
       }).catch((error) => {

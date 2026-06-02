@@ -35,6 +35,14 @@ export type VendorForward = {
   hoursPerMonth?: string | null;
   availabilityNotes?: string | null;
   additionalSkills?: string | null;
+  teamSize?: string | null;
+  teamMembers?: {
+    fullName: string;
+    title: string;
+    roleSkills: string;
+    location: string;
+    yearsTogether: string;
+  }[];
   sectors?: string[];
   skills?: string[];
   certifications?: { name: string; isCurrent: boolean; provider: string }[];

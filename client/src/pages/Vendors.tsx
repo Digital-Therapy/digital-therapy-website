@@ -54,42 +54,42 @@ const financeAccountingSkillGroups: SkillGroup[] = [
 
 const vendorTypes = [
   {
-    title: "Technology SMEs",
+    title: "Technology Vendors",
     highlightedWords: ["Technology"],
     summary:
       "Full-stack engineers, AI specialists, RPA builders, systems architects, integration & data engineers.",
     icon: Code2,
-    context: "vendor application: Technology SME",
-    buttonLabel: "Apply as Technology SME",
+    context: "vendor application: Technology Vendor",
+    buttonLabel: "Apply as Technology Vendor",
   },
   {
-    title: "Finance & Accounting SMEs",
+    title: "Finance & Accounting Vendors",
     highlightedWords: ["Finance", "Accounting"],
     summary:
       "CPAs, controllers, AP/AR specialists, close-cycle leaders, tax & reporting practitioners.",
     icon: BarChart3,
-    context: "vendor application: Finance & Accounting SME",
-    buttonLabel: "Apply as Finance & Accounting SME",
+    context: "vendor application: Finance & Accounting Vendor",
+    buttonLabel: "Apply as Finance & Accounting Vendor",
     skillGroups: financeAccountingSkillGroups,
   },
   {
-    title: "Marketing SMEs",
+    title: "Marketing Vendors",
     highlightedWords: ["Marketing"],
     summary:
       "Brand strategists, web & SEO specialists, content & campaign operators, marketing automation experts.",
     icon: Briefcase,
-    context: "vendor application: Marketing SME",
-    buttonLabel: "Apply as Marketing SME",
+    context: "vendor application: Marketing Vendor",
+    buttonLabel: "Apply as Marketing Vendor",
     skillGroups: marketingSkillGroups,
   },
   {
-    title: "Family Office SMEs",
+    title: "Family Office Vendors",
     highlightedWords: ["Family", "Office"],
     summary:
       "Family-office operators, principals' chiefs of staff, governance specialists, private-wealth advisors.",
     icon: Landmark,
-    context: "vendor application: Family Office SME",
-    buttonLabel: "Apply as Family Office SME",
+    context: "vendor application: Family Office Vendor",
+    buttonLabel: "Apply as Family Office Vendor",
     skillGroups: familyOfficeSkillGroups,
   },
 ];

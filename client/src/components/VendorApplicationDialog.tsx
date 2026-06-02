@@ -63,6 +63,27 @@ const initialForm: VendorFormState = {
   signature: "",
 };
 
+export type TeamMember = {
+  fullName: string;
+  title: string;
+  roleSkills: string;
+  location: string;
+  yearsTogether: string;
+};
+
+const blankTeamMember = (): TeamMember => ({
+  fullName: "",
+  title: "",
+  roleSkills: "",
+  location: "",
+  yearsTogether: "",
+});
+
+// Slider stops for "How big is your team?" — index 0 = Just me (solo),
+// indices 1-9 = teams of 2-10, index 10 = "More" (more than 10).
+const TEAM_STEPS = ["Just me", "2", "3", "4", "5", "6", "7", "8", "9", "10", "More"] as const;
+const TEAM_MORE_INDEX = TEAM_STEPS.length - 1;
+
 const sectors = [
   "Pharma / Bio-Tech",
   "Accounting",
@@ -186,6 +207,12 @@ export function VendorApplicationDialog({
   const [selectedSkills, setSelectedSkills] = useState<Set<string>>(() => new Set());
   const [selectedSectors, setSelectedSectors] = useState<Set<string>>(() => new Set());
   const [certifications, setCertifications] = useState<{ name: string; isCurrent: boolean; provider: string }[]>([]);
+  // Team composition. teamSizeIndex is the slider position (0 = Just me).
+  // teamMembers holds one lockup per teammate beyond the applicant, so its
+  // length tracks the dial: index 1-9 → that many additional members; the
+  // "More" stop seeds 10 and lets the applicant add/remove past that.
+  const [teamSizeIndex, setTeamSizeIndex] = useState(0);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   // NDA execution state — vendor must execute the NDA before main form submit.
   const [ndaOpen, setNdaOpen] = useState(false);
   const [ndaData, setNdaData] = useState<VendorNdaData | null>(null);
@@ -204,6 +231,35 @@ export function VendorApplicationDialog({
     setCertifications((current) =>
       current.map((cert, i) => (i === index ? { ...cert, [field]: value } : cert)),
     );
+  };
+
+  // Grow/shrink the teammate lockups to match the dial, preserving any
+  // already-typed entries so dragging never wipes out captured details.
+  const handleTeamSizeChange = (index: number) => {
+    setTeamSizeIndex(index);
+    // "Just me" → 0 lockups; teams of N → N-1 lockups (== index);
+    // "More" → at least 10, but keep any extra rows the user already added.
+    setTeamMembers((current) => {
+      const target =
+        index === TEAM_MORE_INDEX ? Math.max(10, current.length) : index;
+      if (target === current.length) return current;
+      if (target < current.length) return current.slice(0, target);
+      return [...current, ...Array.from({ length: target - current.length }, blankTeamMember)];
+    });
+  };
+
+  const updateTeamMember = (index: number, field: keyof TeamMember, value: string) => {
+    setTeamMembers((current) =>
+      current.map((member, i) => (i === index ? { ...member, [field]: value } : member)),
+    );
+  };
+
+  const addTeamMember = () => {
+    setTeamMembers((current) => [...current, blankTeamMember()]);
+  };
+
+  const removeTeamMember = (index: number) => {
+    setTeamMembers((current) => current.filter((_, i) => i !== index));
   };
 
   const toggleSkill = (skill: string) => {
@@ -239,6 +295,8 @@ export function VendorApplicationDialog({
       setSelectedSkills(new Set());
       setSelectedSectors(new Set());
       setCertifications([]);
+      setTeamSizeIndex(0);
+      setTeamMembers([]);
       setNdaData(null);
       setOpen(false);
       toast.success(
@@ -319,6 +377,13 @@ export function VendorApplicationDialog({
       hoursPerMonth: form.hoursPerMonth,
       availabilityNotes: form.availabilityNotes,
       additionalSkills: form.additionalSkills,
+      teamSize:
+        teamSizeIndex === TEAM_MORE_INDEX
+          ? "More than 10"
+          : teamSizeIndex === 0
+            ? "Just me (1)"
+            : String(teamSizeIndex + 1),
+      teamMembers,
       sectors: Array.from(selectedSectors),
       skills: selectedSkillList,
       certifications: certifications.map((c) => ({
@@ -346,6 +411,14 @@ export function VendorApplicationDialog({
       files,
     });
   };
+
+  const teamReadoutNumber = teamSizeIndex === TEAM_MORE_INDEX ? "10+" : String(teamSizeIndex + 1);
+  const teamReadoutLabel =
+    teamSizeIndex === 0
+      ? "Just me"
+      : teamSizeIndex === TEAM_MORE_INDEX
+        ? "More than 10 — list your core members below"
+        : `${teamSizeIndex + 1} people`;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -410,6 +483,129 @@ export function VendorApplicationDialog({
                   <Input value={form.role} onChange={(event) => updateField("role", event.target.value)} placeholder={`e.g. ${vendorTypeLabel}, Founder, Consultant`} className="h-11" />
                 </label>
               </div>
+            </fieldset>
+
+            <fieldset className="space-y-5">
+              <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">Team</legend>
+              <div className="flex flex-col gap-1">
+                <p className="text-sm font-semibold text-black/74">How big is your team?</p>
+                <p className="text-xs text-black/55">
+                  Slide to the number of people on your team. We&rsquo;ll reveal a short lockup for each
+                  teammate so you can introduce them.
+                </p>
+              </div>
+
+              <div className="rounded-[1.1rem] border border-black/10 bg-[#F7F4EE]/60 p-5">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-display text-4xl leading-none tracking-[-0.04em] text-[#0A65FF]">
+                    {teamReadoutNumber}
+                  </span>
+                  <span className="text-sm font-semibold text-black/70">{teamReadoutLabel}</span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={TEAM_MORE_INDEX}
+                  step={1}
+                  value={teamSizeIndex}
+                  onChange={(event) => handleTeamSizeChange(Number(event.target.value))}
+                  aria-label="How big is your team?"
+                  className="mt-4 h-2 w-full cursor-pointer appearance-none rounded-full bg-black/10 accent-[#0A65FF]"
+                />
+                <div className="mt-2 flex justify-between text-[0.6rem] font-bold uppercase tracking-[0.12em] text-black/45">
+                  <span>Just me</span>
+                  <span>5</span>
+                  <span>10</span>
+                  <span>More</span>
+                </div>
+              </div>
+
+              {teamMembers.length > 0 ? (
+                <div className="space-y-4">
+                  <p className="text-xs text-black/60">
+                    Tell us about your{" "}
+                    {teamMembers.length === 1 ? "teammate" : `${teamMembers.length} teammates`}. You&rsquo;re
+                    already covered in &ldquo;About Vendor&rdquo; above.
+                  </p>
+                  {teamMembers.map((member, index) => (
+                    <div key={index} className="rounded-[1rem] border border-black/10 bg-[#F7F4EE]/60 p-4">
+                      <div className="mb-3 flex items-center justify-between">
+                        <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[#0A65FF]">
+                          Team member {index + 2}
+                        </p>
+                        {teamSizeIndex === TEAM_MORE_INDEX ? (
+                          <button
+                            type="button"
+                            onClick={() => removeTeamMember(index)}
+                            aria-label={`Remove team member ${index + 2}`}
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-full text-black/45 transition-colors duration-200 hover:bg-black/5 hover:text-[#0A65FF]"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        ) : null}
+                      </div>
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <label className="flex flex-col gap-2 text-sm font-semibold text-black/74">
+                          Full name
+                          <Input
+                            value={member.fullName}
+                            onChange={(event) => updateTeamMember(index, "fullName", event.target.value)}
+                            placeholder="Their name"
+                            className="h-11"
+                          />
+                        </label>
+                        <label className="flex flex-col gap-2 text-sm font-semibold text-black/74">
+                          Title
+                          <Input
+                            value={member.title}
+                            onChange={(event) => updateTeamMember(index, "title", event.target.value)}
+                            placeholder="e.g. Senior Engineer"
+                            className="h-11"
+                          />
+                        </label>
+                        <label className="flex flex-col gap-2 text-sm font-semibold text-black/74 sm:col-span-2">
+                          Role / skills
+                          <Input
+                            value={member.roleSkills}
+                            onChange={(event) => updateTeamMember(index, "roleSkills", event.target.value)}
+                            placeholder="What they do and the tools they specialize in"
+                            className="h-11"
+                          />
+                        </label>
+                        <label className="flex flex-col gap-2 text-sm font-semibold text-black/74">
+                          Location
+                          <Input
+                            value={member.location}
+                            onChange={(event) => updateTeamMember(index, "location", event.target.value)}
+                            placeholder="City, Country"
+                            className="h-11"
+                          />
+                        </label>
+                        <label className="flex flex-col gap-2 text-sm font-semibold text-black/74">
+                          # of years working together
+                          <Input
+                            value={member.yearsTogether}
+                            onChange={(event) => updateTeamMember(index, "yearsTogether", event.target.value)}
+                            placeholder="e.g. 3"
+                            inputMode="numeric"
+                            className="h-11"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  ))}
+                  {teamSizeIndex === TEAM_MORE_INDEX ? (
+                    <button
+                      type="button"
+                      onClick={addTeamMember}
+                      className="inline-flex items-center gap-2 rounded-full border border-[#0A65FF]/30 bg-[#0A65FF]/8 px-5 py-2.5 text-sm font-semibold text-[#0A65FF] transition-all duration-300 hover:border-[#0A65FF]/55 hover:bg-[#0A65FF]/14"
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add team member
+                    </button>
+                  ) : null}
+                </div>
+              ) : null}
             </fieldset>
 
             <fieldset className="space-y-5">
