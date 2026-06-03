@@ -1,4 +1,5 @@
 import { COOKIE_NAME } from "@shared/const";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { notifyOwner } from "./_core/notification";
@@ -197,6 +198,19 @@ export const appRouter = router({
   }),
   vendor: router({
     submit: publicProcedure.input(vendorApplicationInput).mutation(async ({ input }) => {
+      // Server-side NDA gate. The VendorNdaDialog enforces this in the UI, but a
+      // direct API call could otherwise submit without an executed NDA. Reject
+      // unless the signed agreement is present (signer + typed signature + date).
+      const ndaIsExecuted = Boolean(
+        input.ndaSignerName && input.ndaSignatureText && input.ndaSignatureDate,
+      );
+      if (!ndaIsExecuted) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "A signed Vendor NDA is required to submit a vendor application.",
+        });
+      }
+
       const { files, ...payload } = input;
       const portalStored = await forwardVendorToPortal(payload, files);
 

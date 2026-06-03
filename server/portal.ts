@@ -71,7 +71,8 @@ export async function forwardContactToPortal(payload: ContactForward): Promise<b
       body: JSON.stringify(payload),
     });
     if (!res.ok) {
-      console.warn(`[Portal] contact forward failed: ${res.status} ${await res.text()}`);
+      // Log status only -- the response body can echo submitted fields (PII).
+      console.warn(`[Portal] contact forward failed: ${res.status}`);
       return false;
     }
     return true;
@@ -102,7 +103,8 @@ export async function forwardVendorToPortal(
       body: form,
     });
     if (!res.ok) {
-      console.warn(`[Portal] vendor forward failed: ${res.status} ${await res.text()}`);
+      // Log status only -- the response body can echo submitted fields (PII).
+      console.warn(`[Portal] vendor forward failed: ${res.status}`);
       return false;
     }
     return true;
