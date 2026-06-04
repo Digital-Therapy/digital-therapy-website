@@ -11,6 +11,7 @@ import {
   getVendorById,
   getVendorFacets,
   searchVendors,
+  updateVendorProfile,
   updateVendorStatus,
 } from "./vendors";
 import { vendorStatusValues } from "../drizzle/schema";
@@ -317,6 +318,22 @@ export const appRouter = router({
     adminFacets: adminProcedure.query(async () => {
       return getVendorFacets();
     }),
+    // Admin-curated Company & Links override (backfill for legacy vendors).
+    adminUpdateProfile: adminProcedure
+      .input(
+        z.object({
+          id: z.string().trim().min(1).max(64),
+          companyName: z.string().trim().max(240).optional(),
+          websiteUrl: z.string().trim().max(500).optional(),
+          personalLinkedin: z.string().trim().max(500).optional(),
+          companySocial: z.string().trim().max(500).optional(),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const { id, ...fields } = input;
+        const success = await updateVendorProfile(id, fields);
+        return { success };
+      }),
   }),
 });
 

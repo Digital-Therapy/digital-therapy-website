@@ -6,6 +6,7 @@ import AdminLayout from "@/components/AdminLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -17,7 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, FileText, Loader2 } from "lucide-react";
+import { ArrowLeft, FileText, Loader2, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link, useRoute } from "wouter";
@@ -48,14 +49,43 @@ export default function AdminVendorDetail() {
 
   const [status, setStatus] = useState<Status>("applied");
   const [notes, setNotes] = useState("");
+  const [editingProfile, setEditingProfile] = useState(false);
+  const emptyProfile = { companyName: "", websiteUrl: "", personalLinkedin: "", companySocial: "" };
+  const [profile, setProfile] = useState(emptyProfile);
 
   const data = detailQuery.data;
+  const syncProfile = () => {
+    if (data?.vendor) {
+      setProfile({
+        companyName: data.vendor.companyName ?? "",
+        websiteUrl: data.vendor.websiteUrl ?? "",
+        personalLinkedin: data.vendor.personalLinkedin ?? "",
+        companySocial: data.vendor.companySocial ?? "",
+      });
+    }
+  };
   useEffect(() => {
     if (data?.vendor) {
       setStatus(data.vendor.status as Status);
       setNotes(data.vendor.statusNotes ?? "");
+      setProfile({
+        companyName: data.vendor.companyName ?? "",
+        websiteUrl: data.vendor.websiteUrl ?? "",
+        personalLinkedin: data.vendor.personalLinkedin ?? "",
+        companySocial: data.vendor.companySocial ?? "",
+      });
     }
   }, [data?.vendor]);
+
+  const updateProfile = trpc.vendor.adminUpdateProfile.useMutation({
+    onSuccess: () => {
+      toast.success("Company & links updated.");
+      utils.vendor.adminGet.invalidate({ id });
+      utils.vendor.adminSearch.invalidate();
+      setEditingProfile(false);
+    },
+    onError: (e) => toast.error(e.message || "Could not save company & links."),
+  });
 
   const updateStatus = trpc.vendor.adminUpdateStatus.useMutation({
     onSuccess: () => {
@@ -160,13 +190,78 @@ export default function AdminVendorDetail() {
               <TabsContent value="profile" className="space-y-4">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-base">Company &amp; links</CardTitle>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-base">Company &amp; links</CardTitle>
+                      {!editingProfile ? (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            syncProfile();
+                            setEditingProfile(true);
+                          }}
+                          className="text-black/60"
+                        >
+                          <Pencil className="mr-1.5 h-3.5 w-3.5" />
+                          Edit
+                        </Button>
+                      ) : null}
+                    </div>
                   </CardHeader>
-                  <CardContent className="grid gap-4 sm:grid-cols-2">
-                    <Field label="Company name" value={data.vendor.companyName} />
-                    <LinkField label="Website" value={data.vendor.websiteUrl} />
-                    <LinkField label="Personal LinkedIn" value={data.vendor.personalLinkedin} />
-                    <LinkField label="Company LinkedIn / Instagram" value={data.vendor.companySocial} />
+                  <CardContent>
+                    {editingProfile ? (
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <EditField
+                          label="Company name"
+                          value={profile.companyName}
+                          placeholder="Company name"
+                          onChange={(v) => setProfile((p) => ({ ...p, companyName: v }))}
+                        />
+                        <EditField
+                          label="Website URL"
+                          value={profile.websiteUrl}
+                          placeholder="https://company.com"
+                          onChange={(v) => setProfile((p) => ({ ...p, websiteUrl: v }))}
+                        />
+                        <EditField
+                          label="Personal LinkedIn"
+                          value={profile.personalLinkedin}
+                          placeholder="https://linkedin.com/in/…"
+                          onChange={(v) => setProfile((p) => ({ ...p, personalLinkedin: v }))}
+                        />
+                        <EditField
+                          label="Company LinkedIn / Instagram"
+                          value={profile.companySocial}
+                          placeholder="https://linkedin.com/company/… or instagram.com/…"
+                          onChange={(v) => setProfile((p) => ({ ...p, companySocial: v }))}
+                        />
+                        <div className="flex gap-2 sm:col-span-2">
+                          <Button
+                            onClick={() => updateProfile.mutate({ id, ...profile })}
+                            disabled={updateProfile.isPending}
+                          >
+                            {updateProfile.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                            Save
+                          </Button>
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              syncProfile();
+                              setEditingProfile(false);
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <Field label="Company name" value={data.vendor.companyName} />
+                        <LinkField label="Website" value={data.vendor.websiteUrl} />
+                        <LinkField label="Personal LinkedIn" value={data.vendor.personalLinkedin} />
+                        <LinkField label="Company LinkedIn / Instagram" value={data.vendor.companySocial} />
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
@@ -333,6 +428,25 @@ function Field({ label, value }: { label: string; value: string | null }) {
       <div className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-black/45">{label}</div>
       <div className="mt-1 text-sm text-black/80">{value || "—"}</div>
     </div>
+  );
+}
+
+function EditField({
+  label,
+  value,
+  placeholder,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  placeholder?: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-black/45">{label}</span>
+      <Input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="h-10" />
+    </label>
   );
 }
 

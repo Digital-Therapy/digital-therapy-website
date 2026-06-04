@@ -320,6 +320,16 @@ async function ensureStatusTable(pool: pg.Pool) {
        updated_at timestamptz NOT NULL DEFAULT now()
      )`,
   );
+  // Admin-curated Company & Links overrides for vendors whose applications
+  // predate those form fields. Added here (not on the portal's table) so the
+  // portal app is never modified. Idempotent.
+  await pool.query(
+    `ALTER TABLE dt_site.vendor_status
+       ADD COLUMN IF NOT EXISTS company_name text,
+       ADD COLUMN IF NOT EXISTS website_url text,
+       ADD COLUMN IF NOT EXISTS personal_linkedin text,
+       ADD COLUMN IF NOT EXISTS company_social text`,
+  );
   _statusReady = true;
 }
 
@@ -347,11 +357,12 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
     name: String(row.name ?? ""),
     email: String(row.email ?? ""),
     role: asString(row.role),
-    // These columns don't exist on the portal's VendorApplication yet; null for now.
-    companyName: asString(row.companyName),
-    websiteUrl: asString(row.websiteUrl),
-    personalLinkedin: asString(row.personalLinkedin),
-    companySocial: asString(row.companySocial),
+    // Admin-curated override (dt_site) wins; falls back to the portal column
+    // once Milton adds it. Both are null today for legacy applications.
+    companyName: asString(row.dt_company_name) ?? asString(row.companyName),
+    websiteUrl: asString(row.dt_website_url) ?? asString(row.websiteUrl),
+    personalLinkedin: asString(row.dt_personal_linkedin) ?? asString(row.personalLinkedin),
+    companySocial: asString(row.dt_company_social) ?? asString(row.companySocial),
     personalBio: asString(row.personalBio),
     companyCv: asString(row.companyCv),
     hourlyRate: asString(row.hourlyRate),
@@ -378,7 +389,9 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
 async function loadPortalRecords(pool: pg.Pool): Promise<VendorRecord[]> {
   await ensureStatusTable(pool);
   const { rows } = await pool.query(
-    `SELECT va.*, s.status AS dt_status, s.status_notes AS dt_status_notes
+    `SELECT va.*, s.status AS dt_status, s.status_notes AS dt_status_notes,
+            s.company_name AS dt_company_name, s.website_url AS dt_website_url,
+            s.personal_linkedin AS dt_personal_linkedin, s.company_social AS dt_company_social
        FROM "VendorApplication" va
        LEFT JOIN dt_site.vendor_status s ON s.vendor_application_id = va.id`,
   );
@@ -450,6 +463,47 @@ export async function updateVendorStatus(id: string, status: VendorStatus, statu
     }
   }
   if (ENV.devPreview) return devUpdateStatus(id, status, statusNotes);
+  return false;
+}
+
+export type VendorProfileFields = {
+  companyName?: string;
+  websiteUrl?: string;
+  personalLinkedin?: string;
+  companySocial?: string;
+};
+
+/** Admin-curated Company & Links override, stored in our dt_site side-table. */
+export async function updateVendorProfile(id: string, fields: VendorProfileFields): Promise<boolean> {
+  const pool = getPool();
+  if (pool) {
+    try {
+      await ensureStatusTable(pool);
+      await pool.query(
+        `INSERT INTO dt_site.vendor_status
+           (vendor_application_id, company_name, website_url, personal_linkedin, company_social, updated_at)
+         VALUES ($1, $2, $3, $4, $5, now())
+         ON CONFLICT (vendor_application_id) DO UPDATE SET
+           company_name = EXCLUDED.company_name,
+           website_url = EXCLUDED.website_url,
+           personal_linkedin = EXCLUDED.personal_linkedin,
+           company_social = EXCLUDED.company_social,
+           updated_at = now()`,
+        [
+          id,
+          fields.companyName || null,
+          fields.websiteUrl || null,
+          fields.personalLinkedin || null,
+          fields.companySocial || null,
+        ],
+      );
+      return true;
+    } catch (error) {
+      console.warn("[Vendors] Failed to update vendor profile:", error);
+      return false;
+    }
+  }
+  if (ENV.devPreview) return devUpdateProfile(id, fields);
   return false;
 }
 
@@ -548,6 +602,16 @@ function devUpdateStatus(id: string, status: VendorStatus, statusNotes?: string)
   if (!r) return false;
   r.status = status;
   if (statusNotes !== undefined) r.statusNotes = statusNotes || null;
+  return true;
+}
+
+function devUpdateProfile(id: string, fields: VendorProfileFields): boolean {
+  const r = devStore.find((x) => x.id === id);
+  if (!r) return false;
+  r.companyName = fields.companyName || null;
+  r.websiteUrl = fields.websiteUrl || null;
+  r.personalLinkedin = fields.personalLinkedin || null;
+  r.companySocial = fields.companySocial || null;
   return true;
 }
 
