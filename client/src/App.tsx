@@ -21,6 +21,7 @@ import Vendors from "./pages/Vendors";
 import AdminVendors from "./pages/admin/AdminVendors";
 import AdminVendorDetail from "./pages/admin/AdminVendorDetail";
 import AdminClients from "./pages/admin/AdminClients";
+import AdminAccess from "./pages/admin/AdminAccess";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -43,6 +44,7 @@ function Router() {
       <Route path={"/vendorlists"} component={AdminVendors} />
       <Route path={"/vendorlists/:id"} component={AdminVendorDetail} />
       <Route path={"/admin/clients"} component={AdminClients} />
+      <Route path={"/admin/access"} component={AdminAccess} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

@@ -15,6 +15,14 @@ export const ENV = {
   // serve` (which injects Tailscale-User-Login) AND the public-facing reverse
   // proxy strips those headers. See server/_core/context.ts for how it is used.
   trustTailscaleHeader: process.env.TRUST_TAILSCALE_HEADER === "true",
+  // Tailscale logins (comma-separated) that are ALWAYS admin AND own access
+  // management -- they seed/manage the allowlist (server/access.ts) and can
+  // never be locked out. Everyone else must be added via the in-console Access
+  // page. With this empty, no Tailscale login is admin (fail closed).
+  adminTailscaleOwners: (process.env.ADMIN_TAILSCALE_LOGINS ?? "")
+    .split(",")
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean),
   forgeApiUrl: process.env.BUILT_IN_FORGE_API_URL ?? "",
   forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
   // DT Portal (apps.dtapps.io / app-dashboard) ingest target.
