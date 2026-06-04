@@ -10,6 +10,11 @@ export const ENV = {
   // production. Turn off by removing DEV_PREVIEW from .env once a real
   // DATABASE_URL is connected.
   devPreview: process.env.DEV_PREVIEW === "true" && process.env.NODE_ENV !== "production",
+  // Trust Tailscale-injected identity headers as the admin gate. Set ONLY in a
+  // deployment where the /admin console is reached exclusively via `tailscale
+  // serve` (which injects Tailscale-User-Login) AND the public-facing reverse
+  // proxy strips those headers. See server/_core/context.ts for how it is used.
+  trustTailscaleHeader: process.env.TRUST_TAILSCALE_HEADER === "true",
   forgeApiUrl: process.env.BUILT_IN_FORGE_API_URL ?? "",
   forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
   // DT Portal (apps.dtapps.io / app-dashboard) ingest target.
