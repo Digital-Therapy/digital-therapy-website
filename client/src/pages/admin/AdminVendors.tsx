@@ -263,7 +263,7 @@ export default function AdminVendors() {
                 {result.rows.map((v) => (
                   <TableRow
                     key={v.id}
-                    onClick={() => setLocation(`/admin/vendors/${v.id}`)}
+                    onClick={() => setLocation(`/vendorlists/${v.id}`)}
                     className="cursor-pointer"
                   >
                     <TableCell>

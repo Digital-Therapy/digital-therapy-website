@@ -147,7 +147,7 @@ export default function SiteFooter() {
             tailnet, so it is a harmless dead link for the public. */}
         <div className="mt-12 flex justify-end pb-3">
           <a
-            href="https://dt-server-1.tail951beb.ts.net/vendors"
+            href="https://dt-server-1.tail951beb.ts.net/vendorlists"
             className="text-xs font-medium text-black/35 transition-colors duration-200 hover:text-[#0A65FF]"
           >
             Admin

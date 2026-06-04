@@ -16,7 +16,7 @@ import { Briefcase, Loader2, LogOut, Users } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 const navItems = [
-  { icon: Users, label: "Vendors", path: "/admin/vendors" },
+  { icon: Users, label: "Vendors", path: "/vendorlists" },
   { icon: Briefcase, label: "Clients & Projects", path: "/admin/clients" },
 ];
 
@@ -66,7 +66,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <header className="sticky top-0 z-40 border-b border-black/10 bg-white/85 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
           <div className="flex items-center gap-6">
-            <Link href="/admin/vendors" className="font-display text-lg tracking-[-0.04em] text-[#111111]">
+            <Link href="/vendorlists" className="font-display text-lg tracking-[-0.04em] text-[#111111]">
               Digital Therapy <span className="text-[#0A65FF]">· Vendor Admin</span>
             </Link>
             <nav className="hidden items-center gap-1 sm:flex">
