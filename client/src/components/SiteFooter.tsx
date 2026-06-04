@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { ArrowUpRight, Mail, Phone } from "lucide-react";
 import { ContactFormDialog } from "@/components/ContactBooking";
@@ -42,15 +41,6 @@ export default function SiteFooter() {
   // the Vendors page — the CTA's purpose is to drive them there.
   const [pathname] = useLocation();
 
-  // The Admin link is only shown when the site is being viewed over Tailscale
-  // (the *.ts.net MagicDNS host served by `tailscale serve`). On the public
-  // www.digitaltherapy.io host the link is never rendered, and /admin is
-  // blocked at the public proxy. Computed in an effect so it stays false during
-  // the build-time prerender (127.0.0.1) and hydrates without a mismatch.
-  const [onTailnet, setOnTailnet] = useState(false);
-  useEffect(() => {
-    setOnTailnet(window.location.hostname.endsWith(".ts.net"));
-  }, []);
   const showVendorCta = pathname !== "/vendors";
 
   return (
@@ -152,20 +142,19 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        {/* Staff entrance to the vendor admin console. Rendered ONLY when the
-            site is viewed over Tailscale (the *.ts.net host) — see onTailnet
-            above. On the public site it is never shown and /admin is blocked at
-            the proxy, so being on the tailnet is itself the access gate. */}
-        {onTailnet && (
-          <div className="mt-12 flex justify-end pb-3">
-            <a
-              href="/admin/vendors"
-              className="text-xs font-medium text-black/35 transition-colors duration-200 hover:text-[#0A65FF]"
-            >
-              Admin
-            </a>
-          </div>
-        )}
+        {/* Staff entrance to the vendor admin console. Always shown, but it
+            points at the absolute Tailscale (MagicDNS) URL -- which only
+            resolves for devices on the tailnet. For the public it is a harmless
+            dead link; /admin is also hard-blocked on the public proxy. Being on
+            the tailnet is the access gate (see server/_core/context.ts). */}
+        <div className="mt-12 flex justify-end pb-3">
+          <a
+            href="https://dt-server-1.tail951beb.ts.net/admin/vendors"
+            className="text-xs font-medium text-black/35 transition-colors duration-200 hover:text-[#0A65FF]"
+          >
+            Admin
+          </a>
+        </div>
 
         <div className="grid grid-cols-1 items-center gap-4 border-t border-black/10 pt-7 text-sm text-black/70 sm:grid-cols-[1fr_auto_1fr]">
           <div className="flex items-center gap-3 sm:justify-self-start">
