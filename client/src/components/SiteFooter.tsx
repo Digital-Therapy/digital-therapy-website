@@ -142,14 +142,12 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        {/* Staff entrance to the vendor admin console. Always shown, but it
-            points at the absolute Tailscale (MagicDNS) URL -- which only
-            resolves for devices on the tailnet. For the public it is a harmless
-            dead link; /admin is also hard-blocked on the public proxy. Being on
-            the tailnet is the access gate (see server/_core/context.ts). */}
+        {/* Staff entrance, shown to everyone but pointed at the absolute
+            Tailscale (MagicDNS) host -- which only resolves for devices on the
+            tailnet, so it is a harmless dead link for the public. */}
         <div className="mt-12 flex justify-end pb-3">
           <a
-            href="https://dt-server-1.tail951beb.ts.net/admin/vendors"
+            href="https://dt-server-1.tail951beb.ts.net/vendors"
             className="text-xs font-medium text-black/35 transition-colors duration-200 hover:text-[#0A65FF]"
           >
             Admin
