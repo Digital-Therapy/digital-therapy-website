@@ -141,7 +141,20 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 items-center gap-4 border-t border-black/10 pt-7 text-sm text-black/70 sm:grid-cols-[1fr_auto_1fr]">
+        {/* Discreet staff entrance to the vendor admin console. Sits just above
+            the divider line (right-aligned) so it clears the floating chat
+            widget in the bottom-right corner and stays visible at every width.
+            The page itself rejects non-admins, so linking it here is safe. */}
+        <div className="mt-12 flex justify-end pb-3">
+          <a
+            href="/admin/vendors"
+            className="text-xs font-medium text-black/35 transition-colors duration-200 hover:text-[#0A65FF]"
+          >
+            Admin
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 items-center gap-4 border-t border-black/10 pt-7 text-sm text-black/70 sm:grid-cols-[1fr_auto_1fr]">
           <div className="flex items-center gap-3 sm:justify-self-start">
             <img src={markUrl} alt="" aria-hidden="true" className="h-6 w-6 object-contain" width={197} height={227}/>
             <span>© {new Date().getFullYear()} Digital Therapy, LLC. All Rights Reserved.</span>
@@ -157,17 +170,7 @@ export default function SiteFooter() {
               Accessibility
             </a>
           </div>
-          {/* Discreet staff entrance to the vendor admin console. The page
-              itself rejects non-admins (sign-in gate + server-side guard), so
-              linking it here is safe — it's just a convenience. */}
-          <div className="hidden sm:flex sm:justify-self-end">
-            <a
-              href="/admin/vendors"
-              className="text-xs font-medium text-black/35 transition-colors duration-200 hover:text-[#0A65FF]"
-            >
-              Admin
-            </a>
-          </div>
+          <div aria-hidden="true" className="hidden sm:block" />
         </div>
       </div>
     </footer>
