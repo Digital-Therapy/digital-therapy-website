@@ -1,9 +1,10 @@
 import { COOKIE_NAME } from "@shared/const";
 import { z } from "zod";
+import { addAllowlist, isOwner, listAllowlist, removeAllowlist } from "./access";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { notifyOwner } from "./_core/notification";
 import { systemRouter } from "./_core/systemRouter";
-import { adminProcedure, publicProcedure, router } from "./_core/trpc";
+import { adminProcedure, ownerProcedure, publicProcedure, router } from "./_core/trpc";
 import { createContactSubmission } from "./db";
 import { forwardContactToPortal, forwardVendorToPortal } from "./portal";
 import {
@@ -406,6 +407,20 @@ export const appRouter = router({
     removeProject: adminProcedure
       .input(z.object({ id: z.number().int() }))
       .mutation(async ({ input }) => ({ success: await deleteProject(input.id) })),
+  }),
+
+  // Admin access management -- OWNER-only (milton@/hello@). Owners add/remove the
+  // Tailscale logins that may use the console; see server/access.ts.
+  access: router({
+    // Any admin may ask whether THEY are an owner (drives the nav item).
+    amIOwner: adminProcedure.query(({ ctx }) => isOwner(ctx.user.email)),
+    list: ownerProcedure.query(async () => listAllowlist()),
+    add: ownerProcedure
+      .input(z.object({ login: z.string().trim().min(3).max(160), note: z.string().trim().max(200).optional().default("") }))
+      .mutation(async ({ input, ctx }) => addAllowlist(input.login, input.note ?? "", ctx.user.email ?? "")),
+    remove: ownerProcedure
+      .input(z.object({ login: z.string().trim().min(3).max(160) }))
+      .mutation(async ({ input }) => removeAllowlist(input.login)),
   }),
 });
 

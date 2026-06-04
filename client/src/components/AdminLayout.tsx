@@ -12,7 +12,8 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { getLoginUrl } from "@/const";
-import { Briefcase, Loader2, LogOut, Users } from "lucide-react";
+import { trpc } from "@/lib/trpc";
+import { Briefcase, Loader2, LogOut, ShieldCheck, Users } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 const navItems = [
@@ -23,6 +24,16 @@ const navItems = [
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { loading, user, logout } = useAuth();
   const [location] = useLocation();
+
+  // The Access tab is owner-only (milton@/hello@). amIOwner is admin-gated, so
+  // it only runs once we know the viewer is an admin.
+  const ownerQuery = trpc.access.amIOwner.useQuery(undefined, {
+    enabled: !loading && user?.role === "admin",
+    retry: false,
+  });
+  const nav = ownerQuery.data
+    ? [...navItems, { icon: ShieldCheck, label: "Access", path: "/admin/access" }]
+    : navItems;
 
   if (loading) {
     return (
@@ -70,7 +81,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               Digital Therapy <span className="text-[#0A65FF]">· Vendor Admin</span>
             </Link>
             <nav className="hidden items-center gap-1 sm:flex">
-              {navItems.map((item) => {
+              {nav.map((item) => {
                 const active = location.startsWith(item.path);
                 return (
                   <Link
