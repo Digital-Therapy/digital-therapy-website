@@ -127,6 +127,7 @@ type VendorRecord = {
   context: string | null;
   status: VendorStatus;
   statusNotes: string | null;
+  activeEngaged: boolean;
   createdAt: Date;
   skills: string[];
   sectors: string[];
@@ -281,6 +282,7 @@ function toDetail(r: VendorRecord, all: VendorRecord[]) {
       sourcePage: r.sourcePage,
       status: r.status,
       statusNotes: r.statusNotes,
+      activeEngaged: r.activeEngaged,
       createdAt: r.createdAt,
     },
     skills: r.skills.map((skill, i) => ({ id: i, skill })),
@@ -320,7 +322,7 @@ function facetsFrom(records: VendorRecord[]) {
 
 let _pool: pg.Pool | null = null;
 let _poolTried = false;
-function getPool(): pg.Pool | null {
+export function getPool(): pg.Pool | null {
   if (!_poolTried) {
     _poolTried = true;
     const url = process.env.PORTAL_DATABASE_URL;
@@ -357,7 +359,8 @@ async function ensureStatusTable(pool: pg.Pool) {
        ADD COLUMN IF NOT EXISTS website_url text,
        ADD COLUMN IF NOT EXISTS personal_linkedin text,
        ADD COLUMN IF NOT EXISTS company_social text,
-       ADD COLUMN IF NOT EXISTS categories text[]`,
+       ADD COLUMN IF NOT EXISTS categories text[],
+       ADD COLUMN IF NOT EXISTS active_engaged boolean NOT NULL DEFAULT false`,
   );
   _statusReady = true;
 }
@@ -410,6 +413,7 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
     context: asString(row.context),
     status,
     statusNotes: asString(row.dt_status_notes),
+    activeEngaged: row.dt_active_engaged === true,
     createdAt: row.createdAt instanceof Date ? row.createdAt : new Date(row.createdAt),
     skills: [...skillsArr, ...parsedExtra],
     sectors: parseJsonArray(row.sectors).map((s) => String(s)).filter(Boolean),
@@ -425,7 +429,7 @@ async function loadPortalRecords(pool: pg.Pool): Promise<VendorRecord[]> {
     `SELECT va.*, s.status AS dt_status, s.status_notes AS dt_status_notes,
             s.company_name AS dt_company_name, s.website_url AS dt_website_url,
             s.personal_linkedin AS dt_personal_linkedin, s.company_social AS dt_company_social,
-            s.categories AS dt_categories
+            s.categories AS dt_categories, s.active_engaged AS dt_active_engaged
        FROM "VendorApplication" va
        LEFT JOIN dt_site.vendor_status s ON s.vendor_application_id = va.id`,
   );
@@ -565,6 +569,34 @@ export async function updateVendorCategories(id: string, categories: string[]): 
   return false;
 }
 
+/** Toggle whether a vendor is currently active on live engagements. */
+export async function updateVendorActiveEngaged(id: string, active: boolean): Promise<boolean> {
+  const pool = getPool();
+  if (pool) {
+    try {
+      await ensureStatusTable(pool);
+      await pool.query(
+        `INSERT INTO dt_site.vendor_status (vendor_application_id, active_engaged, updated_at)
+         VALUES ($1, $2, now())
+         ON CONFLICT (vendor_application_id)
+         DO UPDATE SET active_engaged = EXCLUDED.active_engaged, updated_at = now()`,
+        [id, active],
+      );
+      return true;
+    } catch (error) {
+      console.warn("[Vendors] Failed to update active-engaged flag:", error);
+      return false;
+    }
+  }
+  if (ENV.devPreview) {
+    const r = devStore.find((x) => x.id === id);
+    if (!r) return false;
+    r.activeEngaged = active;
+    return true;
+  }
+  return false;
+}
+
 /**
  * Local persistence hook for the public form. In portal mode this is a no-op:
  * submissions reach the portal's VendorApplication via the ingest API, which
@@ -633,6 +665,7 @@ function buildDevRecord(input: VendorApplicationData): VendorRecord {
     context: input.context || null,
     status: DEFAULT_STATUS,
     statusNotes: null,
+    activeEngaged: false,
     createdAt: now,
     skills: [...skills, ...parseSkillTags(input.additionalSkills ?? "", skills)],
     sectors: input.sectors ?? [],

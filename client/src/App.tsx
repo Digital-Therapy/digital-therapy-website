@@ -20,6 +20,7 @@ import Terms from "./pages/Terms";
 import Vendors from "./pages/Vendors";
 import AdminVendors from "./pages/admin/AdminVendors";
 import AdminVendorDetail from "./pages/admin/AdminVendorDetail";
+import AdminClients from "./pages/admin/AdminClients";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -41,6 +42,7 @@ function Router() {
           scripts/prerender.mjs ROUTES (auth-gated, not for the sitemap). */}
       <Route path={"/admin/vendors"} component={AdminVendors} />
       <Route path={"/admin/vendors/:id"} component={AdminVendorDetail} />
+      <Route path={"/admin/clients"} component={AdminClients} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

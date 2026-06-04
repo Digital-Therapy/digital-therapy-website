@@ -11,11 +11,27 @@ import {
   getVendorById,
   getVendorFacets,
   searchVendors,
+  updateVendorActiveEngaged,
   updateVendorCategories,
   updateVendorProfile,
   updateVendorStatus,
   VENDOR_CATEGORIES,
 } from "./vendors";
+import {
+  addComp,
+  COMP_TYPES,
+  createClient,
+  createProject,
+  deleteClient,
+  deleteProject,
+  getVendorEngagements,
+  listClients,
+  removeComp,
+  setVendorProject,
+  updateClient,
+  updateComp,
+  updateProject,
+} from "./engagements";
 import { vendorStatusValues } from "../drizzle/schema";
 
 // Strip control chars / collapse newlines so user input can't forge extra
@@ -349,6 +365,47 @@ export const appRouter = router({
         const success = await updateVendorCategories(input.id, input.categories);
         return { success };
       }),
+    // --- Active engagements: assignment + compensation ---
+    adminSetActiveEngaged: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64), active: z.boolean() }))
+      .mutation(async ({ input }) => ({ success: await updateVendorActiveEngaged(input.id, input.active) })),
+    adminGetEngagements: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64) }))
+      .query(async ({ input }) => getVendorEngagements(input.id)),
+    adminSetAssignment: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64), projectId: z.number().int(), assigned: z.boolean() }))
+      .mutation(async ({ input }) => ({ success: await setVendorProject(input.id, input.projectId, input.assigned) })),
+    adminAddComp: adminProcedure
+      .input(z.object({ vendorProjectId: z.number().int(), type: z.enum(COMP_TYPES), details: z.record(z.string(), z.any()) }))
+      .mutation(async ({ input }) => addComp(input.vendorProjectId, input.type, input.details)),
+    adminUpdateComp: adminProcedure
+      .input(z.object({ id: z.number().int(), type: z.enum(COMP_TYPES), details: z.record(z.string(), z.any()) }))
+      .mutation(async ({ input }) => ({ success: await updateComp(input.id, input.type, input.details) })),
+    adminRemoveComp: adminProcedure
+      .input(z.object({ id: z.number().int() }))
+      .mutation(async ({ input }) => ({ success: await removeComp(input.id) })),
+  }),
+  // Clients & projects management (dedicated admin manager).
+  clients: router({
+    list: adminProcedure.query(async () => listClients()),
+    create: adminProcedure
+      .input(z.object({ name: z.string().trim().min(1).max(200) }))
+      .mutation(async ({ input }) => createClient(input.name)),
+    update: adminProcedure
+      .input(z.object({ id: z.number().int(), name: z.string().trim().min(1).max(200).optional(), active: z.boolean().optional() }))
+      .mutation(async ({ input }) => ({ success: await updateClient(input.id, { name: input.name, active: input.active }) })),
+    remove: adminProcedure
+      .input(z.object({ id: z.number().int() }))
+      .mutation(async ({ input }) => ({ success: await deleteClient(input.id) })),
+    createProject: adminProcedure
+      .input(z.object({ clientId: z.number().int(), name: z.string().trim().min(1).max(200) }))
+      .mutation(async ({ input }) => createProject(input.clientId, input.name)),
+    updateProject: adminProcedure
+      .input(z.object({ id: z.number().int(), name: z.string().trim().min(1).max(200).optional(), active: z.boolean().optional() }))
+      .mutation(async ({ input }) => ({ success: await updateProject(input.id, { name: input.name, active: input.active }) })),
+    removeProject: adminProcedure
+      .input(z.object({ id: z.number().int() }))
+      .mutation(async ({ input }) => ({ success: await deleteProject(input.id) })),
   }),
 });
 

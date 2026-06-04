@@ -12,10 +12,13 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { getLoginUrl } from "@/const";
-import { Loader2, LogOut, Users } from "lucide-react";
+import { Briefcase, Loader2, LogOut, Users } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
-const navItems = [{ icon: Users, label: "Vendors", path: "/admin/vendors" }];
+const navItems = [
+  { icon: Users, label: "Vendors", path: "/admin/vendors" },
+  { icon: Briefcase, label: "Clients & Projects", path: "/admin/clients" },
+];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { loading, user, logout } = useAuth();

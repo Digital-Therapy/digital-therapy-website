@@ -6,7 +6,9 @@ import AdminLayout from "@/components/AdminLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { ActiveClientEngagements } from "./VendorEngagements";
 import {
   Select,
   SelectContent,
@@ -55,6 +57,7 @@ export default function AdminVendorDetail() {
   const emptyProfile = { companyName: "", websiteUrl: "", personalLinkedin: "", companySocial: "" };
   const [profile, setProfile] = useState(emptyProfile);
   const [categories, setCategories] = useState<string[]>([]);
+  const [activeEngaged, setActiveEngaged] = useState(false);
 
   const data = detailQuery.data;
   const syncProfile = () => {
@@ -78,8 +81,21 @@ export default function AdminVendorDetail() {
         companySocial: data.vendor.companySocial ?? "",
       });
       setCategories(data.vendor.categories ?? []);
+      setActiveEngaged(data.vendor.activeEngaged ?? false);
     }
   }, [data?.vendor]);
+
+  const setActiveEngagedMutation = trpc.vendor.adminSetActiveEngaged.useMutation({
+    onSuccess: () => {
+      utils.vendor.adminGet.invalidate({ id });
+      utils.vendor.adminSearch.invalidate();
+    },
+    onError: (e) => toast.error(e.message || "Could not update engagement flag."),
+  });
+  const toggleActiveEngaged = (checked: boolean) => {
+    setActiveEngaged(checked);
+    setActiveEngagedMutation.mutate({ id, active: checked });
+  };
 
   const updateCategories = trpc.vendor.adminUpdateCategories.useMutation({
     onSuccess: () => {
@@ -163,7 +179,7 @@ export default function AdminVendorDetail() {
             {/* Pipeline status control */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Pipeline status</CardTitle>
+                <CardTitle className="text-base">Vendor List Status</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex flex-wrap items-end gap-3">
@@ -236,6 +252,21 @@ export default function AdminVendorDetail() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Live-engagement gate → reveals the Active Client Engagements section. */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Live engagement</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <label className="flex cursor-pointer items-center gap-3 text-sm">
+                  <Checkbox checked={activeEngaged} onCheckedChange={(v) => toggleActiveEngaged(v === true)} />
+                  <span>This vendor is currently active on live Digital Therapy engagements.</span>
+                </label>
+              </CardContent>
+            </Card>
+
+            {activeEngaged ? <ActiveClientEngagements vendorId={id} /> : null}
 
             <Tabs defaultValue="profile">
               <TabsList>
