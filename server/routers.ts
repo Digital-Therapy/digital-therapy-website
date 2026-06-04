@@ -1,6 +1,7 @@
 import { COOKIE_NAME } from "@shared/const";
 import { z } from "zod";
 import { addAllowlist, isOwner, listAllowlist, removeAllowlist } from "./access";
+import { tailnetUsers } from "./tailscaleUsers";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { notifyOwner } from "./_core/notification";
 import { systemRouter } from "./_core/systemRouter";
@@ -414,6 +415,8 @@ export const appRouter = router({
   access: router({
     // Any admin may ask whether THEY are an owner (drives the nav item).
     amIOwner: adminProcedure.query(({ ctx }) => isOwner(ctx.user.email)),
+    // Current tailnet members, for the owner's "assign a user" dropdown.
+    tailnetUsers: ownerProcedure.query(async () => tailnetUsers()),
     list: ownerProcedure.query(async () => listAllowlist()),
     add: ownerProcedure
       .input(z.object({ login: z.string().trim().min(3).max(160), note: z.string().trim().max(200).optional().default("") }))
