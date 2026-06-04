@@ -46,7 +46,7 @@ function formatBytes(bytes: number | null) {
 }
 
 export default function AdminVendorDetail() {
-  const [, params] = useRoute("/admin/vendors/:id");
+  const [, params] = useRoute("/vendorlists/:id");
   const id = params?.id ?? "";
   const utils = trpc.useUtils();
   const detailQuery = trpc.vendor.adminGet.useQuery({ id }, { enabled: id.length > 0 });
@@ -135,7 +135,7 @@ export default function AdminVendorDetail() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <Link href="/admin/vendors" className="inline-flex items-center gap-1.5 text-sm text-black/60 hover:text-[#0A65FF]">
+        <Link href="/vendorlists" className="inline-flex items-center gap-1.5 text-sm text-black/60 hover:text-[#0A65FF]">
           <ArrowLeft className="h-4 w-4" />
           Back to inventory
         </Link>

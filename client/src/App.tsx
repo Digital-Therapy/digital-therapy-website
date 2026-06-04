@@ -40,8 +40,8 @@ function Router() {
       {/* Protected admin console — auth/role-gated in AdminLayout, guarded
           server-side by adminProcedure. Intentionally excluded from
           scripts/prerender.mjs ROUTES (auth-gated, not for the sitemap). */}
-      <Route path={"/admin/vendors"} component={AdminVendors} />
-      <Route path={"/admin/vendors/:id"} component={AdminVendorDetail} />
+      <Route path={"/vendorlists"} component={AdminVendors} />
+      <Route path={"/vendorlists/:id"} component={AdminVendorDetail} />
       <Route path={"/admin/clients"} component={AdminClients} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
