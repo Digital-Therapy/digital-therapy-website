@@ -20,10 +20,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Check, FileText, Loader2, Pencil } from "lucide-react";
+import { ArrowLeft, Check, FileText, Loader2, Pencil, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Link, useRoute } from "wouter";
+import { Link, useLocation, useRoute } from "wouter";
 
 const STATUSES = ["applied", "screening", "approved", "onboarded", "archived"] as const;
 type Status = (typeof STATUSES)[number];
@@ -132,6 +132,22 @@ export default function AdminVendorDetail() {
     onError: (e) => toast.error(e.message || "Could not update status."),
   });
 
+  const [, navigate] = useLocation();
+  const setRemoved = trpc.vendor.adminSetRemoved.useMutation({
+    onSuccess: (_res, vars) => {
+      utils.vendor.adminSearch.invalidate();
+      utils.vendor.adminFacets.invalidate();
+      if (vars.removed) {
+        toast.success("Vendor removed from your workspace.");
+        navigate("/vendorlists");
+      } else {
+        toast.success("Vendor restored.");
+        utils.vendor.adminGet.invalidate({ id });
+      }
+    },
+    onError: (e) => toast.error(e.message || "Could not update vendor."),
+  });
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -173,7 +189,27 @@ export default function AdminVendorDetail() {
                     {data.applicationsFromEmail} applications on file from this email.
                   </p>
                 )}
+                {data.vendor.removed ? (
+                  <p className="mt-1 text-xs font-medium text-black/45">Removed from your workspace.</p>
+                ) : null}
               </div>
+              {data.vendor.removed ? (
+                <Button variant="outline" onClick={() => setRemoved.mutate({ id, removed: false })}>
+                  Restore to workspace
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                  onClick={() => {
+                    if (confirm(`Remove "${data.vendor.name}" from your vendor workspace? You can restore it later.`))
+                      setRemoved.mutate({ id, removed: true });
+                  }}
+                >
+                  <Trash2 className="mr-1.5 h-4 w-4" />
+                  Remove from workspace
+                </Button>
+              )}
             </div>
 
             {/* Pipeline status control */}

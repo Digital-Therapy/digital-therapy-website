@@ -13,6 +13,7 @@ import {
   getVendorById,
   getVendorFacets,
   searchVendors,
+  setVendorRemoved,
   updateVendorActiveEngaged,
   updateVendorCategories,
   updateVendorProfile,
@@ -160,6 +161,7 @@ const vendorSearchInput = z.object({
   sortDir: z.enum(["asc", "desc"]).optional().default("desc"),
   page: z.number().int().min(1).optional().default(1),
   pageSize: z.number().int().min(1).max(100).optional().default(25),
+  includeRemoved: z.boolean().optional().default(false),
 });
 
 export function formatContactNotification(input: z.infer<typeof contactSubmissionInput>) {
@@ -323,6 +325,10 @@ export const appRouter = router({
     adminGet: adminProcedure.input(z.object({ id: z.string().trim().min(1).max(64) })).query(async ({ input }) => {
       return getVendorById(input.id);
     }),
+    // Soft-remove / restore a vendor from the workspace (dt_site only).
+    adminSetRemoved: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64), removed: z.boolean() }))
+      .mutation(async ({ input }) => ({ success: await setVendorRemoved(input.id, input.removed) })),
     adminUpdateStatus: adminProcedure
       .input(
         z.object({

@@ -82,6 +82,8 @@ export type VendorSearchFilters = {
   sortDir?: "asc" | "desc";
   page?: number;
   pageSize?: number;
+  /** Include vendors that have been soft-removed from the workspace. */
+  includeRemoved?: boolean;
 };
 
 export type VendorListRow = {
@@ -92,6 +94,7 @@ export type VendorListRow = {
   appliedCategory: string | null;
   categories: string[];
   status: VendorStatus;
+  removed: boolean;
   hourlyRate: string | null;
   hoursPerMonth: string | null;
   createdAt: Date;
@@ -128,6 +131,7 @@ type VendorRecord = {
   status: VendorStatus;
   statusNotes: string | null;
   activeEngaged: boolean;
+  removed: boolean;
   createdAt: Date;
   skills: string[];
   sectors: string[];
@@ -249,6 +253,7 @@ function toListRow(r: VendorRecord): VendorListRow {
     appliedCategory: r.appliedCategory,
     categories: r.categories,
     status: r.status,
+    removed: r.removed,
     hourlyRate: r.hourlyRate,
     hoursPerMonth: r.hoursPerMonth,
     createdAt: r.createdAt,
@@ -283,6 +288,7 @@ function toDetail(r: VendorRecord, all: VendorRecord[]) {
       status: r.status,
       statusNotes: r.statusNotes,
       activeEngaged: r.activeEngaged,
+      removed: r.removed,
       createdAt: r.createdAt,
     },
     skills: r.skills.map((skill, i) => ({ id: i, skill })),
@@ -360,7 +366,8 @@ async function ensureStatusTable(pool: pg.Pool) {
        ADD COLUMN IF NOT EXISTS personal_linkedin text,
        ADD COLUMN IF NOT EXISTS company_social text,
        ADD COLUMN IF NOT EXISTS categories text[],
-       ADD COLUMN IF NOT EXISTS active_engaged boolean NOT NULL DEFAULT false`,
+       ADD COLUMN IF NOT EXISTS active_engaged boolean NOT NULL DEFAULT false,
+       ADD COLUMN IF NOT EXISTS removed boolean NOT NULL DEFAULT false`,
   );
   _statusReady = true;
 }
@@ -414,6 +421,7 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
     status,
     statusNotes: asString(row.dt_status_notes),
     activeEngaged: row.dt_active_engaged === true,
+    removed: row.dt_removed === true,
     createdAt: row.createdAt instanceof Date ? row.createdAt : new Date(row.createdAt),
     skills: [...skillsArr, ...parsedExtra],
     sectors: parseJsonArray(row.sectors).map((s) => String(s)).filter(Boolean),
@@ -429,7 +437,7 @@ async function loadPortalRecords(pool: pg.Pool): Promise<VendorRecord[]> {
     `SELECT va.*, s.status AS dt_status, s.status_notes AS dt_status_notes,
             s.company_name AS dt_company_name, s.website_url AS dt_website_url,
             s.personal_linkedin AS dt_personal_linkedin, s.company_social AS dt_company_social,
-            s.categories AS dt_categories, s.active_engaged AS dt_active_engaged
+            s.categories AS dt_categories, s.active_engaged AS dt_active_engaged, s.removed AS dt_removed
        FROM "VendorApplication" va
        LEFT JOIN dt_site.vendor_status s ON s.vendor_application_id = va.id`,
   );
@@ -463,7 +471,8 @@ export async function searchVendors(
   const page = Math.max(1, filters.page ?? 1);
   const pageSize = Math.min(100, Math.max(1, filters.pageSize ?? 25));
   const records = await loadRecords();
-  const filtered = sortRecords(applyFilters(records, filters), filters);
+  const visible = filters.includeRemoved ? records : records.filter((r) => !r.removed);
+  const filtered = sortRecords(applyFilters(visible, filters), filters);
   const total = filtered.length;
   const rows = filtered.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize).map(toListRow);
   return { rows, total, page, pageSize };
@@ -477,7 +486,36 @@ export async function getVendorById(id: string) {
 }
 
 export async function getVendorFacets() {
-  return facetsFrom(await loadRecords());
+  return facetsFrom((await loadRecords()).filter((r) => !r.removed));
+}
+
+/** Soft-remove (or restore) a vendor from the admin workspace. Stored in
+ * dt_site only — the portal's VendorApplication row is never touched. */
+export async function setVendorRemoved(id: string, removed: boolean): Promise<boolean> {
+  const pool = getPool();
+  if (pool) {
+    try {
+      await ensureStatusTable(pool);
+      await pool.query(
+        `INSERT INTO dt_site.vendor_status (vendor_application_id, removed, updated_at)
+         VALUES ($1, $2, now())
+         ON CONFLICT (vendor_application_id)
+         DO UPDATE SET removed = EXCLUDED.removed, updated_at = now()`,
+        [id, removed],
+      );
+      return true;
+    } catch (error) {
+      console.warn("[Vendors] Failed to set removed flag:", error);
+      return false;
+    }
+  }
+  if (ENV.devPreview) {
+    const r = devStore.find((x) => x.id === id);
+    if (!r) return false;
+    r.removed = removed;
+    return true;
+  }
+  return false;
 }
 
 export async function updateVendorStatus(id: string, status: VendorStatus, statusNotes?: string): Promise<boolean> {
@@ -666,6 +704,7 @@ function buildDevRecord(input: VendorApplicationData): VendorRecord {
     status: DEFAULT_STATUS,
     statusNotes: null,
     activeEngaged: false,
+    removed: false,
     createdAt: now,
     skills: [...skills, ...parseSkillTags(input.additionalSkills ?? "", skills)],
     sectors: input.sectors ?? [],

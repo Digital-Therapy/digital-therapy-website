@@ -20,8 +20,9 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { trpc } from "@/lib/trpc";
-import { ChevronDown, Search, SlidersHorizontal, Users, X } from "lucide-react";
+import { ChevronDown, RotateCcw, Search, SlidersHorizontal, Trash2, Users, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { useLocation } from "wouter";
 
 // Primary category toggle across the top of the console. `value` is the stored
@@ -66,13 +67,15 @@ export default function AdminVendors() {
   const [sectors, setSectors] = useState<string[]>([]);
   const [vendorType, setVendorType] = useState<string>("");
   const [status, setStatus] = useState<string>("");
+  const [includeRemoved, setIncludeRemoved] = useState(false);
   const [page, setPage] = useState(1);
 
   // Reset to page 1 whenever a filter changes.
   useEffect(() => {
     setPage(1);
-  }, [query, skills, certifications, sectors, vendorType, status]);
+  }, [query, skills, certifications, sectors, vendorType, status, includeRemoved]);
 
+  const utils = trpc.useUtils();
   const facetsQuery = trpc.vendor.adminFacets.useQuery();
   const searchQuery = trpc.vendor.adminSearch.useQuery({
     query,
@@ -81,8 +84,17 @@ export default function AdminVendors() {
     sectors,
     vendorType: vendorType || undefined,
     status: (status || undefined) as (typeof STATUSES)[number] | undefined,
+    includeRemoved,
     page,
     pageSize: PAGE_SIZE,
+  });
+
+  const setRemoved = trpc.vendor.adminSetRemoved.useMutation({
+    onSuccess: () => {
+      utils.vendor.adminSearch.invalidate();
+      utils.vendor.adminFacets.invalidate();
+    },
+    onError: (e) => toast.error(e.message || "Could not update vendor."),
   });
 
   const facets = facetsQuery.data;
@@ -224,11 +236,17 @@ export default function AdminVendors() {
                 ? "Searching…"
                 : `${result?.total ?? 0} vendor${(result?.total ?? 0) === 1 ? "" : "s"} found`}
             </span>
-            {result && result.total > 0 && (
-              <span>
-                Page {result.page} of {totalPages}
-              </span>
-            )}
+            <div className="flex items-center gap-4">
+              <label className="flex cursor-pointer items-center gap-2 text-xs">
+                <Checkbox checked={includeRemoved} onCheckedChange={(v) => setIncludeRemoved(v === true)} />
+                Show removed
+              </label>
+              {result && result.total > 0 && (
+                <span>
+                  Page {result.page} of {totalPages}
+                </span>
+              )}
+            </div>
           </div>
 
           {searchQuery.isLoading ? (
@@ -253,10 +271,11 @@ export default function AdminVendors() {
                   <TableHead>Name</TableHead>
                   <TableHead>Categories</TableHead>
                   <TableHead>Skills</TableHead>
-                  <TableHead>Certifications</TableHead>
+                  <TableHead className="w-[190px]">Certifications</TableHead>
                   <TableHead>Rate</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Applied</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -264,10 +283,17 @@ export default function AdminVendors() {
                   <TableRow
                     key={v.id}
                     onClick={() => setLocation(`/vendorlists/${v.id}`)}
-                    className="cursor-pointer"
+                    className={`cursor-pointer ${v.removed ? "opacity-55" : ""}`}
                   >
                     <TableCell>
-                      <div className="font-medium text-[#111111]">{v.name}</div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-[#111111]">{v.name}</span>
+                        {v.removed ? (
+                          <Badge variant="outline" className="font-normal text-black/45">
+                            Removed
+                          </Badge>
+                        ) : null}
+                      </div>
                       <div className="text-xs text-black/50">{v.email}</div>
                     </TableCell>
                     <TableCell>
@@ -290,8 +316,8 @@ export default function AdminVendors() {
                     <TableCell>
                       <TagList items={v.skills} />
                     </TableCell>
-                    <TableCell>
-                      <TagList items={v.certifications} />
+                    <TableCell className="w-[190px] align-top">
+                      <StackedTagList items={v.certifications} />
                     </TableCell>
                     <TableCell className="whitespace-nowrap text-sm text-black/70">{v.hourlyRate || "—"}</TableCell>
                     <TableCell>
@@ -305,6 +331,36 @@ export default function AdminVendors() {
                     </TableCell>
                     <TableCell className="whitespace-nowrap text-sm text-black/55">
                       {new Date(v.createdAt).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {v.removed ? (
+                        <button
+                          type="button"
+                          aria-label={`Restore ${v.name}`}
+                          title="Restore to workspace"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setRemoved.mutate({ id: v.id, removed: false });
+                          }}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full text-black/45 transition-colors hover:bg-black/5 hover:text-[#0A65FF]"
+                        >
+                          <RotateCcw className="h-4 w-4" />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          aria-label={`Remove ${v.name}`}
+                          title="Remove from workspace"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (confirm(`Remove "${v.name}" from your vendor workspace? You can restore it later.`))
+                              setRemoved.mutate({ id: v.id, removed: true });
+                          }}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full text-black/40 transition-colors hover:bg-black/5 hover:text-red-600"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -348,6 +404,28 @@ function TagList({ items, max = 3 }: { items: string[]; max?: number }) {
         </Badge>
       ))}
       {extra > 0 && <span className="text-xs text-black/45">+{extra}</span>}
+    </div>
+  );
+}
+
+/** Vertical stack — one tag per line — so a column stays narrow and rows grow
+ * taller instead. Long tag text wraps within the constrained cell width. */
+function StackedTagList({ items, max = 8 }: { items: string[]; max?: number }) {
+  if (!items.length) return <span className="text-xs text-black/35">—</span>;
+  const shown = items.slice(0, max);
+  const extra = items.length - shown.length;
+  return (
+    <div className="flex flex-col items-start gap-1">
+      {shown.map((item) => (
+        <Badge
+          key={item}
+          variant="secondary"
+          className="max-w-full whitespace-normal text-left font-normal leading-tight"
+        >
+          {item}
+        </Badge>
+      ))}
+      {extra > 0 && <span className="text-xs text-black/45">+{extra} more</span>}
     </div>
   );
 }
