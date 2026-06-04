@@ -251,7 +251,7 @@ export default function AdminVendors() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
-                  <TableHead>Type</TableHead>
+                  <TableHead>Categories</TableHead>
                   <TableHead>Skills</TableHead>
                   <TableHead>Certifications</TableHead>
                   <TableHead>Rate</TableHead>
@@ -270,7 +270,23 @@ export default function AdminVendors() {
                       <div className="font-medium text-[#111111]">{v.name}</div>
                       <div className="text-xs text-black/50">{v.email}</div>
                     </TableCell>
-                    <TableCell className="text-sm text-black/70">{v.vendorTypeLabel}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-wrap gap-1">
+                        {v.categories.length ? (
+                          v.categories.map((c) => (
+                            <Badge
+                              key={c}
+                              variant={c === v.appliedCategory ? "secondary" : "outline"}
+                              className="font-normal"
+                            >
+                              {c}
+                            </Badge>
+                          ))
+                        ) : (
+                          <span className="text-sm text-black/50">{v.vendorTypeLabel}</span>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <TagList items={v.skills} />
                     </TableCell>

@@ -18,13 +18,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, FileText, Loader2, Pencil } from "lucide-react";
+import { ArrowLeft, Check, FileText, Loader2, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link, useRoute } from "wouter";
 
 const STATUSES = ["applied", "screening", "approved", "onboarded", "archived"] as const;
 type Status = (typeof STATUSES)[number];
+
+const ALL_CATEGORIES = ["Technology", "Finance & Accounting", "Marketing", "Family Office"];
 
 const STATUS_STYLES: Record<string, string> = {
   applied: "bg-black/8 text-black/70",
@@ -52,6 +54,7 @@ export default function AdminVendorDetail() {
   const [editingProfile, setEditingProfile] = useState(false);
   const emptyProfile = { companyName: "", websiteUrl: "", personalLinkedin: "", companySocial: "" };
   const [profile, setProfile] = useState(emptyProfile);
+  const [categories, setCategories] = useState<string[]>([]);
 
   const data = detailQuery.data;
   const syncProfile = () => {
@@ -74,8 +77,25 @@ export default function AdminVendorDetail() {
         personalLinkedin: data.vendor.personalLinkedin ?? "",
         companySocial: data.vendor.companySocial ?? "",
       });
+      setCategories(data.vendor.categories ?? []);
     }
   }, [data?.vendor]);
+
+  const updateCategories = trpc.vendor.adminUpdateCategories.useMutation({
+    onSuccess: () => {
+      utils.vendor.adminGet.invalidate({ id });
+      utils.vendor.adminSearch.invalidate();
+    },
+    onError: (e) => toast.error(e.message || "Could not update categories."),
+  });
+
+  const appliedCategory = data?.vendor.appliedCategory ?? null;
+  const toggleCategory = (cat: string) => {
+    if (cat === appliedCategory) return; // applied category is always included
+    const next = categories.includes(cat) ? categories.filter((c) => c !== cat) : [...categories, cat];
+    setCategories(next);
+    updateCategories.mutate({ id, categories: next as ("Technology" | "Finance & Accounting" | "Marketing" | "Family Office")[] });
+  };
 
   const updateProfile = trpc.vendor.adminUpdateProfile.useMutation({
     onSuccess: () => {
@@ -175,6 +195,45 @@ export default function AdminVendorDetail() {
                   placeholder="Internal notes on this candidate (interview impressions, fit, follow-ups)…"
                   className="min-h-[80px] resize-none"
                 />
+              </CardContent>
+            </Card>
+
+            {/* Category tags — drive which category filters/searches this vendor
+                appears under. The applied category is always included. */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Categories</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-xs text-black/55">
+                  Tag this vendor into every discipline they can deliver — they&rsquo;ll surface under each
+                  category&rsquo;s filter and searches. Their applied category is locked on.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {ALL_CATEGORIES.map((cat) => {
+                    const checked = categories.includes(cat);
+                    const isApplied = cat === appliedCategory;
+                    return (
+                      <button
+                        key={cat}
+                        type="button"
+                        disabled={isApplied || updateCategories.isPending}
+                        onClick={() => toggleCategory(cat)}
+                        className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                          checked
+                            ? "border-[#0A65FF] bg-[#0A65FF] text-white"
+                            : "border-black/15 bg-white text-black/70 hover:border-[#0A65FF]/40 hover:text-[#0A65FF]"
+                        } ${isApplied ? "cursor-default opacity-95" : ""}`}
+                      >
+                        {checked ? <Check className="h-3.5 w-3.5" /> : null}
+                        {cat}
+                        {isApplied ? (
+                          <span className="ml-0.5 text-[0.6rem] font-bold uppercase tracking-wide opacity-80">applied</span>
+                        ) : null}
+                      </button>
+                    );
+                  })}
+                </div>
               </CardContent>
             </Card>
 

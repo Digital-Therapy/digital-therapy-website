@@ -18,6 +18,26 @@ import { ENV } from "./_core/env";
 export type VendorStatus = (typeof vendorStatusValues)[number];
 const DEFAULT_STATUS: VendorStatus = "applied";
 
+// Canonical SME categories used for tagging + search. A vendor's EFFECTIVE
+// categories = the one they applied as (derived from their vendorTypeLabel)
+// plus any extra categories the admin tags them with.
+export const VENDOR_CATEGORIES = ["Technology", "Finance & Accounting", "Marketing", "Family Office"] as const;
+
+function deriveCategory(vendorTypeLabel: string): string | null {
+  const lower = (vendorTypeLabel || "").toLowerCase();
+  return VENDOR_CATEGORIES.find((c) => lower.includes(c.toLowerCase())) ?? null;
+}
+
+function effectiveCategories(vendorTypeLabel: string, adminCats: string[] | null): string[] {
+  const set = new Set<string>();
+  const applied = deriveCategory(vendorTypeLabel);
+  if (applied) set.add(applied);
+  for (const c of adminCats ?? []) {
+    if ((VENDOR_CATEGORIES as readonly string[]).includes(c)) set.add(c);
+  }
+  return Array.from(set);
+}
+
 /** Parsed vendor application payload (matches vendorApplicationInput in routers.ts). */
 export type VendorApplicationData = {
   vendorTypeLabel: string;
@@ -69,6 +89,8 @@ export type VendorListRow = {
   name: string;
   email: string;
   vendorTypeLabel: string;
+  appliedCategory: string | null;
+  categories: string[];
   status: VendorStatus;
   hourlyRate: string | null;
   hoursPerMonth: string | null;
@@ -82,6 +104,8 @@ export type VendorListRow = {
 type VendorRecord = {
   id: string;
   vendorTypeLabel: string;
+  appliedCategory: string | null;
+  categories: string[];
   name: string;
   email: string;
   role: string | null;
@@ -166,10 +190,10 @@ function applyFilters(records: VendorRecord[], filters: VendorSearchFilters): Ve
     );
   }
   if (filters.vendorType) {
+    // Match against EFFECTIVE categories (applied + admin tags), so a vendor
+    // tagged into other disciplines surfaces under those category filters too.
     const vt = filters.vendorType.toLowerCase();
-    // Substring match so "Technology" matches both "Technology Vendor" and
-    // legacy "Technology SME" labels in historical data.
-    out = out.filter((r) => r.vendorTypeLabel.toLowerCase().includes(vt));
+    out = out.filter((r) => r.categories.some((c) => c.toLowerCase() === vt));
   }
   if (filters.status) out = out.filter((r) => r.status === filters.status);
   if (filters.rateMin != null) out = out.filter((r) => r.hourlyRateNumeric != null && r.hourlyRateNumeric >= filters.rateMin!);
@@ -221,6 +245,8 @@ function toListRow(r: VendorRecord): VendorListRow {
     name: r.name,
     email: r.email,
     vendorTypeLabel: r.vendorTypeLabel,
+    appliedCategory: r.appliedCategory,
+    categories: r.categories,
     status: r.status,
     hourlyRate: r.hourlyRate,
     hoursPerMonth: r.hoursPerMonth,
@@ -236,6 +262,8 @@ function toDetail(r: VendorRecord, all: VendorRecord[]) {
     vendor: {
       id: r.id,
       vendorTypeLabel: r.vendorTypeLabel,
+      appliedCategory: r.appliedCategory,
+      categories: r.categories,
       name: r.name,
       email: r.email,
       role: r.role,
@@ -328,7 +356,8 @@ async function ensureStatusTable(pool: pg.Pool) {
        ADD COLUMN IF NOT EXISTS company_name text,
        ADD COLUMN IF NOT EXISTS website_url text,
        ADD COLUMN IF NOT EXISTS personal_linkedin text,
-       ADD COLUMN IF NOT EXISTS company_social text`,
+       ADD COLUMN IF NOT EXISTS company_social text,
+       ADD COLUMN IF NOT EXISTS categories text[]`,
   );
   _statusReady = true;
 }
@@ -351,9 +380,13 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
   const status = (vendorStatusValues as readonly string[]).includes(statusRaw ?? "")
     ? (statusRaw as VendorStatus)
     : DEFAULT_STATUS;
+  const vendorTypeLabel = String(row.vendorTypeLabel ?? "");
+  const dtCategories = Array.isArray(row.dt_categories) ? row.dt_categories.map(String) : null;
   return {
     id: String(row.id),
-    vendorTypeLabel: String(row.vendorTypeLabel ?? ""),
+    vendorTypeLabel,
+    appliedCategory: deriveCategory(vendorTypeLabel),
+    categories: effectiveCategories(vendorTypeLabel, dtCategories),
     name: String(row.name ?? ""),
     email: String(row.email ?? ""),
     role: asString(row.role),
@@ -391,7 +424,8 @@ async function loadPortalRecords(pool: pg.Pool): Promise<VendorRecord[]> {
   const { rows } = await pool.query(
     `SELECT va.*, s.status AS dt_status, s.status_notes AS dt_status_notes,
             s.company_name AS dt_company_name, s.website_url AS dt_website_url,
-            s.personal_linkedin AS dt_personal_linkedin, s.company_social AS dt_company_social
+            s.personal_linkedin AS dt_personal_linkedin, s.company_social AS dt_company_social,
+            s.categories AS dt_categories
        FROM "VendorApplication" va
        LEFT JOIN dt_site.vendor_status s ON s.vendor_application_id = va.id`,
   );
@@ -507,6 +541,30 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
   return false;
 }
 
+/** Admin category tags (in addition to the applied category), in dt_site. */
+export async function updateVendorCategories(id: string, categories: string[]): Promise<boolean> {
+  const clean = categories.filter((c) => (VENDOR_CATEGORIES as readonly string[]).includes(c));
+  const pool = getPool();
+  if (pool) {
+    try {
+      await ensureStatusTable(pool);
+      await pool.query(
+        `INSERT INTO dt_site.vendor_status (vendor_application_id, categories, updated_at)
+         VALUES ($1, $2, now())
+         ON CONFLICT (vendor_application_id)
+         DO UPDATE SET categories = EXCLUDED.categories, updated_at = now()`,
+        [id, clean],
+      );
+      return true;
+    } catch (error) {
+      console.warn("[Vendors] Failed to update vendor categories:", error);
+      return false;
+    }
+  }
+  if (ENV.devPreview) return devUpdateCategories(id, clean);
+  return false;
+}
+
 /**
  * Local persistence hook for the public form. In portal mode this is a no-op:
  * submissions reach the portal's VendorApplication via the ingest API, which
@@ -552,6 +610,8 @@ function buildDevRecord(input: VendorApplicationData): VendorRecord {
   return {
     id,
     vendorTypeLabel: input.vendorTypeLabel,
+    appliedCategory: deriveCategory(input.vendorTypeLabel),
+    categories: effectiveCategories(input.vendorTypeLabel, null),
     name: input.name,
     email: input.email,
     role: input.role || null,
@@ -612,6 +672,13 @@ function devUpdateProfile(id: string, fields: VendorProfileFields): boolean {
   r.websiteUrl = fields.websiteUrl || null;
   r.personalLinkedin = fields.personalLinkedin || null;
   r.companySocial = fields.companySocial || null;
+  return true;
+}
+
+function devUpdateCategories(id: string, categories: string[]): boolean {
+  const r = devStore.find((x) => x.id === id);
+  if (!r) return false;
+  r.categories = effectiveCategories(r.vendorTypeLabel, categories);
   return true;
 }
 

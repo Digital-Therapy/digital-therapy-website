@@ -11,8 +11,10 @@ import {
   getVendorById,
   getVendorFacets,
   searchVendors,
+  updateVendorCategories,
   updateVendorProfile,
   updateVendorStatus,
+  VENDOR_CATEGORIES,
 } from "./vendors";
 import { vendorStatusValues } from "../drizzle/schema";
 
@@ -332,6 +334,19 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         const { id, ...fields } = input;
         const success = await updateVendorProfile(id, fields);
+        return { success };
+      }),
+    // Admin category tags — a vendor can belong to multiple SME categories
+    // beyond the one they applied as, so they surface in more searches.
+    adminUpdateCategories: adminProcedure
+      .input(
+        z.object({
+          id: z.string().trim().min(1).max(64),
+          categories: z.array(z.enum(VENDOR_CATEGORIES)).max(VENDOR_CATEGORIES.length),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const success = await updateVendorCategories(input.id, input.categories);
         return { success };
       }),
   }),
