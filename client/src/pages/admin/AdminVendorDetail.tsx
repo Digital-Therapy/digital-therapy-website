@@ -42,9 +42,9 @@ function formatBytes(bytes: number | null) {
 
 export default function AdminVendorDetail() {
   const [, params] = useRoute("/admin/vendors/:id");
-  const id = Number(params?.id);
+  const id = params?.id ?? "";
   const utils = trpc.useUtils();
-  const detailQuery = trpc.vendor.adminGet.useQuery({ id }, { enabled: Number.isFinite(id) && id > 0 });
+  const detailQuery = trpc.vendor.adminGet.useQuery({ id }, { enabled: id.length > 0 });
 
   const [status, setStatus] = useState<Status>("applied");
   const [notes, setNotes] = useState("");

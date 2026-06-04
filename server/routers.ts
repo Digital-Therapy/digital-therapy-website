@@ -299,13 +299,13 @@ export const appRouter = router({
     adminSearch: adminProcedure.input(vendorSearchInput).query(async ({ input }) => {
       return searchVendors(input);
     }),
-    adminGet: adminProcedure.input(z.object({ id: z.number().int().positive() })).query(async ({ input }) => {
+    adminGet: adminProcedure.input(z.object({ id: z.string().trim().min(1).max(64) })).query(async ({ input }) => {
       return getVendorById(input.id);
     }),
     adminUpdateStatus: adminProcedure
       .input(
         z.object({
-          id: z.number().int().positive(),
+          id: z.string().trim().min(1).max(64),
           status: z.enum(vendorStatusValues),
           statusNotes: z.string().trim().max(4000).optional(),
         }),

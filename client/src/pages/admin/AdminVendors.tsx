@@ -26,12 +26,14 @@ import { useLocation } from "wouter";
 
 // Primary category toggle across the top of the console. `value` is the stored
 // vendorTypeLabel ("" = All); `label` is the friendly category name.
+// `value` is matched as a substring against the stored vendorTypeLabel, so it
+// catches both "Technology Vendor" and legacy "Technology SME" labels.
 const CATEGORIES: { label: string; value: string }[] = [
   { label: "All", value: "" },
-  { label: "Technology", value: "Technology Vendor" },
-  { label: "Finance & Accounting", value: "Finance & Accounting Vendor" },
-  { label: "Marketing", value: "Marketing Vendor" },
-  { label: "Family Offices", value: "Family Office Vendor" },
+  { label: "Technology", value: "Technology" },
+  { label: "Finance & Accounting", value: "Finance & Accounting" },
+  { label: "Marketing", value: "Marketing" },
+  { label: "Family Offices", value: "Family Office" },
 ];
 
 const STATUSES = ["applied", "screening", "approved", "onboarded", "archived"] as const;
