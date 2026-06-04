@@ -157,7 +157,17 @@ export default function SiteFooter() {
               Accessibility
             </a>
           </div>
-          <div aria-hidden="true" className="hidden sm:block" />
+          {/* Discreet staff entrance to the vendor admin console. The page
+              itself rejects non-admins (sign-in gate + server-side guard), so
+              linking it here is safe — it's just a convenience. */}
+          <div className="hidden sm:flex sm:justify-self-end">
+            <a
+              href="/admin/vendors"
+              className="text-xs font-medium text-black/35 transition-colors duration-200 hover:text-[#0A65FF]"
+            >
+              Admin
+            </a>
+          </div>
         </div>
       </div>
     </footer>

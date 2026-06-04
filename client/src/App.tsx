@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import { ChatWidget } from "./components/ChatWidget";
 import { RouteSeo } from "./components/RouteSeo";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -18,6 +18,8 @@ import Partners from "./pages/Partners";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Vendors from "./pages/Vendors";
+import AdminVendors from "./pages/admin/AdminVendors";
+import AdminVendorDetail from "./pages/admin/AdminVendorDetail";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -34,6 +36,11 @@ function Router() {
       <Route path={"/privacy"} component={Privacy} />
       <Route path={"/accessibility"} component={Accessibility} />
       <Route path={"/team"} component={Team} />
+      {/* Protected admin console — auth/role-gated in AdminLayout, guarded
+          server-side by adminProcedure. Intentionally excluded from
+          scripts/prerender.mjs ROUTES (auth-gated, not for the sitemap). */}
+      <Route path={"/admin/vendors"} component={AdminVendors} />
+      <Route path={"/admin/vendors/:id"} component={AdminVendorDetail} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
@@ -47,6 +54,11 @@ function Router() {
 // - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
 
 function App() {
+  // The admin console is an app shell, not a marketing page — suppress the
+  // public footer and chat widget on /admin/* routes.
+  const [location] = useLocation();
+  const isAdmin = location.startsWith("/admin");
+
   return (
     <ErrorBoundary>
       <ThemeProvider
@@ -57,8 +69,8 @@ function App() {
           <RouteSeo />
           <Toaster />
           <Router />
-          <SiteFooter />
-          <ChatWidget />
+          {!isAdmin && <SiteFooter />}
+          {!isAdmin && <ChatWidget />}
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

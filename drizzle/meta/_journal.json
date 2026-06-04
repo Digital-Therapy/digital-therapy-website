@@ -15,6 +15,20 @@
       "when": 1777962560116,
       "tag": "0001_silent_barracuda",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1780468135264,
+      "tag": "0002_lying_vampiro",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1780520639102,
+      "tag": "0003_flimsy_princess_powerful",
+      "breakpoints": true
     }
   ]
 }

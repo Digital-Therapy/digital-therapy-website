@@ -3,9 +3,17 @@ import { z } from "zod";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { notifyOwner } from "./_core/notification";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, router } from "./_core/trpc";
+import { adminProcedure, publicProcedure, router } from "./_core/trpc";
 import { createContactSubmission } from "./db";
 import { forwardContactToPortal, forwardVendorToPortal } from "./portal";
+import {
+  createVendorApplication,
+  getVendorById,
+  getVendorFacets,
+  searchVendors,
+  updateVendorStatus,
+} from "./vendors";
+import { vendorStatusValues } from "../drizzle/schema";
 
 // Strip control chars / collapse newlines so user input can't forge extra
 // fields in the plain-text owner notification body.
@@ -50,6 +58,10 @@ const vendorApplicationInput = z.object({
   name: z.string().trim().min(2, "Please enter your name.").max(160),
   email: z.string().trim().email("Please enter a valid email.").max(320),
   role: z.string().trim().max(160).optional().default(""),
+  companyName: z.string().trim().max(240).optional().default(""),
+  websiteUrl: z.string().trim().max(500).optional().default(""),
+  personalLinkedin: z.string().trim().max(500).optional().default(""),
+  companySocial: z.string().trim().max(500).optional().default(""),
   personalBio: z.string().trim().max(8000).optional().default(""),
   companyCv: z.string().trim().max(8000).optional().default(""),
   hourlyRate: z.string().trim().max(120).optional().default(""),
@@ -108,6 +120,25 @@ const vendorApplicationInput = z.object({
   context: z.string().trim().max(240).optional().default("vendor application"),
   sourcePage: z.string().trim().max(500).optional().default("unknown"),
   files: z.array(vendorFileInput).max(3).optional().default([]),
+});
+
+// Admin vendor search input. Multi-value dimensions (skills/certifications/
+// sectors) are AND-matched server-side; ranges apply to parsed numerics.
+const vendorSearchInput = z.object({
+  query: z.string().trim().max(200).optional().default(""),
+  skills: z.array(z.string().trim().max(120)).max(20).optional().default([]),
+  certifications: z.array(z.string().trim().max(240)).max(20).optional().default([]),
+  sectors: z.array(z.string().trim().max(120)).max(20).optional().default([]),
+  vendorType: z.string().trim().max(160).optional(),
+  status: z.enum(vendorStatusValues).optional(),
+  rateMin: z.number().int().nonnegative().optional(),
+  rateMax: z.number().int().nonnegative().optional(),
+  hoursMin: z.number().int().nonnegative().optional(),
+  hoursMax: z.number().int().nonnegative().optional(),
+  sort: z.enum(["createdAt", "name", "hourlyRateNumeric", "status"]).optional().default("createdAt"),
+  sortDir: z.enum(["asc", "desc"]).optional().default("desc"),
+  page: z.number().int().min(1).optional().default(1),
+  pageSize: z.number().int().min(1).max(100).optional().default(25),
 });
 
 export function formatContactNotification(input: z.infer<typeof contactSubmissionInput>) {
@@ -200,6 +231,14 @@ export const appRouter = router({
       const { files, ...payload } = input;
       const portalStored = await forwardVendorToPortal(payload, files);
 
+      // Persist locally as the system of record for the admin vendor inventory.
+      // Non-fatal: if the DB is unavailable or the write fails, the public form
+      // still succeeds via the portal mirror + owner notification below.
+      const saved = await createVendorApplication(input, { portalForwarded: portalStored }).catch((error) => {
+        console.warn("[Vendor] local persist failed:", error);
+        return null;
+      });
+
       // Best-effort owner ping so the team is alerted even if the portal is down.
       const ndaExecuted = Boolean(
         input.ndaSignerName && input.ndaSignatureText && input.ndaSignatureDate,
@@ -253,7 +292,30 @@ export const appRouter = router({
         return false;
       });
 
-      return { success: true, portalStored, notificationDelivered } as const;
+      return { success: true, portalStored, notificationDelivered, id: saved?.id ?? null } as const;
+    }),
+
+    // --- Admin-only vendor inventory API (guarded by adminProcedure) ---
+    adminSearch: adminProcedure.input(vendorSearchInput).query(async ({ input }) => {
+      return searchVendors(input);
+    }),
+    adminGet: adminProcedure.input(z.object({ id: z.number().int().positive() })).query(async ({ input }) => {
+      return getVendorById(input.id);
+    }),
+    adminUpdateStatus: adminProcedure
+      .input(
+        z.object({
+          id: z.number().int().positive(),
+          status: z.enum(vendorStatusValues),
+          statusNotes: z.string().trim().max(4000).optional(),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const success = await updateVendorStatus(input.id, input.status, input.statusNotes);
+        return { success };
+      }),
+    adminFacets: adminProcedure.query(async () => {
+      return getVendorFacets();
     }),
   }),
 });

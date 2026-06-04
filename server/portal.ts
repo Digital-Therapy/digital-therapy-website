@@ -29,6 +29,10 @@ export type VendorForward = {
   name: string;
   email: string;
   role?: string | null;
+  companyName?: string | null;
+  websiteUrl?: string | null;
+  personalLinkedin?: string | null;
+  companySocial?: string | null;
   personalBio?: string | null;
   companyCv?: string | null;
   hourlyRate?: string | null;

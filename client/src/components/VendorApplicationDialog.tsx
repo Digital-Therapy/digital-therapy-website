@@ -36,6 +36,10 @@ type Variant = keyof typeof variantClasses;
 type VendorFormState = {
   name: string;
   email: string;
+  companyName: string;
+  websiteUrl: string;
+  personalLinkedin: string;
+  companySocial: string;
   role: string;
   personalBio: string;
   companyCv: string;
@@ -51,6 +55,10 @@ type VendorFormState = {
 const initialForm: VendorFormState = {
   name: "",
   email: "",
+  companyName: "",
+  websiteUrl: "",
+  personalLinkedin: "",
+  companySocial: "",
   role: "",
   personalBio: "",
   companyCv: "",
@@ -83,6 +91,9 @@ const blankTeamMember = (): TeamMember => ({
 // indices 1-9 = teams of 2-10, index 10 = "More" (more than 10).
 const TEAM_STEPS = ["Just me", "2", "3", "4", "5", "6", "7", "8", "9", "10", "More"] as const;
 const TEAM_MORE_INDEX = TEAM_STEPS.length - 1;
+// Max number of individual teammate profiles we ask an applicant to fill in,
+// regardless of total team size — we only want their few key people.
+const TEAM_MEMBER_CAP = 3;
 
 const sectors = [
   "Pharma / Bio-Tech",
@@ -237,11 +248,12 @@ export function VendorApplicationDialog({
   // already-typed entries so dragging never wipes out captured details.
   const handleTeamSizeChange = (index: number) => {
     setTeamSizeIndex(index);
-    // "Just me" → 0 lockups; teams of N → N-1 lockups (== index);
-    // "More" → at least 10, but keep any extra rows the user already added.
+    // "Just me" → 0 lockups; otherwise one lockup per additional teammate, but
+    // capped at TEAM_MEMBER_CAP so we never ask applicants to profile an entire
+    // large team — just their few key people. The dial still records the full
+    // team size for our records.
     setTeamMembers((current) => {
-      const target =
-        index === TEAM_MORE_INDEX ? Math.max(10, current.length) : index;
+      const target = Math.min(TEAM_MEMBER_CAP, index);
       if (target === current.length) return current;
       if (target < current.length) return current.slice(0, target);
       return [...current, ...Array.from({ length: target - current.length }, blankTeamMember)];
@@ -252,14 +264,6 @@ export function VendorApplicationDialog({
     setTeamMembers((current) =>
       current.map((member, i) => (i === index ? { ...member, [field]: value } : member)),
     );
-  };
-
-  const addTeamMember = () => {
-    setTeamMembers((current) => [...current, blankTeamMember()]);
-  };
-
-  const removeTeamMember = (index: number) => {
-    setTeamMembers((current) => current.filter((_, i) => i !== index));
   };
 
   const toggleSkill = (skill: string) => {
@@ -371,6 +375,10 @@ export function VendorApplicationDialog({
       name: form.name,
       email: form.email,
       role: form.role,
+      companyName: form.companyName,
+      websiteUrl: form.websiteUrl,
+      personalLinkedin: form.personalLinkedin,
+      companySocial: form.companySocial,
       personalBio: form.personalBio,
       companyCv: form.companyCv,
       hourlyRate: form.hourlyRate,
@@ -417,8 +425,10 @@ export function VendorApplicationDialog({
     teamSizeIndex === 0
       ? "Just me"
       : teamSizeIndex === TEAM_MORE_INDEX
-        ? "More than 10 — list your core members below"
+        ? "More than 10 — tell us about your key people below"
         : `${teamSizeIndex + 1} people`;
+  // True when the indicated team is larger than the number of profiles we ask for.
+  const teamMembersCapped = teamSizeIndex > TEAM_MEMBER_CAP;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -478,6 +488,22 @@ export function VendorApplicationDialog({
                   Work email
                   <Input value={form.email} onChange={(event) => updateField("email", event.target.value)} required type="email" placeholder="name@firm.com" className="h-11" />
                 </label>
+                <label className="flex flex-col gap-3 text-sm font-semibold text-black/74">
+                  Company name
+                  <Input value={form.companyName} onChange={(event) => updateField("companyName", event.target.value)} placeholder="Your company (or leave blank if solo)" className="h-11" />
+                </label>
+                <label className="flex flex-col gap-3 text-sm font-semibold text-black/74">
+                  Website URL
+                  <Input value={form.websiteUrl} onChange={(event) => updateField("websiteUrl", event.target.value)} type="url" placeholder="https://yourcompany.com" className="h-11" />
+                </label>
+                <label className="flex flex-col gap-3 text-sm font-semibold text-black/74">
+                  Personal LinkedIn
+                  <Input value={form.personalLinkedin} onChange={(event) => updateField("personalLinkedin", event.target.value)} type="url" placeholder="https://linkedin.com/in/you" className="h-11" />
+                </label>
+                <label className="flex flex-col gap-3 text-sm font-semibold text-black/74">
+                  Company LinkedIn or Instagram
+                  <Input value={form.companySocial} onChange={(event) => updateField("companySocial", event.target.value)} type="url" placeholder="https://linkedin.com/company/… or instagram.com/…" className="h-11" />
+                </label>
                 <label className="flex flex-col gap-3 text-sm font-semibold text-black/74 sm:col-span-2">
                   Title / role
                   <Input value={form.role} onChange={(event) => updateField("role", event.target.value)} placeholder={`e.g. ${vendorTypeLabel}, Founder, Consultant`} className="h-11" />
@@ -523,9 +549,12 @@ export function VendorApplicationDialog({
               {teamMembers.length > 0 ? (
                 <div className="space-y-4">
                   <p className="text-xs text-black/60">
-                    Tell us about your{" "}
-                    {teamMembers.length === 1 ? "teammate" : `${teamMembers.length} teammates`}. You&rsquo;re
-                    already covered in &ldquo;About Vendor&rdquo; above.
+                    {teamMembersCapped
+                      ? `Tell us about your ${TEAM_MEMBER_CAP} key team members — no need to list everyone.`
+                      : `Tell us about your ${
+                          teamMembers.length === 1 ? "teammate" : `${teamMembers.length} teammates`
+                        }.`}{" "}
+                    You&rsquo;re already covered in &ldquo;About Vendor&rdquo; above.
                   </p>
                   {teamMembers.map((member, index) => (
                     <div key={index} className="rounded-[1rem] border border-black/10 bg-[#F7F4EE]/60 p-4">
@@ -533,19 +562,9 @@ export function VendorApplicationDialog({
                         <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[#0A65FF]">
                           Team member {index + 2}
                         </p>
-                        {teamSizeIndex === TEAM_MORE_INDEX ? (
-                          <button
-                            type="button"
-                            onClick={() => removeTeamMember(index)}
-                            aria-label={`Remove team member ${index + 2}`}
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-full text-black/45 transition-colors duration-200 hover:bg-black/5 hover:text-[#0A65FF]"
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
-                        ) : null}
                       </div>
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <label className="flex flex-col gap-2 text-sm font-semibold text-black/74">
+                      <div className="grid gap-4 sm:grid-cols-6">
+                        <label className="flex flex-col gap-2 text-sm font-semibold text-black/74 sm:col-span-2">
                           Full name
                           <Input
                             value={member.fullName}
@@ -554,7 +573,7 @@ export function VendorApplicationDialog({
                             className="h-11"
                           />
                         </label>
-                        <label className="flex flex-col gap-2 text-sm font-semibold text-black/74">
+                        <label className="flex flex-col gap-2 text-sm font-semibold text-black/74 sm:col-span-2">
                           Title
                           <Input
                             value={member.title}
@@ -564,15 +583,6 @@ export function VendorApplicationDialog({
                           />
                         </label>
                         <label className="flex flex-col gap-2 text-sm font-semibold text-black/74 sm:col-span-2">
-                          Role / skills
-                          <Input
-                            value={member.roleSkills}
-                            onChange={(event) => updateTeamMember(index, "roleSkills", event.target.value)}
-                            placeholder="What they do and the tools they specialize in"
-                            className="h-11"
-                          />
-                        </label>
-                        <label className="flex flex-col gap-2 text-sm font-semibold text-black/74">
                           Location
                           <Input
                             value={member.location}
@@ -581,7 +591,16 @@ export function VendorApplicationDialog({
                             className="h-11"
                           />
                         </label>
-                        <label className="flex flex-col gap-2 text-sm font-semibold text-black/74">
+                        <label className="flex flex-col gap-2 text-sm font-semibold text-black/74 sm:col-span-4">
+                          Role / skills
+                          <Input
+                            value={member.roleSkills}
+                            onChange={(event) => updateTeamMember(index, "roleSkills", event.target.value)}
+                            placeholder="What they do and the tools they specialize in"
+                            className="h-11"
+                          />
+                        </label>
+                        <label className="flex flex-col gap-2 text-sm font-semibold text-black/74 sm:col-span-2">
                           # of years working together
                           <Input
                             value={member.yearsTogether}
@@ -594,16 +613,6 @@ export function VendorApplicationDialog({
                       </div>
                     </div>
                   ))}
-                  {teamSizeIndex === TEAM_MORE_INDEX ? (
-                    <button
-                      type="button"
-                      onClick={addTeamMember}
-                      className="inline-flex items-center gap-2 rounded-full border border-[#0A65FF]/30 bg-[#0A65FF]/8 px-5 py-2.5 text-sm font-semibold text-[#0A65FF] transition-all duration-300 hover:border-[#0A65FF]/55 hover:bg-[#0A65FF]/14"
-                    >
-                      <Plus className="h-4 w-4" />
-                      Add team member
-                    </button>
-                  ) : null}
                 </div>
               ) : null}
             </fieldset>
