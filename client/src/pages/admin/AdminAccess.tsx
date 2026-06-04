@@ -7,6 +7,7 @@ import AdminLayout from "@/components/AdminLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/lib/trpc";
 import { Plus, ShieldCheck, Trash2 } from "lucide-react";
@@ -16,6 +17,7 @@ import { toast } from "sonner";
 export default function AdminAccess() {
   const utils = trpc.useUtils();
   const accessQuery = trpc.access.list.useQuery(undefined, { retry: false });
+  const tailnetQuery = trpc.access.tailnetUsers.useQuery(undefined, { retry: false });
   const refresh = () => utils.access.list.invalidate();
   const onErr = (e: { message?: string }) => toast.error(e.message || "Something went wrong.");
 
@@ -71,6 +73,11 @@ export default function AdminAccess() {
   const owners = accessQuery.data?.owners ?? [];
   const entries = accessQuery.data?.entries ?? [];
 
+  // Tailnet users not already an owner or on the list -- the assignable set.
+  const taken = new Set([...owners, ...entries.map((e) => e.login)]);
+  const available = (tailnetQuery.data ?? []).filter((u) => !taken.has(u.login));
+  const haveFeed = (tailnetQuery.data?.length ?? 0) > 0;
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -82,15 +89,32 @@ export default function AdminAccess() {
           </p>
         </div>
 
-        {/* Add a login */}
+        {/* Add a user */}
         <div className="flex flex-col gap-2 rounded-2xl border border-black/10 bg-white p-4 sm:flex-row">
-          <Input
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
-            placeholder="name@digitaltherapy.io (their Tailscale login)"
-            className="h-10 sm:flex-1"
-            onKeyDown={(e) => e.key === "Enter" && submit()}
-          />
+          {haveFeed ? (
+            // Pick from the current tailnet members (no guessing the login).
+            <Select value={login} onValueChange={setLogin} disabled={available.length === 0}>
+              <SelectTrigger className="h-10 sm:flex-1">
+                <SelectValue placeholder={available.length === 0 ? "Everyone on the tailnet already has access" : "Select a Tailscale user..."} />
+              </SelectTrigger>
+              <SelectContent>
+                {available.map((u) => (
+                  <SelectItem key={u.login} value={u.login}>
+                    {u.name} -- {u.login}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : (
+            // Fallback if the tailnet feed is unavailable: type the login.
+            <Input
+              value={login}
+              onChange={(e) => setLogin(e.target.value)}
+              placeholder="name@digitaltherapy.io (their Tailscale login)"
+              className="h-10 sm:flex-1"
+              onKeyDown={(e) => e.key === "Enter" && submit()}
+            />
+          )}
           <Input
             value={note}
             onChange={(e) => setNote(e.target.value)}
