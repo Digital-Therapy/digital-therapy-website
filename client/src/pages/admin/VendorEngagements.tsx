@@ -514,17 +514,30 @@ function ClientNdaPanel({ vendorId, clientId }: { vendorId: string; clientId: nu
                 </span>
               </span>
               {!s.signed ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigator.clipboard.writeText(s.link);
-                    toast.success(`${NDA_PARTY_LABEL[s.party] ?? s.party} signing link copied.`);
-                  }}
-                  className="inline-flex items-center gap-1 text-black/45 hover:text-[#0A65FF]"
-                >
-                  <Copy className="h-3 w-3" />
-                  Copy link
-                </button>
+                <span className="flex items-center gap-2">
+                  {s.party === "dt" ? (
+                    <a
+                      href={s.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 rounded-full bg-[#0A65FF] px-2.5 py-1 font-medium text-white hover:bg-[#004ed1]"
+                    >
+                      <ShieldCheck className="h-3 w-3" />
+                      Sign as Digital Therapy
+                    </a>
+                  ) : null}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(s.link);
+                      toast.success(`${NDA_PARTY_LABEL[s.party] ?? s.party} signing link copied.`);
+                    }}
+                    className="inline-flex items-center gap-1 text-black/45 hover:text-[#0A65FF]"
+                  >
+                    <Copy className="h-3 w-3" />
+                    Copy link
+                  </button>
+                </span>
               ) : null}
             </div>
           ))}
