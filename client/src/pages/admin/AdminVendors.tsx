@@ -363,6 +363,11 @@ export default function AdminVendors() {
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-[#111111]">{v.name}</span>
+                        {v.coreTeam ? (
+                          <Badge className="bg-[#0A65FF]/10 font-normal text-[#0A65FF] hover:bg-[#0A65FF]/10">
+                            Core
+                          </Badge>
+                        ) : null}
                         {v.removed ? (
                           <Badge variant="outline" className="font-normal text-black/45">
                             Removed

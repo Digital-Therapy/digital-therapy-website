@@ -13,7 +13,9 @@ import {
   getVendorById,
   getVendorsForExport,
   getVendorFacets,
+  listVendorBrief,
   searchVendors,
+  setVendorCoreTeam,
   setVendorRemoved,
   updateVendorActiveEngaged,
   updateVendorCategories,
@@ -33,6 +35,7 @@ import {
   listClients,
   removeComp,
   removeContact,
+  setClientResource,
   setPrimaryContact,
   setVendorProject,
   updateClient,
@@ -338,6 +341,12 @@ export const appRouter = router({
     adminSetRemoved: adminProcedure
       .input(z.object({ id: z.string().trim().min(1).max(64), removed: z.boolean() }))
       .mutation(async ({ input }) => ({ success: await setVendorRemoved(input.id, input.removed) })),
+    // Flag a vendor as core team (DT is their primary client).
+    adminSetCoreTeam: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64), coreTeam: z.boolean() }))
+      .mutation(async ({ input }) => ({ success: await setVendorCoreTeam(input.id, input.coreTeam) })),
+    // Brief vendor list for pickers (Originator dropdown, resource checkboxes).
+    adminBriefList: adminProcedure.query(async () => listVendorBrief()),
     adminUpdateStatus: adminProcedure
       .input(
         z.object({
@@ -418,12 +427,26 @@ export const appRouter = router({
           legalName: z.string().trim().max(400).optional(),
           address: z.string().trim().max(500).optional(),
           website: z.string().trim().max(300).optional(),
+          originator: z.string().trim().max(200).optional(),
+          intakeDate: z.string().trim().max(40).optional(),
+          referrer: z.string().trim().max(200).optional(),
         }),
       )
       .mutation(async ({ input }) => {
         const { id, ...fields } = input;
         return { success: await updateClient(id, fields) };
       }),
+    setResource: adminProcedure
+      .input(
+        z.object({
+          clientId: z.number().int(),
+          vendorApplicationId: z.string().trim().min(1).max(64),
+          assigned: z.boolean(),
+        }),
+      )
+      .mutation(async ({ input }) => ({
+        success: await setClientResource(input.clientId, input.vendorApplicationId, input.assigned),
+      })),
     addContact: adminProcedure
       .input(
         z.object({

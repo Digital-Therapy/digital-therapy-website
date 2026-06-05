@@ -58,6 +58,7 @@ export default function AdminVendorDetail() {
   const [profile, setProfile] = useState(emptyProfile);
   const [categories, setCategories] = useState<string[]>([]);
   const [activeEngaged, setActiveEngaged] = useState(false);
+  const [coreTeam, setCoreTeam] = useState(false);
 
   const data = detailQuery.data;
   const syncProfile = () => {
@@ -82,6 +83,7 @@ export default function AdminVendorDetail() {
       });
       setCategories(data.vendor.categories ?? []);
       setActiveEngaged(data.vendor.activeEngaged ?? false);
+      setCoreTeam(data.vendor.coreTeam ?? false);
     }
   }, [data?.vendor]);
 
@@ -95,6 +97,19 @@ export default function AdminVendorDetail() {
   const toggleActiveEngaged = (checked: boolean) => {
     setActiveEngaged(checked);
     setActiveEngagedMutation.mutate({ id, active: checked });
+  };
+
+  const setCoreTeamMutation = trpc.vendor.adminSetCoreTeam.useMutation({
+    onSuccess: () => {
+      utils.vendor.adminGet.invalidate({ id });
+      utils.vendor.adminSearch.invalidate();
+      utils.vendor.adminBriefList.invalidate();
+    },
+    onError: (e) => toast.error(e.message || "Could not update core-team flag."),
+  });
+  const toggleCoreTeam = (checked: boolean) => {
+    setCoreTeam(checked);
+    setCoreTeamMutation.mutate({ id, coreTeam: checked });
   };
 
   const updateCategories = trpc.vendor.adminUpdateCategories.useMutation({
@@ -292,9 +307,15 @@ export default function AdminVendorDetail() {
             {/* Live-engagement gate → reveals the Active Client Engagements section. */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Live engagement</CardTitle>
+                <CardTitle className="text-base">Team &amp; engagement</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-3">
+                <label className="flex cursor-pointer items-center gap-3 text-sm">
+                  <Checkbox checked={coreTeam} onCheckedChange={(v) => toggleCoreTeam(v === true)} />
+                  <span>
+                    <strong>Core team member</strong> — a vendor for whom Digital Therapy is their primary client.
+                  </span>
+                </label>
                 <label className="flex cursor-pointer items-center gap-3 text-sm">
                   <Checkbox checked={activeEngaged} onCheckedChange={(v) => toggleActiveEngaged(v === true)} />
                   <span>This vendor is currently active on live Digital Therapy engagements.</span>

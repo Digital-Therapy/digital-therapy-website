@@ -95,6 +95,7 @@ export type VendorListRow = {
   categories: string[];
   status: VendorStatus;
   removed: boolean;
+  coreTeam: boolean;
   hourlyRate: string | null;
   hoursPerMonth: string | null;
   createdAt: Date;
@@ -132,6 +133,7 @@ type VendorRecord = {
   statusNotes: string | null;
   activeEngaged: boolean;
   removed: boolean;
+  coreTeam: boolean;
   createdAt: Date;
   skills: string[];
   sectors: string[];
@@ -254,6 +256,7 @@ function toListRow(r: VendorRecord): VendorListRow {
     categories: r.categories,
     status: r.status,
     removed: r.removed,
+    coreTeam: r.coreTeam,
     hourlyRate: r.hourlyRate,
     hoursPerMonth: r.hoursPerMonth,
     createdAt: r.createdAt,
@@ -289,6 +292,7 @@ function toDetail(r: VendorRecord, all: VendorRecord[]) {
       statusNotes: r.statusNotes,
       activeEngaged: r.activeEngaged,
       removed: r.removed,
+      coreTeam: r.coreTeam,
       createdAt: r.createdAt,
     },
     skills: r.skills.map((skill, i) => ({ id: i, skill })),
@@ -367,7 +371,8 @@ async function ensureStatusTable(pool: pg.Pool) {
        ADD COLUMN IF NOT EXISTS company_social text,
        ADD COLUMN IF NOT EXISTS categories text[],
        ADD COLUMN IF NOT EXISTS active_engaged boolean NOT NULL DEFAULT false,
-       ADD COLUMN IF NOT EXISTS removed boolean NOT NULL DEFAULT false`,
+       ADD COLUMN IF NOT EXISTS removed boolean NOT NULL DEFAULT false,
+       ADD COLUMN IF NOT EXISTS core_team boolean NOT NULL DEFAULT false`,
   );
   _statusReady = true;
 }
@@ -422,6 +427,7 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
     statusNotes: asString(row.dt_status_notes),
     activeEngaged: row.dt_active_engaged === true,
     removed: row.dt_removed === true,
+    coreTeam: row.dt_core_team === true,
     createdAt: row.createdAt instanceof Date ? row.createdAt : new Date(row.createdAt),
     skills: [...skillsArr, ...parsedExtra],
     sectors: parseJsonArray(row.sectors).map((s) => String(s)).filter(Boolean),
@@ -437,7 +443,7 @@ async function loadPortalRecords(pool: pg.Pool): Promise<VendorRecord[]> {
     `SELECT va.*, s.status AS dt_status, s.status_notes AS dt_status_notes,
             s.company_name AS dt_company_name, s.website_url AS dt_website_url,
             s.personal_linkedin AS dt_personal_linkedin, s.company_social AS dt_company_social,
-            s.categories AS dt_categories, s.active_engaged AS dt_active_engaged, s.removed AS dt_removed
+            s.categories AS dt_categories, s.active_engaged AS dt_active_engaged, s.removed AS dt_removed, s.core_team AS dt_core_team
        FROM "VendorApplication" va
        LEFT JOIN dt_site.vendor_status s ON s.vendor_application_id = va.id`,
   );
@@ -548,6 +554,43 @@ export async function setVendorRemoved(id: string, removed: boolean): Promise<bo
     return true;
   }
   return false;
+}
+
+/** Flag a vendor as "core team" — a vendor for whom DT is their primary client. */
+export async function setVendorCoreTeam(id: string, coreTeam: boolean): Promise<boolean> {
+  const pool = getPool();
+  if (pool) {
+    try {
+      await ensureStatusTable(pool);
+      await pool.query(
+        `INSERT INTO dt_site.vendor_status (vendor_application_id, core_team, updated_at)
+         VALUES ($1, $2, now())
+         ON CONFLICT (vendor_application_id)
+         DO UPDATE SET core_team = EXCLUDED.core_team, updated_at = now()`,
+        [id, coreTeam],
+      );
+      return true;
+    } catch (error) {
+      console.warn("[Vendors] Failed to set core_team flag:", error);
+      return false;
+    }
+  }
+  if (ENV.devPreview) {
+    const r = devStore.find((x) => x.id === id);
+    if (!r) return false;
+    r.coreTeam = coreTeam;
+    return true;
+  }
+  return false;
+}
+
+/** Brief list of all non-removed vendors for pickers (Originator dropdown,
+ * Resource Assignment checkboxes). Core team first, then alphabetical. */
+export async function listVendorBrief(): Promise<{ id: string; name: string; coreTeam: boolean }[]> {
+  const records = (await loadRecords()).filter((r) => !r.removed);
+  return records
+    .map((r) => ({ id: r.id, name: r.name, coreTeam: r.coreTeam }))
+    .sort((a, b) => (a.coreTeam === b.coreTeam ? a.name.localeCompare(b.name) : a.coreTeam ? -1 : 1));
 }
 
 export async function updateVendorStatus(id: string, status: VendorStatus, statusNotes?: string): Promise<boolean> {
@@ -737,6 +780,7 @@ function buildDevRecord(input: VendorApplicationData): VendorRecord {
     statusNotes: null,
     activeEngaged: false,
     removed: false,
+    coreTeam: false,
     createdAt: now,
     skills: [...skills, ...parseSkillTags(input.additionalSkills ?? "", skills)],
     sectors: input.sectors ?? [],

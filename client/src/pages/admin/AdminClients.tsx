@@ -17,6 +17,7 @@ import { ClientCard } from "./ClientCard";
 export default function AdminClients() {
   const utils = trpc.useUtils();
   const clientsQuery = trpc.clients.list.useQuery();
+  const vendorsQuery = trpc.vendor.adminBriefList.useQuery();
   const createClient = trpc.clients.create.useMutation({
     onSuccess: () => utils.clients.list.invalidate(),
     onError: (e) => toast.error(e.message || "Something went wrong."),
@@ -62,7 +63,7 @@ export default function AdminClients() {
         ) : clients.length === 0 ? (
           <p className="text-sm text-black/55">No clients yet — add your first above.</p>
         ) : (
-          clients.map((client) => <ClientCard key={client.id} client={client} />)
+          clients.map((client) => <ClientCard key={client.id} client={client} vendors={vendorsQuery.data ?? []} />)
         )}
       </div>
     </AdminLayout>

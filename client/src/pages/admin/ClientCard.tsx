@@ -9,8 +9,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { trpc, type RouterOutputs } from "@/lib/trpc";
-import { Check, Pencil, Plus, ShieldCheck, Star, Trash2, X } from "lucide-react";
+import { Check, Pencil, Plus, ShieldCheck, Star, Trash2, Users, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -19,7 +28,9 @@ type Contact = ClientRow["contacts"][number];
 
 const blankContact = { name: "", title: "", email: "", phone: "" };
 
-export function ClientCard({ client }: { client: ClientRow }) {
+type VendorBrief = { id: string; name: string; coreTeam: boolean };
+
+export function ClientCard({ client, vendors }: { client: ClientRow; vendors: VendorBrief[] }) {
   const utils = trpc.useUtils();
   const refresh = () => utils.clients.list.invalidate();
   const onErr = (e: { message?: string }) => toast.error(e.message || "Something went wrong.");
@@ -34,17 +45,29 @@ export function ClientCard({ client }: { client: ClientRow }) {
   const updateContact = trpc.clients.updateContact.useMutation(m());
   const removeContact = trpc.clients.removeContact.useMutation(m());
   const setPrimary = trpc.clients.setPrimaryContact.useMutation(m());
+  const setResource = trpc.clients.setResource.useMutation(m());
+
+  const coreTeam = vendors.filter((v) => v.coreTeam);
+  const vendorName = (vid: string) => vendors.find((v) => v.id === vid)?.name ?? "Unknown";
+  const assigned = client.resourceIds ?? [];
 
   // Company details edit
-  const [editingDetails, setEditingDetails] = useState(false);
-  const [details, setDetails] = useState({
+  const detailsFromClient = () => ({
     legalName: client.legalName ?? "",
     address: client.address ?? "",
     website: client.website ?? "",
+    originator: client.originator ?? "",
+    intakeDate: client.intakeDate ?? "",
+    referrer: client.referrer ?? "",
   });
+  const [editingDetails, setEditingDetails] = useState(false);
+  const [details, setDetails] = useState(detailsFromClient);
   useEffect(() => {
-    setDetails({ legalName: client.legalName ?? "", address: client.address ?? "", website: client.website ?? "" });
-  }, [client.legalName, client.address, client.website]);
+    setDetails(detailsFromClient());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [client.legalName, client.address, client.website, client.originator, client.intakeDate, client.referrer]);
+
+  const [resourceSearch, setResourceSearch] = useState("");
 
   const [newProject, setNewProject] = useState("");
   const [newContact, setNewContact] = useState(blankContact);
@@ -132,6 +155,40 @@ export function ClientCard({ client }: { client: ClientRow }) {
                 placeholder="Website"
                 className="h-9"
               />
+              <label className="flex flex-col gap-1 text-xs text-black/55">
+                Originator (introduced by)
+                <Select
+                  value={details.originator || "__none__"}
+                  onValueChange={(v) => setDetails((d) => ({ ...d, originator: v === "__none__" ? "" : v }))}
+                >
+                  <SelectTrigger className="h-9">
+                    <SelectValue placeholder="Team member" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__none__">— None —</SelectItem>
+                    {coreTeam.map((t) => (
+                      <SelectItem key={t.id} value={t.name}>
+                        {t.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </label>
+              <label className="flex flex-col gap-1 text-xs text-black/55">
+                Intake date
+                <Input
+                  type="date"
+                  value={details.intakeDate}
+                  onChange={(e) => setDetails((d) => ({ ...d, intakeDate: e.target.value }))}
+                  className="h-9"
+                />
+              </label>
+              <Input
+                value={details.referrer}
+                onChange={(e) => setDetails((d) => ({ ...d, referrer: e.target.value }))}
+                placeholder="External referrer (name)"
+                className="h-9 sm:col-span-2"
+              />
               <div className="flex gap-2 sm:col-span-2">
                 <Button
                   size="sm"
@@ -146,11 +203,7 @@ export function ClientCard({ client }: { client: ClientRow }) {
                   size="sm"
                   variant="outline"
                   onClick={() => {
-                    setDetails({
-                      legalName: client.legalName ?? "",
-                      address: client.address ?? "",
-                      website: client.website ?? "",
-                    });
+                    setDetails(detailsFromClient());
                     setEditingDetails(false);
                   }}
                 >
@@ -163,6 +216,91 @@ export function ClientCard({ client }: { client: ClientRow }) {
               <Detail label="Legal name" value={client.legalName} className="sm:col-span-2" />
               <Detail label="Address" value={client.address} />
               <Detail label="Website" value={client.website} />
+              <Detail label="Originator" value={client.originator} />
+              <Detail label="Intake date" value={client.intakeDate} />
+              <Detail label="Referrer" value={client.referrer} className="sm:col-span-2" />
+            </div>
+          )}
+        </section>
+
+        {/* Resource Assignments */}
+        <section>
+          <div className="mb-2 flex items-center justify-between">
+            <h3 className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-black/45">Resource assignments</h3>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" size="sm" className="h-7 text-xs text-black/55">
+                  <Users className="mr-1 h-3.5 w-3.5" />
+                  Assign
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-72 p-0">
+                <div className="border-b border-black/8 p-2">
+                  <Input
+                    value={resourceSearch}
+                    onChange={(e) => setResourceSearch(e.target.value)}
+                    placeholder="Search team & vendors…"
+                    className="h-8"
+                  />
+                </div>
+                <ScrollArea className="h-64">
+                  <div className="p-2">
+                    {(() => {
+                      const filtered = vendors.filter((v) =>
+                        v.name.toLowerCase().includes(resourceSearch.toLowerCase()),
+                      );
+                      if (filtered.length === 0)
+                        return <p className="px-2 py-6 text-center text-xs text-black/45">No matches</p>;
+                      return filtered.map((v) => (
+                        <label
+                          key={v.id}
+                          className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-black/5"
+                        >
+                          <Checkbox
+                            checked={assigned.includes(v.id)}
+                            onCheckedChange={(checked) =>
+                              setResource.mutate({
+                                clientId: client.id,
+                                vendorApplicationId: v.id,
+                                assigned: checked === true,
+                              })
+                            }
+                          />
+                          <span className="flex-1 truncate">{v.name}</span>
+                          {v.coreTeam ? <span className="text-[0.6rem] font-bold text-[#0A65FF]">CORE</span> : null}
+                        </label>
+                      ));
+                    })()}
+                  </div>
+                </ScrollArea>
+              </PopoverContent>
+            </Popover>
+          </div>
+          {assigned.length === 0 ? (
+            <Badge variant="outline" className="font-normal text-black/45">
+              Unassigned
+            </Badge>
+          ) : (
+            <div className="flex flex-wrap gap-1.5">
+              {assigned.map((vid) => {
+                const isCore = vendors.find((v) => v.id === vid)?.coreTeam;
+                return (
+                  <button
+                    key={vid}
+                    type="button"
+                    onClick={() =>
+                      setResource.mutate({ clientId: client.id, vendorApplicationId: vid, assigned: false })
+                    }
+                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${
+                      isCore ? "bg-[#0A65FF]/10 text-[#0A65FF] hover:bg-[#0A65FF]/20" : "bg-black/8 text-black/70 hover:bg-black/15"
+                    }`}
+                    title="Remove from this client"
+                  >
+                    {vendorName(vid)}
+                    <X className="h-3 w-3" />
+                  </button>
+                );
+              })}
             </div>
           )}
         </section>

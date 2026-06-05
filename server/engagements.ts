@@ -25,6 +25,9 @@ export type Client = {
   legalName: string | null;
   address: string | null;
   website: string | null;
+  originator: string | null;
+  intakeDate: string | null;
+  referrer: string | null;
 };
 export type Project = { id: number; clientId: number; name: string; active: boolean };
 export type CompLine = { id: number; type: string; details: Record<string, unknown> };
@@ -62,8 +65,24 @@ async function ensureTables() {
     `ALTER TABLE dt_site.client
        ADD COLUMN IF NOT EXISTS legal_name text,
        ADD COLUMN IF NOT EXISTS address text,
-       ADD COLUMN IF NOT EXISTS website text`,
+       ADD COLUMN IF NOT EXISTS website text,
+       ADD COLUMN IF NOT EXISTS originator text,
+       ADD COLUMN IF NOT EXISTS intake_date text,
+       ADD COLUMN IF NOT EXISTS referrer text`,
   );
+  // Client-level resource roster: which vendors (incl. core team) are assigned
+  // to this client overall. vendor_application_id references the portal's
+  // VendorApplication.id (text); no FK since that table is the portal's.
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS dt_site.client_resource (
+       id serial PRIMARY KEY,
+       client_id integer NOT NULL REFERENCES dt_site.client(id) ON DELETE CASCADE,
+       vendor_application_id text NOT NULL,
+       created_at timestamptz NOT NULL DEFAULT now(),
+       UNIQUE (client_id, vendor_application_id)
+     )`,
+  );
+  await pool.query(`CREATE INDEX IF NOT EXISTS client_resource_client_idx ON dt_site.client_resource (client_id)`);
   // People we deal with at each client; one markable as the primary signer.
   await pool.query(
     `CREATE TABLE IF NOT EXISTS dt_site.client_contact (
@@ -136,6 +155,9 @@ function mapClientRow(c: Record<string, unknown>): Client {
     legalName: (c.legal_name as string) ?? null,
     address: (c.address as string) ?? null,
     website: (c.website as string) ?? null,
+    originator: (c.originator as string) ?? null,
+    intakeDate: (c.intake_date as string) ?? null,
+    referrer: (c.referrer as string) ?? null,
   };
 }
 
@@ -151,19 +173,24 @@ function mapContactRow(c: Record<string, unknown>): ClientContact {
   };
 }
 
-export async function listClients(): Promise<(Client & { projects: Project[]; contacts: ClientContact[] })[]> {
+export async function listClients(): Promise<
+  (Client & { projects: Project[]; contacts: ClientContact[]; resourceIds: string[] })[]
+> {
   const pool = await ensureTables();
   if (!pool) return [];
   const clients = await pool.query(
-    `SELECT id, name, active, nda_wall, legal_name, address, website FROM dt_site.client ORDER BY name`,
+    `SELECT id, name, active, nda_wall, legal_name, address, website, originator, intake_date, referrer
+       FROM dt_site.client ORDER BY name`,
   );
   const projects = await pool.query(`SELECT id, client_id, name, active FROM dt_site.project ORDER BY name`);
   const contacts = await pool.query(
     `SELECT id, client_id, name, title, email, phone, is_primary FROM dt_site.client_contact
      ORDER BY is_primary DESC, name`,
   );
+  const resources = await pool.query(`SELECT client_id, vendor_application_id FROM dt_site.client_resource`);
   const projByClient = groupBy(projects.rows, (p) => p.client_id as number);
   const contactsByClient = groupBy(contacts.rows, (c) => c.client_id as number);
+  const resByClient = groupBy(resources.rows, (r) => r.client_id as number);
   return clients.rows.map((c) => ({
     ...mapClientRow(c),
     projects: (projByClient.get(c.id) ?? []).map((p) => ({
@@ -173,6 +200,7 @@ export async function listClients(): Promise<(Client & { projects: Project[]; co
       active: p.active,
     })),
     contacts: (contactsByClient.get(c.id) ?? []).map(mapContactRow),
+    resourceIds: (resByClient.get(c.id) ?? []).map((r) => String(r.vendor_application_id)),
   }));
 }
 
@@ -181,7 +209,7 @@ export async function createClient(name: string): Promise<Client | null> {
   if (!pool) return null;
   const r = await pool.query(
     `INSERT INTO dt_site.client (name) VALUES ($1)
-     RETURNING id, name, active, nda_wall, legal_name, address, website`,
+     RETURNING id, name, active, nda_wall, legal_name, address, website, originator, intake_date, referrer`,
     [name],
   );
   return mapClientRow(r.rows[0]);
@@ -189,7 +217,17 @@ export async function createClient(name: string): Promise<Client | null> {
 
 export async function updateClient(
   id: number,
-  fields: { name?: string; active?: boolean; ndaWall?: boolean; legalName?: string; address?: string; website?: string },
+  fields: {
+    name?: string;
+    active?: boolean;
+    ndaWall?: boolean;
+    legalName?: string;
+    address?: string;
+    website?: string;
+    originator?: string;
+    intakeDate?: string;
+    referrer?: string;
+  },
 ): Promise<boolean> {
   const pool = await ensureTables();
   if (!pool) return false;
@@ -200,6 +238,9 @@ export async function updateClient(
     legalName: "legal_name",
     address: "address",
     website: "website",
+    originator: "originator",
+    intakeDate: "intake_date",
+    referrer: "referrer",
   };
   const sets: string[] = [];
   const vals: unknown[] = [];
@@ -213,6 +254,29 @@ export async function updateClient(
   if (!sets.length) return true;
   vals.push(id);
   await pool.query(`UPDATE dt_site.client SET ${sets.join(", ")} WHERE id = $${vals.length}`, vals);
+  return true;
+}
+
+/** Assign/unassign a vendor (team member or vendor) to a client's roster. */
+export async function setClientResource(
+  clientId: number,
+  vendorApplicationId: string,
+  assigned: boolean,
+): Promise<boolean> {
+  const pool = await ensureTables();
+  if (!pool) return false;
+  if (assigned) {
+    await pool.query(
+      `INSERT INTO dt_site.client_resource (client_id, vendor_application_id)
+       VALUES ($1, $2) ON CONFLICT (client_id, vendor_application_id) DO NOTHING`,
+      [clientId, vendorApplicationId],
+    );
+  } else {
+    await pool.query(`DELETE FROM dt_site.client_resource WHERE client_id = $1 AND vendor_application_id = $2`, [
+      clientId,
+      vendorApplicationId,
+    ]);
+  }
   return true;
 }
 
