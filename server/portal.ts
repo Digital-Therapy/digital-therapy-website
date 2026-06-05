@@ -62,6 +62,49 @@ function ingestUrl(path: string): string | null {
   return `${ENV.portalIngestBase.replace(/\/$/, "")}${path}`;
 }
 
+export type EmailAttachment = { filename: string; contentBase64: string; contentType: string };
+export type EmailMessage = {
+  to: string | string[];
+  cc?: string | string[];
+  subject: string;
+  html?: string;
+  text?: string;
+  replyTo?: string;
+  attachments?: EmailAttachment[];
+  tags?: string[];
+};
+
+/**
+ * Send transactional email via the portal's relay (Option A). From-address is
+ * fixed server-side (Digital Therapy <nda@digitaltherapy.io>). Best-effort:
+ * returns false (never throws) when the relay isn't configured/reachable —
+ * e.g. local dev, where PORTAL_INGEST_BASE is unset. Callers must not depend
+ * on delivery; signing links are always available in the admin as a fallback.
+ */
+export async function sendEmailViaRelay(message: EmailMessage): Promise<{ ok: boolean; id?: string }> {
+  const url = ingestUrl("/api/ingest/send-email");
+  if (!url) {
+    console.warn("[Email] relay not configured (PORTAL_INGEST_BASE unset) — skipping send");
+    return { ok: false };
+  }
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${ENV.ingestSecret}` },
+      body: JSON.stringify(message),
+    });
+    const data = (await res.json().catch(() => ({}))) as { ok?: boolean; id?: string; error?: string };
+    if (!res.ok || !data.ok) {
+      console.warn(`[Email] relay send failed: ${res.status} ${data.error ?? ""}`);
+      return { ok: false };
+    }
+    return { ok: true, id: data.id };
+  } catch (error) {
+    console.warn("[Email] relay send error:", error);
+    return { ok: false };
+  }
+}
+
 export async function forwardContactToPortal(payload: ContactForward): Promise<boolean> {
   const url = ingestUrl("/api/ingest/contact");
   if (!url) return false;

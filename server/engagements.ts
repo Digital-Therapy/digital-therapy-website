@@ -216,6 +216,10 @@ export async function listClients(): Promise<
   }));
 }
 
+export async function getClientById(id: number) {
+  return (await listClients()).find((c) => c.id === id) ?? null;
+}
+
 export async function createClient(name: string): Promise<Client | null> {
   const pool = await ensureTables();
   if (!pool) return null;

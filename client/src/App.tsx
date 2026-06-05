@@ -21,6 +21,7 @@ import Vendors from "./pages/Vendors";
 import AdminVendors from "./pages/admin/AdminVendors";
 import AdminVendorDetail from "./pages/admin/AdminVendorDetail";
 import AdminClients from "./pages/admin/AdminClients";
+import NdaSigningPage from "./pages/NdaSigningPage";
 import AdminAccess from "./pages/admin/AdminAccess";
 
 function Router() {
@@ -45,6 +46,8 @@ function Router() {
       <Route path={"/vendorlists/:id"} component={AdminVendorDetail} />
       <Route path={"/admin/clients"} component={AdminClients} />
       <Route path={"/admin/access"} component={AdminAccess} />
+      {/* Public, token-gated NDA signing — no auth, not prerendered. */}
+      <Route path={"/nda/sign/:token"} component={NdaSigningPage} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
@@ -61,7 +64,10 @@ function App() {
   // The admin console is an app shell, not a marketing page — suppress the
   // public footer and chat widget on /admin/* routes.
   const [location] = useLocation();
-  const isAdmin = location.startsWith("/admin");
+  // Hide the public marketing footer/chat on the admin console and the public
+  // NDA signing page (app shells, not marketing pages).
+  const isAdmin =
+    location.startsWith("/admin") || location.startsWith("/vendorlists") || location.startsWith("/nda/sign");
 
   return (
     <ErrorBoundary>

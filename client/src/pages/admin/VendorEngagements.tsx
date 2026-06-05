@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/lib/trpc";
-import { ChevronDown, ChevronRight, Plus, Receipt, ShieldCheck, Trash2 } from "lucide-react";
+import { CheckCircle2, ChevronDown, ChevronRight, Copy, Download, Loader2, Plus, Receipt, Send, ShieldCheck, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -185,6 +185,7 @@ export function ActiveClientEngagements({ vendorId }: { vendorId: string }) {
 
                 {open ? (
                   <div className="space-y-1 border-t border-black/8 px-3 py-2">
+                    {client.ndaWall ? <ClientNdaPanel vendorId={vendorId} clientId={client.id} /> : null}
                     {client.projects.length === 0 ? (
                       <p className="py-1 text-xs text-black/45">No active projects for this client.</p>
                     ) : (
@@ -408,5 +409,127 @@ function CompensationDialog({
         )}
       </DialogContent>
     </Dialog>
+  );
+}
+
+const NDA_PARTY_LABEL: Record<string, string> = {
+  client: "Client",
+  dt: "Digital Therapy",
+  vendor: "Vendor",
+};
+
+const NDA_STATUS_LABEL: Record<string, string> = {
+  pending: "Required — not sent",
+  sent: "Sent — awaiting signatures",
+  completed: "Fully executed",
+};
+
+function downloadBase64Pdf(base64: string, filename: string) {
+  const bytes = atob(base64);
+  const arr = new Uint8Array(bytes.length);
+  for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+  const url = URL.createObjectURL(new Blob([arr], { type: "application/pdf" }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/** NDA panel shown for an NDA-walled client inside a vendor's engagement row. */
+function ClientNdaPanel({ vendorId, clientId }: { vendorId: string; clientId: number }) {
+  const utils = trpc.useUtils();
+  const statusQuery = trpc.vendor.adminNdaStatus.useQuery({ id: vendorId, clientId });
+  const [downloading, setDownloading] = useState(false);
+
+  const send = trpc.vendor.adminSendNda.useMutation({
+    onSuccess: () => {
+      utils.vendor.adminNdaStatus.invalidate({ id: vendorId, clientId });
+      utils.vendor.adminGetEngagements.invalidate({ id: vendorId });
+      toast.success("NDA generated — signing links emailed (and shown below to copy).");
+    },
+    onError: (e) => toast.error(e.message || "Could not send the NDA."),
+  });
+
+  const nda = statusQuery.data;
+  const signed = nda?.signers.filter((s) => s.signed).length ?? 0;
+  const total = nda?.signers.length ?? 0;
+
+  const downloadExecuted = async () => {
+    if (!nda) return;
+    setDownloading(true);
+    try {
+      const res = await utils.vendor.adminNdaExecutedPdf.fetch({ ndaId: nda.ndaId });
+      if (res.base64) downloadBase64Pdf(res.base64, "NDA-executed.pdf");
+      else toast.error("Executed PDF not available yet.");
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  return (
+    <div className="mb-2 rounded-lg border border-amber-200 bg-amber-50/60 p-3">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 text-sm font-semibold text-amber-900">
+          <ShieldCheck className="h-4 w-4" />
+          Client-NDA Wall
+          {nda ? (
+            <span className="text-xs font-normal text-amber-800">
+              · {NDA_STATUS_LABEL[nda.status] ?? nda.status}
+              {nda.status === "sent" ? ` (${signed}/${total} signed)` : ""}
+            </span>
+          ) : null}
+        </div>
+        {statusQuery.isLoading ? null : !nda || nda.status === "pending" ? (
+          <Button size="sm" onClick={() => send.mutate({ id: vendorId, clientId })} disabled={send.isPending}>
+            {send.isPending ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <Send className="mr-1.5 h-3.5 w-3.5" />}
+            Send NDA
+          </Button>
+        ) : nda.status === "completed" ? (
+          <Button size="sm" variant="outline" onClick={downloadExecuted} disabled={downloading}>
+            {downloading ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <Download className="mr-1.5 h-3.5 w-3.5" />}
+            Executed PDF
+          </Button>
+        ) : (
+          <Button size="sm" variant="outline" onClick={() => send.mutate({ id: vendorId, clientId })} disabled={send.isPending}>
+            <Send className="mr-1.5 h-3.5 w-3.5" />
+            Resend
+          </Button>
+        )}
+      </div>
+
+      {nda ? (
+        <div className="mt-2 space-y-1">
+          {nda.signers.map((s) => (
+            <div key={s.party} className="flex items-center justify-between gap-2 text-xs">
+              <span className="flex items-center gap-1.5">
+                {s.signed ? (
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                ) : (
+                  <span className="inline-block h-2 w-2 rounded-full bg-black/25" />
+                )}
+                <strong>{NDA_PARTY_LABEL[s.party] ?? s.party}:</strong> {s.name || "—"}
+                <span className={s.signed ? "text-emerald-700" : "text-black/45"}>
+                  {s.signed ? "signed" : "pending"}
+                </span>
+              </span>
+              {!s.signed ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(s.link);
+                    toast.success(`${NDA_PARTY_LABEL[s.party] ?? s.party} signing link copied.`);
+                  }}
+                  className="inline-flex items-center gap-1 text-black/45 hover:text-[#0A65FF]"
+                >
+                  <Copy className="h-3 w-3" />
+                  Copy link
+                </button>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }

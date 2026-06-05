@@ -24,6 +24,13 @@ import {
   VENDOR_CATEGORIES,
 } from "./vendors";
 import {
+  buildExecutedPdf,
+  getNdaByToken,
+  getNdaForVendorClient,
+  sendNda,
+  signNda,
+} from "./nda";
+import {
   addComp,
   addContact,
   COMP_TYPES,
@@ -410,12 +417,36 @@ export const appRouter = router({
     adminRequireClientNda: adminProcedure
       .input(z.object({ id: z.string().trim().min(1).max(64), clientId: z.number().int() }))
       .mutation(async ({ input }) => ({ success: await requireClientNda(input.id, input.clientId) })),
+    // Generate the tri-party NDA + signing tokens and email the client/vendor links.
+    adminSendNda: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64), clientId: z.number().int() }))
+      .mutation(async ({ input }) => sendNda(input.id, input.clientId)),
+    adminNdaStatus: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64), clientId: z.number().int() }))
+      .query(async ({ input }) => getNdaForVendorClient(input.id, input.clientId)),
+    adminNdaExecutedPdf: adminProcedure
+      .input(z.object({ ndaId: z.number().int() }))
+      .query(async ({ input }) => ({ base64: await buildExecutedPdf(input.ndaId) })),
     adminUpdateComp: adminProcedure
       .input(z.object({ id: z.number().int(), type: z.enum(COMP_TYPES), details: z.record(z.string(), z.any()) }))
       .mutation(async ({ input }) => ({ success: await updateComp(input.id, input.type, input.details) })),
     adminRemoveComp: adminProcedure
       .input(z.object({ id: z.number().int() }))
       .mutation(async ({ input }) => ({ success: await removeComp(input.id) })),
+  }),
+  // Public, token-gated NDA signing (no auth — external parties sign via link).
+  nda: router({
+    getByToken: publicProcedure
+      .input(z.object({ token: z.string().trim().min(16).max(64) }))
+      .query(async ({ input }) => getNdaByToken(input.token)),
+    sign: publicProcedure
+      .input(z.object({ token: z.string().trim().min(16).max(64), signatureText: z.string().trim().min(2).max(160) }))
+      .mutation(async ({ input, ctx }) => {
+        const fwd = ctx.req.headers["x-forwarded-for"];
+        const ip = (Array.isArray(fwd) ? fwd[0] : fwd)?.split(",")[0]?.trim() || ctx.req.ip || null;
+        const ua = (ctx.req.headers["user-agent"] as string) || null;
+        return signNda(input.token, input.signatureText, ip, ua);
+      }),
   }),
   // Clients & projects management (dedicated admin manager).
   clients: router({

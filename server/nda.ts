@@ -1,0 +1,347 @@
+/**
+ * Tri-party NDA workflow (Client · Digital Therapy · Vendor): generate the named
+ * NDA, issue per-party signing tokens, collect in-app typed signatures with an
+ * audit trail, and on completion produce + email the executed PDF. All state is
+ * in our isolated dt_site schema; email goes through the portal relay
+ * (best-effort). Reuses the vendors.ts pg pool.
+ */
+import crypto from "crypto";
+import { jsPDF } from "jspdf";
+import { DT_ENTITY, fillNda, type NdaParties } from "../shared/ndaTemplate";
+import { getClientById } from "./engagements";
+import { sendEmailViaRelay } from "./portal";
+import { getPool, getVendorById } from "./vendors";
+
+const SIGNING_BASE = (process.env.PUBLIC_BASE_URL || "https://www.digitaltherapy.io").replace(/\/$/, "");
+const signLink = (token: string) => `${SIGNING_BASE}/nda/sign/${token}`;
+const newToken = () => crypto.randomUUID().replace(/-/g, "");
+
+let _ndaReady = false;
+async function ensureNdaSchema(pool: NonNullable<ReturnType<typeof getPool>>) {
+  if (_ndaReady) return;
+  await pool.query(`CREATE SCHEMA IF NOT EXISTS dt_site`);
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS dt_site.client (
+       id serial PRIMARY KEY, name text NOT NULL, active boolean NOT NULL DEFAULT true,
+       created_at timestamptz NOT NULL DEFAULT now())`,
+  );
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS dt_site.vendor_nda (
+       id serial PRIMARY KEY,
+       vendor_application_id text NOT NULL,
+       client_id integer NOT NULL REFERENCES dt_site.client(id) ON DELETE CASCADE,
+       status text NOT NULL DEFAULT 'pending',
+       created_at timestamptz NOT NULL DEFAULT now(),
+       UNIQUE (vendor_application_id, client_id))`,
+  );
+  await pool.query(
+    `ALTER TABLE dt_site.vendor_nda
+       ADD COLUMN IF NOT EXISTS effective_date text,
+       ADD COLUMN IF NOT EXISTS sent_at timestamptz,
+       ADD COLUMN IF NOT EXISTS completed_at timestamptz,
+       ADD COLUMN IF NOT EXISTS client_legal_name text,
+       ADD COLUMN IF NOT EXISTS client_address text,
+       ADD COLUMN IF NOT EXISTS vendor_company text,
+       ADD COLUMN IF NOT EXISTS vendor_name text`,
+  );
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS dt_site.nda_signer (
+       id serial PRIMARY KEY,
+       nda_id integer NOT NULL REFERENCES dt_site.vendor_nda(id) ON DELETE CASCADE,
+       party text NOT NULL,
+       name text,
+       email text,
+       title text,
+       token text NOT NULL UNIQUE,
+       signed_at timestamptz,
+       signature_text text,
+       signed_ip text,
+       signed_user_agent text,
+       created_at timestamptz NOT NULL DEFAULT now(),
+       UNIQUE (nda_id, party))`,
+  );
+  await pool.query(`CREATE INDEX IF NOT EXISTS nda_signer_nda_idx ON dt_site.nda_signer (nda_id)`);
+  _ndaReady = true;
+}
+
+const PARTY_LABEL: Record<string, string> = {
+  client: "For the Company (Client)",
+  dt: "For Digital Therapy LLC",
+  vendor: "For the Counterparty (Vendor)",
+};
+
+function partiesFromNda(nda: Record<string, any>): NdaParties {
+  return {
+    clientLegalName: nda.client_legal_name ?? "",
+    clientAddress: nda.client_address ?? "",
+    vendorCompany: nda.vendor_company ?? "",
+    vendorName: nda.vendor_name ?? "",
+    effectiveDate: nda.effective_date ?? "",
+  };
+}
+
+/** Generate (or refresh) the NDA + signing tokens and email the client + vendor
+ * their links. Idempotent: re-running keeps existing tokens (acts as a resend). */
+export async function sendNda(vendorAppId: string, clientId: number) {
+  const pool = getPool();
+  if (!pool) return null;
+  const client = await getClientById(clientId);
+  const vendor = await getVendorById(vendorAppId);
+  if (!client || !vendor) return null;
+  await ensureNdaSchema(pool);
+
+  const primary = client.contacts.find((c) => c.isPrimary) ?? client.contacts[0] ?? null;
+  const vendorCompany = vendor.vendor.companyName || vendor.vendor.name;
+  const effectiveDate = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+  const up = await pool.query(
+    `INSERT INTO dt_site.vendor_nda
+       (vendor_application_id, client_id, status, effective_date, sent_at,
+        client_legal_name, client_address, vendor_company, vendor_name)
+     VALUES ($1,$2,'sent',$3, now(), $4,$5,$6,$7)
+     ON CONFLICT (vendor_application_id, client_id) DO UPDATE SET
+        status = CASE WHEN dt_site.vendor_nda.status = 'completed' THEN 'completed' ELSE 'sent' END,
+        effective_date = COALESCE(dt_site.vendor_nda.effective_date, EXCLUDED.effective_date),
+        sent_at = COALESCE(dt_site.vendor_nda.sent_at, now()),
+        client_legal_name = EXCLUDED.client_legal_name,
+        client_address = EXCLUDED.client_address,
+        vendor_company = EXCLUDED.vendor_company,
+        vendor_name = EXCLUDED.vendor_name
+     RETURNING id, status`,
+    [vendorAppId, clientId, effectiveDate, client.legalName ?? client.name, client.address ?? "", vendorCompany, vendor.vendor.name],
+  );
+  const ndaId = up.rows[0].id as number;
+
+  const seed = [
+    { party: "client", name: primary?.name ?? client.legalName ?? client.name, email: primary?.email ?? "", title: primary?.title ?? "" },
+    { party: "dt", name: DT_ENTITY.signerName, email: DT_ENTITY.signerEmail, title: DT_ENTITY.signerTitle },
+    { party: "vendor", name: vendor.vendor.name, email: vendor.vendor.email, title: vendor.vendor.role ?? "" },
+  ];
+  for (const s of seed) {
+    await pool.query(
+      `INSERT INTO dt_site.nda_signer (nda_id, party, name, email, title, token)
+       VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (nda_id, party) DO NOTHING`,
+      [ndaId, s.party, s.name, s.email || null, s.title || null, newToken()],
+    );
+  }
+
+  const signers = (
+    await pool.query(`SELECT party, name, email, token, signed_at FROM dt_site.nda_signer WHERE nda_id=$1`, [ndaId])
+  ).rows;
+  const byParty = Object.fromEntries(signers.map((s) => [s.party, s]));
+
+  // Email client + vendor invites (best-effort). DT signs from the admin.
+  const subject = `Please sign: Mutual NDA — ${client.legalName ?? client.name}`;
+  for (const party of ["client", "vendor"]) {
+    const s = byParty[party];
+    if (!s?.email || s.signed_at) continue;
+    const link = signLink(s.token);
+    await sendEmailViaRelay({
+      to: s.email,
+      cc: DT_ENTITY.signerEmail,
+      subject,
+      html:
+        `<p>Hello ${s.name ?? ""},</p>` +
+        `<p>${client.legalName ?? client.name}, ${DT_ENTITY.name}, and ${vendorCompany} are entering a mutual non-disclosure agreement for an engagement. Please review and sign your copy:</p>` +
+        `<p><a href="${link}">${link}</a></p><p>Thank you,<br/>Digital Therapy</p>`,
+      text: `Please review and sign the mutual NDA: ${link}`,
+      replyTo: DT_ENTITY.signerEmail,
+      tags: ["nda", "invite"],
+    });
+  }
+
+  return {
+    ndaId,
+    status: up.rows[0].status as string,
+    signers: signers.map((s) => ({
+      party: s.party as string,
+      name: s.name as string,
+      email: s.email as string | null,
+      signed: Boolean(s.signed_at),
+      link: signLink(s.token),
+    })),
+  };
+}
+
+/** Public: load NDA context for a signing token. */
+export async function getNdaByToken(token: string) {
+  const pool = getPool();
+  if (!pool) return null;
+  await ensureNdaSchema(pool);
+  const signer = (await pool.query(`SELECT * FROM dt_site.nda_signer WHERE token=$1`, [token])).rows[0];
+  if (!signer) return null;
+  const nda = (await pool.query(`SELECT * FROM dt_site.vendor_nda WHERE id=$1`, [signer.nda_id])).rows[0];
+  if (!nda) return null;
+  const all = (await pool.query(`SELECT party, name, signed_at FROM dt_site.nda_signer WHERE nda_id=$1`, [nda.id])).rows;
+  return {
+    status: nda.status as string,
+    party: signer.party as string,
+    signerName: signer.name as string,
+    signerTitle: (signer.title as string) ?? null,
+    signed: Boolean(signer.signed_at),
+    signedAt: signer.signed_at as Date | null,
+    parties: partiesFromNda(nda),
+    signers: all.map((s) => ({ party: s.party as string, name: s.name as string, signed: Boolean(s.signed_at) })),
+  };
+}
+
+/** Public: record a signature. Signature text must match the signer's name. */
+export async function signNda(
+  token: string,
+  signatureText: string,
+  ip: string | null,
+  userAgent: string | null,
+): Promise<{ ok: boolean; error?: string; completed?: boolean }> {
+  const pool = getPool();
+  if (!pool) return { ok: false, error: "Signing is temporarily unavailable." };
+  await ensureNdaSchema(pool);
+  const signer = (await pool.query(`SELECT * FROM dt_site.nda_signer WHERE token=$1`, [token])).rows[0];
+  if (!signer) return { ok: false, error: "This signing link is invalid." };
+  if (signer.signed_at) return { ok: false, error: "You have already signed this NDA." };
+  if (signatureText.trim().toLowerCase() !== String(signer.name).trim().toLowerCase()) {
+    return { ok: false, error: "Your typed signature must match your name exactly." };
+  }
+  await pool.query(
+    `UPDATE dt_site.nda_signer SET signed_at=now(), signature_text=$2, signed_ip=$3, signed_user_agent=$4 WHERE id=$1`,
+    [signer.id, signatureText.trim(), ip, userAgent],
+  );
+  const remaining = (
+    await pool.query(`SELECT count(*)::int AS n FROM dt_site.nda_signer WHERE nda_id=$1 AND signed_at IS NULL`, [
+      signer.nda_id,
+    ])
+  ).rows[0].n as number;
+  if (remaining === 0) await finalizeNda(signer.nda_id);
+  return { ok: true, completed: remaining === 0 };
+}
+
+async function finalizeNda(ndaId: number) {
+  const pool = getPool();
+  if (!pool) return;
+  await pool.query(`UPDATE dt_site.vendor_nda SET status='completed', completed_at=now() WHERE id=$1 AND status<>'completed'`, [ndaId]);
+  const nda = (await pool.query(`SELECT * FROM dt_site.vendor_nda WHERE id=$1`, [ndaId])).rows[0];
+  const signers = (await pool.query(`SELECT party, name, email FROM dt_site.nda_signer WHERE nda_id=$1`, [ndaId])).rows;
+  const pdf = await buildExecutedPdf(ndaId);
+  const to = signers.map((s) => s.email).filter(Boolean) as string[];
+  if (pdf && to.length) {
+    await sendEmailViaRelay({
+      to,
+      subject: `Executed: Mutual NDA — ${nda.client_legal_name ?? ""}`,
+      html: `<p>Attached is the fully executed mutual NDA between ${nda.client_legal_name}, ${DT_ENTITY.name}, and ${nda.vendor_company}. A copy is provided to all parties.</p>`,
+      text: "Attached is the fully executed mutual NDA.",
+      replyTo: DT_ENTITY.signerEmail,
+      attachments: [
+        {
+          filename: `NDA-${String(nda.client_legal_name || "client").replace(/[^\w]+/g, "_")}.pdf`,
+          contentBase64: pdf,
+          contentType: "application/pdf",
+        },
+      ],
+      tags: ["nda", "executed"],
+    });
+  }
+}
+
+/** Build the executed NDA PDF (base64). Renders the filled agreement + every
+ * party's signature block + an audit trail. jsPDF runs server-side in Node. */
+export async function buildExecutedPdf(ndaId: number): Promise<string | null> {
+  const pool = getPool();
+  if (!pool) return null;
+  const nda = (await pool.query(`SELECT * FROM dt_site.vendor_nda WHERE id=$1`, [ndaId])).rows[0];
+  if (!nda) return null;
+  const signers = (
+    await pool.query(
+      `SELECT party, name, title, email, signed_at, signature_text, signed_ip FROM dt_site.nda_signer WHERE nda_id=$1`,
+      [ndaId],
+    )
+  ).rows;
+  const order = ["dt", "client", "vendor"];
+  signers.sort((a, b) => order.indexOf(a.party) - order.indexOf(b.party));
+  const filled = fillNda(partiesFromNda(nda));
+
+  const doc = new jsPDF({ unit: "pt", format: "letter" });
+  const L = 54;
+  const R = 558;
+  const BOTTOM = 740;
+  let y = 64;
+  const ensureSpace = (h: number) => {
+    if (y + h > BOTTOM) {
+      doc.addPage();
+      y = 64;
+    }
+  };
+  const para = (text: string, opts: { size?: number; bold?: boolean; gap?: number } = {}) => {
+    const size = opts.size ?? 10;
+    doc.setFont("helvetica", opts.bold ? "bold" : "normal");
+    doc.setFontSize(size);
+    doc.setTextColor(17);
+    for (const line of doc.splitTextToSize(text, R - L)) {
+      ensureSpace(size + 3);
+      doc.text(line, L, y);
+      y += size + 3;
+    }
+    y += opts.gap ?? 6;
+  };
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(15);
+  doc.text(filled.title, (L + R) / 2, y, { align: "center" });
+  y += 26;
+  para(filled.intro);
+  for (const b of filled.background) para(b);
+  for (const c of filled.clauses) {
+    para(c.heading, { bold: true, gap: 2 });
+    para(c.body, { size: 9.5 });
+  }
+
+  ensureSpace(30);
+  para("IN WITNESS WHEREOF, the Parties have executed this Agreement as of the dates set forth below.", { gap: 8 });
+  for (const s of signers) {
+    ensureSpace(64);
+    para(PARTY_LABEL[s.party] ?? s.party, { bold: true, gap: 2 });
+    para(`Signature: ${s.signature_text ?? "(unsigned)"}`, { gap: 1 });
+    para(`Name: ${s.name}${s.title ? `, ${s.title}` : ""}`, { size: 9.5, gap: 1 });
+    para(`Date: ${s.signed_at ? new Date(s.signed_at).toLocaleString() : "—"}     Email: ${s.email ?? ""}`, { size: 9, gap: 8 });
+  }
+
+  ensureSpace(30);
+  para("Audit trail", { bold: true, gap: 2 });
+  for (const s of signers) {
+    para(
+      `${PARTY_LABEL[s.party] ?? s.party} — ${s.name}: signed ${s.signed_at ? new Date(s.signed_at).toISOString() : "—"}${s.signed_ip ? ` (IP ${s.signed_ip})` : ""}`,
+      { size: 8, gap: 1 },
+    );
+  }
+
+  return Buffer.from(doc.output("arraybuffer")).toString("base64");
+}
+
+/** Admin view of the NDA for a vendor↔client: status + signer links. */
+export async function getNdaForVendorClient(vendorAppId: string, clientId: number) {
+  const pool = getPool();
+  if (!pool) return null;
+  await ensureNdaSchema(pool);
+  const nda = (
+    await pool.query(`SELECT * FROM dt_site.vendor_nda WHERE vendor_application_id=$1 AND client_id=$2`, [
+      vendorAppId,
+      clientId,
+    ])
+  ).rows[0];
+  if (!nda) return null;
+  const signers = (
+    await pool.query(`SELECT party, name, email, token, signed_at FROM dt_site.nda_signer WHERE nda_id=$1`, [nda.id])
+  ).rows;
+  return {
+    ndaId: nda.id as number,
+    status: nda.status as string,
+    effectiveDate: (nda.effective_date as string) ?? null,
+    executedAvailable: nda.status === "completed",
+    signers: signers.map((s) => ({
+      party: s.party as string,
+      name: s.name as string,
+      email: s.email as string | null,
+      signed: Boolean(s.signed_at),
+      signedAt: s.signed_at as Date | null,
+      link: signLink(s.token),
+    })),
+  };
+}
