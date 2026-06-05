@@ -35,6 +35,7 @@ import {
   listClients,
   removeComp,
   removeContact,
+  requireClientNda,
   setClientResource,
   setPrimaryContact,
   setVendorProject,
@@ -404,6 +405,11 @@ export const appRouter = router({
     adminAddComp: adminProcedure
       .input(z.object({ vendorProjectId: z.number().int(), type: z.enum(COMP_TYPES), details: z.record(z.string(), z.any()) }))
       .mutation(async ({ input }) => addComp(input.vendorProjectId, input.type, input.details)),
+    // Inline from a vendor profile: require the tri-party NDA for this vendor on
+    // a client (sets the client's NDA Wall + marks 'pending'). Send is wired later.
+    adminRequireClientNda: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64), clientId: z.number().int() }))
+      .mutation(async ({ input }) => ({ success: await requireClientNda(input.id, input.clientId) })),
     adminUpdateComp: adminProcedure
       .input(z.object({ id: z.number().int(), type: z.enum(COMP_TYPES), details: z.record(z.string(), z.any()) }))
       .mutation(async ({ input }) => ({ success: await updateComp(input.id, input.type, input.details) })),

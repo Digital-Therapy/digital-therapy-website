@@ -83,6 +83,18 @@ async function ensureTables() {
      )`,
   );
   await pool.query(`CREATE INDEX IF NOT EXISTS client_resource_client_idx ON dt_site.client_resource (client_id)`);
+  // Tri-party NDA tracker per vendor<->client. 'pending' = required but not yet
+  // sent/signed; the signing workflow (later) advances this to sent/signed.
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS dt_site.vendor_nda (
+       id serial PRIMARY KEY,
+       vendor_application_id text NOT NULL,
+       client_id integer NOT NULL REFERENCES dt_site.client(id) ON DELETE CASCADE,
+       status text NOT NULL DEFAULT 'pending',
+       created_at timestamptz NOT NULL DEFAULT now(),
+       UNIQUE (vendor_application_id, client_id)
+     )`,
+  );
   // People we deal with at each client; one markable as the primary signer.
   await pool.query(
     `CREATE TABLE IF NOT EXISTS dt_site.client_contact (
@@ -346,6 +358,21 @@ export async function deleteClient(id: number): Promise<boolean> {
   return true;
 }
 
+/** Inline from a vendor profile: mark a client as NDA-walled AND record that
+ * THIS vendor needs the tri-party NDA for it (status 'pending'). The actual
+ * document generation + send is wired when the NDA workflow + email go live. */
+export async function requireClientNda(vendorAppId: string, clientId: number): Promise<boolean> {
+  const pool = await ensureTables();
+  if (!pool) return false;
+  await pool.query(`UPDATE dt_site.client SET nda_wall = true WHERE id = $1`, [clientId]);
+  await pool.query(
+    `INSERT INTO dt_site.vendor_nda (vendor_application_id, client_id, status)
+     VALUES ($1, $2, 'pending') ON CONFLICT (vendor_application_id, client_id) DO NOTHING`,
+    [vendorAppId, clientId],
+  );
+  return true;
+}
+
 export async function createProject(clientId: number, name: string): Promise<Project | null> {
   const pool = await ensureTables();
   if (!pool) return null;
@@ -451,6 +478,11 @@ export async function getVendorEngagements(vendorAppId: string) {
         [vpIds],
       )
     : { rows: [] as { id: number; vendor_project_id: number; type: string; details: Record<string, unknown> }[] };
+  const ndas = await pool.query(
+    `SELECT client_id, status FROM dt_site.vendor_nda WHERE vendor_application_id = $1`,
+    [vendorAppId],
+  );
+  const ndaStatusByClient = new Map<number, string>(ndas.rows.map((r) => [r.client_id as number, r.status as string]));
   const compsByVp = groupBy(comps.rows, (c) => c.vendor_project_id);
   const projByClient = groupBy(projects.rows, (p) => p.client_id as number);
 
@@ -459,6 +491,7 @@ export async function getVendorEngagements(vendorAppId: string) {
       id: c.id,
       name: c.name,
       ndaWall: c.nda_wall === true,
+      ndaStatus: ndaStatusByClient.get(c.id) ?? null,
       projects: (projByClient.get(c.id) ?? []).map((p) => {
         const vpId = vpByProject.get(p.id) ?? null;
         return {

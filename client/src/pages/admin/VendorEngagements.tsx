@@ -84,8 +84,33 @@ export function ActiveClientEngagements({ vendorId }: { vendorId: string }) {
 
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
   const [compFor, setCompFor] = useState<{ vendorProjectId: number; projectName: string } | null>(null);
+  const [ndaPrompt, setNdaPrompt] = useState<{ id: number; name: string } | null>(null);
+  const [askedClients, setAskedClients] = useState<Set<number>>(new Set());
+
+  const requireNda = trpc.vendor.adminRequireClientNda.useMutation({
+    onSuccess: () => {
+      utils.vendor.adminGetEngagements.invalidate({ id: vendorId });
+      utils.clients.list.invalidate();
+      toast.success("NDA Wall set — the NDA will be sent to this vendor once the signing workflow is live.");
+    },
+    onError: (e) => toast.error(e.message || "Could not set NDA requirement."),
+  });
 
   const clients = engagements.data?.clients ?? [];
+
+  // Opening a client we haven't resolved yet, that isn't already NDA-walled →
+  // ask whether it needs a Client-NDA Wall.
+  const openClient = (client: { id: number; name: string; ndaWall: boolean }) => {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      next.has(client.id) ? next.delete(client.id) : next.add(client.id);
+      return next;
+    });
+    if (!expanded.has(client.id) && !client.ndaWall && !askedClients.has(client.id)) {
+      setAskedClients((prev) => new Set(prev).add(client.id));
+      setNdaPrompt({ id: client.id, name: client.name });
+    }
+  };
 
   // Auto-expand clients that already have an assigned project for this vendor.
   useEffect(() => {
@@ -131,13 +156,7 @@ export function ActiveClientEngagements({ vendorId }: { vendorId: string }) {
               <div key={client.id} className="rounded-lg border border-black/10">
                 <button
                   type="button"
-                  onClick={() =>
-                    setExpanded((prev) => {
-                      const next = new Set(prev);
-                      next.has(client.id) ? next.delete(client.id) : next.add(client.id);
-                      return next;
-                    })
-                  }
+                  onClick={() => openClient(client)}
                   className="flex w-full items-center gap-2 px-3 py-2.5 text-left"
                 >
                   {open ? <ChevronDown className="h-4 w-4 text-black/45" /> : <ChevronRight className="h-4 w-4 text-black/45" />}
@@ -150,6 +169,11 @@ export function ActiveClientEngagements({ vendorId }: { vendorId: string }) {
                     >
                       <ShieldCheck className="h-3 w-3" />
                       NDA Wall
+                    </Badge>
+                  ) : null}
+                  {client.ndaStatus === "pending" ? (
+                    <Badge className="ml-1 bg-orange-100 font-normal text-orange-800 hover:bg-orange-100">
+                      NDA required — pending
                     </Badge>
                   ) : null}
                   {assignedCount > 0 ? (
@@ -206,6 +230,35 @@ export function ActiveClientEngagements({ vendorId }: { vendorId: string }) {
           onChanged={() => utils.vendor.adminGetEngagements.invalidate({ id: vendorId })}
         />
       ) : null}
+
+      {/* Inline NDA-wall prompt fired when engaging a client not yet walled. */}
+      <Dialog open={ndaPrompt != null} onOpenChange={(o) => !o && setNdaPrompt(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Does {ndaPrompt?.name} require an NDA wall?</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-black/65">
+            If yes, every vendor on this client must sign a tri-party NDA (Client · Digital Therapy · Vendor). We'll
+            flag the client and queue the NDA for this vendor. (The actual document send turns on once the signing
+            workflow is live.)
+          </p>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button variant="outline" onClick={() => setNdaPrompt(null)}>
+              No, no NDA needed
+            </Button>
+            <Button
+              onClick={() => {
+                if (ndaPrompt) requireNda.mutate({ id: vendorId, clientId: ndaPrompt.id });
+                setNdaPrompt(null);
+              }}
+              disabled={requireNda.isPending}
+            >
+              <ShieldCheck className="mr-1.5 h-4 w-4" />
+              Yes, require NDA
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }
