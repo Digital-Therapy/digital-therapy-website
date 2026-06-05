@@ -130,15 +130,16 @@ export async function sendNda(vendorAppId: string, clientId: number) {
   ).rows;
   const byParty = Object.fromEntries(signers.map((s) => [s.party, s]));
 
-  // Email client + vendor invites (best-effort). DT signs from the admin.
+  // Email each party their signing link (best-effort). DT can also sign from the
+  // admin via the "Sign as Digital Therapy" button.
   const subject = `Please sign: Mutual NDA — ${client.legalName ?? client.name}`;
-  for (const party of ["client", "vendor"]) {
+  for (const party of ["client", "dt", "vendor"]) {
     const s = byParty[party];
     if (!s?.email || s.signed_at) continue;
     const link = signLink(s.token);
     await sendEmailViaRelay({
       to: s.email,
-      cc: DT_ENTITY.signerEmail,
+      cc: party === "dt" ? undefined : DT_ENTITY.signerEmail,
       subject,
       html:
         `<p>Hello ${s.name ?? ""},</p>` +
