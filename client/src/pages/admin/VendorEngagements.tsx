@@ -443,10 +443,19 @@ function ClientNdaPanel({ vendorId, clientId }: { vendorId: string; clientId: nu
   const [downloading, setDownloading] = useState(false);
 
   const send = trpc.vendor.adminSendNda.useMutation({
-    onSuccess: () => {
+    onSuccess: (res) => {
       utils.vendor.adminNdaStatus.invalidate({ id: vendorId, clientId });
       utils.vendor.adminGetEngagements.invalidate({ id: vendorId });
-      toast.success("NDA generated — signing links emailed (and shown below to copy).");
+      const missing = res?.missingEmail ?? [];
+      const label: Record<string, string> = { client: "Client", dt: "Digital Therapy", vendor: "Vendor" };
+      if (missing.length) {
+        toast.warning(
+          `NDA generated, but no email on file for: ${missing.map((p) => label[p] ?? p).join(", ")}. ` +
+            `Add their email and resend, or copy their signing link below to send manually.`,
+        );
+      } else {
+        toast.success("NDA generated — signing links emailed (and shown below to copy).");
+      }
     },
     onError: (e) => toast.error(e.message || "Could not send the NDA."),
   });

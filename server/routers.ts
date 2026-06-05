@@ -1,4 +1,5 @@
 import { COOKIE_NAME } from "@shared/const";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { addAllowlist, isOwner, listAllowlist, removeAllowlist } from "./access";
 import { tailnetUsers } from "./tailscaleUsers";
@@ -56,6 +57,33 @@ import { vendorStatusValues } from "../drizzle/schema";
 // Strip control chars / collapse newlines so user input can't forge extra
 // fields in the plain-text owner notification body.
 const oneLine = (value: string) => value.replace(/[\r\n]+/g, " ").trim();
+
+// Real client IP for the NDA signing audit trail. `cf-connecting-ip` is set by
+// Cloudflare and cannot be forged by the client (Cloudflare strips any inbound
+// copy), so it is the trustworthy source behind the tunnel; fall back to the
+// left-most X-Forwarded-For, then the socket IP.
+function clientIp(req: { headers: Record<string, string | string[] | undefined>; ip?: string }): string | null {
+  const cf = req.headers["cf-connecting-ip"];
+  if (typeof cf === "string" && cf.trim()) return cf.trim();
+  const fwd = req.headers["x-forwarded-for"];
+  const first = (Array.isArray(fwd) ? fwd[0] : fwd)?.split(",")[0]?.trim();
+  return first || req.ip || null;
+}
+
+// Lightweight in-memory per-IP rate limit for the public, token-gated NDA
+// endpoints (fixed 60s window). Keeps a leaked/guessed link from being hammered.
+const _ndaHits = new Map<string, { n: number; t: number }>();
+function ndaRateLimited(ip: string | null): boolean {
+  const key = ip || "unknown";
+  const now = Date.now();
+  const e = _ndaHits.get(key);
+  if (!e || now - e.t > 60_000) {
+    _ndaHits.set(key, { n: 1, t: now });
+    return false;
+  }
+  e.n += 1;
+  return e.n > 20;
+}
 
 const contactSubmissionInput = z.object({
   name: z.string().trim().min(2, "Please enter your name.").max(160),
@@ -438,12 +466,17 @@ export const appRouter = router({
   nda: router({
     getByToken: publicProcedure
       .input(z.object({ token: z.string().trim().min(16).max(64) }))
-      .query(async ({ input }) => getNdaByToken(input.token)),
+      .query(async ({ input, ctx }) => {
+        if (ndaRateLimited(clientIp(ctx.req)))
+          throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many requests. Please wait a moment." });
+        return getNdaByToken(input.token);
+      }),
     sign: publicProcedure
       .input(z.object({ token: z.string().trim().min(16).max(64), signatureText: z.string().trim().min(2).max(160) }))
       .mutation(async ({ input, ctx }) => {
-        const fwd = ctx.req.headers["x-forwarded-for"];
-        const ip = (Array.isArray(fwd) ? fwd[0] : fwd)?.split(",")[0]?.trim() || ctx.req.ip || null;
+        const ip = clientIp(ctx.req);
+        if (ndaRateLimited(ip))
+          throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many attempts. Please wait a moment." });
         const ua = (ctx.req.headers["user-agent"] as string) || null;
         return signNda(input.token, input.signatureText, ip, ua);
       }),

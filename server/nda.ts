@@ -16,6 +16,14 @@ const SIGNING_BASE = (process.env.PUBLIC_BASE_URL || "https://www.digitaltherapy
 const signLink = (token: string) => `${SIGNING_BASE}/nda/sign/${token}`;
 const newToken = () => crypto.randomUUID().replace(/-/g, "");
 
+// Dates on a legal document must be unambiguous and not depend on the server's
+// timezone. Pin to a fixed business timezone and always show the zone.
+const NDA_TZ = "America/New_York";
+const fmtDate = (d: Date | string | number) =>
+  new Date(d).toLocaleDateString("en-US", { timeZone: NDA_TZ, year: "numeric", month: "long", day: "numeric" });
+const fmtDateTime = (d: Date | string | number) =>
+  new Date(d).toLocaleString("en-US", { timeZone: NDA_TZ, timeZoneName: "short" });
+
 let _ndaReady = false;
 async function ensureNdaSchema(pool: NonNullable<ReturnType<typeof getPool>>) {
   if (_ndaReady) return;
@@ -92,7 +100,7 @@ export async function sendNda(vendorAppId: string, clientId: number) {
 
   const primary = client.contacts.find((c) => c.isPrimary) ?? client.contacts[0] ?? null;
   const vendorCompany = vendor.vendor.companyName || vendor.vendor.name;
-  const effectiveDate = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  const effectiveDate = fmtDate(new Date());
 
   const up = await pool.query(
     `INSERT INTO dt_site.vendor_nda
@@ -133,10 +141,19 @@ export async function sendNda(vendorAppId: string, clientId: number) {
   // Email each party their signing link (best-effort). DT can also sign from the
   // admin via the "Sign as Digital Therapy" button.
   const subject = `Please sign: Mutual NDA — ${client.legalName ?? client.name}`;
+  const invited: string[] = [];
+  const missingEmail: string[] = [];
   for (const party of ["client", "dt", "vendor"]) {
     const s = byParty[party];
-    if (!s?.email || s.signed_at) continue;
+    if (!s || s.signed_at) continue;
+    if (!s.email) {
+      // No address on file -> can't invite. Surfaced to the admin so they fill
+      // it in or hand the party their link manually (returned in `signers`).
+      missingEmail.push(party);
+      continue;
+    }
     const link = signLink(s.token);
+    invited.push(party);
     await sendEmailViaRelay({
       to: s.email,
       cc: party === "dt" ? undefined : DT_ENTITY.signerEmail,
@@ -154,6 +171,8 @@ export async function sendNda(vendorAppId: string, clientId: number) {
   return {
     ndaId,
     status: up.rows[0].status as string,
+    invited,
+    missingEmail,
     signers: signers.map((s) => ({
       party: s.party as string,
       name: s.name as string,
@@ -218,7 +237,14 @@ export async function signNda(
 async function finalizeNda(ndaId: number) {
   const pool = getPool();
   if (!pool) return;
-  await pool.query(`UPDATE dt_site.vendor_nda SET status='completed', completed_at=now() WHERE id=$1 AND status<>'completed'`, [ndaId]);
+  // Atomic claim: only the call that actually flips the row to 'completed' goes
+  // on to send the executed-copy email. If two parties sign at the same instant,
+  // the loser's UPDATE affects 0 rows and bails -- so the PDF is emailed once.
+  const claim = await pool.query(
+    `UPDATE dt_site.vendor_nda SET status='completed', completed_at=now() WHERE id=$1 AND status<>'completed'`,
+    [ndaId],
+  );
+  if (claim.rowCount === 0) return;
   const nda = (await pool.query(`SELECT * FROM dt_site.vendor_nda WHERE id=$1`, [ndaId])).rows[0];
   const signers = (await pool.query(`SELECT party, name, email FROM dt_site.nda_signer WHERE nda_id=$1`, [ndaId])).rows;
   const pdf = await buildExecutedPdf(ndaId);
@@ -301,7 +327,7 @@ export async function buildExecutedPdf(ndaId: number): Promise<string | null> {
     para(PARTY_LABEL[s.party] ?? s.party, { bold: true, gap: 2 });
     para(`Signature: ${s.signature_text ?? "(unsigned)"}`, { gap: 1 });
     para(`Name: ${s.name}${s.title ? `, ${s.title}` : ""}`, { size: 9.5, gap: 1 });
-    para(`Date: ${s.signed_at ? new Date(s.signed_at).toLocaleString() : "—"}     Email: ${s.email ?? ""}`, { size: 9, gap: 8 });
+    para(`Date: ${s.signed_at ? fmtDateTime(s.signed_at) : "(unsigned)"}     Email: ${s.email ?? ""}`, { size: 9, gap: 8 });
   }
 
   ensureSpace(30);
