@@ -485,6 +485,38 @@ export async function getVendorById(id: string) {
   return toDetail(r, records);
 }
 
+/** Compact full profiles for the selected ids (order preserved) — used for the
+ * one-page-per-vendor PDF export. */
+export async function getVendorsForExport(ids: string[]) {
+  const records = await loadRecords();
+  const byId = new Map(records.map((r) => [r.id, r]));
+  return ids
+    .map((id) => byId.get(id))
+    .filter((r): r is NonNullable<typeof r> => Boolean(r))
+    .map((r) => ({
+      id: r.id,
+      name: r.name,
+      email: r.email,
+      role: r.role,
+      vendorTypeLabel: r.vendorTypeLabel,
+      appliedCategory: r.appliedCategory,
+      categories: r.categories,
+      companyName: r.companyName,
+      websiteUrl: r.websiteUrl,
+      personalLinkedin: r.personalLinkedin,
+      companySocial: r.companySocial,
+      hourlyRate: r.hourlyRate,
+      hoursPerMonth: r.hoursPerMonth,
+      teamSize: r.teamSize,
+      availabilityNotes: r.availabilityNotes,
+      status: r.status,
+      skills: r.skills,
+      sectors: r.sectors,
+      certifications: r.certifications,
+      personalBio: r.personalBio,
+    }));
+}
+
 export async function getVendorFacets() {
   return facetsFrom((await loadRecords()).filter((r) => !r.removed));
 }

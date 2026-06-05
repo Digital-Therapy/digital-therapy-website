@@ -11,6 +11,7 @@ import { forwardContactToPortal, forwardVendorToPortal } from "./portal";
 import {
   createVendorApplication,
   getVendorById,
+  getVendorsForExport,
   getVendorFacets,
   searchVendors,
   setVendorRemoved,
@@ -325,6 +326,10 @@ export const appRouter = router({
     adminGet: adminProcedure.input(z.object({ id: z.string().trim().min(1).max(64) })).query(async ({ input }) => {
       return getVendorById(input.id);
     }),
+    // Compact profiles for the selected vendors → one-page-each PDF export.
+    adminGetMany: adminProcedure
+      .input(z.object({ ids: z.array(z.string().trim().min(1).max(64)).min(1).max(100) }))
+      .query(async ({ input }) => getVendorsForExport(input.ids)),
     // Soft-remove / restore a vendor from the workspace (dt_site only).
     adminSetRemoved: adminProcedure
       .input(z.object({ id: z.string().trim().min(1).max(64), removed: z.boolean() }))
@@ -400,8 +405,17 @@ export const appRouter = router({
       .input(z.object({ name: z.string().trim().min(1).max(200) }))
       .mutation(async ({ input }) => createClient(input.name)),
     update: adminProcedure
-      .input(z.object({ id: z.number().int(), name: z.string().trim().min(1).max(200).optional(), active: z.boolean().optional() }))
-      .mutation(async ({ input }) => ({ success: await updateClient(input.id, { name: input.name, active: input.active }) })),
+      .input(
+        z.object({
+          id: z.number().int(),
+          name: z.string().trim().min(1).max(200).optional(),
+          active: z.boolean().optional(),
+          ndaWall: z.boolean().optional(),
+        }),
+      )
+      .mutation(async ({ input }) => ({
+        success: await updateClient(input.id, { name: input.name, active: input.active, ndaWall: input.ndaWall }),
+      })),
     remove: adminProcedure
       .input(z.object({ id: z.number().int() }))
       .mutation(async ({ input }) => ({ success: await deleteClient(input.id) })),

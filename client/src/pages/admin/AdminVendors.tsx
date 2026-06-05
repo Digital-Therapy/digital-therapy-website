@@ -20,10 +20,12 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { trpc } from "@/lib/trpc";
-import { ChevronDown, RotateCcw, Search, SlidersHorizontal, Trash2, Users, X } from "lucide-react";
+import { ChevronDown, FileDown, RotateCcw, Search, SlidersHorizontal, Trash2, Users, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
+import { generateVendorPdf, type ExportProfile } from "./vendorPdf";
+import { VendorExportDialog } from "./VendorExportDialog";
 
 // Primary category toggle across the top of the console. `value` is the stored
 // vendorTypeLabel ("" = All); `label` is the friendly category name.
@@ -96,6 +98,49 @@ export default function AdminVendors() {
     },
     onError: (e) => toast.error(e.message || "Could not update vendor."),
   });
+
+  // Selection + PDF export.
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [exporting, setExporting] = useState(false);
+  const [exportProfiles, setExportProfiles] = useState<ExportProfile[] | null>(null);
+
+  const toggleSelect = (id: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+
+  const pageIds = searchQuery.data?.rows.map((r) => r.id) ?? [];
+  const allOnPageSelected = pageIds.length > 0 && pageIds.every((id) => selected.has(id));
+  const toggleSelectAllOnPage = () =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (allOnPageSelected) pageIds.forEach((id) => next.delete(id));
+      else pageIds.forEach((id) => next.add(id));
+      return next;
+    });
+
+  // Step 1: fetch the selected profiles, then open the rate/hours dialog.
+  const exportSelected = async () => {
+    if (selected.size === 0) return;
+    setExporting(true);
+    try {
+      const data = await utils.vendor.adminGetMany.fetch({ ids: Array.from(selected) });
+      setExportProfiles(data as ExportProfile[]);
+    } catch {
+      toast.error("Could not load profiles for export.");
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  // Step 2: the dialog returns profiles with the custom rate/hours applied.
+  const generateExport = (profiles: ExportProfile[]) => {
+    generateVendorPdf(profiles);
+    toast.success(`Exported ${profiles.length} vendor profile${profiles.length === 1 ? "" : "s"} to PDF.`);
+    setExportProfiles(null);
+  };
 
   const facets = facetsQuery.data;
   const result = searchQuery.data;
@@ -237,6 +282,18 @@ export default function AdminVendors() {
                 : `${result?.total ?? 0} vendor${(result?.total ?? 0) === 1 ? "" : "s"} found`}
             </span>
             <div className="flex items-center gap-4">
+              {selected.size > 0 ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-medium text-[#0A65FF]">{selected.size} selected</span>
+                  <Button size="sm" onClick={exportSelected} disabled={exporting}>
+                    <FileDown className="mr-1.5 h-4 w-4" />
+                    Export to PDF
+                  </Button>
+                  <Button size="sm" variant="ghost" className="text-black/55" onClick={() => setSelected(new Set())}>
+                    Clear
+                  </Button>
+                </div>
+              ) : null}
               <label className="flex cursor-pointer items-center gap-2 text-xs">
                 <Checkbox checked={includeRemoved} onCheckedChange={(v) => setIncludeRemoved(v === true)} />
                 Show removed
@@ -268,6 +325,14 @@ export default function AdminVendors() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-8">
+                    <Checkbox
+                      checked={allOnPageSelected}
+                      onCheckedChange={toggleSelectAllOnPage}
+                      aria-label="Select all on this page"
+                    />
+                  </TableHead>
+                  <TableHead className="w-8 text-right tabular-nums text-black/45">#</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Categories</TableHead>
                   <TableHead>Skills</TableHead>
@@ -279,12 +344,22 @@ export default function AdminVendors() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {result.rows.map((v) => (
+                {result.rows.map((v, index) => (
                   <TableRow
                     key={v.id}
                     onClick={() => setLocation(`/vendorlists/${v.id}`)}
                     className={`cursor-pointer ${v.removed ? "opacity-55" : ""}`}
                   >
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      <Checkbox
+                        checked={selected.has(v.id)}
+                        onCheckedChange={() => toggleSelect(v.id)}
+                        aria-label={`Select ${v.name}`}
+                      />
+                    </TableCell>
+                    <TableCell className="text-right text-sm tabular-nums text-black/45">
+                      {(result.page - 1) * result.pageSize + index + 1}
+                    </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-[#111111]">{v.name}</span>
@@ -388,6 +463,15 @@ export default function AdminVendors() {
           )}
         </div>
       </div>
+
+      {exportProfiles ? (
+        <VendorExportDialog
+          profiles={exportProfiles}
+          open
+          onOpenChange={(o) => !o && setExportProfiles(null)}
+          onGenerate={generateExport}
+        />
+      ) : null}
     </AdminLayout>
   );
 }

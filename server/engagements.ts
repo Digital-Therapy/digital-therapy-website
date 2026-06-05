@@ -8,7 +8,7 @@ import { getPool } from "./vendors";
 export const COMP_TYPES = ["fixed_fee", "fixed_hours", "time_materials", "success_fee"] as const;
 export type CompType = (typeof COMP_TYPES)[number];
 
-export type Client = { id: number; name: string; active: boolean };
+export type Client = { id: number; name: string; active: boolean; ndaWall: boolean };
 export type Project = { id: number; clientId: number; name: string; active: boolean };
 export type CompLine = { id: number; type: string; details: Record<string, unknown> };
 
@@ -37,6 +37,9 @@ async function ensureTables() {
        created_at timestamptz NOT NULL DEFAULT now()
      )`,
   );
+  // Client-NDA Wall: this client requires a tri-party (Client + Digital Therapy
+  // + Vendor) NDA from every vendor who could touch their PII. Idempotent.
+  await pool.query(`ALTER TABLE dt_site.client ADD COLUMN IF NOT EXISTS nda_wall boolean NOT NULL DEFAULT false`);
   await pool.query(
     `CREATE TABLE IF NOT EXISTS dt_site.project (
        id serial PRIMARY KEY,
@@ -89,13 +92,14 @@ async function seedSampleClients(pool: NonNullable<ReturnType<typeof getPool>>) 
 export async function listClients(): Promise<(Client & { projects: Project[] })[]> {
   const pool = await ensureTables();
   if (!pool) return [];
-  const clients = await pool.query(`SELECT id, name, active FROM dt_site.client ORDER BY name`);
+  const clients = await pool.query(`SELECT id, name, active, nda_wall FROM dt_site.client ORDER BY name`);
   const projects = await pool.query(`SELECT id, client_id, name, active FROM dt_site.project ORDER BY name`);
   const byClient = groupBy(projects.rows, (p) => p.client_id as number);
   return clients.rows.map((c) => ({
     id: c.id,
     name: c.name,
     active: c.active,
+    ndaWall: c.nda_wall === true,
     projects: (byClient.get(c.id) ?? []).map((p) => ({ id: p.id, clientId: p.client_id, name: p.name, active: p.active })),
   }));
 }
@@ -103,11 +107,15 @@ export async function listClients(): Promise<(Client & { projects: Project[] })[
 export async function createClient(name: string): Promise<Client | null> {
   const pool = await ensureTables();
   if (!pool) return null;
-  const r = await pool.query(`INSERT INTO dt_site.client (name) VALUES ($1) RETURNING id, name, active`, [name]);
-  return r.rows[0];
+  const r = await pool.query(`INSERT INTO dt_site.client (name) VALUES ($1) RETURNING id, name, active, nda_wall`, [name]);
+  const c = r.rows[0];
+  return { id: c.id, name: c.name, active: c.active, ndaWall: c.nda_wall === true };
 }
 
-export async function updateClient(id: number, fields: { name?: string; active?: boolean }): Promise<boolean> {
+export async function updateClient(
+  id: number,
+  fields: { name?: string; active?: boolean; ndaWall?: boolean },
+): Promise<boolean> {
   const pool = await ensureTables();
   if (!pool) return false;
   const sets: string[] = [];
@@ -119,6 +127,10 @@ export async function updateClient(id: number, fields: { name?: string; active?:
   if (fields.active !== undefined) {
     sets.push(`active = $${sets.length + 1}`);
     vals.push(fields.active);
+  }
+  if (fields.ndaWall !== undefined) {
+    sets.push(`nda_wall = $${sets.length + 1}`);
+    vals.push(fields.ndaWall);
   }
   if (!sets.length) return true;
   vals.push(id);
@@ -223,7 +235,7 @@ export async function removeComp(id: number): Promise<boolean> {
 export async function getVendorEngagements(vendorAppId: string) {
   const pool = await ensureTables();
   if (!pool) return { clients: [] };
-  const clients = await pool.query(`SELECT id, name FROM dt_site.client WHERE active = true ORDER BY name`);
+  const clients = await pool.query(`SELECT id, name, nda_wall FROM dt_site.client WHERE active = true ORDER BY name`);
   const projects = await pool.query(`SELECT id, client_id, name FROM dt_site.project WHERE active = true ORDER BY name`);
   const vps = await pool.query(`SELECT id, project_id FROM dt_site.vendor_project WHERE vendor_application_id = $1`, [
     vendorAppId,
@@ -245,6 +257,7 @@ export async function getVendorEngagements(vendorAppId: string) {
     clients: clients.rows.map((c) => ({
       id: c.id,
       name: c.name,
+      ndaWall: c.nda_wall === true,
       projects: (projByClient.get(c.id) ?? []).map((p) => {
         const vpId = vpByProject.get(p.id) ?? null;
         return {

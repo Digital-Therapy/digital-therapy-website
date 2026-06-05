@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/lib/trpc";
-import { ChevronDown, ChevronRight, Plus, Receipt, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronRight, Plus, Receipt, ShieldCheck, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -143,6 +143,15 @@ export function ActiveClientEngagements({ vendorId }: { vendorId: string }) {
                   {open ? <ChevronDown className="h-4 w-4 text-black/45" /> : <ChevronRight className="h-4 w-4 text-black/45" />}
                   <Checkbox checked={open} className="pointer-events-none" />
                   <span className="font-medium">{client.name}</span>
+                  {client.ndaWall ? (
+                    <Badge
+                      className="ml-1 gap-1 bg-amber-100 font-normal text-amber-800 hover:bg-amber-100"
+                      title="This client requires a tri-party (Client · Digital Therapy · Vendor) NDA from every vendor who touches their PII."
+                    >
+                      <ShieldCheck className="h-3 w-3" />
+                      NDA Wall
+                    </Badge>
+                  ) : null}
                   {assignedCount > 0 ? (
                     <Badge variant="secondary" className="ml-1 font-normal">
                       {assignedCount} project{assignedCount === 1 ? "" : "s"}

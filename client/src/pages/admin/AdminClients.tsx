@@ -10,7 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/lib/trpc";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, ShieldCheck, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -81,8 +81,21 @@ export default function AdminClients() {
                   <div className="flex items-center gap-3">
                     <CardTitle className="text-lg">{client.name}</CardTitle>
                     {!client.active ? <Badge variant="outline">On Deck</Badge> : null}
+                    {client.ndaWall ? (
+                      <Badge className="gap-1 bg-amber-100 font-normal text-amber-800 hover:bg-amber-100">
+                        <ShieldCheck className="h-3 w-3" />
+                        NDA Wall
+                      </Badge>
+                    ) : null}
                   </div>
                   <div className="flex items-center gap-3">
+                    <label className="flex cursor-pointer items-center gap-2 text-xs text-black/60">
+                      <Checkbox
+                        checked={client.ndaWall}
+                        onCheckedChange={(v) => updateClient.mutate({ id: client.id, ndaWall: v === true })}
+                      />
+                      NDA Wall
+                    </label>
                     <label className="flex cursor-pointer items-center gap-2 text-xs text-black/60">
                       <Checkbox
                         checked={client.active}
