@@ -8,7 +8,24 @@ import { getPool } from "./vendors";
 export const COMP_TYPES = ["fixed_fee", "fixed_hours", "time_materials", "success_fee"] as const;
 export type CompType = (typeof COMP_TYPES)[number];
 
-export type Client = { id: number; name: string; active: boolean; ndaWall: boolean };
+export type ClientContact = {
+  id: number;
+  clientId: number;
+  name: string;
+  title: string | null;
+  email: string | null;
+  phone: string | null;
+  isPrimary: boolean;
+};
+export type Client = {
+  id: number;
+  name: string;
+  active: boolean;
+  ndaWall: boolean;
+  legalName: string | null;
+  address: string | null;
+  website: string | null;
+};
 export type Project = { id: number; clientId: number; name: string; active: boolean };
 export type CompLine = { id: number; type: string; details: Record<string, unknown> };
 
@@ -40,6 +57,27 @@ async function ensureTables() {
   // Client-NDA Wall: this client requires a tri-party (Client + Digital Therapy
   // + Vendor) NDA from every vendor who could touch their PII. Idempotent.
   await pool.query(`ALTER TABLE dt_site.client ADD COLUMN IF NOT EXISTS nda_wall boolean NOT NULL DEFAULT false`);
+  // Company detail fields for the client (used to fill the tri-party NDA). Idempotent.
+  await pool.query(
+    `ALTER TABLE dt_site.client
+       ADD COLUMN IF NOT EXISTS legal_name text,
+       ADD COLUMN IF NOT EXISTS address text,
+       ADD COLUMN IF NOT EXISTS website text`,
+  );
+  // People we deal with at each client; one markable as the primary signer.
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS dt_site.client_contact (
+       id serial PRIMARY KEY,
+       client_id integer NOT NULL REFERENCES dt_site.client(id) ON DELETE CASCADE,
+       name text NOT NULL,
+       title text,
+       email text,
+       phone text,
+       is_primary boolean NOT NULL DEFAULT false,
+       created_at timestamptz NOT NULL DEFAULT now()
+     )`,
+  );
+  await pool.query(`CREATE INDEX IF NOT EXISTS client_contact_client_idx ON dt_site.client_contact (client_id)`);
   await pool.query(
     `CREATE TABLE IF NOT EXISTS dt_site.project (
        id serial PRIMARY KEY,
@@ -89,52 +127,151 @@ async function seedSampleClients(pool: NonNullable<ReturnType<typeof getPool>>) 
 
 // ── Clients & projects management ────────────────────────────────────────────
 
-export async function listClients(): Promise<(Client & { projects: Project[] })[]> {
+function mapClientRow(c: Record<string, unknown>): Client {
+  return {
+    id: c.id as number,
+    name: c.name as string,
+    active: c.active === true,
+    ndaWall: c.nda_wall === true,
+    legalName: (c.legal_name as string) ?? null,
+    address: (c.address as string) ?? null,
+    website: (c.website as string) ?? null,
+  };
+}
+
+function mapContactRow(c: Record<string, unknown>): ClientContact {
+  return {
+    id: c.id as number,
+    clientId: c.client_id as number,
+    name: c.name as string,
+    title: (c.title as string) ?? null,
+    email: (c.email as string) ?? null,
+    phone: (c.phone as string) ?? null,
+    isPrimary: c.is_primary === true,
+  };
+}
+
+export async function listClients(): Promise<(Client & { projects: Project[]; contacts: ClientContact[] })[]> {
   const pool = await ensureTables();
   if (!pool) return [];
-  const clients = await pool.query(`SELECT id, name, active, nda_wall FROM dt_site.client ORDER BY name`);
+  const clients = await pool.query(
+    `SELECT id, name, active, nda_wall, legal_name, address, website FROM dt_site.client ORDER BY name`,
+  );
   const projects = await pool.query(`SELECT id, client_id, name, active FROM dt_site.project ORDER BY name`);
-  const byClient = groupBy(projects.rows, (p) => p.client_id as number);
+  const contacts = await pool.query(
+    `SELECT id, client_id, name, title, email, phone, is_primary FROM dt_site.client_contact
+     ORDER BY is_primary DESC, name`,
+  );
+  const projByClient = groupBy(projects.rows, (p) => p.client_id as number);
+  const contactsByClient = groupBy(contacts.rows, (c) => c.client_id as number);
   return clients.rows.map((c) => ({
-    id: c.id,
-    name: c.name,
-    active: c.active,
-    ndaWall: c.nda_wall === true,
-    projects: (byClient.get(c.id) ?? []).map((p) => ({ id: p.id, clientId: p.client_id, name: p.name, active: p.active })),
+    ...mapClientRow(c),
+    projects: (projByClient.get(c.id) ?? []).map((p) => ({
+      id: p.id,
+      clientId: p.client_id,
+      name: p.name,
+      active: p.active,
+    })),
+    contacts: (contactsByClient.get(c.id) ?? []).map(mapContactRow),
   }));
 }
 
 export async function createClient(name: string): Promise<Client | null> {
   const pool = await ensureTables();
   if (!pool) return null;
-  const r = await pool.query(`INSERT INTO dt_site.client (name) VALUES ($1) RETURNING id, name, active, nda_wall`, [name]);
-  const c = r.rows[0];
-  return { id: c.id, name: c.name, active: c.active, ndaWall: c.nda_wall === true };
+  const r = await pool.query(
+    `INSERT INTO dt_site.client (name) VALUES ($1)
+     RETURNING id, name, active, nda_wall, legal_name, address, website`,
+    [name],
+  );
+  return mapClientRow(r.rows[0]);
 }
 
 export async function updateClient(
   id: number,
-  fields: { name?: string; active?: boolean; ndaWall?: boolean },
+  fields: { name?: string; active?: boolean; ndaWall?: boolean; legalName?: string; address?: string; website?: string },
 ): Promise<boolean> {
   const pool = await ensureTables();
   if (!pool) return false;
+  const colByField: Record<string, string> = {
+    name: "name",
+    active: "active",
+    ndaWall: "nda_wall",
+    legalName: "legal_name",
+    address: "address",
+    website: "website",
+  };
   const sets: string[] = [];
   const vals: unknown[] = [];
-  if (fields.name !== undefined) {
-    sets.push(`name = $${sets.length + 1}`);
-    vals.push(fields.name);
-  }
-  if (fields.active !== undefined) {
-    sets.push(`active = $${sets.length + 1}`);
-    vals.push(fields.active);
-  }
-  if (fields.ndaWall !== undefined) {
-    sets.push(`nda_wall = $${sets.length + 1}`);
-    vals.push(fields.ndaWall);
+  for (const [field, col] of Object.entries(colByField)) {
+    const value = (fields as Record<string, unknown>)[field];
+    if (value !== undefined) {
+      sets.push(`${col} = $${sets.length + 1}`);
+      vals.push(value);
+    }
   }
   if (!sets.length) return true;
   vals.push(id);
   await pool.query(`UPDATE dt_site.client SET ${sets.join(", ")} WHERE id = $${vals.length}`, vals);
+  return true;
+}
+
+// ── Client contacts ──────────────────────────────────────────────────────────
+
+export async function addContact(
+  clientId: number,
+  fields: { name: string; title?: string; email?: string; phone?: string },
+): Promise<ClientContact | null> {
+  const pool = await ensureTables();
+  if (!pool) return null;
+  const r = await pool.query(
+    `INSERT INTO dt_site.client_contact (client_id, name, title, email, phone)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING id, client_id, name, title, email, phone, is_primary`,
+    [clientId, fields.name, fields.title || null, fields.email || null, fields.phone || null],
+  );
+  return mapContactRow(r.rows[0]);
+}
+
+export async function updateContact(
+  id: number,
+  fields: { name?: string; title?: string; email?: string; phone?: string },
+): Promise<boolean> {
+  const pool = await ensureTables();
+  if (!pool) return false;
+  const colByField: Record<string, string> = { name: "name", title: "title", email: "email", phone: "phone" };
+  const sets: string[] = [];
+  const vals: unknown[] = [];
+  for (const [field, col] of Object.entries(colByField)) {
+    const value = (fields as Record<string, unknown>)[field];
+    if (value !== undefined) {
+      sets.push(`${col} = $${sets.length + 1}`);
+      vals.push(value === "" ? null : value);
+    }
+  }
+  if (!sets.length) return true;
+  vals.push(id);
+  await pool.query(`UPDATE dt_site.client_contact SET ${sets.join(", ")} WHERE id = $${vals.length}`, vals);
+  return true;
+}
+
+export async function removeContact(id: number): Promise<boolean> {
+  const pool = await ensureTables();
+  if (!pool) return false;
+  await pool.query(`DELETE FROM dt_site.client_contact WHERE id = $1`, [id]);
+  return true;
+}
+
+/** Make one contact the client's primary (signer); clears any other primary. */
+export async function setPrimaryContact(clientId: number, contactId: number): Promise<boolean> {
+  const pool = await ensureTables();
+  if (!pool) return false;
+  await pool.query(
+    `UPDATE dt_site.client_contact
+       SET is_primary = (id = $2)
+     WHERE client_id = $1`,
+    [clientId, contactId],
+  );
   return true;
 }
 

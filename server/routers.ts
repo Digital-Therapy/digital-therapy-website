@@ -23,6 +23,7 @@ import {
 } from "./vendors";
 import {
   addComp,
+  addContact,
   COMP_TYPES,
   createClient,
   createProject,
@@ -31,9 +32,12 @@ import {
   getVendorEngagements,
   listClients,
   removeComp,
+  removeContact,
+  setPrimaryContact,
   setVendorProject,
   updateClient,
   updateComp,
+  updateContact,
   updateProject,
 } from "./engagements";
 import { vendorStatusValues } from "../drizzle/schema";
@@ -411,11 +415,49 @@ export const appRouter = router({
           name: z.string().trim().min(1).max(200).optional(),
           active: z.boolean().optional(),
           ndaWall: z.boolean().optional(),
+          legalName: z.string().trim().max(400).optional(),
+          address: z.string().trim().max(500).optional(),
+          website: z.string().trim().max(300).optional(),
         }),
       )
-      .mutation(async ({ input }) => ({
-        success: await updateClient(input.id, { name: input.name, active: input.active, ndaWall: input.ndaWall }),
-      })),
+      .mutation(async ({ input }) => {
+        const { id, ...fields } = input;
+        return { success: await updateClient(id, fields) };
+      }),
+    addContact: adminProcedure
+      .input(
+        z.object({
+          clientId: z.number().int(),
+          name: z.string().trim().min(1).max(200),
+          title: z.string().trim().max(200).optional(),
+          email: z.string().trim().max(320).optional(),
+          phone: z.string().trim().max(60).optional(),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const { clientId, ...fields } = input;
+        return addContact(clientId, fields);
+      }),
+    updateContact: adminProcedure
+      .input(
+        z.object({
+          id: z.number().int(),
+          name: z.string().trim().min(1).max(200).optional(),
+          title: z.string().trim().max(200).optional(),
+          email: z.string().trim().max(320).optional(),
+          phone: z.string().trim().max(60).optional(),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const { id, ...fields } = input;
+        return { success: await updateContact(id, fields) };
+      }),
+    removeContact: adminProcedure
+      .input(z.object({ id: z.number().int() }))
+      .mutation(async ({ input }) => ({ success: await removeContact(input.id) })),
+    setPrimaryContact: adminProcedure
+      .input(z.object({ clientId: z.number().int(), contactId: z.number().int() }))
+      .mutation(async ({ input }) => ({ success: await setPrimaryContact(input.clientId, input.contactId) })),
     remove: adminProcedure
       .input(z.object({ id: z.number().int() }))
       .mutation(async ({ input }) => ({ success: await deleteClient(input.id) })),
