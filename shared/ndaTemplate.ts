@@ -24,6 +24,48 @@ export type NdaParties = {
 export type NdaClause = { heading: string; body: string };
 export type FilledNda = { title: string; intro: string; background: string[]; clauses: NdaClause[] };
 
+/**
+ * Per-client custom NDA templates may use these placeholders; the system fills
+ * them at send time. Client name/address are written into the custom template
+ * literally (it's client-specific).
+ */
+export const NDA_PLACEHOLDERS = "[INSERT VENDOR], [INSERT ADDRESS], [EFFECTIVE DATE]";
+
+export function applyNdaPlaceholders(
+  template: string,
+  vals: { vendorCompany: string; vendorAddress: string; effectiveDate: string },
+): string {
+  return template
+    .replace(/\[INSERT VENDOR\]/gi, vals.vendorCompany || "[Vendor]")
+    .replace(/\[INSERT ADDRESS\]/gi, vals.vendorAddress || "[vendor address]")
+    .replace(/\[EFFECTIVE[ _]DATE\]/gi, vals.effectiveDate || "the Effective Date");
+}
+
+/** Flatten the structured default template into the stored body text. Paragraphs
+ * are separated by blank lines; the first paragraph is the title; the text ends
+ * at the IN WITNESS line (signature blocks are appended by the renderer). */
+export function renderDefaultBody(p: NdaParties): string {
+  const f = fillNda(p);
+  const blocks = [
+    f.title,
+    f.intro,
+    "Background",
+    ...f.background,
+    "Agreement",
+    ...f.clauses.map((c) => `${c.heading}. ${c.body}`),
+    "IN WITNESS WHEREOF, the Parties hereto have executed this Agreement as of the date first written above.",
+  ];
+  return blocks.join("\n\n");
+}
+
+/** Split a stored NDA body into render-ready paragraphs (first = title). */
+export function ndaBodyParagraphs(body: string): string[] {
+  return body
+    .split(/\n{2,}/)
+    .map((s) => s.replace(/\s*\n\s*/g, " ").trim())
+    .filter(Boolean);
+}
+
 export function fillNda(p: NdaParties): FilledNda {
   const company = p.clientLegalName || "the Company";
   const counterparty = p.vendorCompany || p.vendorName || "the Counterparty";

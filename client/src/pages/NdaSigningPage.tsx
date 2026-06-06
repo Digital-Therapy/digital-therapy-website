@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
-import { fillNda } from "@shared/ndaTemplate";
 import { CheckCircle2, Loader2, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { useRoute } from "wouter";
@@ -69,7 +68,7 @@ export default function NdaSigningPage() {
     );
   }
 
-  const filled = fillNda(data.parties);
+  const [title, ...bodyParas] = data.bodyParagraphs;
   const alreadySigned = data.signed || justSigned;
   const fullyExecuted = data.status === "completed";
   const canSign =
@@ -109,19 +108,11 @@ export default function NdaSigningPage() {
 
       {/* The agreement */}
       <div className="max-h-[55vh] overflow-y-auto rounded-2xl border border-black/10 bg-white p-6 text-sm leading-6 text-black/80">
-        <h1 className="text-center font-display text-2xl tracking-[-0.04em] text-[#111111]">{filled.title}</h1>
-        <p className="mt-4">{filled.intro}</p>
-        <p className="mt-3 font-semibold">Background</p>
-        {filled.background.map((b, i) => (
-          <p key={i} className="mt-1">
-            {b}
+        <h1 className="text-center font-display text-2xl tracking-[-0.04em] text-[#111111]">{title}</h1>
+        {bodyParas.map((p, i) => (
+          <p key={i} className="mt-3 whitespace-pre-line">
+            {p}
           </p>
-        ))}
-        {filled.clauses.map((c) => (
-          <div key={c.heading} className="mt-3">
-            <p className="font-semibold">{c.heading}</p>
-            <p className="mt-0.5">{c.body}</p>
-          </div>
         ))}
       </div>
 

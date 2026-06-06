@@ -28,6 +28,9 @@ export type Client = {
   originator: string | null;
   intakeDate: string | null;
   referrer: string | null;
+  /** Client-specific NDA body text (overrides the default template). Ends at the
+   * IN WITNESS line; signature blocks are appended at render. Null = use default. */
+  ndaTemplate: string | null;
 };
 export type Project = { id: number; clientId: number; name: string; active: boolean };
 export type CompLine = { id: number; type: string; details: Record<string, unknown> };
@@ -68,7 +71,8 @@ async function ensureTables() {
        ADD COLUMN IF NOT EXISTS website text,
        ADD COLUMN IF NOT EXISTS originator text,
        ADD COLUMN IF NOT EXISTS intake_date text,
-       ADD COLUMN IF NOT EXISTS referrer text`,
+       ADD COLUMN IF NOT EXISTS referrer text,
+       ADD COLUMN IF NOT EXISTS nda_template text`,
   );
   // Client-level resource roster: which vendors (incl. core team) are assigned
   // to this client overall. vendor_application_id references the portal's
@@ -170,6 +174,7 @@ function mapClientRow(c: Record<string, unknown>): Client {
     originator: (c.originator as string) ?? null,
     intakeDate: (c.intake_date as string) ?? null,
     referrer: (c.referrer as string) ?? null,
+    ndaTemplate: (c.nda_template as string) ?? null,
   };
 }
 
@@ -191,7 +196,7 @@ export async function listClients(): Promise<
   const pool = await ensureTables();
   if (!pool) return [];
   const clients = await pool.query(
-    `SELECT id, name, active, nda_wall, legal_name, address, website, originator, intake_date, referrer
+    `SELECT id, name, active, nda_wall, legal_name, address, website, originator, intake_date, referrer, nda_template
        FROM dt_site.client ORDER BY name`,
   );
   const projects = await pool.query(`SELECT id, client_id, name, active FROM dt_site.project ORDER BY name`);
@@ -225,7 +230,7 @@ export async function createClient(name: string): Promise<Client | null> {
   if (!pool) return null;
   const r = await pool.query(
     `INSERT INTO dt_site.client (name) VALUES ($1)
-     RETURNING id, name, active, nda_wall, legal_name, address, website, originator, intake_date, referrer`,
+     RETURNING id, name, active, nda_wall, legal_name, address, website, originator, intake_date, referrer, nda_template`,
     [name],
   );
   return mapClientRow(r.rows[0]);
@@ -243,6 +248,7 @@ export async function updateClient(
     originator?: string;
     intakeDate?: string;
     referrer?: string;
+    ndaTemplate?: string;
   },
 ): Promise<boolean> {
   const pool = await ensureTables();
@@ -257,6 +263,7 @@ export async function updateClient(
     originator: "originator",
     intakeDate: "intake_date",
     referrer: "referrer",
+    ndaTemplate: "nda_template",
   };
   const sets: string[] = [];
   const vals: unknown[] = [];
@@ -264,7 +271,7 @@ export async function updateClient(
     const value = (fields as Record<string, unknown>)[field];
     if (value !== undefined) {
       sets.push(`${col} = $${sets.length + 1}`);
-      vals.push(value);
+      vals.push(value === "" ? null : value);
     }
   }
   if (!sets.length) return true;

@@ -7,7 +7,13 @@
  */
 import crypto from "crypto";
 import { jsPDF } from "jspdf";
-import { DT_ENTITY, fillNda, type NdaParties } from "../shared/ndaTemplate";
+import {
+  DT_ENTITY,
+  applyNdaPlaceholders,
+  ndaBodyParagraphs,
+  renderDefaultBody,
+  type NdaParties,
+} from "../shared/ndaTemplate";
 import { getClientById } from "./engagements";
 import { sendEmailViaRelay } from "./portal";
 import { getPool, getVendorById } from "./vendors";
@@ -50,7 +56,8 @@ async function ensureNdaSchema(pool: NonNullable<ReturnType<typeof getPool>>) {
        ADD COLUMN IF NOT EXISTS client_legal_name text,
        ADD COLUMN IF NOT EXISTS client_address text,
        ADD COLUMN IF NOT EXISTS vendor_company text,
-       ADD COLUMN IF NOT EXISTS vendor_name text`,
+       ADD COLUMN IF NOT EXISTS vendor_name text,
+       ADD COLUMN IF NOT EXISTS body_text text`,
   );
   await pool.query(
     `CREATE TABLE IF NOT EXISTS dt_site.nda_signer (
@@ -78,6 +85,21 @@ const PARTY_LABEL: Record<string, string> = {
   vendor: "For the Counterparty (Vendor)",
 };
 
+/** Signature-block headings keyed to the actual entity names on this NDA. */
+function signerLabels(nda: Record<string, any>): Record<string, string> {
+  return {
+    client: nda.client_legal_name || "The Company",
+    dt: DT_ENTITY.name,
+    vendor: nda.vendor_company || "The Counterparty (Vendor)",
+  };
+}
+
+/** The exact agreement body for this NDA: the snapshot taken at send time, or
+ * the default template rendered on the fly for pre-snapshot records. */
+function ndaBody(nda: Record<string, any>): string {
+  return (nda.body_text as string) || renderDefaultBody(partiesFromNda(nda));
+}
+
 function partiesFromNda(nda: Record<string, any>): NdaParties {
   return {
     clientLegalName: nda.client_legal_name ?? "",
@@ -102,11 +124,31 @@ export async function sendNda(vendorAppId: string, clientId: number) {
   const vendorCompany = vendor.vendor.companyName || vendor.vendor.name;
   const effectiveDate = fmtDate(new Date());
 
+  // The exact NDA wording is snapshotted onto the record at first send so the
+  // executed document is immutable even if the client/vendor records change
+  // later. A client-specific template (e.g. Chapman's client-provided form)
+  // wins; otherwise the default mutual-NDA template is rendered. Body ends at
+  // the IN WITNESS line — signature blocks are appended at render.
+  const parties: NdaParties = {
+    clientLegalName: client.legalName ?? client.name,
+    clientAddress: client.address ?? "",
+    vendorCompany,
+    vendorName: vendor.vendor.name,
+    effectiveDate,
+  };
+  const bodyText = client.ndaTemplate
+    ? applyNdaPlaceholders(client.ndaTemplate, {
+        vendorCompany,
+        vendorAddress: vendor.vendor.companyAddress ?? "",
+        effectiveDate,
+      })
+    : renderDefaultBody(parties);
+
   const up = await pool.query(
     `INSERT INTO dt_site.vendor_nda
        (vendor_application_id, client_id, status, effective_date, sent_at,
-        client_legal_name, client_address, vendor_company, vendor_name)
-     VALUES ($1,$2,'sent',$3, now(), $4,$5,$6,$7)
+        client_legal_name, client_address, vendor_company, vendor_name, body_text)
+     VALUES ($1,$2,'sent',$3, now(), $4,$5,$6,$7,$8)
      ON CONFLICT (vendor_application_id, client_id) DO UPDATE SET
         status = CASE WHEN dt_site.vendor_nda.status = 'completed' THEN 'completed' ELSE 'sent' END,
         effective_date = COALESCE(dt_site.vendor_nda.effective_date, EXCLUDED.effective_date),
@@ -114,9 +156,19 @@ export async function sendNda(vendorAppId: string, clientId: number) {
         client_legal_name = EXCLUDED.client_legal_name,
         client_address = EXCLUDED.client_address,
         vendor_company = EXCLUDED.vendor_company,
-        vendor_name = EXCLUDED.vendor_name
+        vendor_name = EXCLUDED.vendor_name,
+        body_text = COALESCE(dt_site.vendor_nda.body_text, EXCLUDED.body_text)
      RETURNING id, status`,
-    [vendorAppId, clientId, effectiveDate, client.legalName ?? client.name, client.address ?? "", vendorCompany, vendor.vendor.name],
+    [
+      vendorAppId,
+      clientId,
+      effectiveDate,
+      client.legalName ?? client.name,
+      client.address ?? "",
+      vendorCompany,
+      vendor.vendor.name,
+      bodyText,
+    ],
   );
   const ndaId = up.rows[0].id as number;
 
@@ -201,6 +253,9 @@ export async function getNdaByToken(token: string) {
     signed: Boolean(signer.signed_at),
     signedAt: signer.signed_at as Date | null,
     parties: partiesFromNda(nda),
+    // Exact agreement text for this NDA (client-specific or default), already
+    // filled. The signing page renders these paragraphs verbatim.
+    bodyParagraphs: ndaBodyParagraphs(ndaBody(nda)),
     signers: all.map((s) => ({ party: s.party as string, name: s.name as string, signed: Boolean(s.signed_at) })),
   };
 }
@@ -281,9 +336,10 @@ export async function buildExecutedPdf(ndaId: number): Promise<string | null> {
       [ndaId],
     )
   ).rows;
-  const order = ["dt", "client", "vendor"];
+  const order = ["client", "dt", "vendor"];
   signers.sort((a, b) => order.indexOf(a.party) - order.indexOf(b.party));
-  const filled = fillNda(partiesFromNda(nda));
+  const paragraphs = ndaBodyParagraphs(ndaBody(nda));
+  const labels = signerLabels(nda);
 
   const doc = new jsPDF({ unit: "pt", format: "letter" });
   const L = 54;
@@ -309,37 +365,51 @@ export async function buildExecutedPdf(ndaId: number): Promise<string | null> {
     y += opts.gap ?? 6;
   };
 
+  // First paragraph is the title (rendered centered/bold); the rest is the body.
+  const [title, ...rest] = paragraphs;
   doc.setFont("helvetica", "bold");
   doc.setFontSize(15);
-  doc.text(filled.title, (L + R) / 2, y, { align: "center" });
+  doc.text(title ?? "MUTUAL NON-DISCLOSURE AGREEMENT", (L + R) / 2, y, { align: "center" });
   y += 26;
-  para(filled.intro);
-  for (const b of filled.background) para(b);
-  for (const c of filled.clauses) {
-    para(c.heading, { bold: true, gap: 2 });
-    para(c.body, { size: 9.5 });
-  }
+  for (const p of rest) para(p, { size: 9.5 });
 
-  ensureSpace(30);
-  para("IN WITNESS WHEREOF, the Parties have executed this Agreement as of the dates set forth below.", { gap: 8 });
+  // Signature blocks: Signature line, Print name, Title, Date — one per party,
+  // headed by each party's actual entity name. (The body already ends with its
+  // own "IN WITNESS WHEREOF" line, so we don't repeat it here.)
+  y += 8;
   for (const s of signers) {
-    ensureSpace(64);
-    para(PARTY_LABEL[s.party] ?? s.party, { bold: true, gap: 2 });
-    para(`Signature: ${s.signature_text ?? "(unsigned)"}`, { gap: 1 });
-    para(`Name: ${s.name}${s.title ? `, ${s.title}` : ""}`, { size: 9.5, gap: 1 });
-    para(`Date: ${s.signed_at ? fmtDateTime(s.signed_at) : "(unsigned)"}     Email: ${s.email ?? ""}`, { size: 9, gap: 8 });
+    ensureSpace(78);
+    para(labels[s.party] ?? PARTY_LABEL[s.party] ?? s.party, { bold: true, gap: 4 });
+    para(`Signature: ${s.signature_text ?? "______________________________"}`, { gap: 2 });
+    para(`Print name: ${s.name ?? ""}`, { size: 9.5, gap: 2 });
+    para(`Title: ${s.title ?? ""}`, { size: 9.5, gap: 2 });
+    para(`Date: ${s.signed_at ? fmtDate(s.signed_at) : "______________"}`, { size: 9.5, gap: 10 });
   }
 
   ensureSpace(30);
   para("Audit trail", { bold: true, gap: 2 });
   for (const s of signers) {
     para(
-      `${PARTY_LABEL[s.party] ?? s.party} — ${s.name}: signed ${s.signed_at ? new Date(s.signed_at).toISOString() : "—"}${s.signed_ip ? ` (IP ${s.signed_ip})` : ""}`,
+      `${labels[s.party] ?? s.party} — ${s.name}: signed ${s.signed_at ? new Date(s.signed_at).toISOString() : "—"}${s.signed_ip ? ` (IP ${s.signed_ip})` : ""}`,
       { size: 8, gap: 1 },
     );
   }
 
   return Buffer.from(doc.output("arraybuffer")).toString("base64");
+}
+
+/** Void an NDA for a vendor↔client (deletes the record + its signing tokens, so
+ * any signatures collected on the wrong document are discarded). The next "Send
+ * NDA" generates a fresh NDA with new tokens and the current client template. */
+export async function voidNda(vendorAppId: string, clientId: number): Promise<boolean> {
+  const pool = getPool();
+  if (!pool) return false;
+  await ensureNdaSchema(pool);
+  await pool.query(`DELETE FROM dt_site.vendor_nda WHERE vendor_application_id=$1 AND client_id=$2`, [
+    vendorAppId,
+    clientId,
+  ]);
+  return true;
 }
 
 /** Admin view of the NDA for a vendor↔client: status + signer links. */

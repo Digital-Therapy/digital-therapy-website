@@ -460,6 +460,15 @@ function ClientNdaPanel({ vendorId, clientId }: { vendorId: string; clientId: nu
     onError: (e) => toast.error(e.message || "Could not send the NDA."),
   });
 
+  const voidNda = trpc.vendor.adminVoidNda.useMutation({
+    onSuccess: () => {
+      utils.vendor.adminNdaStatus.invalidate({ id: vendorId, clientId });
+      utils.vendor.adminGetEngagements.invalidate({ id: vendorId });
+      toast.success("NDA voided. Click “Send NDA” to reissue with the current document.");
+    },
+    onError: (e) => toast.error(e.message || "Could not void the NDA."),
+  });
+
   const nda = statusQuery.data;
   const signed = nda?.signers.filter((s) => s.signed).length ?? 0;
   const total = nda?.signers.length ?? 0;
@@ -550,6 +559,27 @@ function ClientNdaPanel({ vendorId, clientId }: { vendorId: string; clientId: nu
               ) : null}
             </div>
           ))}
+          {/* Void & reissue — for an NDA issued on the wrong document. Discards
+              any signatures collected so far and lets you resend with the
+              client's current NDA wording. */}
+          <div className="pt-1 text-right">
+            <button
+              type="button"
+              onClick={() => {
+                if (
+                  confirm(
+                    "Void this NDA? Any signatures already collected will be discarded, and you can reissue it with the client's current NDA document.",
+                  )
+                )
+                  voidNda.mutate({ id: vendorId, clientId });
+              }}
+              disabled={voidNda.isPending}
+              className="inline-flex items-center gap-1 text-[0.7rem] text-black/40 hover:text-red-600"
+            >
+              <Trash2 className="h-3 w-3" />
+              Void &amp; reissue
+            </button>
+          </div>
         </div>
       ) : null}
     </div>

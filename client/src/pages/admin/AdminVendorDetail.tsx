@@ -54,7 +54,7 @@ export default function AdminVendorDetail() {
   const [status, setStatus] = useState<Status>("applied");
   const [notes, setNotes] = useState("");
   const [editingProfile, setEditingProfile] = useState(false);
-  const emptyProfile = { companyName: "", websiteUrl: "", personalLinkedin: "", companySocial: "" };
+  const emptyProfile = { companyName: "", companyAddress: "", websiteUrl: "", personalLinkedin: "", companySocial: "" };
   const [profile, setProfile] = useState(emptyProfile);
   const [categories, setCategories] = useState<string[]>([]);
   const [activeEngaged, setActiveEngaged] = useState(false);
@@ -65,6 +65,7 @@ export default function AdminVendorDetail() {
     if (data?.vendor) {
       setProfile({
         companyName: data.vendor.companyName ?? "",
+        companyAddress: data.vendor.companyAddress ?? "",
         websiteUrl: data.vendor.websiteUrl ?? "",
         personalLinkedin: data.vendor.personalLinkedin ?? "",
         companySocial: data.vendor.companySocial ?? "",
@@ -77,6 +78,7 @@ export default function AdminVendorDetail() {
       setNotes(data.vendor.statusNotes ?? "");
       setProfile({
         companyName: data.vendor.companyName ?? "",
+        companyAddress: data.vendor.companyAddress ?? "",
         websiteUrl: data.vendor.websiteUrl ?? "",
         personalLinkedin: data.vendor.personalLinkedin ?? "",
         companySocial: data.vendor.companySocial ?? "",
@@ -365,6 +367,12 @@ export default function AdminVendorDetail() {
                           onChange={(v) => setProfile((p) => ({ ...p, companyName: v }))}
                         />
                         <EditField
+                          label="Company address (for the NDA)"
+                          value={profile.companyAddress}
+                          placeholder="123 Main St, Suite 100, City, ST 00000"
+                          onChange={(v) => setProfile((p) => ({ ...p, companyAddress: v }))}
+                        />
+                        <EditField
                           label="Website URL"
                           value={profile.websiteUrl}
                           placeholder="https://company.com"
@@ -404,6 +412,7 @@ export default function AdminVendorDetail() {
                     ) : (
                       <div className="grid gap-4 sm:grid-cols-2">
                         <Field label="Company name" value={data.vendor.companyName} />
+                        <Field label="Company address" value={data.vendor.companyAddress} />
                         <LinkField label="Website" value={data.vendor.websiteUrl} />
                         <LinkField label="Personal LinkedIn" value={data.vendor.personalLinkedin} />
                         <LinkField label="Company LinkedIn / Instagram" value={data.vendor.companySocial} />

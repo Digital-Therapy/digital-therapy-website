@@ -11,6 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -19,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { trpc, type RouterOutputs } from "@/lib/trpc";
-import { Check, Pencil, Plus, ShieldCheck, Star, Trash2, Users, X } from "lucide-react";
+import { Check, FileText, Pencil, Plus, ShieldCheck, Star, Trash2, Users, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -67,6 +68,14 @@ export function ClientCard({ client, vendors }: { client: ClientRow; vendors: Ve
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client.legalName, client.address, client.website, client.originator, client.intakeDate, client.referrer]);
 
+  // Client-specific NDA document
+  const [editingNda, setEditingNda] = useState(false);
+  const [ndaDraft, setNdaDraft] = useState(client.ndaTemplate ?? "");
+  useEffect(() => {
+    setNdaDraft(client.ndaTemplate ?? "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [client.ndaTemplate]);
+
   const [resourceSearch, setResourceSearch] = useState("");
 
   const [newProject, setNewProject] = useState("");
@@ -90,6 +99,12 @@ export function ClientCard({ client, vendors }: { client: ClientRow; vendors: Ve
               <Badge className="gap-1 bg-amber-100 font-normal text-amber-800 hover:bg-amber-100">
                 <ShieldCheck className="h-3 w-3" />
                 NDA Wall
+              </Badge>
+            ) : null}
+            {client.ndaTemplate ? (
+              <Badge className="gap-1 bg-indigo-100 font-normal text-indigo-800 hover:bg-indigo-100">
+                <FileText className="h-3 w-3" />
+                Custom NDA
               </Badge>
             ) : null}
           </div>
@@ -220,6 +235,79 @@ export function ClientCard({ client, vendors }: { client: ClientRow; vendors: Ve
               <Detail label="Intake date" value={client.intakeDate} />
               <Detail label="Referrer" value={client.referrer} className="sm:col-span-2" />
             </div>
+          )}
+        </section>
+
+        {/* NDA document — client-specific override of the default mutual NDA */}
+        <section>
+          <div className="mb-2 flex items-center justify-between">
+            <h3 className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-black/45">NDA document</h3>
+            {!editingNda ? (
+              <Button variant="ghost" size="sm" className="h-7 text-xs text-black/55" onClick={() => setEditingNda(true)}>
+                <Pencil className="mr-1 h-3.5 w-3.5" />
+                {client.ndaTemplate ? "Edit" : "Use a client-specific NDA"}
+              </Button>
+            ) : null}
+          </div>
+          {editingNda ? (
+            <div className="space-y-2">
+              <p className="text-xs leading-5 text-black/55">
+                Paste this client's exact NDA wording. End at the “IN WITNESS WHEREOF…” line — the three signature
+                blocks (Client · Digital Therapy · Vendor) are appended automatically. Placeholders filled per vendor:{" "}
+                <code className="rounded bg-black/5 px-1">[INSERT VENDOR]</code>,{" "}
+                <code className="rounded bg-black/5 px-1">[INSERT ADDRESS]</code>,{" "}
+                <code className="rounded bg-black/5 px-1">[EFFECTIVE DATE]</code>. Leave blank to use the default
+                mutual NDA. Changes apply to NDAs sent from now on; reissue any in-flight NDA to pick up new wording.
+              </p>
+              <Textarea
+                value={ndaDraft}
+                onChange={(e) => setNdaDraft(e.target.value)}
+                placeholder="MUTUAL NON-DISCLOSURE AGREEMENT…"
+                className="min-h-[260px] font-mono text-xs leading-5"
+              />
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    updateClient.mutate({ id: client.id, ndaTemplate: ndaDraft.trim() });
+                    setEditingNda(false);
+                  }}
+                >
+                  Save NDA
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setNdaDraft(client.ndaTemplate ?? "");
+                    setEditingNda(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                {client.ndaTemplate ? (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-red-600 hover:text-red-700"
+                    onClick={() => {
+                      if (!confirm("Reset this client to the default mutual NDA?")) return;
+                      updateClient.mutate({ id: client.id, ndaTemplate: "" });
+                      setNdaDraft("");
+                      setEditingNda(false);
+                    }}
+                  >
+                    Reset to default
+                  </Button>
+                ) : null}
+              </div>
+            </div>
+          ) : client.ndaTemplate ? (
+            <p className="line-clamp-3 whitespace-pre-line rounded-lg border border-black/10 bg-black/[0.02] p-3 text-xs leading-5 text-black/65">
+              {client.ndaTemplate}
+            </p>
+          ) : (
+            <p className="text-xs text-black/45">Using the default mutual NDA template.</p>
           )}
         </section>
 

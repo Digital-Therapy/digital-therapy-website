@@ -114,6 +114,7 @@ type VendorRecord = {
   email: string;
   role: string | null;
   companyName: string | null;
+  companyAddress: string | null;
   websiteUrl: string | null;
   personalLinkedin: string | null;
   companySocial: string | null;
@@ -277,6 +278,7 @@ function toDetail(r: VendorRecord, all: VendorRecord[]) {
       email: r.email,
       role: r.role,
       companyName: r.companyName,
+      companyAddress: r.companyAddress,
       websiteUrl: r.websiteUrl,
       personalLinkedin: r.personalLinkedin,
       companySocial: r.companySocial,
@@ -366,6 +368,7 @@ async function ensureStatusTable(pool: pg.Pool) {
   await pool.query(
     `ALTER TABLE dt_site.vendor_status
        ADD COLUMN IF NOT EXISTS company_name text,
+       ADD COLUMN IF NOT EXISTS company_address text,
        ADD COLUMN IF NOT EXISTS website_url text,
        ADD COLUMN IF NOT EXISTS personal_linkedin text,
        ADD COLUMN IF NOT EXISTS company_social text,
@@ -408,6 +411,7 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
     // Admin-curated override (dt_site) wins; falls back to the portal column
     // once Milton adds it. Both are null today for legacy applications.
     companyName: asString(row.dt_company_name) ?? asString(row.companyName),
+    companyAddress: asString(row.dt_company_address) ?? asString(row.companyAddress),
     websiteUrl: asString(row.dt_website_url) ?? asString(row.websiteUrl),
     personalLinkedin: asString(row.dt_personal_linkedin) ?? asString(row.personalLinkedin),
     companySocial: asString(row.dt_company_social) ?? asString(row.companySocial),
@@ -441,7 +445,7 @@ async function loadPortalRecords(pool: pg.Pool): Promise<VendorRecord[]> {
   await ensureStatusTable(pool);
   const { rows } = await pool.query(
     `SELECT va.*, s.status AS dt_status, s.status_notes AS dt_status_notes,
-            s.company_name AS dt_company_name, s.website_url AS dt_website_url,
+            s.company_name AS dt_company_name, s.company_address AS dt_company_address, s.website_url AS dt_website_url,
             s.personal_linkedin AS dt_personal_linkedin, s.company_social AS dt_company_social,
             s.categories AS dt_categories, s.active_engaged AS dt_active_engaged, s.removed AS dt_removed, s.core_team AS dt_core_team
        FROM "VendorApplication" va
@@ -619,6 +623,7 @@ export async function updateVendorStatus(id: string, status: VendorStatus, statu
 
 export type VendorProfileFields = {
   companyName?: string;
+  companyAddress?: string;
   websiteUrl?: string;
   personalLinkedin?: string;
   companySocial?: string;
@@ -632,10 +637,11 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
       await ensureStatusTable(pool);
       await pool.query(
         `INSERT INTO dt_site.vendor_status
-           (vendor_application_id, company_name, website_url, personal_linkedin, company_social, updated_at)
-         VALUES ($1, $2, $3, $4, $5, now())
+           (vendor_application_id, company_name, company_address, website_url, personal_linkedin, company_social, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, now())
          ON CONFLICT (vendor_application_id) DO UPDATE SET
            company_name = EXCLUDED.company_name,
+           company_address = EXCLUDED.company_address,
            website_url = EXCLUDED.website_url,
            personal_linkedin = EXCLUDED.personal_linkedin,
            company_social = EXCLUDED.company_social,
@@ -643,6 +649,7 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
         [
           id,
           fields.companyName || null,
+          fields.companyAddress || null,
           fields.websiteUrl || null,
           fields.personalLinkedin || null,
           fields.companySocial || null,
@@ -761,6 +768,7 @@ function buildDevRecord(input: VendorApplicationData): VendorRecord {
     email: input.email,
     role: input.role || null,
     companyName: input.companyName || null,
+    companyAddress: null,
     websiteUrl: input.websiteUrl || null,
     personalLinkedin: input.personalLinkedin || null,
     companySocial: input.companySocial || null,
@@ -817,6 +825,7 @@ function devUpdateProfile(id: string, fields: VendorProfileFields): boolean {
   const r = devStore.find((x) => x.id === id);
   if (!r) return false;
   r.companyName = fields.companyName || null;
+  r.companyAddress = fields.companyAddress || null;
   r.websiteUrl = fields.websiteUrl || null;
   r.personalLinkedin = fields.personalLinkedin || null;
   r.companySocial = fields.companySocial || null;

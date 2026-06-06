@@ -30,6 +30,7 @@ import {
   getNdaForVendorClient,
   sendNda,
   signNda,
+  voidNda,
 } from "./nda";
 import {
   addComp,
@@ -404,6 +405,7 @@ export const appRouter = router({
         z.object({
           id: z.string().trim().min(1).max(64),
           companyName: z.string().trim().max(240).optional(),
+          companyAddress: z.string().trim().max(400).optional(),
           websiteUrl: z.string().trim().max(500).optional(),
           personalLinkedin: z.string().trim().max(500).optional(),
           companySocial: z.string().trim().max(500).optional(),
@@ -449,6 +451,11 @@ export const appRouter = router({
     adminSendNda: adminProcedure
       .input(z.object({ id: z.string().trim().min(1).max(64), clientId: z.number().int() }))
       .mutation(async ({ input }) => sendNda(input.id, input.clientId)),
+    // Void an in-flight NDA (e.g. one issued on the wrong document) so it can be
+    // reissued with the current client template + fresh signing links.
+    adminVoidNda: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64), clientId: z.number().int() }))
+      .mutation(async ({ input }) => ({ success: await voidNda(input.id, input.clientId) })),
     adminNdaStatus: adminProcedure
       .input(z.object({ id: z.string().trim().min(1).max(64), clientId: z.number().int() }))
       .query(async ({ input }) => getNdaForVendorClient(input.id, input.clientId)),
@@ -500,6 +507,7 @@ export const appRouter = router({
           originator: z.string().trim().max(200).optional(),
           intakeDate: z.string().trim().max(40).optional(),
           referrer: z.string().trim().max(200).optional(),
+          ndaTemplate: z.string().max(60000).optional(),
         }),
       )
       .mutation(async ({ input }) => {
