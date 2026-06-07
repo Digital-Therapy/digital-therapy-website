@@ -100,6 +100,30 @@ export const ROUTE_META: Record<string, RouteMeta> = {
 
 const DEFAULT_META: RouteMeta = ROUTE_META["/404"];
 
+/**
+ * Dynamic, non-prerendered routes whose paths carry an id/token, so they have no
+ * exact ROUTE_META entry. Matched by prefix AFTER exact lookup so they don't
+ * fall back to the "Page Not Found" default. All noindex (private/token-gated).
+ */
+const PREFIX_META: { prefix: string; meta: RouteMeta }[] = [
+  {
+    prefix: "/nda/sign",
+    meta: {
+      title: "Sign your Mutual NDA · Digital Therapy",
+      description: "Review and electronically sign your mutual non-disclosure agreement with Digital Therapy.",
+      noindex: true,
+    },
+  },
+  {
+    prefix: "/vendorlists",
+    meta: { title: "Vendor Lists · Digital Therapy", description: "Digital Therapy admin console.", noindex: true },
+  },
+  {
+    prefix: "/admin",
+    meta: { title: "Admin · Digital Therapy", description: "Digital Therapy admin console.", noindex: true },
+  },
+];
+
 /** Normalize a pathname (strip trailing slash, default to "/"). */
 export function normalizePath(pathname: string): string {
   if (!pathname) return "/";
@@ -108,7 +132,12 @@ export function normalizePath(pathname: string): string {
 }
 
 export function getRouteMeta(pathname: string): RouteMeta {
-  return ROUTE_META[normalizePath(pathname)] ?? DEFAULT_META;
+  const p = normalizePath(pathname);
+  if (ROUTE_META[p]) return ROUTE_META[p];
+  for (const { prefix, meta } of PREFIX_META) {
+    if (p === prefix || p.startsWith(prefix + "/")) return meta;
+  }
+  return DEFAULT_META;
 }
 
 /** Absolute canonical URL for a path. */
