@@ -176,7 +176,7 @@ export async function sendNda(vendorAppId: string, clientId: number) {
   const seed = [
     { party: "client", name: primary?.name ?? client.legalName ?? client.name, email: primary?.email ?? "", title: primary?.title ?? "" },
     { party: "dt", name: DT_ENTITY.signerName, email: DT_ENTITY.signerEmail, title: DT_ENTITY.signerTitle },
-    { party: "vendor", name: vendor.vendor.name, email: vendor.vendor.email, title: vendor.vendor.role ?? "" },
+    { party: "vendor", name: vendor.vendor.name, email: vendor.vendor.email, title: vendor.vendor.title || vendor.vendor.role || "" },
   ];
   for (const s of seed) {
     await pool.query(
