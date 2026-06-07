@@ -409,6 +409,12 @@ export const appRouter = router({
           websiteUrl: z.string().trim().max(500).optional(),
           personalLinkedin: z.string().trim().max(500).optional(),
           companySocial: z.string().trim().max(500).optional(),
+          phone: z.string().trim().max(200).optional(),
+          contactEmail: z.string().trim().max(320).optional(),
+          links: z
+            .array(z.object({ label: z.string().trim().max(80).default(""), url: z.string().trim().max(500) }))
+            .max(20)
+            .optional(),
         }),
       )
       .mutation(async ({ input }) => {

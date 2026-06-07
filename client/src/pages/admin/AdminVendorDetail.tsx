@@ -20,7 +20,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Check, FileText, Loader2, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, FileText, Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link, useLocation, useRoute } from "wouter";
@@ -54,35 +54,51 @@ export default function AdminVendorDetail() {
   const [status, setStatus] = useState<Status>("applied");
   const [notes, setNotes] = useState("");
   const [editingProfile, setEditingProfile] = useState(false);
-  const emptyProfile = { companyName: "", companyAddress: "", websiteUrl: "", personalLinkedin: "", companySocial: "" };
-  const [profile, setProfile] = useState(emptyProfile);
+  type VendorLink = { label: string; url: string };
+  type ProfileForm = {
+    companyName: string;
+    companyAddress: string;
+    websiteUrl: string;
+    personalLinkedin: string;
+    companySocial: string;
+    phone: string;
+    contactEmail: string;
+    links: VendorLink[];
+  };
+  const emptyProfile: ProfileForm = {
+    companyName: "",
+    companyAddress: "",
+    websiteUrl: "",
+    personalLinkedin: "",
+    companySocial: "",
+    phone: "",
+    contactEmail: "",
+    links: [],
+  };
+  const [profile, setProfile] = useState<ProfileForm>(emptyProfile);
   const [categories, setCategories] = useState<string[]>([]);
   const [activeEngaged, setActiveEngaged] = useState(false);
   const [coreTeam, setCoreTeam] = useState(false);
 
   const data = detailQuery.data;
+  const profileFromVendor = (v: NonNullable<typeof data>["vendor"]): ProfileForm => ({
+    companyName: v.companyName ?? "",
+    companyAddress: v.companyAddress ?? "",
+    websiteUrl: v.websiteUrl ?? "",
+    personalLinkedin: v.personalLinkedin ?? "",
+    companySocial: v.companySocial ?? "",
+    phone: v.phone ?? "",
+    contactEmail: v.contactEmail ?? "",
+    links: (v.links ?? []).map((l) => ({ label: l.label ?? "", url: l.url ?? "" })),
+  });
   const syncProfile = () => {
-    if (data?.vendor) {
-      setProfile({
-        companyName: data.vendor.companyName ?? "",
-        companyAddress: data.vendor.companyAddress ?? "",
-        websiteUrl: data.vendor.websiteUrl ?? "",
-        personalLinkedin: data.vendor.personalLinkedin ?? "",
-        companySocial: data.vendor.companySocial ?? "",
-      });
-    }
+    if (data?.vendor) setProfile(profileFromVendor(data.vendor));
   };
   useEffect(() => {
     if (data?.vendor) {
       setStatus(data.vendor.status as Status);
       setNotes(data.vendor.statusNotes ?? "");
-      setProfile({
-        companyName: data.vendor.companyName ?? "",
-        companyAddress: data.vendor.companyAddress ?? "",
-        websiteUrl: data.vendor.websiteUrl ?? "",
-        personalLinkedin: data.vendor.personalLinkedin ?? "",
-        companySocial: data.vendor.companySocial ?? "",
-      });
+      setProfile(profileFromVendor(data.vendor));
       setCategories(data.vendor.categories ?? []);
       setActiveEngaged(data.vendor.activeEngaged ?? false);
       setCoreTeam(data.vendor.coreTeam ?? false);
@@ -390,6 +406,80 @@ export default function AdminVendorDetail() {
                           placeholder="https://linkedin.com/company/… or instagram.com/…"
                           onChange={(v) => setProfile((p) => ({ ...p, companySocial: v }))}
                         />
+                        <EditField
+                          label="Phone"
+                          value={profile.phone}
+                          placeholder="e.g. +1 212-555-0100 (separate multiple with commas)"
+                          onChange={(v) => setProfile((p) => ({ ...p, phone: v }))}
+                        />
+                        <EditField
+                          label="Email"
+                          value={profile.contactEmail}
+                          placeholder="contact@company.com (separate multiple with commas)"
+                          onChange={(v) => setProfile((p) => ({ ...p, contactEmail: v }))}
+                        />
+
+                        {/* Additional websites / links — repeatable */}
+                        <div className="sm:col-span-2">
+                          <div className="mb-1.5 flex items-center justify-between">
+                            <span className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-black/45">
+                              Additional websites / links
+                            </span>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 text-xs text-black/55"
+                              onClick={() => setProfile((p) => ({ ...p, links: [...p.links, { label: "", url: "" }] }))}
+                            >
+                              <Plus className="mr-1 h-3.5 w-3.5" />
+                              Add link
+                            </Button>
+                          </div>
+                          {profile.links.length === 0 ? (
+                            <p className="text-xs text-black/40">No additional links. Click “Add link” to add websites, portfolios, etc.</p>
+                          ) : (
+                            <div className="space-y-2">
+                              {profile.links.map((lnk, i) => (
+                                <div key={i} className="flex items-center gap-2">
+                                  <Input
+                                    value={lnk.label}
+                                    onChange={(e) =>
+                                      setProfile((p) => ({
+                                        ...p,
+                                        links: p.links.map((l, j) => (j === i ? { ...l, label: e.target.value } : l)),
+                                      }))
+                                    }
+                                    placeholder="Label (e.g. Portfolio)"
+                                    className="h-10 w-1/3"
+                                  />
+                                  <Input
+                                    value={lnk.url}
+                                    onChange={(e) =>
+                                      setProfile((p) => ({
+                                        ...p,
+                                        links: p.links.map((l, j) => (j === i ? { ...l, url: e.target.value } : l)),
+                                      }))
+                                    }
+                                    placeholder="https://…"
+                                    className="h-10 flex-1"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      setProfile((p) => ({ ...p, links: p.links.filter((_, j) => j !== i) }))
+                                    }
+                                    aria-label="Remove link"
+                                    className="shrink-0 p-1.5 text-black/40 hover:text-red-600"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
                         <div className="flex gap-2 sm:col-span-2">
                           <Button
                             onClick={() => updateProfile.mutate({ id, ...profile })}
@@ -416,6 +506,11 @@ export default function AdminVendorDetail() {
                         <LinkField label="Website" value={data.vendor.websiteUrl} />
                         <LinkField label="Personal LinkedIn" value={data.vendor.personalLinkedin} />
                         <LinkField label="Company LinkedIn / Instagram" value={data.vendor.companySocial} />
+                        <Field label="Phone" value={data.vendor.phone} />
+                        <Field label="Email" value={data.vendor.contactEmail} />
+                        {(data.vendor.links ?? []).map((lnk, i) => (
+                          <LinkField key={i} label={lnk.label || "Link"} value={lnk.url} />
+                        ))}
                       </div>
                     )}
                   </CardContent>
