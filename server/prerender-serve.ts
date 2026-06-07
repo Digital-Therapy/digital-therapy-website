@@ -20,6 +20,44 @@ export function registerPrerendered(app: Express) {
       : path.resolve(import.meta.dirname, "public");
 
   const notFoundPage = path.join(distPath, "404.html");
+  const indexFile = path.join(distPath, "index.html");
+
+  // Dynamic, SPA-only routes that are intentionally NOT prerendered: the
+  // auth-gated admin console. These must fall through to the SPA shell
+  // (index.html, 200) so the client router renders them — never the prerendered
+  // 404. (The token-gated NDA signing route is handled explicitly below so its
+  // shared links unfurl with a clean, private preview instead of "Page Not
+  // Found".)
+  const spaRoutePrefixes = ["/vendorlists", "/admin"];
+
+  // Inject a clean, private (noindex) preview into the SPA shell for the
+  // token-gated NDA signing page — the shell itself carries no static meta
+  // (it's set client-side), so shared links would otherwise unfurl blank.
+  const SIGN_META = [
+    `<title>Sign your Mutual NDA · Digital Therapy</title>`,
+    `<meta name="description" content="Review and electronically sign your mutual non-disclosure agreement with Digital Therapy." />`,
+    `<meta name="robots" content="noindex, nofollow" />`,
+    `<meta property="og:type" content="website" />`,
+    `<meta property="og:title" content="Sign your Mutual NDA · Digital Therapy" />`,
+    `<meta property="og:description" content="Review and electronically sign your mutual non-disclosure agreement with Digital Therapy." />`,
+    `<meta property="og:image" content="https://www.digitaltherapy.io/og-image.png" />`,
+    `<meta property="og:image:width" content="1200" />`,
+    `<meta property="og:image:height" content="630" />`,
+    `<meta name="twitter:card" content="summary_large_image" />`,
+    `<meta name="twitter:title" content="Sign your Mutual NDA · Digital Therapy" />`,
+    `<meta name="twitter:description" content="Review and electronically sign your mutual non-disclosure agreement with Digital Therapy." />`,
+    `<meta name="twitter:image" content="https://www.digitaltherapy.io/og-image.png" />`,
+  ].join("\n    ");
+  let _signingShell: string | null | undefined;
+  const signingShell = (): string | null => {
+    if (_signingShell !== undefined) return _signingShell;
+    try {
+      _signingShell = fs.readFileSync(indexFile, "utf8").replace("</head>", `  ${SIGN_META}\n  </head>`);
+    } catch {
+      _signingShell = null;
+    }
+    return _signingShell;
+  };
 
   app.get("*", (req: Request, res: Response, next: NextFunction) => {
     const p = req.path;
@@ -29,6 +67,17 @@ export function registerPrerendered(app: Express) {
     // file directly (200) for both /thesis and /thesis/ avoids a 301 to the
     // non-canonical trailing-slash URL.
     if (p === "/" || path.extname(p)) return next();
+
+    // Token-gated NDA signing → serve the SPA shell (200) with injected private
+    // preview meta, so the SPA renders it and shared links unfurl cleanly.
+    if (p === "/nda/sign" || p.startsWith("/nda/sign/")) {
+      const shell = signingShell();
+      if (shell) return res.status(200).type("html").send(shell);
+      return next(); // shell unreadable → plain SPA fallback
+    }
+
+    // Other SPA-only dynamic routes → fall through to the SPA shell (200), not the 404.
+    if (spaRoutePrefixes.some((pre) => p === pre || p.startsWith(pre + "/"))) return next();
 
     const clean = p.replace(/\/+$/, "");
     const file = path.join(distPath, clean, "index.html");
