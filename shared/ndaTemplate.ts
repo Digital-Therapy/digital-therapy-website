@@ -58,6 +58,26 @@ export function renderDefaultBody(p: NdaParties): string {
   return blocks.join("\n\n");
 }
 
+/**
+ * Identify the bold "heading" portion at the start of an NDA paragraph so both
+ * the signing page and the executed PDF emphasize the same text. Returns the
+ * bold head (may be "") and the remaining body. Recognizes the section labels
+ * (Background / Agreement), numbered clause headings ("N. Title."), and the
+ * IN WITNESS WHEREOF lead. (The title is rendered separately.)
+ */
+export function ndaHeadingSplit(paragraph: string): { head: string; rest: string } {
+  const p = paragraph.trim();
+  if (p === "MUTUAL NON-DISCLOSURE AGREEMENT" || p === "Background" || p === "Agreement") {
+    return { head: p, rest: "" };
+  }
+  if (/^IN WITNESS WHEREOF\b/.test(p)) {
+    return { head: "IN WITNESS WHEREOF", rest: p.slice("IN WITNESS WHEREOF".length) };
+  }
+  const m = p.match(/^(\d+\.\s+[^.]+\.)([\s\S]*)$/);
+  if (m) return { head: m[1], rest: m[2] };
+  return { head: "", rest: p };
+}
+
 /** Split a stored NDA body into render-ready paragraphs (first = title). */
 export function ndaBodyParagraphs(body: string): string[] {
   return body

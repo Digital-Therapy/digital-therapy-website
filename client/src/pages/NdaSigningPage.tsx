@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
+import { ndaHeadingSplit } from "@shared/ndaTemplate";
 import { CheckCircle2, Loader2, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { useRoute } from "wouter";
@@ -109,11 +110,15 @@ export default function NdaSigningPage() {
       {/* The agreement */}
       <div className="max-h-[55vh] overflow-y-auto rounded-2xl border border-black/10 bg-white p-6 text-sm leading-6 text-black/80">
         <h1 className="text-center font-display text-2xl tracking-[-0.04em] text-[#111111]">{title}</h1>
-        {bodyParas.map((p, i) => (
-          <p key={i} className="mt-3 whitespace-pre-line">
-            {p}
-          </p>
-        ))}
+        {bodyParas.map((p, i) => {
+          const { head, rest } = ndaHeadingSplit(p);
+          return (
+            <p key={i} className="mt-3 whitespace-pre-line">
+              {head ? <strong className="font-semibold text-[#111111]">{head}</strong> : null}
+              {rest}
+            </p>
+          );
+        })}
       </div>
 
       {/* Sign / status */}

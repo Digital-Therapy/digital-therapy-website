@@ -48,7 +48,11 @@ export function ClientCard({ client, vendors }: { client: ClientRow; vendors: Ve
   const setPrimary = trpc.clients.setPrimaryContact.useMutation(m());
   const setResource = trpc.clients.setResource.useMutation(m());
 
-  const coreTeam = vendors.filter((v) => v.coreTeam);
+  // Originator = whoever on the team introduced the client. Everyone is a vendor,
+  // so offer the full pool (core-team members first), not only those flagged core.
+  const originatorOptions = [...vendors].sort(
+    (a, b) => Number(b.coreTeam) - Number(a.coreTeam) || a.name.localeCompare(b.name),
+  );
   const vendorName = (vid: string) => vendors.find((v) => v.id === vid)?.name ?? "Unknown";
   const assigned = client.resourceIds ?? [];
 
@@ -181,11 +185,17 @@ export function ClientCard({ client, vendors }: { client: ClientRow; vendors: Ve
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="__none__">— None —</SelectItem>
-                    {coreTeam.map((t) => (
-                      <SelectItem key={t.id} value={t.name}>
-                        {t.name}
-                      </SelectItem>
-                    ))}
+                    {(() => {
+                      const seen = new Set<string>();
+                      return originatorOptions
+                        .filter((t) => t.name && !seen.has(t.name) && seen.add(t.name))
+                        .map((t) => (
+                          <SelectItem key={t.id} value={t.name}>
+                            {t.name}
+                            {t.coreTeam ? "  · Core" : ""}
+                          </SelectItem>
+                        ));
+                    })()}
                   </SelectContent>
                 </Select>
               </label>

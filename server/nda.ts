@@ -11,6 +11,7 @@ import {
   DT_ENTITY,
   applyNdaPlaceholders,
   ndaBodyParagraphs,
+  ndaHeadingSplit,
   renderDefaultBody,
   type NdaParties,
 } from "../shared/ndaTemplate";
@@ -364,6 +365,35 @@ export async function buildExecutedPdf(ndaId: number): Promise<string | null> {
     }
     y += opts.gap ?? 6;
   };
+  // Body paragraph with its heading prefix emphasized (bold) inline, wrapping
+  // word-by-word so the heading and running text flow together.
+  const bodyPara = (text: string, opts: { size?: number; gap?: number } = {}) => {
+    const size = opts.size ?? 9.5;
+    const { head } = ndaHeadingSplit(text);
+    const nBold = head ? head.split(/\s+/).length : 0;
+    const words = text.split(/\s+/).filter(Boolean);
+    doc.setFontSize(size);
+    doc.setTextColor(17);
+    const lineH = size + 3;
+    let x = L;
+    ensureSpace(lineH);
+    words.forEach((w, i) => {
+      doc.setFont("helvetica", i < nBold ? "bold" : "normal");
+      const ww = doc.getTextWidth(w);
+      const sp = doc.getTextWidth(" ");
+      if (x > L && x + ww > R) {
+        y += lineH;
+        x = L;
+        if (y > BOTTOM) {
+          doc.addPage();
+          y = 64;
+        }
+      }
+      doc.text(w, x, y);
+      x += ww + sp;
+    });
+    y += lineH + (opts.gap ?? 6);
+  };
 
   // First paragraph is the title (rendered centered/bold); the rest is the body.
   const [title, ...rest] = paragraphs;
@@ -371,7 +401,7 @@ export async function buildExecutedPdf(ndaId: number): Promise<string | null> {
   doc.setFontSize(15);
   doc.text(title ?? "MUTUAL NON-DISCLOSURE AGREEMENT", (L + R) / 2, y, { align: "center" });
   y += 26;
-  for (const p of rest) para(p, { size: 9.5 });
+  for (const p of rest) bodyPara(p, { size: 9.5 });
 
   // Signature blocks: Signature line, Print name, Title, Date — one per party,
   // headed by each party's actual entity name. (The body already ends with its
