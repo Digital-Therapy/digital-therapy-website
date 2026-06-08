@@ -111,6 +111,7 @@ export default function AdminVendorDetail() {
       setCategories(data.vendor.categories ?? []);
       setActiveEngaged(data.vendor.activeEngaged ?? false);
       setCoreTeam(data.vendor.coreTeam ?? false);
+      setOwner(data.vendor.owner ?? false);
     }
   }, [data?.vendor]);
 
@@ -137,6 +138,19 @@ export default function AdminVendorDetail() {
   const toggleCoreTeam = (checked: boolean) => {
     setCoreTeam(checked);
     setCoreTeamMutation.mutate({ id, coreTeam: checked });
+  };
+
+  const [owner, setOwner] = useState(false);
+  const setOwnerMutation = trpc.vendor.adminSetOwner.useMutation({
+    onSuccess: () => {
+      utils.vendor.adminGet.invalidate({ id });
+      utils.vendor.adminGetEngagements.invalidate({ id });
+    },
+    onError: (e) => toast.error(e.message || "Could not update owner flag."),
+  });
+  const toggleOwner = (checked: boolean) => {
+    setOwner(checked);
+    setOwnerMutation.mutate({ id, owner: checked });
   };
 
   const updateCategories = trpc.vendor.adminUpdateCategories.useMutation({
@@ -344,13 +358,20 @@ export default function AdminVendorDetail() {
                   </span>
                 </label>
                 <label className="flex cursor-pointer items-center gap-3 text-sm">
+                  <Checkbox checked={owner} onCheckedChange={(v) => toggleOwner(v === true)} />
+                  <span>
+                    <strong>Digital Therapy owner</strong> — assigned to projects like any vendor, but exempt from
+                    client NDA walls (DT is already a party to those NDAs).
+                  </span>
+                </label>
+                <label className="flex cursor-pointer items-center gap-3 text-sm">
                   <Checkbox checked={activeEngaged} onCheckedChange={(v) => toggleActiveEngaged(v === true)} />
                   <span>This vendor is currently active on live Digital Therapy engagements.</span>
                 </label>
               </CardContent>
             </Card>
 
-            {activeEngaged ? <ActiveClientEngagements vendorId={id} /> : null}
+            {activeEngaged ? <ActiveClientEngagements vendorId={id} ownerExempt={owner} /> : null}
 
             <Tabs defaultValue="profile">
               <TabsList>

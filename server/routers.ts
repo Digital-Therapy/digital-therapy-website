@@ -17,6 +17,7 @@ import {
   listVendorBrief,
   searchVendors,
   setVendorCoreTeam,
+  setVendorOwner,
   setVendorRemoved,
   updateVendorActiveEngaged,
   updateVendorCategories,
@@ -382,6 +383,9 @@ export const appRouter = router({
     adminSetCoreTeam: adminProcedure
       .input(z.object({ id: z.string().trim().min(1).max(64), coreTeam: z.boolean() }))
       .mutation(async ({ input }) => ({ success: await setVendorCoreTeam(input.id, input.coreTeam) })),
+    adminSetOwner: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64), owner: z.boolean() }))
+      .mutation(async ({ input }) => ({ success: await setVendorOwner(input.id, input.owner) })),
     // Brief vendor list for pickers (Originator dropdown, resource checkboxes).
     adminBriefList: adminProcedure.query(async () => listVendorBrief()),
     adminUpdateStatus: adminProcedure

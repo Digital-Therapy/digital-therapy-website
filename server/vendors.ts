@@ -96,6 +96,7 @@ export type VendorListRow = {
   status: VendorStatus;
   removed: boolean;
   coreTeam: boolean;
+  owner: boolean;
   hourlyRate: string | null;
   hoursPerMonth: string | null;
   createdAt: Date;
@@ -142,6 +143,9 @@ type VendorRecord = {
   activeEngaged: boolean;
   removed: boolean;
   coreTeam: boolean;
+  /** Owner of Digital Therapy: assigned like any vendor, but exempt from
+   * client NDA walls (DT is already a party to those NDAs). */
+  owner: boolean;
   createdAt: Date;
   skills: string[];
   sectors: string[];
@@ -265,6 +269,7 @@ function toListRow(r: VendorRecord): VendorListRow {
     status: r.status,
     removed: r.removed,
     coreTeam: r.coreTeam,
+    owner: r.owner,
     hourlyRate: r.hourlyRate,
     hoursPerMonth: r.hoursPerMonth,
     createdAt: r.createdAt,
@@ -306,6 +311,7 @@ function toDetail(r: VendorRecord, all: VendorRecord[]) {
       activeEngaged: r.activeEngaged,
       removed: r.removed,
       coreTeam: r.coreTeam,
+      owner: r.owner,
       createdAt: r.createdAt,
     },
     skills: r.skills.map((skill, i) => ({ id: i, skill })),
@@ -392,7 +398,8 @@ async function ensureStatusTable(pool: pg.Pool) {
        ADD COLUMN IF NOT EXISTS categories text[],
        ADD COLUMN IF NOT EXISTS active_engaged boolean NOT NULL DEFAULT false,
        ADD COLUMN IF NOT EXISTS removed boolean NOT NULL DEFAULT false,
-       ADD COLUMN IF NOT EXISTS core_team boolean NOT NULL DEFAULT false`,
+       ADD COLUMN IF NOT EXISTS core_team boolean NOT NULL DEFAULT false,
+       ADD COLUMN IF NOT EXISTS owner boolean NOT NULL DEFAULT false`,
   );
   _statusReady = true;
 }
@@ -462,6 +469,7 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
     activeEngaged: row.dt_active_engaged === true,
     removed: row.dt_removed === true,
     coreTeam: row.dt_core_team === true,
+    owner: row.dt_owner === true,
     createdAt: row.createdAt instanceof Date ? row.createdAt : new Date(row.createdAt),
     skills: [...skillsArr, ...parsedExtra],
     sectors: parseJsonArray(row.sectors).map((s) => String(s)).filter(Boolean),
@@ -480,7 +488,7 @@ async function loadPortalRecords(pool: pg.Pool): Promise<VendorRecord[]> {
             s.personal_linkedin AS dt_personal_linkedin, s.company_social AS dt_company_social,
             s.phone AS dt_phone, s.primary_email AS dt_primary_email, s.alt_emails AS dt_alt_emails,
             s.title AS dt_title, s.links AS dt_links,
-            s.categories AS dt_categories, s.active_engaged AS dt_active_engaged, s.removed AS dt_removed, s.core_team AS dt_core_team
+            s.categories AS dt_categories, s.active_engaged AS dt_active_engaged, s.removed AS dt_removed, s.core_team AS dt_core_team, s.owner AS dt_owner
        FROM "VendorApplication" va
        LEFT JOIN dt_site.vendor_status s ON s.vendor_application_id = va.id`,
   );
@@ -619,6 +627,40 @@ export async function setVendorCoreTeam(id: string, coreTeam: boolean): Promise<
     return true;
   }
   return false;
+}
+
+/** Flag a vendor as the Digital Therapy owner — assigned like any vendor, but
+ * exempt from client NDA walls (DT is already a party to those NDAs). */
+export async function setVendorOwner(id: string, owner: boolean): Promise<boolean> {
+  const pool = getPool();
+  if (pool) {
+    try {
+      await ensureStatusTable(pool);
+      await pool.query(
+        `INSERT INTO dt_site.vendor_status (vendor_application_id, owner, updated_at)
+         VALUES ($1, $2, now())
+         ON CONFLICT (vendor_application_id)
+         DO UPDATE SET owner = EXCLUDED.owner, updated_at = now()`,
+        [id, owner],
+      );
+      return true;
+    } catch (error) {
+      console.warn("[Vendors] Failed to set owner flag:", error);
+      return false;
+    }
+  }
+  if (ENV.devPreview) {
+    const r = devStore.find((x) => x.id === id);
+    if (!r) return false;
+    r.owner = owner;
+    return true;
+  }
+  return false;
+}
+
+/** Whether a vendor is the DT owner (NDA-wall exempt). */
+export async function isVendorOwner(id: string): Promise<boolean> {
+  return (await loadRecords()).some((r) => r.id === id && r.owner);
 }
 
 /** Brief list of all non-removed vendors for pickers (Originator dropdown,
@@ -859,6 +901,7 @@ function buildDevRecord(input: VendorApplicationData): VendorRecord {
     activeEngaged: false,
     removed: false,
     coreTeam: false,
+    owner: false,
     createdAt: now,
     skills: [...skills, ...parseSkillTags(input.additionalSkills ?? "", skills)],
     sectors: input.sectors ?? [],

@@ -122,6 +122,9 @@ export async function sendNda(vendorAppId: string, clientId: number) {
   const client = await getClientById(clientId);
   const vendor = await getVendorById(vendorAppId);
   if (!client || !vendor) return null;
+  // The Digital Therapy owner is already a party to every tri-party NDA, so they
+  // are exempt from client NDA walls — never generate a vendor NDA for them.
+  if (vendor.vendor.owner) return { ndaId: 0, status: "waived", invited: [], missingEmail: [], signers: [] };
   await ensureNdaSchema(pool);
 
   const primary = client.contacts.find((c) => c.isPrimary) ?? client.contacts[0] ?? null;

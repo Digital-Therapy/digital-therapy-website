@@ -3,7 +3,7 @@
  * compensation arrangements per vendor-project. All in our isolated dt_site
  * schema (the portal's tables are never touched). Reuses the vendors.ts pool.
  */
-import { getPool } from "./vendors";
+import { getPool, isVendorOwner } from "./vendors";
 
 export const COMP_TYPES = ["fixed_fee", "fixed_hours", "time_materials", "success_fee"] as const;
 export type CompType = (typeof COMP_TYPES)[number];
@@ -375,6 +375,9 @@ export async function deleteClient(id: number): Promise<boolean> {
 export async function requireClientNda(vendorAppId: string, clientId: number): Promise<boolean> {
   const pool = await ensureTables();
   if (!pool) return false;
+  // The DT owner is exempt from client NDA walls — don't create a pending NDA
+  // for them (defense in depth; the UI also skips the prompt for the owner).
+  if (await isVendorOwner(vendorAppId)) return true;
   await pool.query(`UPDATE dt_site.client SET nda_wall = true WHERE id = $1`, [clientId]);
   await pool.query(
     `INSERT INTO dt_site.vendor_nda (vendor_application_id, client_id, status)

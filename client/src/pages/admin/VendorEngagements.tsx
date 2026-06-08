@@ -74,7 +74,7 @@ function fmt(v: unknown): string {
   return Number.isFinite(n) ? n.toLocaleString() : String(v);
 }
 
-export function ActiveClientEngagements({ vendorId }: { vendorId: string }) {
+export function ActiveClientEngagements({ vendorId, ownerExempt = false }: { vendorId: string; ownerExempt?: boolean }) {
   const utils = trpc.useUtils();
   const engagements = trpc.vendor.adminGetEngagements.useQuery({ id: vendorId });
   const setAssignment = trpc.vendor.adminSetAssignment.useMutation({
@@ -106,7 +106,8 @@ export function ActiveClientEngagements({ vendorId }: { vendorId: string }) {
       next.has(client.id) ? next.delete(client.id) : next.add(client.id);
       return next;
     });
-    if (!expanded.has(client.id) && !client.ndaWall && !askedClients.has(client.id)) {
+    // The DT owner is exempt from client NDA walls — never prompt to require one.
+    if (!ownerExempt && !expanded.has(client.id) && !client.ndaWall && !askedClients.has(client.id)) {
       setAskedClients((prev) => new Set(prev).add(client.id));
       setNdaPrompt({ id: client.id, name: client.name });
     }
@@ -185,7 +186,16 @@ export function ActiveClientEngagements({ vendorId }: { vendorId: string }) {
 
                 {open ? (
                   <div className="space-y-1 border-t border-black/8 px-3 py-2">
-                    {client.ndaWall ? <ClientNdaPanel vendorId={vendorId} clientId={client.id} /> : null}
+                    {client.ndaWall ? (
+                      ownerExempt ? (
+                        <div className="mb-2 flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2 text-xs text-emerald-800">
+                          <ShieldCheck className="h-3.5 w-3.5" />
+                          NDA waived — Digital Therapy owner is already a party to this client's NDA.
+                        </div>
+                      ) : (
+                        <ClientNdaPanel vendorId={vendorId} clientId={client.id} />
+                      )
+                    ) : null}
                     {client.projects.length === 0 ? (
                       <p className="py-1 text-xs text-black/45">No active projects for this client.</p>
                     ) : (
