@@ -4,7 +4,7 @@
 //   1. serves dist/public locally (SPA fallback, /api/* -> 404 so tRPC fails fast)
 //   2. uses Playwright/chromium to render each route to static HTML, so non-JS
 //      crawlers + social scrapers get full content + React-19-hoisted meta tags
-//   3. renders a branded 1200x630 og-image.png
+//   3. renders a branded 1200x630 og-image-v2.png
 //   4. writes sitemap.xml
 //
 // Chromium is provided in the Docker build stage via
@@ -139,9 +139,9 @@ async function renderOgImage(browser) {
   await page.evaluate(() => document.fonts && document.fonts.ready);
   await page.waitForTimeout(300);
   const el = await page.$(".card");
-  await el.screenshot({ path: join(DIST, "og-image.png") });
+  await el.screenshot({ path: join(DIST, "og-image-v2.png") });
   await page.close();
-  console.log("  rendered og-image.png (1200x630)");
+  console.log("  rendered og-image-v2.png (1200x630)");
 }
 
 async function writeSitemap() {
