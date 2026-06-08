@@ -109,8 +109,8 @@ const PREFIX_META: { prefix: string; meta: RouteMeta }[] = [
   {
     prefix: "/nda/sign",
     meta: {
-      title: "Sign your Mutual NDA · Digital Therapy",
-      description: "Review and electronically sign your mutual non-disclosure agreement with Digital Therapy.",
+      title: "Client NDA · Digital Therapy",
+      description: "Review and electronically sign the confidential NDA for your Digital Therapy engagement.",
       noindex: true,
     },
   },

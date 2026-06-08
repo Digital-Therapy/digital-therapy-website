@@ -31,28 +31,42 @@ export function registerPrerendered(app: Express) {
   const spaRoutePrefixes = ["/vendorlists", "/admin"];
 
   // Inject a clean, private (noindex) preview into the SPA shell for the
-  // token-gated NDA signing page — the shell itself carries no static meta
-  // (it's set client-side), so shared links would otherwise unfurl blank.
+  // token-gated NDA signing page. The prerender step bakes the HOME page's meta
+  // into index.html, so we must STRIP those tags first, then inject the signing
+  // tags — otherwise link unfurlers show the homepage title/description.
+  const SIGN_TITLE = "Client NDA · Digital Therapy";
+  const SIGN_DESC = "Review and electronically sign the confidential NDA for your Digital Therapy engagement.";
+  const SIGN_IMG = "https://www.digitaltherapy.io/og-image.png";
   const SIGN_META = [
-    `<title>Sign your Mutual NDA · Digital Therapy</title>`,
-    `<meta name="description" content="Review and electronically sign your mutual non-disclosure agreement with Digital Therapy." />`,
+    `<title>${SIGN_TITLE}</title>`,
+    `<meta name="description" content="${SIGN_DESC}" />`,
     `<meta name="robots" content="noindex, nofollow" />`,
     `<meta property="og:type" content="website" />`,
-    `<meta property="og:title" content="Sign your Mutual NDA · Digital Therapy" />`,
-    `<meta property="og:description" content="Review and electronically sign your mutual non-disclosure agreement with Digital Therapy." />`,
-    `<meta property="og:image" content="https://www.digitaltherapy.io/og-image.png" />`,
+    `<meta property="og:title" content="${SIGN_TITLE}" />`,
+    `<meta property="og:description" content="${SIGN_DESC}" />`,
+    `<meta property="og:image" content="${SIGN_IMG}" />`,
     `<meta property="og:image:width" content="1200" />`,
     `<meta property="og:image:height" content="630" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
-    `<meta name="twitter:title" content="Sign your Mutual NDA · Digital Therapy" />`,
-    `<meta name="twitter:description" content="Review and electronically sign your mutual non-disclosure agreement with Digital Therapy." />`,
-    `<meta name="twitter:image" content="https://www.digitaltherapy.io/og-image.png" />`,
+    `<meta name="twitter:title" content="${SIGN_TITLE}" />`,
+    `<meta name="twitter:description" content="${SIGN_DESC}" />`,
+    `<meta name="twitter:image" content="${SIGN_IMG}" />`,
   ].join("\n    ");
+  // Remove the baked-in homepage tags so they don't win over the signing tags.
+  const stripBakedMeta = (html: string): string =>
+    html
+      .replace(/<title>[\s\S]*?<\/title>/i, "")
+      .replace(/<meta\s+name=["']description["'][^>]*>/gi, "")
+      .replace(/<meta\s+name=["']robots["'][^>]*>/gi, "")
+      .replace(/<link\s+rel=["']canonical["'][^>]*>/gi, "")
+      .replace(/<meta\s+property=["']og:[^"']*["'][^>]*>/gi, "")
+      .replace(/<meta\s+name=["']twitter:[^"']*["'][^>]*>/gi, "");
   let _signingShell: string | null | undefined;
   const signingShell = (): string | null => {
     if (_signingShell !== undefined) return _signingShell;
     try {
-      _signingShell = fs.readFileSync(indexFile, "utf8").replace("</head>", `  ${SIGN_META}\n  </head>`);
+      const html = stripBakedMeta(fs.readFileSync(indexFile, "utf8"));
+      _signingShell = html.replace("</head>", `  ${SIGN_META}\n  </head>`);
     } catch {
       _signingShell = null;
     }
