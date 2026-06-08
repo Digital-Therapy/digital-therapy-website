@@ -418,6 +418,7 @@ export const appRouter = router({
           primaryEmail: z.string().trim().max(320).optional(),
           altEmails: z.array(z.string().trim().max(320)).max(20).optional(),
           title: z.string().trim().max(160).optional(),
+          hourlyRate: z.string().trim().max(120).optional(),
           links: z
             .array(z.object({ label: z.string().trim().max(80).default(""), url: z.string().trim().max(500) }))
             .max(20)

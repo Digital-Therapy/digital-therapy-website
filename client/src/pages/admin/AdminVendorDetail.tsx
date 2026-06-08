@@ -66,6 +66,7 @@ export default function AdminVendorDetail() {
     primaryEmail: string;
     altEmails: string[];
     title: string;
+    hourlyRate: string;
     links: VendorLink[];
   };
   const emptyProfile: ProfileForm = {
@@ -79,6 +80,7 @@ export default function AdminVendorDetail() {
     primaryEmail: "",
     altEmails: [],
     title: "",
+    hourlyRate: "",
     links: [],
   };
   const [profile, setProfile] = useState<ProfileForm>(emptyProfile);
@@ -98,6 +100,7 @@ export default function AdminVendorDetail() {
     primaryEmail: v.email ?? "",
     altEmails: v.altEmails ?? [],
     title: v.title ?? "",
+    hourlyRate: v.hourlyRate ?? "",
     links: (v.links ?? []).map((l) => ({ label: l.label ?? "", url: l.url ?? "" })),
   });
   const syncProfile = () => {
@@ -506,6 +509,12 @@ export default function AdminVendorDetail() {
                           value={profile.title}
                           placeholder="e.g. Managing Member, Owner, President"
                           onChange={(v) => setProfile((p) => ({ ...p, title: v }))}
+                        />
+                        <EditField
+                          label="Hourly rate (override)"
+                          value={profile.hourlyRate}
+                          placeholder="e.g. $150/hr — overrides what the vendor entered"
+                          onChange={(v) => setProfile((p) => ({ ...p, hourlyRate: v }))}
                         />
 
                         {/* Additional websites / links — repeatable */}

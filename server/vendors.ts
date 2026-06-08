@@ -394,6 +394,7 @@ async function ensureStatusTable(pool: pg.Pool) {
        ADD COLUMN IF NOT EXISTS primary_email text,
        ADD COLUMN IF NOT EXISTS alt_emails jsonb NOT NULL DEFAULT '[]'::jsonb,
        ADD COLUMN IF NOT EXISTS title text,
+       ADD COLUMN IF NOT EXISTS hourly_rate text,
        ADD COLUMN IF NOT EXISTS links jsonb NOT NULL DEFAULT '[]'::jsonb,
        ADD COLUMN IF NOT EXISTS categories text[],
        ADD COLUMN IF NOT EXISTS active_engaged boolean NOT NULL DEFAULT false,
@@ -454,9 +455,11 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
       .filter((l) => l.url),
     personalBio: asString(row.personalBio),
     companyCv: asString(row.companyCv),
-    hourlyRate: asString(row.hourlyRate),
+    // Admin hourly-rate override (dt_site) wins over what the vendor entered;
+    // the numeric (used for the 2x export prefill) is parsed from the effective.
+    hourlyRate: asString(row.dt_hourly_rate)?.trim() || asString(row.hourlyRate),
     hoursPerMonth: asString(row.hoursPerMonth),
-    hourlyRateNumeric: parseFirstInt(asString(row.hourlyRate)),
+    hourlyRateNumeric: parseFirstInt(asString(row.dt_hourly_rate)?.trim() || asString(row.hourlyRate)),
     hoursPerMonthNumeric: parseFirstInt(asString(row.hoursPerMonth)),
     availabilityNotes: asString(row.availabilityNotes),
     additionalSkills,
@@ -487,7 +490,7 @@ async function loadPortalRecords(pool: pg.Pool): Promise<VendorRecord[]> {
             s.company_name AS dt_company_name, s.company_address AS dt_company_address, s.website_url AS dt_website_url,
             s.personal_linkedin AS dt_personal_linkedin, s.company_social AS dt_company_social,
             s.phone AS dt_phone, s.primary_email AS dt_primary_email, s.alt_emails AS dt_alt_emails,
-            s.title AS dt_title, s.links AS dt_links,
+            s.title AS dt_title, s.hourly_rate AS dt_hourly_rate, s.links AS dt_links,
             s.categories AS dt_categories, s.active_engaged AS dt_active_engaged, s.removed AS dt_removed, s.core_team AS dt_core_team, s.owner AS dt_owner
        FROM "VendorApplication" va
        LEFT JOIN dt_site.vendor_status s ON s.vendor_application_id = va.id`,
@@ -710,6 +713,8 @@ export type VendorProfileFields = {
   /** Additional emails on top of the primary. */
   altEmails?: string[];
   title?: string;
+  /** Admin override of the vendor-entered hourly rate. */
+  hourlyRate?: string;
   links?: VendorLink[];
 };
 
@@ -733,8 +738,8 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
       await ensureStatusTable(pool);
       await pool.query(
         `INSERT INTO dt_site.vendor_status
-           (vendor_application_id, full_name, company_name, company_address, website_url, personal_linkedin, company_social, phone, primary_email, alt_emails, title, links, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::jsonb, $11, $12::jsonb, now())
+           (vendor_application_id, full_name, company_name, company_address, website_url, personal_linkedin, company_social, phone, primary_email, alt_emails, title, hourly_rate, links, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::jsonb, $11, $12, $13::jsonb, now())
          ON CONFLICT (vendor_application_id) DO UPDATE SET
            full_name = EXCLUDED.full_name,
            company_name = EXCLUDED.company_name,
@@ -746,6 +751,7 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
            primary_email = EXCLUDED.primary_email,
            alt_emails = EXCLUDED.alt_emails,
            title = EXCLUDED.title,
+           hourly_rate = EXCLUDED.hourly_rate,
            links = EXCLUDED.links,
            updated_at = now()`,
         [
@@ -760,6 +766,7 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
           fields.primaryEmail || null,
           JSON.stringify(cleanEmails(fields.altEmails)),
           fields.title || null,
+          fields.hourlyRate || null,
           JSON.stringify(cleanLinks(fields.links)),
         ],
       );
@@ -947,6 +954,10 @@ function devUpdateProfile(id: string, fields: VendorProfileFields): boolean {
   if (fields.primaryEmail && fields.primaryEmail.trim()) r.email = fields.primaryEmail.trim();
   r.altEmails = cleanEmails(fields.altEmails);
   r.title = fields.title || null;
+  if (fields.hourlyRate !== undefined) {
+    r.hourlyRate = fields.hourlyRate || null;
+    r.hourlyRateNumeric = parseFirstInt(r.hourlyRate);
+  }
   r.links = cleanLinks(fields.links);
   return true;
 }
