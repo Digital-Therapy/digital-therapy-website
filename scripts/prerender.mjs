@@ -128,7 +128,7 @@ const OG_CARD_HTML = `<!doctype html><html><head><meta charset="utf-8">
     </div>
     <div class="row">
       <p class="sub">One trained team for data, workflow, reporting, automation &amp; security.</p>
-      <div class="brand"><span class="dot"></span>dt.dtapps.io</div>
+      <div class="brand"><span class="dot"></span>digitaltherapy.io</div>
     </div>
   </div>
 </body></html>`;
