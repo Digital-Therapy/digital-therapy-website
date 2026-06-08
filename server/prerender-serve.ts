@@ -53,14 +53,19 @@ export function registerPrerendered(app: Express) {
     `<meta name="twitter:image" content="${SIGN_IMG}" />`,
   ].join("\n    ");
   // Remove the baked-in homepage tags so they don't win over the signing tags.
+  // The title match is bounded with [^<] (NOT [\s\S]) so it can't start at the
+  // literal "<title>" inside the index.html template comment and run to the real
+  // </title>, which would swallow the <script> bundle in between (blank page).
+  // Meta/link matches allow other attributes first (e.g. data-loc) but never
+  // cross a ">", so they only ever remove a single tag.
   const stripBakedMeta = (html: string): string =>
     html
-      .replace(/<title>[\s\S]*?<\/title>/i, "")
-      .replace(/<meta\s+name=["']description["'][^>]*>/gi, "")
-      .replace(/<meta\s+name=["']robots["'][^>]*>/gi, "")
-      .replace(/<link\s+rel=["']canonical["'][^>]*>/gi, "")
-      .replace(/<meta\s+property=["']og:[^"']*["'][^>]*>/gi, "")
-      .replace(/<meta\s+name=["']twitter:[^"']*["'][^>]*>/gi, "");
+      .replace(/<title>[^<]*<\/title>/i, "")
+      .replace(/<meta\b[^>]*\bname=["']description["'][^>]*>/gi, "")
+      .replace(/<meta\b[^>]*\bname=["']robots["'][^>]*>/gi, "")
+      .replace(/<link\b[^>]*\brel=["']canonical["'][^>]*>/gi, "")
+      .replace(/<meta\b[^>]*\bproperty=["']og:[^"']*["'][^>]*>/gi, "")
+      .replace(/<meta\b[^>]*\bname=["']twitter:[^"']*["'][^>]*>/gi, "");
   let _signingShell: string | null | undefined;
   const signingShell = (): string | null => {
     if (_signingShell !== undefined) return _signingShell;
