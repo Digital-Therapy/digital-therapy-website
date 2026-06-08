@@ -56,6 +56,7 @@ export default function AdminVendorDetail() {
   const [editingProfile, setEditingProfile] = useState(false);
   type VendorLink = { label: string; url: string };
   type ProfileForm = {
+    fullName: string;
     companyName: string;
     companyAddress: string;
     websiteUrl: string;
@@ -67,6 +68,7 @@ export default function AdminVendorDetail() {
     links: VendorLink[];
   };
   const emptyProfile: ProfileForm = {
+    fullName: "",
     companyName: "",
     companyAddress: "",
     websiteUrl: "",
@@ -84,6 +86,7 @@ export default function AdminVendorDetail() {
 
   const data = detailQuery.data;
   const profileFromVendor = (v: NonNullable<typeof data>["vendor"]): ProfileForm => ({
+    fullName: v.name ?? "",
     companyName: v.companyName ?? "",
     companyAddress: v.companyAddress ?? "",
     websiteUrl: v.websiteUrl ?? "",
@@ -380,6 +383,12 @@ export default function AdminVendorDetail() {
                     {editingProfile ? (
                       <div className="grid gap-4 sm:grid-cols-2">
                         <EditField
+                          label="Full name"
+                          value={profile.fullName}
+                          placeholder="e.g. Jonathan Green"
+                          onChange={(v) => setProfile((p) => ({ ...p, fullName: v }))}
+                        />
+                        <EditField
                           label="Company name"
                           value={profile.companyName}
                           placeholder="Company name"
@@ -416,9 +425,9 @@ export default function AdminVendorDetail() {
                           onChange={(v) => setProfile((p) => ({ ...p, phone: v }))}
                         />
                         <EditField
-                          label="Email"
+                          label="Alternative emails"
                           value={profile.contactEmail}
-                          placeholder="contact@company.com (separate multiple with commas)"
+                          placeholder="alt@company.com (separate multiple with commas)"
                           onChange={(v) => setProfile((p) => ({ ...p, contactEmail: v }))}
                         />
                         <EditField
@@ -516,7 +525,7 @@ export default function AdminVendorDetail() {
                         <LinkField label="Personal LinkedIn" value={data.vendor.personalLinkedin} />
                         <LinkField label="Company LinkedIn / Instagram" value={data.vendor.companySocial} />
                         <Field label="Phone" value={data.vendor.phone} />
-                        <Field label="Email" value={data.vendor.contactEmail} />
+                        <Field label="Alternative emails" value={data.vendor.contactEmail} />
                         <Field label="Title" value={data.vendor.title} />
                         {(data.vendor.links ?? []).map((lnk, i) => (
                           <LinkField key={i} label={lnk.label || "Link"} value={lnk.url} />

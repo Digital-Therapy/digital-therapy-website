@@ -377,6 +377,7 @@ async function ensureStatusTable(pool: pg.Pool) {
   // portal app is never modified. Idempotent.
   await pool.query(
     `ALTER TABLE dt_site.vendor_status
+       ADD COLUMN IF NOT EXISTS full_name text,
        ADD COLUMN IF NOT EXISTS company_name text,
        ADD COLUMN IF NOT EXISTS company_address text,
        ADD COLUMN IF NOT EXISTS website_url text,
@@ -419,7 +420,10 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
     vendorTypeLabel,
     appliedCategory: deriveCategory(vendorTypeLabel),
     categories: effectiveCategories(vendorTypeLabel, dtCategories),
-    name: String(row.name ?? ""),
+    // Admin full-name override (dt_site) wins over the portal application name,
+    // so typos / partial entries (e.g. "Jonathan" -> "Jonathan Green") are fixed
+    // everywhere (list, search, NDA, exports). Falls back to the portal name.
+    name: asString(row.dt_full_name)?.trim() || String(row.name ?? ""),
     email: String(row.email ?? ""),
     role: asString(row.role),
     // Admin-curated override (dt_site) wins; falls back to the portal column
@@ -465,6 +469,7 @@ async function loadPortalRecords(pool: pg.Pool): Promise<VendorRecord[]> {
   await ensureStatusTable(pool);
   const { rows } = await pool.query(
     `SELECT va.*, s.status AS dt_status, s.status_notes AS dt_status_notes,
+            s.full_name AS dt_full_name,
             s.company_name AS dt_company_name, s.company_address AS dt_company_address, s.website_url AS dt_website_url,
             s.personal_linkedin AS dt_personal_linkedin, s.company_social AS dt_company_social,
             s.phone AS dt_phone, s.contact_email AS dt_contact_email, s.title AS dt_title, s.links AS dt_links,
@@ -644,6 +649,7 @@ export async function updateVendorStatus(id: string, status: VendorStatus, statu
 
 export type VendorLink = { label: string; url: string };
 export type VendorProfileFields = {
+  fullName?: string;
   companyName?: string;
   companyAddress?: string;
   websiteUrl?: string;
@@ -670,9 +676,10 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
       await ensureStatusTable(pool);
       await pool.query(
         `INSERT INTO dt_site.vendor_status
-           (vendor_application_id, company_name, company_address, website_url, personal_linkedin, company_social, phone, contact_email, title, links, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::jsonb, now())
+           (vendor_application_id, full_name, company_name, company_address, website_url, personal_linkedin, company_social, phone, contact_email, title, links, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11::jsonb, now())
          ON CONFLICT (vendor_application_id) DO UPDATE SET
+           full_name = EXCLUDED.full_name,
            company_name = EXCLUDED.company_name,
            company_address = EXCLUDED.company_address,
            website_url = EXCLUDED.website_url,
@@ -685,6 +692,7 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
            updated_at = now()`,
         [
           id,
+          fields.fullName || null,
           fields.companyName || null,
           fields.companyAddress || null,
           fields.websiteUrl || null,
@@ -869,6 +877,7 @@ function devUpdateStatus(id: string, status: VendorStatus, statusNotes?: string)
 function devUpdateProfile(id: string, fields: VendorProfileFields): boolean {
   const r = devStore.find((x) => x.id === id);
   if (!r) return false;
+  if (fields.fullName && fields.fullName.trim()) r.name = fields.fullName.trim();
   r.companyName = fields.companyName || null;
   r.companyAddress = fields.companyAddress || null;
   r.websiteUrl = fields.websiteUrl || null;

@@ -404,6 +404,7 @@ export const appRouter = router({
       .input(
         z.object({
           id: z.string().trim().min(1).max(64),
+          fullName: z.string().trim().max(160).optional(),
           companyName: z.string().trim().max(240).optional(),
           companyAddress: z.string().trim().max(400).optional(),
           websiteUrl: z.string().trim().max(500).optional(),
