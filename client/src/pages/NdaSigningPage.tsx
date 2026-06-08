@@ -27,6 +27,7 @@ export default function NdaSigningPage() {
 
   const [signature, setSignature] = useState("");
   const [consent, setConsent] = useState(false);
+  const [authorityCert, setAuthorityCert] = useState(false);
   const [justSigned, setJustSigned] = useState(false);
 
   const sign = trpc.nda.sign.useMutation({
@@ -72,10 +73,13 @@ export default function NdaSigningPage() {
   const [title, ...bodyParas] = data.bodyParagraphs;
   const alreadySigned = data.signed || justSigned;
   const fullyExecuted = data.status === "completed";
+  const needsAuthorityCert = data.requiresAuthorityCert;
+  const vendorCompany = data.parties.vendorCompany || "your company";
   const canSign =
     signature.trim().length > 0 &&
     signature.trim().toLowerCase() === data.signerName.trim().toLowerCase() &&
     consent &&
+    (!needsAuthorityCert || authorityCert) &&
     !sign.isPending;
 
   return shell(
@@ -145,6 +149,15 @@ export default function NdaSigningPage() {
               legal equivalent of my handwritten signature and is binding.
             </span>
           </label>
+          {needsAuthorityCert ? (
+            <label className="flex cursor-pointer items-start gap-3 rounded-xl bg-[#0A65FF]/5 p-3 text-sm leading-6 text-black/80">
+              <Checkbox checked={authorityCert} onCheckedChange={(v) => setAuthorityCert(v === true)} className="mt-1" />
+              <span>
+                I certify that I am authorized to sign this Agreement on behalf of <strong>{vendorCompany}</strong>, and
+                that I own at least 20% of it.
+              </span>
+            </label>
+          ) : null}
           <label className="block text-sm font-semibold text-black/74">
             Signature — type your full name exactly: <span className="text-black/55">{data.signerName}</span>
             <Input
@@ -158,7 +171,13 @@ export default function NdaSigningPage() {
           {sign.isError ? <p className="text-sm text-red-600">Something went wrong. Please try again.</p> : null}
           <Button
             disabled={!canSign}
-            onClick={() => sign.mutate({ token, signatureText: signature.trim() })}
+            onClick={() =>
+              sign.mutate({
+                token,
+                signatureText: signature.trim(),
+                ...(needsAuthorityCert ? { certifiedAuthority: authorityCert } : {}),
+              })
+            }
             size="lg"
             className="w-full"
           >

@@ -64,7 +64,6 @@ export default function AdminVendorDetail() {
     phone: string;
     contactEmail: string;
     title: string;
-    signingAuthority: boolean;
     links: VendorLink[];
   };
   const emptyProfile: ProfileForm = {
@@ -76,7 +75,6 @@ export default function AdminVendorDetail() {
     phone: "",
     contactEmail: "",
     title: "",
-    signingAuthority: false,
     links: [],
   };
   const [profile, setProfile] = useState<ProfileForm>(emptyProfile);
@@ -94,7 +92,6 @@ export default function AdminVendorDetail() {
     phone: v.phone ?? "",
     contactEmail: v.contactEmail ?? "",
     title: v.title ?? "",
-    signingAuthority: v.signingAuthority ?? false,
     links: (v.links ?? []).map((l) => ({ label: l.label ?? "", url: l.url ?? "" })),
   });
   const syncProfile = () => {
@@ -431,18 +428,6 @@ export default function AdminVendorDetail() {
                           onChange={(v) => setProfile((p) => ({ ...p, title: v }))}
                         />
 
-                        {/* Signing-authority certification */}
-                        <label className="flex cursor-pointer items-start gap-2.5 rounded-lg border border-black/10 bg-white p-3 sm:col-span-2">
-                          <Checkbox
-                            checked={profile.signingAuthority}
-                            onCheckedChange={(v) => setProfile((p) => ({ ...p, signingAuthority: v === true }))}
-                            className="mt-0.5"
-                          />
-                          <span className="text-sm leading-5 text-black/75">
-                            Certifies they are authorized to sign on behalf of the company and own at least 20% of it.
-                          </span>
-                        </label>
-
                         {/* Additional websites / links — repeatable */}
                         <div className="sm:col-span-2">
                           <div className="mb-1.5 flex items-center justify-between">
@@ -533,21 +518,6 @@ export default function AdminVendorDetail() {
                         <Field label="Phone" value={data.vendor.phone} />
                         <Field label="Email" value={data.vendor.contactEmail} />
                         <Field label="Title" value={data.vendor.title} />
-                        <div className="rounded-lg border border-black/10 bg-white p-3 sm:col-span-2">
-                          <div className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-black/45">
-                            Signing authority
-                          </div>
-                          <div className="mt-1 flex items-center gap-1.5 text-sm">
-                            {data.vendor.signingAuthority ? (
-                              <>
-                                <Check className="h-4 w-4 text-emerald-600" />
-                                <span className="text-black/80">Certified — authorized to sign &amp; owns ≥20%</span>
-                              </>
-                            ) : (
-                              <span className="text-black/55">Not certified</span>
-                            )}
-                          </div>
-                        </div>
                         {(data.vendor.links ?? []).map((lnk, i) => (
                           <LinkField key={i} label={lnk.label || "Link"} value={lnk.url} />
                         ))}

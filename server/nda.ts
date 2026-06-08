@@ -76,6 +76,9 @@ async function ensureNdaSchema(pool: NonNullable<ReturnType<typeof getPool>>) {
        created_at timestamptz NOT NULL DEFAULT now(),
        UNIQUE (nda_id, party))`,
   );
+  // Vendor signer certifies (at execution) they're authorized to sign for and
+  // own >= 20% of their company. Idempotent for already-created tables.
+  await pool.query(`ALTER TABLE dt_site.nda_signer ADD COLUMN IF NOT EXISTS authority_certified boolean`);
   await pool.query(`CREATE INDEX IF NOT EXISTS nda_signer_nda_idx ON dt_site.nda_signer (nda_id)`);
   _ndaReady = true;
 }
@@ -253,6 +256,9 @@ export async function getNdaByToken(token: string) {
     signerTitle: (signer.title as string) ?? null,
     signed: Boolean(signer.signed_at),
     signedAt: signer.signed_at as Date | null,
+    // The vendor must certify their signing authority + >= 20% ownership before
+    // executing; client/DT signers do not.
+    requiresAuthorityCert: signer.party === "vendor",
     parties: partiesFromNda(nda),
     // Exact agreement text for this NDA (client-specific or default), already
     // filled. The signing page renders these paragraphs verbatim.
@@ -267,6 +273,7 @@ export async function signNda(
   signatureText: string,
   ip: string | null,
   userAgent: string | null,
+  certifiedAuthority?: boolean,
 ): Promise<{ ok: boolean; error?: string; completed?: boolean }> {
   const pool = getPool();
   if (!pool) return { ok: false, error: "Signing is temporarily unavailable." };
@@ -277,9 +284,13 @@ export async function signNda(
   if (signatureText.trim().toLowerCase() !== String(signer.name).trim().toLowerCase()) {
     return { ok: false, error: "Your typed signature must match your name exactly." };
   }
+  // The vendor must affirm signing authority + >= 20% ownership before executing.
+  if (signer.party === "vendor" && certifiedAuthority !== true) {
+    return { ok: false, error: "Please confirm you are authorized to sign and own at least 20% of your company." };
+  }
   await pool.query(
-    `UPDATE dt_site.nda_signer SET signed_at=now(), signature_text=$2, signed_ip=$3, signed_user_agent=$4 WHERE id=$1`,
-    [signer.id, signatureText.trim(), ip, userAgent],
+    `UPDATE dt_site.nda_signer SET signed_at=now(), signature_text=$2, signed_ip=$3, signed_user_agent=$4, authority_certified=$5 WHERE id=$1`,
+    [signer.id, signatureText.trim(), ip, userAgent, signer.party === "vendor" ? certifiedAuthority === true : null],
   );
   const remaining = (
     await pool.query(`SELECT count(*)::int AS n FROM dt_site.nda_signer WHERE nda_id=$1 AND signed_at IS NULL`, [
@@ -333,7 +344,7 @@ export async function buildExecutedPdf(ndaId: number): Promise<string | null> {
   if (!nda) return null;
   const signers = (
     await pool.query(
-      `SELECT party, name, title, email, signed_at, signature_text, signed_ip FROM dt_site.nda_signer WHERE nda_id=$1`,
+      `SELECT party, name, title, email, signed_at, signature_text, signed_ip, authority_certified FROM dt_site.nda_signer WHERE nda_id=$1`,
       [ndaId],
     )
   ).rows;
@@ -413,7 +424,13 @@ export async function buildExecutedPdf(ndaId: number): Promise<string | null> {
     para(`Signature: ${s.signature_text ?? "______________________________"}`, { gap: 2 });
     para(`Print name: ${s.name ?? ""}`, { size: 9.5, gap: 2 });
     para(`Title: ${s.title ?? ""}`, { size: 9.5, gap: 2 });
-    para(`Date: ${s.signed_at ? fmtDate(s.signed_at) : "______________"}`, { size: 9.5, gap: 10 });
+    para(`Date: ${s.signed_at ? fmtDate(s.signed_at) : "______________"}`, { size: 9.5, gap: s.party === "vendor" && s.authority_certified ? 2 : 10 });
+    if (s.party === "vendor" && s.authority_certified) {
+      para(
+        "Certified at signing: authorized to sign on behalf of, and owns at least 20% of, the above company.",
+        { size: 8, gap: 10 },
+      );
+    }
   }
 
   ensureSpace(30);

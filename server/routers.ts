@@ -412,7 +412,6 @@ export const appRouter = router({
           phone: z.string().trim().max(200).optional(),
           contactEmail: z.string().trim().max(320).optional(),
           title: z.string().trim().max(160).optional(),
-          signingAuthority: z.boolean().optional(),
           links: z
             .array(z.object({ label: z.string().trim().max(80).default(""), url: z.string().trim().max(500) }))
             .max(20)
@@ -487,13 +486,19 @@ export const appRouter = router({
         return getNdaByToken(input.token);
       }),
     sign: publicProcedure
-      .input(z.object({ token: z.string().trim().min(16).max(64), signatureText: z.string().trim().min(2).max(160) }))
+      .input(
+        z.object({
+          token: z.string().trim().min(16).max(64),
+          signatureText: z.string().trim().min(2).max(160),
+          certifiedAuthority: z.boolean().optional(),
+        }),
+      )
       .mutation(async ({ input, ctx }) => {
         const ip = clientIp(ctx.req);
         if (ndaRateLimited(ip))
           throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many attempts. Please wait a moment." });
         const ua = (ctx.req.headers["user-agent"] as string) || null;
-        return signNda(input.token, input.signatureText, ip, ua);
+        return signNda(input.token, input.signatureText, ip, ua, input.certifiedAuthority);
       }),
   }),
   // Clients & projects management (dedicated admin manager).

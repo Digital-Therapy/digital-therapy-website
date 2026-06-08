@@ -122,8 +122,6 @@ type VendorRecord = {
   contactEmail: string | null;
   /** Signing title at the company (feeds the NDA signature block). */
   title: string | null;
-  /** Certifies they can sign on behalf of and own >= 20% of the company. */
-  signingAuthority: boolean;
   /** Admin-curated extra links (additional websites/profiles). */
   links: { label: string; url: string }[];
   personalBio: string | null;
@@ -293,7 +291,6 @@ function toDetail(r: VendorRecord, all: VendorRecord[]) {
       phone: r.phone,
       contactEmail: r.contactEmail,
       title: r.title,
-      signingAuthority: r.signingAuthority,
       links: r.links,
       personalBio: r.personalBio,
       companyCv: r.companyCv,
@@ -388,7 +385,6 @@ async function ensureStatusTable(pool: pg.Pool) {
        ADD COLUMN IF NOT EXISTS phone text,
        ADD COLUMN IF NOT EXISTS contact_email text,
        ADD COLUMN IF NOT EXISTS title text,
-       ADD COLUMN IF NOT EXISTS signing_authority boolean NOT NULL DEFAULT false,
        ADD COLUMN IF NOT EXISTS links jsonb NOT NULL DEFAULT '[]'::jsonb,
        ADD COLUMN IF NOT EXISTS categories text[],
        ADD COLUMN IF NOT EXISTS active_engaged boolean NOT NULL DEFAULT false,
@@ -436,7 +432,6 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
     phone: asString(row.dt_phone),
     contactEmail: asString(row.dt_contact_email),
     title: asString(row.dt_title),
-    signingAuthority: row.dt_signing_authority === true,
     links: parseJsonArray(row.dt_links)
       .map((l) => ({ label: l?.label ? String(l.label) : "", url: l?.url ? String(l.url) : "" }))
       .filter((l) => l.url),
@@ -472,8 +467,7 @@ async function loadPortalRecords(pool: pg.Pool): Promise<VendorRecord[]> {
     `SELECT va.*, s.status AS dt_status, s.status_notes AS dt_status_notes,
             s.company_name AS dt_company_name, s.company_address AS dt_company_address, s.website_url AS dt_website_url,
             s.personal_linkedin AS dt_personal_linkedin, s.company_social AS dt_company_social,
-            s.phone AS dt_phone, s.contact_email AS dt_contact_email, s.title AS dt_title,
-            s.signing_authority AS dt_signing_authority, s.links AS dt_links,
+            s.phone AS dt_phone, s.contact_email AS dt_contact_email, s.title AS dt_title, s.links AS dt_links,
             s.categories AS dt_categories, s.active_engaged AS dt_active_engaged, s.removed AS dt_removed, s.core_team AS dt_core_team
        FROM "VendorApplication" va
        LEFT JOIN dt_site.vendor_status s ON s.vendor_application_id = va.id`,
@@ -658,7 +652,6 @@ export type VendorProfileFields = {
   phone?: string;
   contactEmail?: string;
   title?: string;
-  signingAuthority?: boolean;
   links?: VendorLink[];
 };
 
@@ -677,8 +670,8 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
       await ensureStatusTable(pool);
       await pool.query(
         `INSERT INTO dt_site.vendor_status
-           (vendor_application_id, company_name, company_address, website_url, personal_linkedin, company_social, phone, contact_email, title, signing_authority, links, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11::jsonb, now())
+           (vendor_application_id, company_name, company_address, website_url, personal_linkedin, company_social, phone, contact_email, title, links, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::jsonb, now())
          ON CONFLICT (vendor_application_id) DO UPDATE SET
            company_name = EXCLUDED.company_name,
            company_address = EXCLUDED.company_address,
@@ -688,7 +681,6 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
            phone = EXCLUDED.phone,
            contact_email = EXCLUDED.contact_email,
            title = EXCLUDED.title,
-           signing_authority = EXCLUDED.signing_authority,
            links = EXCLUDED.links,
            updated_at = now()`,
         [
@@ -701,7 +693,6 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
           fields.phone || null,
           fields.contactEmail || null,
           fields.title || null,
-          fields.signingAuthority === true,
           JSON.stringify(cleanLinks(fields.links)),
         ],
       );
@@ -825,7 +816,6 @@ function buildDevRecord(input: VendorApplicationData): VendorRecord {
     phone: null,
     contactEmail: null,
     title: null,
-    signingAuthority: false,
     links: [],
     personalBio: input.personalBio || null,
     companyCv: input.companyCv || null,
@@ -887,7 +877,6 @@ function devUpdateProfile(id: string, fields: VendorProfileFields): boolean {
   r.phone = fields.phone || null;
   r.contactEmail = fields.contactEmail || null;
   r.title = fields.title || null;
-  r.signingAuthority = fields.signingAuthority === true;
   r.links = cleanLinks(fields.links);
   return true;
 }
