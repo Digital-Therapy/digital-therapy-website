@@ -63,7 +63,8 @@ export default function AdminVendorDetail() {
     personalLinkedin: string;
     companySocial: string;
     phone: string;
-    contactEmail: string;
+    primaryEmail: string;
+    altEmails: string[];
     title: string;
     links: VendorLink[];
   };
@@ -75,7 +76,8 @@ export default function AdminVendorDetail() {
     personalLinkedin: "",
     companySocial: "",
     phone: "",
-    contactEmail: "",
+    primaryEmail: "",
+    altEmails: [],
     title: "",
     links: [],
   };
@@ -93,7 +95,8 @@ export default function AdminVendorDetail() {
     personalLinkedin: v.personalLinkedin ?? "",
     companySocial: v.companySocial ?? "",
     phone: v.phone ?? "",
-    contactEmail: v.contactEmail ?? "",
+    primaryEmail: v.email ?? "",
+    altEmails: v.altEmails ?? [],
     title: v.title ?? "",
     links: (v.links ?? []).map((l) => ({ label: l.label ?? "", url: l.url ?? "" })),
   });
@@ -424,12 +427,59 @@ export default function AdminVendorDetail() {
                           placeholder="e.g. +1 212-555-0100 (separate multiple with commas)"
                           onChange={(v) => setProfile((p) => ({ ...p, phone: v }))}
                         />
-                        <EditField
-                          label="Alternative emails"
-                          value={profile.contactEmail}
-                          placeholder="alt@company.com (separate multiple with commas)"
-                          onChange={(v) => setProfile((p) => ({ ...p, contactEmail: v }))}
-                        />
+
+                        {/* Email: primary + a "+" to add alternative emails on top */}
+                        <div className="sm:col-span-2">
+                          <span className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-black/45">
+                            Email
+                          </span>
+                          <div className="mt-1.5 flex items-center gap-2">
+                            <Input
+                              value={profile.primaryEmail}
+                              onChange={(e) => setProfile((p) => ({ ...p, primaryEmail: e.target.value }))}
+                              placeholder="primary@email.com"
+                              className="h-10 flex-1"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setProfile((p) => ({ ...p, altEmails: [...p.altEmails, ""] }))}
+                              aria-label="Add alternative email"
+                              title="Add an alternative email (on top of the primary)"
+                              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-black/15 text-black/55 hover:border-[#0A65FF] hover:text-[#0A65FF]"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </button>
+                          </div>
+                          {profile.altEmails.length > 0 ? (
+                            <div className="mt-2 space-y-2">
+                              {profile.altEmails.map((em, i) => (
+                                <div key={i} className="flex items-center gap-2">
+                                  <Input
+                                    value={em}
+                                    onChange={(e) =>
+                                      setProfile((p) => ({
+                                        ...p,
+                                        altEmails: p.altEmails.map((x, j) => (j === i ? e.target.value : x)),
+                                      }))
+                                    }
+                                    placeholder="alternative@email.com"
+                                    className="h-10 flex-1"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      setProfile((p) => ({ ...p, altEmails: p.altEmails.filter((_, j) => j !== i) }))
+                                    }
+                                    aria-label="Remove alternative email"
+                                    className="shrink-0 p-1.5 text-black/40 hover:text-red-600"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
                         <EditField
                           label="Title"
                           value={profile.title}
@@ -525,7 +575,10 @@ export default function AdminVendorDetail() {
                         <LinkField label="Personal LinkedIn" value={data.vendor.personalLinkedin} />
                         <LinkField label="Company LinkedIn / Instagram" value={data.vendor.companySocial} />
                         <Field label="Phone" value={data.vendor.phone} />
-                        <Field label="Alternative emails" value={data.vendor.contactEmail} />
+                        <Field label="Email" value={data.vendor.email} />
+                        {(data.vendor.altEmails ?? []).map((em, i) => (
+                          <Field key={i} label="Alternative email" value={em} />
+                        ))}
                         <Field label="Title" value={data.vendor.title} />
                         {(data.vendor.links ?? []).map((lnk, i) => (
                           <LinkField key={i} label={lnk.label || "Link"} value={lnk.url} />

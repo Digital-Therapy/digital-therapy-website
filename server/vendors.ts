@@ -112,6 +112,8 @@ type VendorRecord = {
   categories: string[];
   name: string;
   email: string;
+  /** Additional email addresses on top of the primary email. */
+  altEmails: string[];
   role: string | null;
   companyName: string | null;
   companyAddress: string | null;
@@ -119,7 +121,6 @@ type VendorRecord = {
   personalLinkedin: string | null;
   companySocial: string | null;
   phone: string | null;
-  contactEmail: string | null;
   /** Signing title at the company (feeds the NDA signature block). */
   title: string | null;
   /** Admin-curated extra links (additional websites/profiles). */
@@ -282,6 +283,7 @@ function toDetail(r: VendorRecord, all: VendorRecord[]) {
       categories: r.categories,
       name: r.name,
       email: r.email,
+      altEmails: r.altEmails,
       role: r.role,
       companyName: r.companyName,
       companyAddress: r.companyAddress,
@@ -289,7 +291,6 @@ function toDetail(r: VendorRecord, all: VendorRecord[]) {
       personalLinkedin: r.personalLinkedin,
       companySocial: r.companySocial,
       phone: r.phone,
-      contactEmail: r.contactEmail,
       title: r.title,
       links: r.links,
       personalBio: r.personalBio,
@@ -384,7 +385,8 @@ async function ensureStatusTable(pool: pg.Pool) {
        ADD COLUMN IF NOT EXISTS personal_linkedin text,
        ADD COLUMN IF NOT EXISTS company_social text,
        ADD COLUMN IF NOT EXISTS phone text,
-       ADD COLUMN IF NOT EXISTS contact_email text,
+       ADD COLUMN IF NOT EXISTS primary_email text,
+       ADD COLUMN IF NOT EXISTS alt_emails jsonb NOT NULL DEFAULT '[]'::jsonb,
        ADD COLUMN IF NOT EXISTS title text,
        ADD COLUMN IF NOT EXISTS links jsonb NOT NULL DEFAULT '[]'::jsonb,
        ADD COLUMN IF NOT EXISTS categories text[],
@@ -424,7 +426,12 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
     // so typos / partial entries (e.g. "Jonathan" -> "Jonathan Green") are fixed
     // everywhere (list, search, NDA, exports). Falls back to the portal name.
     name: asString(row.dt_full_name)?.trim() || String(row.name ?? ""),
-    email: String(row.email ?? ""),
+    // Primary email: admin override (dt_site) wins over the portal application
+    // email; alternative emails are additional addresses on top of it.
+    email: asString(row.dt_primary_email)?.trim() || String(row.email ?? ""),
+    altEmails: parseJsonArray(row.dt_alt_emails)
+      .map((e) => String(e ?? "").trim())
+      .filter(Boolean),
     role: asString(row.role),
     // Admin-curated override (dt_site) wins; falls back to the portal column
     // once Milton adds it. Both are null today for legacy applications.
@@ -434,7 +441,6 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
     personalLinkedin: asString(row.dt_personal_linkedin) ?? asString(row.personalLinkedin),
     companySocial: asString(row.dt_company_social) ?? asString(row.companySocial),
     phone: asString(row.dt_phone),
-    contactEmail: asString(row.dt_contact_email),
     title: asString(row.dt_title),
     links: parseJsonArray(row.dt_links)
       .map((l) => ({ label: l?.label ? String(l.label) : "", url: l?.url ? String(l.url) : "" }))
@@ -472,7 +478,8 @@ async function loadPortalRecords(pool: pg.Pool): Promise<VendorRecord[]> {
             s.full_name AS dt_full_name,
             s.company_name AS dt_company_name, s.company_address AS dt_company_address, s.website_url AS dt_website_url,
             s.personal_linkedin AS dt_personal_linkedin, s.company_social AS dt_company_social,
-            s.phone AS dt_phone, s.contact_email AS dt_contact_email, s.title AS dt_title, s.links AS dt_links,
+            s.phone AS dt_phone, s.primary_email AS dt_primary_email, s.alt_emails AS dt_alt_emails,
+            s.title AS dt_title, s.links AS dt_links,
             s.categories AS dt_categories, s.active_engaged AS dt_active_engaged, s.removed AS dt_removed, s.core_team AS dt_core_team
        FROM "VendorApplication" va
        LEFT JOIN dt_site.vendor_status s ON s.vendor_application_id = va.id`,
@@ -656,7 +663,10 @@ export type VendorProfileFields = {
   personalLinkedin?: string;
   companySocial?: string;
   phone?: string;
-  contactEmail?: string;
+  /** Primary email override (falls back to the application email when blank). */
+  primaryEmail?: string;
+  /** Additional emails on top of the primary. */
+  altEmails?: string[];
   title?: string;
   links?: VendorLink[];
 };
@@ -668,6 +678,11 @@ function cleanLinks(links?: VendorLink[]): VendorLink[] {
     .filter((l) => l.url);
 }
 
+/** Trim and drop empty email entries. */
+function cleanEmails(emails?: string[]): string[] {
+  return (emails ?? []).map((e) => (e ?? "").trim()).filter(Boolean);
+}
+
 /** Admin-curated Company & Links override, stored in our dt_site side-table. */
 export async function updateVendorProfile(id: string, fields: VendorProfileFields): Promise<boolean> {
   const pool = getPool();
@@ -676,8 +691,8 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
       await ensureStatusTable(pool);
       await pool.query(
         `INSERT INTO dt_site.vendor_status
-           (vendor_application_id, full_name, company_name, company_address, website_url, personal_linkedin, company_social, phone, contact_email, title, links, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11::jsonb, now())
+           (vendor_application_id, full_name, company_name, company_address, website_url, personal_linkedin, company_social, phone, primary_email, alt_emails, title, links, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::jsonb, $11, $12::jsonb, now())
          ON CONFLICT (vendor_application_id) DO UPDATE SET
            full_name = EXCLUDED.full_name,
            company_name = EXCLUDED.company_name,
@@ -686,7 +701,8 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
            personal_linkedin = EXCLUDED.personal_linkedin,
            company_social = EXCLUDED.company_social,
            phone = EXCLUDED.phone,
-           contact_email = EXCLUDED.contact_email,
+           primary_email = EXCLUDED.primary_email,
+           alt_emails = EXCLUDED.alt_emails,
            title = EXCLUDED.title,
            links = EXCLUDED.links,
            updated_at = now()`,
@@ -699,7 +715,8 @@ export async function updateVendorProfile(id: string, fields: VendorProfileField
           fields.personalLinkedin || null,
           fields.companySocial || null,
           fields.phone || null,
-          fields.contactEmail || null,
+          fields.primaryEmail || null,
+          JSON.stringify(cleanEmails(fields.altEmails)),
           fields.title || null,
           JSON.stringify(cleanLinks(fields.links)),
         ],
@@ -815,6 +832,7 @@ function buildDevRecord(input: VendorApplicationData): VendorRecord {
     categories: effectiveCategories(input.vendorTypeLabel, null),
     name: input.name,
     email: input.email,
+    altEmails: [],
     role: input.role || null,
     companyName: input.companyName || null,
     companyAddress: null,
@@ -822,7 +840,6 @@ function buildDevRecord(input: VendorApplicationData): VendorRecord {
     personalLinkedin: input.personalLinkedin || null,
     companySocial: input.companySocial || null,
     phone: null,
-    contactEmail: null,
     title: null,
     links: [],
     personalBio: input.personalBio || null,
@@ -884,7 +901,8 @@ function devUpdateProfile(id: string, fields: VendorProfileFields): boolean {
   r.personalLinkedin = fields.personalLinkedin || null;
   r.companySocial = fields.companySocial || null;
   r.phone = fields.phone || null;
-  r.contactEmail = fields.contactEmail || null;
+  if (fields.primaryEmail && fields.primaryEmail.trim()) r.email = fields.primaryEmail.trim();
+  r.altEmails = cleanEmails(fields.altEmails);
   r.title = fields.title || null;
   r.links = cleanLinks(fields.links);
   return true;

@@ -411,7 +411,8 @@ export const appRouter = router({
           personalLinkedin: z.string().trim().max(500).optional(),
           companySocial: z.string().trim().max(500).optional(),
           phone: z.string().trim().max(200).optional(),
-          contactEmail: z.string().trim().max(320).optional(),
+          primaryEmail: z.string().trim().max(320).optional(),
+          altEmails: z.array(z.string().trim().max(320)).max(20).optional(),
           title: z.string().trim().max(160).optional(),
           links: z
             .array(z.object({ label: z.string().trim().max(80).default(""), url: z.string().trim().max(500) }))
