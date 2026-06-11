@@ -20,7 +20,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { trpc } from "@/lib/trpc";
-import { ChevronDown, FileDown, RotateCcw, Search, SlidersHorizontal, Trash2, Users, X } from "lucide-react";
+import { ChevronDown, FileDown, Loader2, RotateCcw, Search, SlidersHorizontal, Trash2, Users, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
@@ -62,6 +62,7 @@ function useDebounced<T>(value: T, delay = 300): T {
 
 export default function AdminVendors() {
   const [, setLocation] = useLocation();
+  const [view, setView] = useState<"inventory" | "nda">("inventory");
   const [queryInput, setQueryInput] = useState("");
   const query = useDebounced(queryInput);
   const [skills, setSkills] = useState<string[]>([]);
@@ -161,6 +162,32 @@ export default function AdminVendors() {
   return (
     <AdminLayout>
       <div className="space-y-6">
+        {/* Landing-page view tabs */}
+        <div className="flex w-fit gap-1 rounded-full border border-black/10 bg-white p-1">
+          {(
+            [
+              ["inventory", "Vendor Inventory"],
+              ["nda", "Vendor NDA Library"],
+            ] as const
+          ).map(([v, label]) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setView(v)}
+              aria-pressed={view === v}
+              className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${
+                view === v ? "bg-[#0A65FF] text-white" : "text-black/60 hover:text-[#0A65FF]"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {view === "nda" ? (
+          <VendorNdaLibrary />
+        ) : (
+          <>
         <div className="flex flex-col gap-1">
           <h1 className="font-display text-3xl tracking-[-0.05em]">Vendor inventory</h1>
           <p className="text-sm text-black/60">
@@ -467,6 +494,8 @@ export default function AdminVendors() {
             </div>
           )}
         </div>
+          </>
+        )}
       </div>
 
       {exportProfiles ? (
@@ -478,6 +507,65 @@ export default function AdminVendors() {
         />
       ) : null}
     </AdminLayout>
+  );
+}
+
+function VendorNdaLibrary() {
+  const ndasQuery = trpc.vendor.adminNdaLibrary.useQuery();
+  const rows = ndasQuery.data ?? [];
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-col gap-1">
+        <h1 className="font-display text-3xl tracking-[-0.05em]">Vendor NDA Library</h1>
+        <p className="text-sm text-black/60">
+          Tri-party mutual NDAs (Client · Digital Therapy · Vendor), newest executed first.
+        </p>
+      </div>
+      <div className="overflow-hidden rounded-2xl border border-black/10 bg-white">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-black/8 text-left text-xs font-semibold uppercase tracking-wider text-black/45">
+              <th className="px-5 py-3">Company</th>
+              <th className="px-5 py-3">Signer</th>
+              <th className="px-5 py-3">Title</th>
+              <th className="px-5 py-3">Execution Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ndasQuery.isLoading ? (
+              <tr>
+                <td colSpan={4} className="px-5 py-12 text-center">
+                  <Loader2 className="mx-auto h-5 w-5 animate-spin text-[#0A65FF]" />
+                </td>
+              </tr>
+            ) : rows.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="px-5 py-12 text-center text-sm text-black/45">
+                  No NDAs yet. They’ll appear here once you send tri-party NDAs to vendors.
+                </td>
+              </tr>
+            ) : (
+              rows.map((r) => (
+                <tr key={r.id} className="border-b border-black/5 last:border-0 hover:bg-black/[0.015]">
+                  <td className="px-5 py-3 font-medium text-black/85">{r.company || "—"}</td>
+                  <td className="px-5 py-3 text-black/80">{r.signer || "—"}</td>
+                  <td className="px-5 py-3 text-black/70">{r.title || "—"}</td>
+                  <td className="px-5 py-3">
+                    {r.executionDate ? (
+                      <span className="text-black/80">{r.executionDate}</span>
+                    ) : (
+                      <span className="inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                        Pending
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
 

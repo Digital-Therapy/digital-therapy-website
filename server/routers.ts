@@ -30,6 +30,7 @@ import {
   getNdaByToken,
   getNdaForVendorClient,
   getSignerBatch,
+  listVendorNdas,
   sendNda,
   signBatch,
   signNda,
@@ -478,6 +479,8 @@ export const appRouter = router({
     adminNdaExecutedPdf: adminProcedure
       .input(z.object({ ndaId: z.number().int() }))
       .query(async ({ input }) => ({ base64: await buildExecutedPdf(input.ndaId) })),
+    // Vendor NDA Library — all tri-party NDAs for the admin landing-page table.
+    adminNdaLibrary: adminProcedure.query(async () => listVendorNdas()),
     adminUpdateComp: adminProcedure
       .input(z.object({ id: z.number().int(), type: z.enum(COMP_TYPES), details: z.record(z.string(), z.any()) }))
       .mutation(async ({ input }) => ({ success: await updateComp(input.id, input.type, input.details) })),

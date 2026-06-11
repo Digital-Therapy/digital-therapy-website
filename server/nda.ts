@@ -610,3 +610,32 @@ export async function getNdaForVendorClient(vendorAppId: string, clientId: numbe
     })),
   };
 }
+
+/** Library of vendor NDAs (newest executed first) for the admin landing page:
+ * vendor company, vendor signer, title, and execution (completed) date. */
+export async function listVendorNdas() {
+  const pool = getPool();
+  if (!pool) return [];
+  await ensureNdaSchema(pool);
+  const rows = (
+    await pool.query(
+      `SELECT n.id, n.vendor_company, n.vendor_name, n.completed_at, n.status,
+              c.name AS client_name,
+              s.name AS signer_name, s.title AS signer_title
+         FROM dt_site.vendor_nda n
+         LEFT JOIN dt_site.client c ON c.id = n.client_id
+         LEFT JOIN dt_site.nda_signer s ON s.nda_id = n.id AND s.party = 'vendor'
+        WHERE n.status IN ('sent', 'completed')
+        ORDER BY n.completed_at DESC NULLS LAST, n.id DESC`,
+    )
+  ).rows;
+  return rows.map((r) => ({
+    id: r.id as number,
+    company: (r.vendor_company as string) || "",
+    signer: (r.signer_name as string) || (r.vendor_name as string) || "",
+    title: (r.signer_title as string) || "",
+    executionDate: r.completed_at ? fmtDate(r.completed_at) : null,
+    status: r.status as string,
+    clientName: (r.client_name as string) || "",
+  }));
+}
