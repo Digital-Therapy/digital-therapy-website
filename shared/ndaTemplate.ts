@@ -18,6 +18,7 @@ export type NdaParties = {
   clientAddress: string;
   vendorCompany: string; // "Counterparty"
   vendorName: string;
+  vendorAddress: string; // Counterparty's offices
   effectiveDate: string; // display string, e.g. "September 15, 2025"
 };
 
@@ -94,7 +95,7 @@ export function fillNda(p: NdaParties): FilledNda {
     intro:
       `This Mutual Non-Disclosure Agreement (this “Agreement”) is made effective as of ${p.effectiveDate || "the date of the last signature hereto"} ` +
       `(the “Effective Date”) by and between ${company} (“Company”), which has offices at ${p.clientAddress || "[address]"}, ` +
-      `and ${DT_ENTITY.name}, with offices at ${DT_ENTITY.address}, and ${counterparty} (“Counterparty”). ` +
+      `and ${DT_ENTITY.name}, with offices at ${DT_ENTITY.address}, and ${counterparty} (“Counterparty”), which has offices at ${p.vendorAddress || "[address]"}. ` +
       `Each of Company and Counterparty is a “Party” and they are collectively referred to herein as the “Parties”.`,
     background: [
       `A. In connection with a business relationship in which ${DT_ENTITY.name} has been engaged by the Company to provide digital transformation services (the “Relationship”), the Parties may disclose or make available certain proprietary or confidential information or materials belonging to either Party, their affiliates or third parties for the purpose (the “Purpose”) of the Relationship.`,

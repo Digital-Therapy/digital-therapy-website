@@ -58,6 +58,7 @@ async function ensureNdaSchema(pool: NonNullable<ReturnType<typeof getPool>>) {
        ADD COLUMN IF NOT EXISTS client_address text,
        ADD COLUMN IF NOT EXISTS vendor_company text,
        ADD COLUMN IF NOT EXISTS vendor_name text,
+       ADD COLUMN IF NOT EXISTS vendor_address text,
        ADD COLUMN IF NOT EXISTS body_text text`,
   );
   await pool.query(
@@ -110,6 +111,7 @@ function partiesFromNda(nda: Record<string, any>): NdaParties {
     clientAddress: nda.client_address ?? "",
     vendorCompany: nda.vendor_company ?? "",
     vendorName: nda.vendor_name ?? "",
+    vendorAddress: nda.vendor_address ?? "",
     effectiveDate: nda.effective_date ?? "",
   };
 }
@@ -136,11 +138,13 @@ export async function sendNda(vendorAppId: string, clientId: number) {
   // later. A client-specific template (e.g. Chapman's client-provided form)
   // wins; otherwise the default mutual-NDA template is rendered. Body ends at
   // the IN WITNESS line — signature blocks are appended at render.
+  const vendorAddress = vendor.vendor.companyAddress ?? "";
   const parties: NdaParties = {
     clientLegalName: client.legalName ?? client.name,
     clientAddress: client.address ?? "",
     vendorCompany,
     vendorName: vendor.vendor.name,
+    vendorAddress,
     effectiveDate,
   };
   const bodyText = client.ndaTemplate
@@ -154,8 +158,8 @@ export async function sendNda(vendorAppId: string, clientId: number) {
   const up = await pool.query(
     `INSERT INTO dt_site.vendor_nda
        (vendor_application_id, client_id, status, effective_date, sent_at,
-        client_legal_name, client_address, vendor_company, vendor_name, body_text)
-     VALUES ($1,$2,'sent',$3, now(), $4,$5,$6,$7,$8)
+        client_legal_name, client_address, vendor_company, vendor_name, vendor_address, body_text)
+     VALUES ($1,$2,'sent',$3, now(), $4,$5,$6,$7,$8,$9)
      ON CONFLICT (vendor_application_id, client_id) DO UPDATE SET
         status = CASE WHEN dt_site.vendor_nda.status = 'completed' THEN 'completed' ELSE 'sent' END,
         effective_date = COALESCE(dt_site.vendor_nda.effective_date, EXCLUDED.effective_date),
@@ -164,6 +168,7 @@ export async function sendNda(vendorAppId: string, clientId: number) {
         client_address = EXCLUDED.client_address,
         vendor_company = EXCLUDED.vendor_company,
         vendor_name = EXCLUDED.vendor_name,
+        vendor_address = EXCLUDED.vendor_address,
         body_text = COALESCE(dt_site.vendor_nda.body_text, EXCLUDED.body_text)
      RETURNING id, status`,
     [
@@ -174,6 +179,7 @@ export async function sendNda(vendorAppId: string, clientId: number) {
       client.address ?? "",
       vendorCompany,
       vendor.vendor.name,
+      vendorAddress,
       bodyText,
     ],
   );
