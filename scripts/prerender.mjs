@@ -144,6 +144,69 @@ async function renderOgImage(browser) {
   console.log("  rendered og-image-v2.png (1200x630)");
 }
 
+// Dedicated share card for NDA signing links — a tri-party graphic
+// (Client · Digital Therapy · Vendor) so emailed/texted links read clearly.
+const NDA_OG_CARD_HTML = `<!doctype html><html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0}
+  .card{width:1200px;height:630px;box-sizing:border-box;
+    background:radial-gradient(1200px 630px at 78% 18%, #1456ff 0%, #0A65FF 40%, #013aa6 100%);
+    color:#fff;font-family:'Manrope',sans-serif;position:relative;overflow:hidden;
+    padding:78px 84px;display:flex;align-items:center;justify-content:space-between;gap:48px}
+  .glow{position:absolute;width:780px;height:780px;border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 62%);
+    right:-200px;top:-260px}
+  .left{max-width:600px;z-index:2}
+  .eyebrow{font-size:23px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:#bfd6ff}
+  .title{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:82px;line-height:1.02;
+    letter-spacing:-0.01em;margin:14px 0 0}
+  .caption{font-size:27px;font-weight:600;color:#e3edff;margin:26px 0 0;letter-spacing:.01em}
+  /* Tri-party graphic */
+  .lobes{position:relative;width:430px;height:460px;flex:none;z-index:2}
+  .lobe{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    box-shadow:inset 26px 26px 60px rgba(255,255,255,0.34), inset -30px -34px 70px rgba(1,30,110,0.6),
+      0 24px 60px rgba(1,28,120,0.45);
+    background:radial-gradient(circle at 34% 28%, #6f9bff 0%, #2f6bff 42%, #0a3fc6 100%)}
+  .lobe span{font-weight:800;font-size:30px;color:#fff;text-shadow:0 2px 6px rgba(1,20,80,0.45)}
+  .client{width:208px;height:208px;left:120px;top:0}
+  .dt{width:226px;height:226px;left:8px;top:182px}
+  .vendor{width:208px;height:208px;left:214px;top:226px}
+  .dt svg{width:96px;height:60px}
+</style></head>
+<body>
+  <div class="card">
+    <div class="glow"></div>
+    <div class="left">
+      <div class="eyebrow">Digital Therapy</div>
+      <h1 class="title">Mutual Non-Disclosure Agreement</h1>
+      <p class="caption">Client &middot; Digital Therapy &middot; Vendor</p>
+    </div>
+    <div class="lobes">
+      <div class="lobe client"><span>Client</span></div>
+      <div class="lobe dt">
+        <svg viewBox="0 0 64 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 9 C8 6 10 5 13 7 L29 18 C31 19.5 33 19.5 35 18 L51 7 C54 5 56 6 56 9 L56 31 C56 34 54 35 51 33 L35 22 C33 20.5 31 20.5 29 22 L13 33 C10 35 8 34 8 31 Z" stroke="#fff" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="lobe vendor"><span>Vendor</span></div>
+    </div>
+  </div>
+</body></html>`;
+
+async function renderNdaOgImage(browser) {
+  const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
+  await page.setContent(NDA_OG_CARD_HTML, { waitUntil: "networkidle" });
+  await page.evaluate(() => document.fonts && document.fonts.ready);
+  await page.waitForTimeout(300);
+  const el = await page.$(".card");
+  await el.screenshot({ path: join(DIST, "nda-share.png") });
+  await page.close();
+  console.log("  rendered nda-share.png (1200x630)");
+}
+
 async function writeSitemap() {
   const today = new Date().toISOString().slice(0, 10);
   const urls = ROUTES.map(({ path, priority }) => {
@@ -164,6 +227,7 @@ async function main() {
     console.log("Prerendering routes...");
     await prerenderRoutes(browser, baseUrl);
     await renderOgImage(browser);
+    await renderNdaOgImage(browser);
     await writeSitemap();
   } finally {
     await browser.close();

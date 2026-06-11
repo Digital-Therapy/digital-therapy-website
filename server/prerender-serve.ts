@@ -36,7 +36,7 @@ export function registerPrerendered(app: Express) {
   // tags — otherwise link unfurlers show the homepage title/description.
   const SIGN_TITLE = "Client NDA · Digital Therapy";
   const SIGN_DESC = "Review and electronically sign the confidential NDA for your Digital Therapy engagement.";
-  const SIGN_IMG = "https://www.digitaltherapy.io/og-image-v2.png";
+  const SIGN_IMG = "https://www.digitaltherapy.io/nda-share.png";
   const SIGN_META = [
     `<title>${SIGN_TITLE}</title>`,
     `<meta name="description" content="${SIGN_DESC}" />`,

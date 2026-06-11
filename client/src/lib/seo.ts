@@ -111,6 +111,7 @@ const PREFIX_META: { prefix: string; meta: RouteMeta }[] = [
     meta: {
       title: "Client NDA · Digital Therapy",
       description: "Review and electronically sign the confidential NDA for your Digital Therapy engagement.",
+      ogImage: "/nda-share.png",
       noindex: true,
     },
   },
