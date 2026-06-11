@@ -530,19 +530,22 @@ export function ClientCard({ client, vendors }: { client: ClientRow; vendors: Ve
                 placeholder="Phone"
                 className="h-9"
               />
-              <div className="sm:col-span-2">
+              <div className="flex items-center gap-2 sm:col-span-2">
                 <Button
-                  variant="outline"
                   size="sm"
+                  disabled={!newContact.name.trim() || addContact.isPending}
                   onClick={() => {
                     if (!newContact.name.trim()) return;
                     addContact.mutate({ clientId: client.id, ...newContact, name: newContact.name.trim() });
                     setNewContact(blankContact);
                   }}
                 >
-                  <Plus className="mr-1 h-4 w-4" />
-                  Add contact
+                  <Check className="mr-1 h-4 w-4" />
+                  Save contact
                 </Button>
+                {!newContact.name.trim() ? (
+                  <span className="text-xs text-black/40">Enter a contact name to save.</span>
+                ) : null}
               </div>
             </div>
           </div>

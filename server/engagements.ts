@@ -311,11 +311,17 @@ export async function addContact(
 ): Promise<ClientContact | null> {
   const pool = await ensureTables();
   if (!pool) return null;
+  // The first contact added for a client becomes the primary signer, so a single
+  // contact is automatically used as the client's NDA signer (no extra step).
+  const existing = await pool.query(`SELECT count(*)::int AS n FROM dt_site.client_contact WHERE client_id = $1`, [
+    clientId,
+  ]);
+  const makePrimary = existing.rows[0].n === 0;
   const r = await pool.query(
-    `INSERT INTO dt_site.client_contact (client_id, name, title, email, phone)
-     VALUES ($1, $2, $3, $4, $5)
+    `INSERT INTO dt_site.client_contact (client_id, name, title, email, phone, is_primary)
+     VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING id, client_id, name, title, email, phone, is_primary`,
-    [clientId, fields.name, fields.title || null, fields.email || null, fields.phone || null],
+    [clientId, fields.name, fields.title || null, fields.email || null, fields.phone || null, makePrimary],
   );
   return mapContactRow(r.rows[0]);
 }
