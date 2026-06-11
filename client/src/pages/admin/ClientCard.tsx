@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { trpc, type RouterOutputs } from "@/lib/trpc";
-import { Check, FileText, Pencil, Plus, ShieldCheck, Star, Trash2, Users, X } from "lucide-react";
+import { Check, ChevronDown, ChevronRight, FileText, Pencil, Plus, ShieldCheck, Star, Trash2, Users, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -92,12 +92,24 @@ export function ClientCard({ client, vendors }: { client: ClientRow; vendors: Ve
     setContactDraft({ name: c.name, title: c.title ?? "", email: c.email ?? "", phone: c.phone ?? "" });
   };
 
+  // Accordion: each client container can be minimized to just its header row.
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <CardTitle className="text-lg">{client.name}</CardTitle>
+          <div className="flex min-w-0 items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setCollapsed((c) => !c)}
+              aria-label={collapsed ? "Expand client" : "Minimize client"}
+              aria-expanded={!collapsed}
+              className="-ml-1 rounded-md p-1 text-black/45 hover:bg-black/5 hover:text-black/70"
+            >
+              {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </button>
+            <CardTitle className="truncate text-lg">{client.name}</CardTitle>
             {!client.active ? <Badge variant="outline">On Deck</Badge> : null}
             {client.ndaWall ? (
               <Badge className="gap-1 bg-amber-100 font-normal text-amber-800 hover:bg-amber-100">
@@ -142,6 +154,7 @@ export function ClientCard({ client, vendors }: { client: ClientRow; vendors: Ve
         </div>
       </CardHeader>
 
+      {collapsed ? null : (
       <CardContent className="space-y-5">
         {/* Company details */}
         <section>
@@ -618,6 +631,7 @@ export function ClientCard({ client, vendors }: { client: ClientRow; vendors: Ve
           </div>
         </section>
       </CardContent>
+      )}
     </Card>
   );
 }
