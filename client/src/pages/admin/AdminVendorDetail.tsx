@@ -21,7 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { ArrowLeft, Check, FileText, Loader2, Pencil, Plus, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Link, useLocation, useRoute } from "wouter";
 
@@ -207,8 +207,40 @@ export default function AdminVendorDetail() {
     onError: (e) => toast.error(e.message || "Could not update vendor."),
   });
 
+  // Show a sticky name label once the main header scrolls up under the admin bar,
+  // so it's always clear which vendor profile you're on while scrolling/tabbing.
+  const nameRef = useRef<HTMLDivElement>(null);
+  const [showStickyName, setShowStickyName] = useState(false);
+  useEffect(() => {
+    const el = nameRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => setShowStickyName(!entry.isIntersecting), {
+      // Trigger just below the 64px AdminLayout header.
+      rootMargin: "-72px 0px 0px 0px",
+      threshold: 0,
+    });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [data?.vendor?.id]);
+
   return (
     <AdminLayout>
+      {data && showStickyName ? (
+        <div className="fixed inset-x-0 top-16 z-30 border-b border-black/10 bg-white/90 shadow-sm backdrop-blur">
+          <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-2.5 sm:px-6">
+            <span className="truncate font-display text-base tracking-[-0.03em] text-[#111111]">
+              {data.vendor.name}
+            </span>
+            <span
+              className={`inline-flex shrink-0 rounded-full px-2 py-0.5 text-[0.65rem] font-semibold capitalize ${
+                STATUS_STYLES[data.vendor.status] ?? "bg-black/8 text-black/70"
+              }`}
+            >
+              {data.vendor.status}
+            </span>
+          </div>
+        </div>
+      ) : null}
       <div className="space-y-6">
         <Link href="/vendorlists" className="inline-flex items-center gap-1.5 text-sm text-black/60 hover:text-[#0A65FF]">
           <ArrowLeft className="h-4 w-4" />
@@ -227,7 +259,10 @@ export default function AdminVendorDetail() {
           </div>
         ) : (
           <>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div
+              ref={nameRef}
+              className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"
+            >
               <div>
                 <div className="flex items-center gap-3">
                   <h1 className="font-display text-3xl tracking-[-0.05em]">{data.vendor.name}</h1>
