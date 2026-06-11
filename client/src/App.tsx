@@ -22,6 +22,7 @@ import AdminVendors from "./pages/admin/AdminVendors";
 import AdminVendorDetail from "./pages/admin/AdminVendorDetail";
 import AdminClients from "./pages/admin/AdminClients";
 import NdaSigningPage from "./pages/NdaSigningPage";
+import NdaBatchSigningPage from "./pages/NdaBatchSigningPage";
 import AdminAccess from "./pages/admin/AdminAccess";
 
 function Router() {
@@ -46,7 +47,9 @@ function Router() {
       <Route path={"/vendorlists/:id"} component={AdminVendorDetail} />
       <Route path={"/admin/clients"} component={AdminClients} />
       <Route path={"/admin/access"} component={AdminAccess} />
-      {/* Public, token-gated NDA signing — no auth, not prerendered. */}
+      {/* Public, token-gated NDA signing — no auth, not prerendered. The batch
+          route (4 segments) is matched before the single route (3 segments). */}
+      <Route path={"/nda/sign/all/:token"} component={NdaBatchSigningPage} />
       <Route path={"/nda/sign/:token"} component={NdaSigningPage} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}

@@ -565,6 +565,21 @@ function ClientNdaPanel({ vendorId, clientId }: { vendorId: string; clientId: nu
                     <Copy className="h-3 w-3" />
                     Copy link
                   </button>
+                  {/* Batch link: lets this client signer review + sign every
+                      outstanding NDA awaiting them (across vendors) in one pass. */}
+                  {s.party === "client" ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(s.link.replace("/nda/sign/", "/nda/sign/all/"));
+                        toast.success("All-NDA link copied — lets this signer sign every outstanding NDA at once.");
+                      }}
+                      className="inline-flex items-center gap-1 text-black/45 hover:text-[#0A65FF]"
+                    >
+                      <Copy className="h-3 w-3" />
+                      Copy all-NDA link
+                    </button>
+                  ) : null}
                 </span>
               ) : null}
             </div>

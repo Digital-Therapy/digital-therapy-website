@@ -270,6 +270,118 @@ export async function getNdaByToken(token: string) {
   };
 }
 
+/** Public: batch view for a signer — every outstanding NDA where the SAME party
+ * + email is awaiting this person, so e.g. a client rep can review and sign
+ * several NDAs (identical but for the vendor) in one pass. The entry token is
+ * any one of that signer's signing tokens. */
+export async function getSignerBatch(token: string) {
+  const pool = getPool();
+  if (!pool) return null;
+  await ensureNdaSchema(pool);
+  const entry = (await pool.query(`SELECT * FROM dt_site.nda_signer WHERE token=$1`, [token])).rows[0];
+  if (!entry) return null;
+  const party = entry.party as string;
+  const email = (entry.email as string | null)?.trim() || null;
+
+  // Group by party + email. If the signer has no email on record we can only
+  // safely show the single NDA for this token.
+  const signerRows = email
+    ? (
+        await pool.query(
+          `SELECT s.* FROM dt_site.nda_signer s
+             JOIN dt_site.vendor_nda n ON n.id = s.nda_id
+            WHERE s.party = $1 AND lower(s.email) = lower($2)
+              AND n.status NOT IN ('void','completed')`,
+          [party, email],
+        )
+      ).rows
+    : [entry];
+
+  const ndas = [];
+  for (const sr of signerRows) {
+    const nda = (await pool.query(`SELECT * FROM dt_site.vendor_nda WHERE id=$1`, [sr.nda_id])).rows[0];
+    if (!nda) continue;
+    const all = (await pool.query(`SELECT party, name, signed_at FROM dt_site.nda_signer WHERE nda_id=$1`, [nda.id]))
+      .rows;
+    ndas.push({
+      ndaId: nda.id as number,
+      status: nda.status as string,
+      clientLegalName: (nda.client_legal_name as string) ?? "",
+      vendorCompany: (nda.vendor_company as string) ?? "",
+      vendorName: (nda.vendor_name as string) ?? "",
+      effectiveDate: (nda.effective_date as string) ?? "",
+      signed: Boolean(sr.signed_at),
+      bodyParagraphs: ndaBodyParagraphs(ndaBody(nda)),
+      signers: all.map((s) => ({ party: s.party as string, name: s.name as string, signed: Boolean(s.signed_at) })),
+    });
+  }
+  ndas.sort((a, b) => a.ndaId - b.ndaId);
+  return {
+    party,
+    signerName: entry.name as string,
+    signerEmail: email,
+    requiresAuthorityCert: party === "vendor",
+    ndas,
+  };
+}
+
+/** Public: apply one signature to several NDAs at once. Only NDAs awaiting THIS
+ * signer (same party + email as the entry token, unsigned, not void/completed)
+ * are signed — the caller can't sign anyone else's NDA. */
+export async function signBatch(
+  token: string,
+  ndaIds: number[],
+  signatureText: string,
+  ip: string | null,
+  userAgent: string | null,
+): Promise<{ ok: boolean; error?: string; signed?: number; completed?: number }> {
+  const pool = getPool();
+  if (!pool) return { ok: false, error: "Signing is temporarily unavailable." };
+  await ensureNdaSchema(pool);
+  const entry = (await pool.query(`SELECT * FROM dt_site.nda_signer WHERE token=$1`, [token])).rows[0];
+  if (!entry) return { ok: false, error: "This signing link is invalid." };
+  const party = entry.party as string;
+  const email = (entry.email as string | null)?.trim() || null;
+  if (!email) return { ok: false, error: "Batch signing isn't available for this link." };
+  if (!ndaIds.length) return { ok: false, error: "Select at least one NDA to sign." };
+
+  const targets = (
+    await pool.query(
+      `SELECT s.id, s.nda_id, s.name FROM dt_site.nda_signer s
+         JOIN dt_site.vendor_nda n ON n.id = s.nda_id
+        WHERE s.party = $1 AND lower(s.email) = lower($2) AND s.signed_at IS NULL
+          AND n.status NOT IN ('void','completed') AND s.nda_id = ANY($3::int[])`,
+      [party, email, ndaIds],
+    )
+  ).rows;
+  if (!targets.length) return { ok: false, error: "There's nothing left to sign on these NDAs." };
+
+  // The typed signature must match the signer's name on every selected NDA.
+  for (const t of targets) {
+    if (signatureText.trim().toLowerCase() !== String(t.name).trim().toLowerCase()) {
+      return { ok: false, error: "Your typed signature must match your name exactly." };
+    }
+  }
+
+  let completed = 0;
+  for (const t of targets) {
+    await pool.query(
+      `UPDATE dt_site.nda_signer SET signed_at=now(), signature_text=$2, signed_ip=$3, signed_user_agent=$4 WHERE id=$1`,
+      [t.id, signatureText.trim(), ip, userAgent],
+    );
+    const remaining = (
+      await pool.query(`SELECT count(*)::int AS n FROM dt_site.nda_signer WHERE nda_id=$1 AND signed_at IS NULL`, [
+        t.nda_id,
+      ])
+    ).rows[0].n as number;
+    if (remaining === 0) {
+      await finalizeNda(t.nda_id);
+      completed += 1;
+    }
+  }
+  return { ok: true, signed: targets.length, completed };
+}
+
 /** Public: record a signature. Signature text must match the signer's name. */
 export async function signNda(
   token: string,

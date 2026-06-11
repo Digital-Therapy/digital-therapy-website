@@ -29,7 +29,9 @@ import {
   buildExecutedPdf,
   getNdaByToken,
   getNdaForVendorClient,
+  getSignerBatch,
   sendNda,
+  signBatch,
   signNda,
   voidNda,
 } from "./nda";
@@ -506,6 +508,29 @@ export const appRouter = router({
           throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many attempts. Please wait a moment." });
         const ua = (ctx.req.headers["user-agent"] as string) || null;
         return signNda(input.token, input.signatureText, ip, ua, input.certifiedAuthority);
+      }),
+    // Batch signing: every outstanding NDA awaiting the same signer (party + email).
+    getBatch: publicProcedure
+      .input(z.object({ token: z.string().trim().min(16).max(64) }))
+      .query(async ({ input, ctx }) => {
+        if (ndaRateLimited(clientIp(ctx.req)))
+          throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many requests. Please wait a moment." });
+        return getSignerBatch(input.token);
+      }),
+    signBatch: publicProcedure
+      .input(
+        z.object({
+          token: z.string().trim().min(16).max(64),
+          ndaIds: z.array(z.number().int()).min(1).max(50),
+          signatureText: z.string().trim().min(2).max(160),
+        }),
+      )
+      .mutation(async ({ input, ctx }) => {
+        const ip = clientIp(ctx.req);
+        if (ndaRateLimited(ip))
+          throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many attempts. Please wait a moment." });
+        const ua = (ctx.req.headers["user-agent"] as string) || null;
+        return signBatch(input.token, input.ndaIds, input.signatureText, ip, ua);
       }),
   }),
   // Clients & projects management (dedicated admin manager).
