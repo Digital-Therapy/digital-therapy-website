@@ -13,12 +13,13 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
-import { Briefcase, Loader2, LogOut, ShieldCheck, Users } from "lucide-react";
+import { Briefcase, Loader2, LogOut, ShieldCheck, TrendingUp, Users } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 const navItems = [
   { icon: Users, label: "Vendors", path: "/vendorlists" },
   { icon: Briefcase, label: "Clients & Projects", path: "/admin/clients" },
+  { icon: TrendingUp, label: "Pipeline", path: "/admin/pipeline" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

@@ -32,6 +32,7 @@ const ROUTES = [
   { path: "/thesis", priority: 0.7 },
   { path: "/partners", priority: 0.7 },
   { path: "/team", priority: 0.7 },
+  { path: "/get-started", priority: 0.85 },
   { path: "/vendors", priority: 0.6 },
   { path: "/terms", priority: 0.2 },
   { path: "/privacy", priority: 0.2 },

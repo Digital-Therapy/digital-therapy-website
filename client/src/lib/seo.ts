@@ -76,6 +76,12 @@ export const ROUTE_META: Record<string, RouteMeta> = {
       "Meet the Digital Therapy team -- leadership, specialist benches, and the alliances behind our family-office Fusion Teams.",
     priority: 0.7,
   },
+  "/get-started": {
+    title: "Get Started | Digital Therapy",
+    description:
+      "Three ways to start a conversation with Digital Therapy -- book a 30-minute intro, send a written message, or apply as a vendor.",
+    priority: 0.85,
+  },
   "/terms": {
     title: "Terms of Service | Digital Therapy",
     description: "Digital Therapy terms of service.",

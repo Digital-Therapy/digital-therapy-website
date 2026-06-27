@@ -92,8 +92,9 @@ export function ClientCard({ client, vendors }: { client: ClientRow; vendors: Ve
     setContactDraft({ name: c.name, title: c.title ?? "", email: c.email ?? "", phone: c.phone ?? "" });
   };
 
-  // Accordion: each client container can be minimized to just its header row.
-  const [collapsed, setCollapsed] = useState(false);
+  // Accordion: each client container starts minimized (just the header row) so
+  // the page opens as a scannable index — expand the ones you want to work on.
+  const [collapsed, setCollapsed] = useState(true);
 
   return (
     <Card>

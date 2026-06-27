@@ -18,6 +18,7 @@ const sitemapGroups = [
       { label: "Process", href: "/process" },
       { label: "Capabilities", href: "/capabilities" },
       { label: "Thesis", href: "/thesis" },
+      { label: "Get Started", href: "/get-started" },
     ],
   },
   {

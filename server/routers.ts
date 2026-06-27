@@ -57,6 +57,21 @@ import {
   updateContact,
   updateProject,
 } from "./engagements";
+import {
+  ACTIVITY_KINDS,
+  addActivity,
+  closeLost,
+  closeWon,
+  createOpportunity,
+  deleteOpportunity,
+  getOpportunity,
+  listOpportunities,
+  OPPORTUNITY_KINDS,
+  OPPORTUNITY_STAGES,
+  setStage,
+  updateOpportunity,
+} from "./pipeline";
+import { submitAccountingAssessment } from "./assessments";
 import { vendorStatusValues } from "../drizzle/schema";
 
 // Strip control chars / collapse newlines so user input can't forge extra
@@ -619,6 +634,160 @@ export const appRouter = router({
     removeProject: adminProcedure
       .input(z.object({ id: z.number().int() }))
       .mutation(async ({ input }) => ({ success: await deleteProject(input.id) })),
+  }),
+
+  // Pipeline: opportunities (new-project for existing clients OR new-client
+  // conversions). On close-won, an opportunity calls into the clients router's
+  // createClient/createProject helpers so a single Close-Won click yields a real
+  // project on the Clients & Projects tab — no double-entry.
+  pipeline: router({
+    list: adminProcedure.query(async () => listOpportunities()),
+    get: adminProcedure
+      .input(z.object({ id: z.number().int() }))
+      .query(async ({ input }) => getOpportunity(input.id)),
+    create: adminProcedure
+      .input(
+        z.object({
+          kind: z.enum(OPPORTUNITY_KINDS),
+          title: z.string().trim().min(1).max(240),
+          clientId: z.number().int().nullable().optional(),
+          prospectName: z.string().trim().max(200).optional(),
+          prospectCompany: z.string().trim().max(200).optional(),
+          prospectEmail: z.string().trim().max(320).optional(),
+          prospectPhone: z.string().trim().max(60).optional(),
+          prospectSource: z.string().trim().max(120).optional(),
+          stage: z.enum(OPPORTUNITY_STAGES).optional(),
+          estValueCents: z.number().int().min(0).nullable().optional(),
+          estCloseDate: z.string().trim().max(40).optional(),
+          probabilityPct: z.number().int().min(0).max(100).nullable().optional(),
+          ownerEmail: z.string().trim().max(320).optional(),
+          nextStep: z.string().trim().max(500).optional(),
+          nextStepDue: z.string().trim().max(40).optional(),
+          notes: z.string().trim().max(8000).optional(),
+        }),
+      )
+      .mutation(async ({ input, ctx }) => createOpportunity(input, ctx.user.email ?? null)),
+    update: adminProcedure
+      .input(
+        z.object({
+          id: z.number().int(),
+          clientId: z.number().int().nullable().optional(),
+          prospectName: z.string().trim().max(200).optional(),
+          prospectCompany: z.string().trim().max(200).optional(),
+          prospectEmail: z.string().trim().max(320).optional(),
+          prospectPhone: z.string().trim().max(60).optional(),
+          prospectSource: z.string().trim().max(120).optional(),
+          title: z.string().trim().min(1).max(240).optional(),
+          estValueCents: z.number().int().min(0).nullable().optional(),
+          estCloseDate: z.string().trim().max(40).optional(),
+          probabilityPct: z.number().int().min(0).max(100).nullable().optional(),
+          ownerEmail: z.string().trim().max(320).optional(),
+          nextStep: z.string().trim().max(500).optional(),
+          nextStepDue: z.string().trim().max(40).optional(),
+          notes: z.string().trim().max(8000).optional(),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const { id, ...fields } = input;
+        return { success: await updateOpportunity(id, fields) };
+      }),
+    setStage: adminProcedure
+      .input(z.object({ id: z.number().int(), stage: z.enum(OPPORTUNITY_STAGES) }))
+      .mutation(async ({ input, ctx }) => ({
+        success: await setStage(input.id, input.stage, ctx.user.email ?? null),
+      })),
+    addActivity: adminProcedure
+      .input(
+        z.object({
+          opportunityId: z.number().int(),
+          kind: z.enum(ACTIVITY_KINDS),
+          body: z.string().trim().min(1).max(8000),
+          occurredAt: z.string().trim().max(40).optional(),
+        }),
+      )
+      .mutation(async ({ input, ctx }) =>
+        addActivity(input.opportunityId, input.kind, input.body, ctx.user.email ?? null, input.occurredAt),
+      ),
+    closeWon: adminProcedure
+      .input(
+        z.object({
+          id: z.number().int(),
+          projectName: z.string().trim().min(1).max(200).optional(),
+          clientName: z.string().trim().min(1).max(200).optional(),
+        }),
+      )
+      .mutation(async ({ input, ctx }) => {
+        const { id, ...rest } = input;
+        const result = await closeWon(id, rest, ctx.user.email ?? null);
+        if (!result.ok) throw new TRPCError({ code: "BAD_REQUEST", message: result.reason ?? "Close-won failed." });
+        return result;
+      }),
+    closeLost: adminProcedure
+      .input(z.object({ id: z.number().int(), reason: z.string().trim().max(2000).optional() }))
+      .mutation(async ({ input, ctx }) => ({
+        success: await closeLost(input.id, input.reason ?? null, ctx.user.email ?? null),
+      })),
+    remove: adminProcedure
+      .input(z.object({ id: z.number().int() }))
+      .mutation(async ({ input }) => ({ success: await deleteOpportunity(input.id) })),
+  }),
+
+  // Public-facing needs-assessment intake forms (Get Started page). Submissions
+  // persist to dt_site.needs_assessment AND fire an owner notification email so
+  // Karina sees a new prospect immediately. publicProcedure — no auth required.
+  assessments: router({
+    submitAccounting: publicProcedure
+      .input(
+        z.object({
+          // Profile (required minimum)
+          familyOfficeName: z.string().trim().min(1).max(200),
+          contactName: z.string().trim().min(1).max(200),
+          contactEmail: z.string().trim().email().max(320),
+          contactRole: z.string().trim().max(200).optional(),
+          websiteUrl: z.string().trim().max(300).optional(),
+          contactPhone: z.string().trim().max(60).optional(),
+          hqState: z.string().trim().max(40).optional(),
+          hqZip: z.string().trim().max(20).optional(),
+          // Scale
+          aum: z.string().trim().max(60).optional(),
+          annualRevenue: z.string().trim().max(60).optional(),
+          backOfficeSize: z.string().trim().max(60).optional(),
+          entityCount: z.string().trim().max(60).optional(),
+          operatingBusinesses: z.string().trim().max(60).optional(),
+          // Composition
+          entityTypes: z.array(z.string().trim().max(80)).max(20).optional(),
+          jurisdictions: z.array(z.string().trim().max(80)).max(30).optional(),
+          assetLocation: z.string().trim().max(60).optional(),
+          investmentTypes: z.array(z.string().trim().max(80)).max(20).optional(),
+          // Current systems
+          generalLedgerSystem: z.string().trim().max(200).optional(),
+          billPaySystem: z.string().trim().max(200).optional(),
+          investmentReportingSystem: z.string().trim().max(200).optional(),
+          payrollSystem: z.string().trim().max(200).optional(),
+          // Close, reporting & volume
+          monthEndCloseTimeline: z.string().trim().max(60).optional(),
+          reportingCadence: z.string().trim().max(60).optional(),
+          monthlyBillVolume: z.string().trim().max(60).optional(),
+          accountsToReconcile: z.string().trim().max(60).optional(),
+          annualK1Volume: z.string().trim().max(60).optional(),
+          payrollHeadcount: z.string().trim().max(60).optional(),
+          // Team composition
+          currentRoles: z.array(z.string().trim().max(80)).max(20).optional(),
+          outsourcingMix: z.string().trim().max(80).optional(),
+          teamGeography: z.string().trim().max(300).optional(),
+          // Goals & timing
+          painPoints: z.string().trim().max(4000).optional(),
+          primaryGoals: z.array(z.string().trim().max(120)).max(20).optional(),
+          timeline: z.string().trim().max(80).optional(),
+          additionalNotes: z.string().trim().max(4000).optional(),
+          // Meta
+          sourcePage: z.string().trim().max(160).optional(),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const { id } = await submitAccountingAssessment(input);
+        return { success: true, id };
+      }),
   }),
 
   // Admin access management -- OWNER-only (milton@/hello@). Owners add/remove the

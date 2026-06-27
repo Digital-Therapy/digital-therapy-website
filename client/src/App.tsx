@@ -18,9 +18,11 @@ import Partners from "./pages/Partners";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Vendors from "./pages/Vendors";
+import GetStarted from "./pages/GetStarted";
 import AdminVendors from "./pages/admin/AdminVendors";
 import AdminVendorDetail from "./pages/admin/AdminVendorDetail";
 import AdminClients from "./pages/admin/AdminClients";
+import AdminPipeline from "./pages/admin/AdminPipeline";
 import NdaSigningPage from "./pages/NdaSigningPage";
 import NdaBatchSigningPage from "./pages/NdaBatchSigningPage";
 import AdminAccess from "./pages/admin/AdminAccess";
@@ -40,12 +42,14 @@ function Router() {
       <Route path={"/privacy"} component={Privacy} />
       <Route path={"/accessibility"} component={Accessibility} />
       <Route path={"/team"} component={Team} />
+      <Route path={"/get-started"} component={GetStarted} />
       {/* Protected admin console — auth/role-gated in AdminLayout, guarded
           server-side by adminProcedure. Intentionally excluded from
           scripts/prerender.mjs ROUTES (auth-gated, not for the sitemap). */}
       <Route path={"/vendorlists"} component={AdminVendors} />
       <Route path={"/vendorlists/:id"} component={AdminVendorDetail} />
       <Route path={"/admin/clients"} component={AdminClients} />
+      <Route path={"/admin/pipeline"} component={AdminPipeline} />
       <Route path={"/admin/access"} component={AdminAccess} />
       {/* Public, token-gated NDA signing — no auth, not prerendered. The batch
           route (4 segments) is matched before the single route (3 segments). */}
