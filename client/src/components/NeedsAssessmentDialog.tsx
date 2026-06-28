@@ -494,7 +494,7 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
 
             {/* Submit */}
             <div className="sticky bottom-0 -mx-6 -mb-6 flex flex-col gap-3 border-t border-black/10 bg-white/95 px-6 py-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-xs text-black/55">
+              <p className="text-base text-black/55">
                 We respond swiftly. We'll be in touch soon.
               </p>
               <div className="flex justify-end gap-2">
