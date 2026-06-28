@@ -91,12 +91,7 @@ const PRIMARY_GOAL_OPTIONS = [
   "Improve controls / risk posture",
 ];
 
-const TIMELINE_OPTIONS = [
-  "Need a partner now (0 – 30 days)",
-  "This quarter",
-  "This year",
-  "Just exploring options",
-];
+const TIMELINE_OPTIONS = ["Exploring options", "Need help ASAP"];
 
 const HQ_LOCATION_OPTIONS = ["In the US", "Outside the US"];
 
