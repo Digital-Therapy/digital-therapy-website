@@ -8,6 +8,7 @@ import PublicHeader from "@/components/PublicHeader";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
+  ArrowUpRight,
   BadgeCheck,
   BarChart3,
   BrainCircuit,
@@ -460,6 +461,29 @@ export default function Thesis() {
                 </a>
               </div>
             </motion.div>
+          </div>
+        </section>
+
+        {/* Partner-with-us CTA — sits just above the Become-a-vendor CTA that
+            SiteFooter renders on every page; the two banners stack visually. */}
+        <section className="bg-white py-12 lg:py-14">
+          <div className="container">
+            <motion.a
+              {...fadeUp}
+              href="/partners"
+              className="group flex flex-col items-center justify-between gap-4 rounded-[1.6rem] border border-[#0A65FF]/25 bg-[#0A65FF]/8 px-6 py-6 transition-all duration-300 hover:border-[#0A65FF]/50 hover:bg-[#0A65FF]/12 sm:flex-row sm:gap-6 sm:px-8 sm:py-7"
+            >
+              <div>
+                <p className="text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0040c9]">For aligned firms</p>
+                <p className="mt-2 font-display text-[clamp(1.05rem,2.6vw,1.875rem)] leading-tight tracking-[-0.03em] text-[#111111]">
+                  Build a deeper partnership with Digital Therapy.
+                </p>
+              </div>
+              <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#0A65FF] px-6 py-3 text-sm font-semibold text-white shadow-[0_14px_35px_rgba(10,101,255,0.28)] transition-transform duration-300 group-hover:-translate-y-0.5 sm:px-7 sm:py-3.5 sm:text-base">
+                Partner with us
+                <ArrowUpRight className="h-4 w-4" />
+              </span>
+            </motion.a>
           </div>
         </section>
       </main>

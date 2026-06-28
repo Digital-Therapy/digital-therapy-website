@@ -18,7 +18,6 @@ const primaryNavItems = [
   { label: "Capabilities", href: "/capabilities" },
   { label: "Process", href: "/process" },
   { label: "DT Brain", href: "/dt-brain" },
-  { label: "Partners", href: "/partners" },
   { label: "Team", href: "/team" },
   { label: "Get Started", href: "/get-started" },
 ] as const;
