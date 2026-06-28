@@ -1,16 +1,14 @@
 /**
- * Get Started — single conversion hub for visitors ready to engage.
+ * Get Started — hub of intake assessments by discipline.
  *
- * v1 surfaces the three existing on-ramps (book a 30-min intro, send a written
- * message, apply as a vendor) using the existing Booking + Contact + Vendor
- * dialogs so nothing is unique to this page that has to be maintained separately.
- * Copy is intentionally light — iterate from here.
+ * Each card opens a structured assessment dialog (e.g. Outsourced Accounting /
+ * Bookkeeping) that collects family-office profile, scale, and current state.
+ * Submissions persist to dt_site.needs_assessment and trigger an owner email.
  */
-import { BookingWidgetDialog } from "@/components/ContactBooking";
 import NeedsAssessmentDialog from "@/components/NeedsAssessmentDialog";
 import PublicHeader from "@/components/PublicHeader";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Calculator, CalendarClock, ClipboardList } from "lucide-react";
+import { ArrowUpRight, Calculator } from "lucide-react";
 import { useState } from "react";
 
 const fadeUp = {
@@ -33,57 +31,24 @@ export default function GetStarted() {
             Get started
           </p>
           <h1 className="mt-5 font-display text-[clamp(2.4rem,5.6vw,4.25rem)] leading-[1.04] tracking-[-0.045em]">
-            Bring Digital Therapy <br className="hidden sm:block" />into your family office.
+            Intake Assessments
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-black/65">
-            Start with a 30-minute intake session — we will walk through your environment together and come back with one clear next step.
+            Take 5 – 10 minutes to walk us through your operation. We come back within one business day with what we see and a recommended next step.
           </p>
         </motion.div>
 
-        {/* Primary CTA */}
+        {/* Assessment cards */}
         <div className="mx-auto mt-14 max-w-xl">
-          <PathCard
+          <ClickableAssessmentCard
             delay={0}
-            eyebrow="Intake session"
-            icon={CalendarClock}
-            title="Book a 30-minute intake session."
-            body="Walk us through your environment. We will come back with one clear next step — or tell you straight if we are not the right fit."
-            cta={
-              <BookingWidgetDialog
-                variant="primary"
-                context="get-started page booking"
-                label="Book 30 min"
-              />
-            }
+            eyebrow="Finance & operations"
+            icon={Calculator}
+            title="Outsourced Accounting / Bookkeeping"
+            body="Evaluate your current accounting workflow, close cadence, and reporting cadence to identify what to standardize, automate, and hand off."
+            onClick={() => setAccountingOpen(true)}
           />
         </div>
-
-        {/* Needs Assessments */}
-        <section className="mt-24 lg:mt-32">
-          <motion.div {...fadeUp} className="mx-auto max-w-3xl text-center">
-            <div className="mx-auto inline-flex items-center gap-2 text-[0.75rem] font-bold uppercase tracking-[0.24em] text-[#0A65FF]">
-              <ClipboardList className="h-4 w-4" />
-              Step two
-            </div>
-            <h2 className="mt-5 font-display text-[clamp(2rem,4.4vw,3.25rem)] leading-[1.06] tracking-[-0.04em]">
-              Needs Assessments
-            </h2>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-black/65">
-              After the intake session, we run targeted assessments to map your current state and surface the highest-impact opportunities.
-            </p>
-          </motion.div>
-
-          <div className="mx-auto mt-14 max-w-xl">
-            <ClickableAssessmentCard
-              delay={0}
-              eyebrow="Finance & operations"
-              icon={Calculator}
-              title="Outsourced Accounting / Bookkeeping"
-              body="Evaluate your current accounting workflow, close cadence, and reporting cadence to identify what to standardize, automate, and hand off."
-              onClick={() => setAccountingOpen(true)}
-            />
-          </div>
-        </section>
       </main>
 
       <NeedsAssessmentDialog open={accountingOpen} onOpenChange={setAccountingOpen} />
@@ -131,43 +96,5 @@ function ClickableAssessmentCard({
         <ArrowUpRight className="h-4 w-4" />
       </span>
     </motion.button>
-  );
-}
-
-function PathCard({
-  eyebrow,
-  icon: Icon,
-  title,
-  body,
-  cta,
-  delay,
-}: {
-  eyebrow: string;
-  icon: React.ComponentType<{ className?: string }>;
-  title: string;
-  body: string;
-  cta?: React.ReactNode;
-  delay: number;
-}) {
-  return (
-    <motion.div
-      {...fadeUp}
-      transition={{ ...fadeUp.transition, delay }}
-      className="flex flex-col rounded-[1.6rem] border border-black/10 bg-white p-7 shadow-[0_2px_24px_rgba(0,0,0,0.03)]"
-    >
-      <div className="flex items-center gap-3">
-        <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#0A65FF]/10 text-[#0A65FF]">
-          <Icon className="h-5 w-5" />
-        </span>
-        <span className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#0040c9]">
-          {eyebrow}
-        </span>
-      </div>
-      <h2 className="mt-5 font-display text-2xl leading-tight tracking-[-0.03em] text-[#111111]">
-        {title}
-      </h2>
-      <p className="mt-3 text-base leading-7 text-black/68">{body}</p>
-      {cta ? <div className="mt-7 flex">{cta}</div> : null}
-    </motion.div>
   );
 }

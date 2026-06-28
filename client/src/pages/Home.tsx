@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Database,
   LockKeyhole,
+  Plus,
   ShieldCheck,
   Workflow,
 } from "lucide-react";
@@ -201,16 +202,23 @@ export default function Home() {
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
                 <img src={welcomeVisual} alt="Digital Therapy welcome hero — modern family office operating layer surfacing data, workflows, reporting, and automation behind one unified team" className="aspect-[16/8] w-full object-cover object-[center_58%]" width={1536} height={1024}/>
               </div>
-              <div className="relative mt-5 grid gap-1 overflow-hidden rounded-[1.35rem] border border-black/10 bg-white p-1 shadow-[0_18px_45px_rgba(16,24,40,0.08)] sm:grid-cols-3">
+              <p className="mt-6 text-center text-xs font-medium italic text-black/55">
+                Tap any outcome below to see a real client case study.
+              </p>
+              <div className="relative mt-2 grid gap-1 overflow-hidden rounded-[1.35rem] border border-black/10 bg-white p-1 shadow-[0_18px_45px_rgba(16,24,40,0.08)] sm:grid-cols-3">
                 {caseStudies.map((study, index) => (
                   <button
                     key={study.label}
                     type="button"
                     onClick={() => setOpenCaseStudyIndex(index)}
                     aria-label={`See the ${study.label} case study`}
-                    className="group flex items-center justify-center rounded-[1rem] px-3 py-3 text-sm font-bold text-[#111111] transition-colors duration-200 hover:bg-[#0A65FF] hover:text-white focus:outline-none focus-visible:bg-[#0A65FF] focus-visible:text-white focus-visible:ring-2 focus-visible:ring-[#0A65FF]/50 focus-visible:ring-offset-2"
+                    className="group flex items-center justify-center gap-2 rounded-[1rem] px-3 py-3 text-sm font-bold text-[#111111] transition-colors duration-200 hover:bg-[#0A65FF] hover:text-white focus:outline-none focus-visible:bg-[#0A65FF] focus-visible:text-white focus-visible:ring-2 focus-visible:ring-[#0A65FF]/50 focus-visible:ring-offset-2"
                   >
-                    {study.label}
+                    <span>{study.label}</span>
+                    <Plus
+                      aria-hidden="true"
+                      className="h-4 w-4 shrink-0 text-[#0A65FF] opacity-60 transition-all duration-200 group-hover:rotate-90 group-hover:text-white group-hover:opacity-100 group-focus-visible:rotate-90 group-focus-visible:text-white group-focus-visible:opacity-100"
+                    />
                   </button>
                 ))}
               </div>

@@ -79,7 +79,7 @@ export const ROUTE_META: Record<string, RouteMeta> = {
   "/get-started": {
     title: "Get Started | Digital Therapy",
     description:
-      "Three ways to start a conversation with Digital Therapy -- book a 30-minute intro, send a written message, or apply as a vendor.",
+      "Intake assessments by discipline -- take 5-10 minutes to walk us through your operation. We come back within one business day with what we see and a recommended next step.",
     priority: 0.85,
   },
   "/terms": {
