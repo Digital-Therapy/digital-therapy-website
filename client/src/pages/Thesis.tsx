@@ -464,26 +464,28 @@ export default function Thesis() {
           </div>
         </section>
 
-        {/* Partner-with-us CTA — sits just above the Become-a-vendor CTA that
-            SiteFooter renders on every page; the two banners stack visually. */}
-        <section className="bg-white py-12 lg:py-14">
-          <div className="container">
-            <motion.a
-              {...fadeUp}
-              href="/partners"
-              className="group flex flex-col items-center justify-between gap-4 rounded-[1.6rem] border border-[#0A65FF]/25 bg-[#0A65FF]/8 px-6 py-6 transition-all duration-300 hover:border-[#0A65FF]/50 hover:bg-[#0A65FF]/12 sm:flex-row sm:gap-6 sm:px-8 sm:py-7"
-            >
-              <div>
-                <p className="text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0040c9]">For aligned firms</p>
-                <p className="mt-2 font-display text-[clamp(1.05rem,2.6vw,1.875rem)] leading-tight tracking-[-0.03em] text-[#111111]">
-                  Build a deeper partnership with Digital Therapy.
-                </p>
-              </div>
-              <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#0A65FF] px-6 py-3 text-sm font-semibold text-white shadow-[0_14px_35px_rgba(10,101,255,0.28)] transition-transform duration-300 group-hover:-translate-y-0.5 sm:px-7 sm:py-3.5 sm:text-base">
+        {/* Partner-with-us CTA — dark, full-bleed page-closer. Deliberately
+            distinct from the light-tint Become-a-vendor pill that SiteFooter
+            renders below so the two sections read as different invitations
+            (firms / specialists) rather than visual siblings. */}
+        <section className="relative overflow-hidden bg-[#111111] py-20 text-white lg:py-24">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_30%,rgba(110,168,255,0.14),transparent_55%)]" />
+          <div className="container relative">
+            <motion.div {...fadeUp} className="mx-auto max-w-3xl text-center">
+              <p className="text-[0.75rem] font-bold uppercase tracking-[0.24em] text-[#6EA8FF]">
+                For aligned firms
+              </p>
+              <h2 className="mt-5 font-display text-[clamp(2.1rem,4.6vw,3.5rem)] leading-[1.04] tracking-[-0.04em]">
+                Build a deeper partnership with Digital Therapy.
+              </h2>
+              <a
+                href="/partners"
+                className="group mt-10 inline-flex items-center gap-2.5 rounded-full border border-white/55 bg-transparent px-8 py-4 text-base font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white hover:text-[#111111]"
+              >
                 Partner with us
-                <ArrowUpRight className="h-4 w-4" />
-              </span>
-            </motion.a>
+                <ArrowUpRight className="h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </a>
+            </motion.div>
           </div>
         </section>
       </main>
