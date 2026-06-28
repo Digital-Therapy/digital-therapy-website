@@ -277,14 +277,9 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
                 <Field label="Title">
                   <Input value={form.contactRole} onChange={(e) => update("contactRole", e.target.value)} />
                 </Field>
-                <Field label="Website URL">
-                  <div className="relative">
-                    <Input
-                      value={form.websiteUrl}
-                      onChange={(e) => update("websiteUrl", e.target.value)}
-                      placeholder="https://"
-                      className="pr-10"
-                    />
+                <Label className="flex flex-col gap-[11px]">
+                  <span className="flex items-center justify-between gap-2 text-sm font-medium text-[#111111]">
+                    <span>Website URL</span>
                     {form.extraWebsiteUrls.length < 2 && (
                       <button
                         type="button"
@@ -294,13 +289,18 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
                         }
                         aria-label="Add another website URL"
                         title="Add another website URL"
-                        className="absolute right-1.5 top-1/2 inline-flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full border border-[#0A65FF] bg-[#0A65FF]/10 text-[#0A65FF] transition-colors hover:bg-[#0A65FF] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF] focus-visible:ring-offset-1"
+                        className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#0A65FF] bg-[#0A65FF]/10 text-[#0A65FF] transition-colors hover:bg-[#0A65FF] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF] focus-visible:ring-offset-1"
                       >
                         <Plus className="h-3.5 w-3.5" />
                       </button>
                     )}
-                  </div>
-                </Field>
+                  </span>
+                  <Input
+                    value={form.websiteUrl}
+                    onChange={(e) => update("websiteUrl", e.target.value)}
+                    placeholder="https://"
+                  />
+                </Label>
                 {form.extraWebsiteUrls.length > 0 && (
                   <div className="grid grid-cols-1 gap-4 sm:col-span-2 sm:grid-cols-2">
                     {form.extraWebsiteUrls.map((url, i) => (
@@ -501,7 +501,11 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
                 <Button variant="ghost" onClick={() => handleOpenChange(false)}>
                   Cancel
                 </Button>
-                <Button onClick={submit} disabled={!canSubmit || submitMutation.isPending}>
+                <Button
+                  onClick={submit}
+                  disabled={!canSubmit || submitMutation.isPending}
+                  className="bg-[#0040c9] text-white hover:bg-[#003397]"
+                >
                   {submitMutation.isPending && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
                   Submit assessment
                 </Button>
