@@ -745,7 +745,9 @@ export const appRouter = router({
           contactEmail: z.string().trim().email().max(320),
           contactRole: z.string().trim().max(200).optional(),
           websiteUrl: z.string().trim().max(300).optional(),
+          additionalWebsites: z.array(z.string().trim().max(300)).max(2).optional(),
           contactPhone: z.string().trim().max(60).optional(),
+          hqCity: z.string().trim().max(120).optional(),
           hqState: z.string().trim().max(40).optional(),
           hqZip: z.string().trim().max(20).optional(),
           // Scale

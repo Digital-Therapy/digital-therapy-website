@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -144,8 +144,10 @@ type FormState = {
   contactName: string;
   contactRole: string;
   websiteUrl: string;
+  extraWebsiteUrls: string[];
   contactEmail: string;
   contactPhone: string;
+  hqCity: string;
   hqState: string;
   hqZip: string;
   aum: string;
@@ -181,8 +183,10 @@ const EMPTY_STATE: FormState = {
   contactName: "",
   contactRole: "",
   websiteUrl: "",
+  extraWebsiteUrls: [],
   contactEmail: "",
   contactPhone: "",
+  hqCity: "",
   hqState: "",
   hqZip: "",
   aum: "",
@@ -247,7 +251,11 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
       contactEmail: form.contactEmail.trim(),
       contactRole: form.contactRole.trim() || undefined,
       websiteUrl: form.websiteUrl.trim() || undefined,
+      additionalWebsites: form.extraWebsiteUrls.map((u) => u.trim()).filter(Boolean).length
+        ? form.extraWebsiteUrls.map((u) => u.trim()).filter(Boolean)
+        : undefined,
       contactPhone: form.contactPhone.trim() || undefined,
+      hqCity: form.hqCity.trim() || undefined,
       hqState: form.hqState || undefined,
       hqZip: form.hqZip.trim() || undefined,
       aum: form.aum || undefined,
@@ -319,39 +327,84 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
                   <Input value={form.contactRole} onChange={(e) => update("contactRole", e.target.value)} />
                 </Field>
                 <Field label="Website URL">
-                  <Input
-                    value={form.websiteUrl}
-                    onChange={(e) => update("websiteUrl", e.target.value)}
-                    placeholder="https://"
-                  />
+                  <div className="relative">
+                    <Input
+                      value={form.websiteUrl}
+                      onChange={(e) => update("websiteUrl", e.target.value)}
+                      placeholder="https://"
+                      className="pr-10"
+                    />
+                    {form.extraWebsiteUrls.length < 2 && (
+                      <button
+                        type="button"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() =>
+                          setForm((f) => ({ ...f, extraWebsiteUrls: [...f.extraWebsiteUrls, ""] }))
+                        }
+                        aria-label="Add another website URL"
+                        title="Add another website URL"
+                        className="absolute right-1.5 top-1/2 inline-flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full border border-[#0A65FF] bg-[#0A65FF]/10 text-[#0A65FF] transition-colors hover:bg-[#0A65FF] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF] focus-visible:ring-offset-1"
+                      >
+                        <Plus className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                  </div>
                 </Field>
+                {form.extraWebsiteUrls.length > 0 && (
+                  <div className="grid grid-cols-1 gap-4 sm:col-span-2 sm:grid-cols-2">
+                    {form.extraWebsiteUrls.map((url, i) => (
+                      <Field key={i} label={`Additional Website URL`}>
+                        <Input
+                          value={url}
+                          onChange={(e) =>
+                            setForm((f) => {
+                              const next = [...f.extraWebsiteUrls];
+                              next[i] = e.target.value;
+                              return { ...f, extraWebsiteUrls: next };
+                            })
+                          }
+                          placeholder="https://"
+                        />
+                      </Field>
+                    ))}
+                  </div>
+                )}
                 <RequiredField label="Email">
                   <Input type="email" value={form.contactEmail} onChange={(e) => update("contactEmail", e.target.value)} />
                 </RequiredField>
                 <Field label="Phone Number">
                   <Input value={form.contactPhone} onChange={(e) => update("contactPhone", e.target.value)} />
                 </Field>
-                <Label className="flex flex-col gap-1.5 sm:col-span-2">
+                <Label className="flex flex-col gap-[11px] sm:col-span-2">
                   <span className="text-sm font-medium text-[#111111]">HQ Location</span>
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3">
+                    <Input
+                      value={form.hqCity}
+                      onChange={(e) => update("hqCity", e.target.value)}
+                      placeholder="Select City"
+                      maxLength={120}
+                      className="flex-1"
+                    />
                     <select
                       value={form.hqState}
                       onChange={(e) => update("hqState", e.target.value)}
-                      className="h-10 rounded-md border border-black/15 bg-white px-3 text-sm focus:border-[#0A65FF] focus:outline-none"
+                      className="border-input focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full flex-1 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs outline-none transition-[color,box-shadow] focus-visible:ring-[3px] md:text-sm"
                     >
-                      <option value="">Pick state…</option>
+                      <option value="">Select State</option>
                       {US_STATE_OPTIONS.map((s) => (
                         <option key={s} value={s}>
                           {s}
                         </option>
                       ))}
                     </select>
+                    <span className="self-center text-sm text-black/55">or</span>
                     <Input
                       value={form.hqZip}
                       onChange={(e) => update("hqZip", e.target.value)}
-                      placeholder="…or enter zip code"
+                      placeholder="Enter Zip Code"
                       inputMode="numeric"
                       maxLength={10}
+                      className="flex-1"
                     />
                   </div>
                 </Label>
@@ -605,7 +658,7 @@ function Grid({ children }: { children: React.ReactNode }) {
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <Label className="flex flex-col gap-1.5">
+    <Label className="flex flex-col gap-[11px]">
       <span className="text-sm font-medium text-[#111111]">{label}</span>
       {children}
     </Label>
@@ -614,7 +667,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function RequiredField({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <Label className="flex flex-col gap-1.5">
+    <Label className="flex flex-col gap-[11px]">
       <span className="text-sm font-medium text-[#111111]">
         {label} <span className="text-[#c83a3a]">*</span>
       </span>
@@ -635,7 +688,7 @@ function RadioGroup({
   onChange: (v: string) => void;
 }) {
   return (
-    <fieldset className="flex flex-col gap-2.5">
+    <fieldset className="flex flex-col gap-[15px]">
       <legend className="text-sm font-medium text-[#111111]">{label}</legend>
       <div className="flex flex-wrap gap-2">
         {options.map((opt) => {
@@ -672,7 +725,7 @@ function CheckboxGrid({
   onToggle: (v: string) => void;
 }) {
   return (
-    <fieldset className="flex flex-col gap-2.5">
+    <fieldset className="flex flex-col gap-[15px]">
       <legend className="text-sm font-medium text-[#111111]">{label}</legend>
       <div className="flex flex-wrap gap-2">
         {options.map((opt) => {

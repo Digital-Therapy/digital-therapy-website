@@ -21,8 +21,10 @@ export type AccountingAssessmentInput = {
   contactName: string;
   contactRole?: string;
   websiteUrl?: string;
+  additionalWebsites?: string[];
   contactEmail: string;
   contactPhone?: string;
+  hqCity?: string;
   hqState?: string;
   hqZip?: string;
   // Scale
@@ -139,8 +141,10 @@ export function formatAccountingAssessment(input: AccountingAssessmentInput, id:
     row("Contact", input.contactName) +
     row("Title", input.contactRole) +
     row("Website", input.websiteUrl) +
+    row("Additional websites", input.additionalWebsites) +
     row("Email", input.contactEmail) +
     row("Phone", input.contactPhone) +
+    row("HQ city", input.hqCity) +
     row("HQ state", input.hqState) +
     row("HQ zip", input.hqZip) +
     "\n" +
