@@ -41,12 +41,8 @@ const JURISDICTION_OPTIONS = ["US Single State", "US Multi-State", "Non-US"];
 
 const GENERAL_LEDGER_OPTIONS = [
   "QuickBooks",
-  "Sage Intacct",
-  "NetSuite",
-  "Workday",
-  "Microsoft Dynamics 365",
   "Xero",
-  "SAP",
+  "Excel",
   "Custom",
   "Other",
 ];
@@ -55,20 +51,17 @@ const BILL_PAY_OPTIONS = [
   "Bill.com",
   "Ramp",
   "Brex",
-  "Tipalti",
-  "Stampli",
-  "AvidXchange",
   "Concur",
   "Custom",
   "Other",
 ];
 
+const ERP_PLATFORM_OPTIONS = ["NetSuite", "Sage Intacct", "SAP", "Microsoft Dynamics", "Other"];
+
 const PAYROLL_OPTIONS = [
   "Gusto",
   "ADP",
   "Paychex",
-  "Justworks",
-  "Rippling",
   "Paylocity",
   "In-House",
   "Custom",
@@ -116,6 +109,9 @@ type FormState = {
   generalLedgerSystemOther: string;
   billPaySystems: string[];
   billPaySystemOther: string;
+  usesErp: string;
+  erpPlatforms: string[];
+  erpPlatformOther: string;
   payrollSystems: string[];
   payrollSystemOther: string;
   monthEndCloseTimeline: string;
@@ -147,6 +143,9 @@ const EMPTY_STATE: FormState = {
   generalLedgerSystemOther: "",
   billPaySystems: [],
   billPaySystemOther: "",
+  usesErp: "",
+  erpPlatforms: [],
+  erpPlatformOther: "",
   payrollSystems: [],
   payrollSystemOther: "",
   monthEndCloseTimeline: "",
@@ -213,6 +212,15 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
       billPaySystemOther:
         form.billPaySystems.includes("Other") && form.billPaySystemOther.trim()
           ? form.billPaySystemOther.trim()
+          : undefined,
+      usesErp: form.usesErp || undefined,
+      erpPlatforms:
+        form.usesErp === "Yes" && form.erpPlatforms.length ? form.erpPlatforms : undefined,
+      erpPlatformOther:
+        form.usesErp === "Yes" &&
+        form.erpPlatforms.includes("Other") &&
+        form.erpPlatformOther.trim()
+          ? form.erpPlatformOther.trim()
           : undefined,
       payrollSystems: form.payrollSystems.length ? form.payrollSystems : undefined,
       payrollSystemOther:
@@ -391,6 +399,22 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
                 otherValue={form.billPaySystemOther}
                 onOtherChange={(v) => update("billPaySystemOther", v)}
               />
+              <RadioGroup
+                label="Do you currently leverage an ERP platform?"
+                options={YES_NO_OPTIONS}
+                value={form.usesErp}
+                onChange={(v) => update("usesErp", v)}
+              />
+              {form.usesErp === "Yes" && (
+                <SystemPicker
+                  label="Which ERP platform?"
+                  options={ERP_PLATFORM_OPTIONS}
+                  values={form.erpPlatforms}
+                  onToggle={(v) => toggle("erpPlatforms", v)}
+                  otherValue={form.erpPlatformOther}
+                  onOtherChange={(v) => update("erpPlatformOther", v)}
+                />
+              )}
               <SystemPicker
                 label="Payroll provider"
                 options={PAYROLL_OPTIONS}

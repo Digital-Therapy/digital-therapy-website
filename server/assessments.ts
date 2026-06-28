@@ -38,6 +38,9 @@ export type AccountingAssessmentInput = {
   generalLedgerSystemOther?: string;
   billPaySystems?: string[];
   billPaySystemOther?: string;
+  usesErp?: string;
+  erpPlatforms?: string[];
+  erpPlatformOther?: string;
   payrollSystems?: string[];
   payrollSystemOther?: string;
   // Close, reporting & volume
@@ -152,6 +155,9 @@ export function formatAccountingAssessment(input: AccountingAssessmentInput, id:
     row("  ↳ Other (specified)", input.generalLedgerSystemOther) +
     row("Bill pay / AP", input.billPaySystems) +
     row("  ↳ Other (specified)", input.billPaySystemOther) +
+    row("Uses an ERP platform", input.usesErp) +
+    row("  ↳ ERP platform(s)", input.erpPlatforms) +
+    row("  ↳ Other (specified)", input.erpPlatformOther) +
     row("Payroll", input.payrollSystems) +
     row("  ↳ Other (specified)", input.payrollSystemOther) +
     "\n" +

@@ -761,6 +761,9 @@ export const appRouter = router({
           generalLedgerSystemOther: z.string().trim().max(300).optional(),
           billPaySystems: z.array(z.string().trim().max(80)).max(20).optional(),
           billPaySystemOther: z.string().trim().max(300).optional(),
+          usesErp: z.string().trim().max(20).optional(),
+          erpPlatforms: z.array(z.string().trim().max(80)).max(20).optional(),
+          erpPlatformOther: z.string().trim().max(300).optional(),
           payrollSystems: z.array(z.string().trim().max(80)).max(20).optional(),
           payrollSystemOther: z.string().trim().max(300).optional(),
           // Close, reporting & volume
