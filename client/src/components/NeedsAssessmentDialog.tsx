@@ -494,7 +494,7 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
                 <Button
                   onClick={submit}
                   disabled={!canSubmit || submitMutation.isPending}
-                  className="bg-[#0040c9] text-white hover:bg-[#003397]"
+                  className="bg-[#0A65FF] text-white hover:bg-[#0040c9]"
                 >
                   {submitMutation.isPending && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
                   Submit assessment
