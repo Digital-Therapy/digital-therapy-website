@@ -23,7 +23,7 @@ type Props = {
 // ─── Question option sets ───────────────────────────────────────────────────
 
 const AUM_OPTIONS = ["Under $100M", "$100M – $500M", "$500M – $1B", "$1B – $5B", "$5B – $10B", "$10B+"];
-const REVENUE_OPTIONS = ["Under $10M", "$10M – $50M", "$50M – $200M", "$200M – $1B", "$1B+"];
+const REVENUE_OPTIONS = ["$10M – $24M", "$25M – $49M", "$50M – $249M", "$250M – $499M", "$500M+"];
 const BACK_OFFICE_OPTIONS = ["1", "2 – 5", "6 – 10", "11 – 29", "30 – 49", "50+"];
 const ENTITY_COUNT_OPTIONS = ["1 – 10", "11 – 24", "25 – 49", "50 – 99", "100 – 199", "200 – 499", "500+"];
 const OPERATING_BIZ_OPTIONS = ["0", "1", "2", "3", "4", "5+"];

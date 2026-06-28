@@ -203,7 +203,7 @@ export default function Home() {
                 <img src={welcomeVisual} alt="Digital Therapy welcome hero — modern family office operating layer surfacing data, workflows, reporting, and automation behind one unified team" className="aspect-[16/8] w-full object-cover object-[center_58%]" width={1536} height={1024}/>
               </div>
               <p className="mt-6 text-center text-xs font-medium italic text-black/55">
-                Tap any outcome below to see a real client case study.
+                Tap the outcomes below to read relevant case studies.
               </p>
               <div className="relative mt-2 grid gap-1 overflow-hidden rounded-[1.35rem] border border-black/10 bg-white p-1 shadow-[0_18px_45px_rgba(16,24,40,0.08)] sm:grid-cols-3">
                 {caseStudies.map((study, index) => (
