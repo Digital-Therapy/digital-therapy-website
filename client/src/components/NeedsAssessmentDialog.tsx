@@ -7,10 +7,18 @@
  */
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { Input as InputBase } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
+import { cn } from "@/lib/utils";
+import type { ComponentProps } from "react";
+
+// Local Input that defaults to a white background so text fields visually
+// match the white radio/checkbox pills used throughout this form.
+function Input({ className, ...props }: ComponentProps<typeof InputBase>) {
+  return <InputBase {...props} className={cn("bg-white", className)} />;
+}
 import { CheckCircle2, Loader2, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -22,93 +30,54 @@ type Props = {
 
 // ─── Question option sets ───────────────────────────────────────────────────
 
-const AUM_OPTIONS = ["Under $100M", "$100M – $500M", "$500M – $1B", "$1B – $5B", "$5B – $10B", "$10B+"];
 const REVENUE_OPTIONS = ["$10M – $24M", "$25M – $49M", "$50M – $249M", "$250M – $499M", "$500M+"];
 const BACK_OFFICE_OPTIONS = ["1", "2 – 5", "6 – 10", "11 – 29", "30 – 49", "50+"];
 const ENTITY_COUNT_OPTIONS = ["1 – 10", "11 – 24", "25 – 49", "50 – 99", "100 – 199", "200 – 499", "500+"];
-const OPERATING_BIZ_OPTIONS = ["0", "1", "2", "3", "4", "5+"];
+const OPERATING_BIZ_OPTIONS = ["Yes", "No"];
 
-const ENTITY_TYPE_OPTIONS = [
-  "Trusts",
-  "LLCs",
-  "Limited Partnerships (LP / LLP)",
-  "S-Corps",
-  "C-Corps",
-  "Partnerships",
-  "Foundations",
-  "Disregarded entities",
+const YES_NO_OPTIONS = ["Yes", "No"];
+
+const JURISDICTION_OPTIONS = ["US Single State", "US Multi-State", "Non-US"];
+
+const GENERAL_LEDGER_OPTIONS = [
+  "QuickBooks",
+  "Sage Intacct",
+  "NetSuite",
+  "Workday",
+  "Microsoft Dynamics 365",
+  "Xero",
+  "SAP",
+  "Custom",
   "Other",
 ];
 
-const JURISDICTION_OPTIONS = [
-  "US — single state",
-  "US — multi-state",
-  "Cayman Islands",
-  "British Virgin Islands",
-  "Luxembourg",
-  "Singapore",
-  "Jersey / Guernsey",
-  "Switzerland",
-  "Bermuda",
-  "Other offshore",
+const BILL_PAY_OPTIONS = [
+  "Bill.com",
+  "Ramp",
+  "Brex",
+  "Tipalti",
+  "Stampli",
+  "AvidXchange",
+  "Concur",
+  "Custom",
+  "Other",
 ];
 
-const ASSET_LOCATION_OPTIONS = [
-  "All on-shore",
-  "Mostly on-shore",
-  "Mixed",
-  "Mostly off-shore",
-  "All off-shore",
+const PAYROLL_OPTIONS = [
+  "Gusto",
+  "ADP",
+  "Paychex",
+  "Justworks",
+  "Rippling",
+  "Paylocity",
+  "In-House",
+  "Custom",
+  "Other",
 ];
-
-const INVESTMENT_TYPE_OPTIONS = [
-  "Public equities",
-  "Public fixed income",
-  "Private equity",
-  "Hedge funds",
-  "Venture capital",
-  "Real estate — direct",
-  "Real estate — funds",
-  "Art / collectibles",
-  "Digital assets / crypto",
-  "Operating-business interests",
-];
-
-const CLOSE_TIMELINE_OPTIONS = [
-  "Under 5 business days",
-  "5 – 10 business days",
-  "10 – 20 business days",
-  "20+ business days",
-  "We do not close monthly",
-];
-
-const REPORTING_CADENCE_OPTIONS = ["Weekly", "Monthly", "Quarterly", "Annually", "Ad hoc only"];
 
 const BILL_VOLUME_OPTIONS = ["Under 50", "50 – 200", "200 – 500", "500 – 1,000", "1,000+"];
 const ACCOUNTS_OPTIONS = ["Under 10", "10 – 50", "50 – 100", "100 – 250", "250+"];
-const K1_VOLUME_OPTIONS = ["0", "1 – 25", "25 – 100", "100 – 500", "500+"];
 const PAYROLL_HEADCOUNT_OPTIONS = ["0", "1 – 10", "11 – 25", "26 – 50", "51 – 100", "100+"];
-
-const CURRENT_ROLE_OPTIONS = [
-  "CFO",
-  "Controller",
-  "Senior accountant",
-  "Staff accountant",
-  "Bookkeeper",
-  "AP clerk",
-  "AR clerk",
-  "Payroll specialist",
-  "Tax manager",
-  "External accountant / CPA firm",
-];
-
-const OUTSOURCING_MIX_OPTIONS = [
-  "All in-house",
-  "Mostly in-house",
-  "Roughly half / half",
-  "Mostly outsourced",
-  "All outsourced",
-];
 
 const PRIMARY_GOAL_OPTIONS = [
   "Reduce cost",
@@ -129,13 +98,7 @@ const TIMELINE_OPTIONS = [
   "Just exploring options",
 ];
 
-const US_STATE_OPTIONS = [
-  "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID",
-  "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO",
-  "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA",
-  "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY",
-  "PR", "International",
-];
+const HQ_LOCATION_OPTIONS = ["In the US", "Outside the US"];
 
 // ─── State type ─────────────────────────────────────────────────────────────
 
@@ -147,31 +110,23 @@ type FormState = {
   extraWebsiteUrls: string[];
   contactEmail: string;
   contactPhone: string;
-  hqCity: string;
-  hqState: string;
-  hqZip: string;
-  aum: string;
+  hqLocation: string;
   annualRevenue: string;
   backOfficeSize: string;
   entityCount: string;
   operatingBusinesses: string;
-  entityTypes: string[];
+  owns501c3: string;
   jurisdictions: string[];
-  assetLocation: string;
-  investmentTypes: string[];
-  generalLedgerSystem: string;
-  billPaySystem: string;
-  investmentReportingSystem: string;
-  payrollSystem: string;
+  generalLedgerSystems: string[];
+  generalLedgerSystemOther: string;
+  billPaySystems: string[];
+  billPaySystemOther: string;
+  payrollSystems: string[];
+  payrollSystemOther: string;
   monthEndCloseTimeline: string;
-  reportingCadence: string;
   monthlyBillVolume: string;
   accountsToReconcile: string;
-  annualK1Volume: string;
   payrollHeadcount: string;
-  currentRoles: string[];
-  outsourcingMix: string;
-  teamGeography: string;
   painPoints: string;
   primaryGoals: string[];
   timeline: string;
@@ -186,31 +141,23 @@ const EMPTY_STATE: FormState = {
   extraWebsiteUrls: [],
   contactEmail: "",
   contactPhone: "",
-  hqCity: "",
-  hqState: "",
-  hqZip: "",
-  aum: "",
+  hqLocation: "",
   annualRevenue: "",
   backOfficeSize: "",
   entityCount: "",
   operatingBusinesses: "",
-  entityTypes: [],
+  owns501c3: "",
   jurisdictions: [],
-  assetLocation: "",
-  investmentTypes: [],
-  generalLedgerSystem: "",
-  billPaySystem: "",
-  investmentReportingSystem: "",
-  payrollSystem: "",
+  generalLedgerSystems: [],
+  generalLedgerSystemOther: "",
+  billPaySystems: [],
+  billPaySystemOther: "",
+  payrollSystems: [],
+  payrollSystemOther: "",
   monthEndCloseTimeline: "",
-  reportingCadence: "",
   monthlyBillVolume: "",
   accountsToReconcile: "",
-  annualK1Volume: "",
   payrollHeadcount: "",
-  currentRoles: [],
-  outsourcingMix: "",
-  teamGeography: "",
   painPoints: "",
   primaryGoals: [],
   timeline: "",
@@ -255,31 +202,32 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
         ? form.extraWebsiteUrls.map((u) => u.trim()).filter(Boolean)
         : undefined,
       contactPhone: form.contactPhone.trim() || undefined,
-      hqCity: form.hqCity.trim() || undefined,
-      hqState: form.hqState || undefined,
-      hqZip: form.hqZip.trim() || undefined,
-      aum: form.aum || undefined,
+      hqLocation: form.hqLocation || undefined,
       annualRevenue: form.annualRevenue || undefined,
       backOfficeSize: form.backOfficeSize || undefined,
       entityCount: form.entityCount || undefined,
       operatingBusinesses: form.operatingBusinesses || undefined,
-      entityTypes: form.entityTypes.length ? form.entityTypes : undefined,
+      owns501c3: form.owns501c3 || undefined,
       jurisdictions: form.jurisdictions.length ? form.jurisdictions : undefined,
-      assetLocation: form.assetLocation || undefined,
-      investmentTypes: form.investmentTypes.length ? form.investmentTypes : undefined,
-      generalLedgerSystem: form.generalLedgerSystem.trim() || undefined,
-      billPaySystem: form.billPaySystem.trim() || undefined,
-      investmentReportingSystem: form.investmentReportingSystem.trim() || undefined,
-      payrollSystem: form.payrollSystem.trim() || undefined,
+      generalLedgerSystems: form.generalLedgerSystems.length ? form.generalLedgerSystems : undefined,
+      generalLedgerSystemOther:
+        form.generalLedgerSystems.includes("Other") && form.generalLedgerSystemOther.trim()
+          ? form.generalLedgerSystemOther.trim()
+          : undefined,
+      billPaySystems: form.billPaySystems.length ? form.billPaySystems : undefined,
+      billPaySystemOther:
+        form.billPaySystems.includes("Other") && form.billPaySystemOther.trim()
+          ? form.billPaySystemOther.trim()
+          : undefined,
+      payrollSystems: form.payrollSystems.length ? form.payrollSystems : undefined,
+      payrollSystemOther:
+        form.payrollSystems.includes("Other") && form.payrollSystemOther.trim()
+          ? form.payrollSystemOther.trim()
+          : undefined,
       monthEndCloseTimeline: form.monthEndCloseTimeline || undefined,
-      reportingCadence: form.reportingCadence || undefined,
       monthlyBillVolume: form.monthlyBillVolume || undefined,
       accountsToReconcile: form.accountsToReconcile || undefined,
-      annualK1Volume: form.annualK1Volume || undefined,
       payrollHeadcount: form.payrollHeadcount || undefined,
-      currentRoles: form.currentRoles.length ? form.currentRoles : undefined,
-      outsourcingMix: form.outsourcingMix || undefined,
-      teamGeography: form.teamGeography.trim() || undefined,
       painPoints: form.painPoints.trim() || undefined,
       primaryGoals: form.primaryGoals.length ? form.primaryGoals : undefined,
       timeline: form.timeline || undefined,
@@ -375,50 +323,19 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
                 <Field label="Phone Number">
                   <Input value={form.contactPhone} onChange={(e) => update("contactPhone", e.target.value)} />
                 </Field>
-                <Label className="flex flex-col gap-[11px] sm:col-span-2">
-                  <span className="text-sm font-medium text-[#111111]">HQ Location</span>
-                  <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3">
-                    <Input
-                      value={form.hqCity}
-                      onChange={(e) => update("hqCity", e.target.value)}
-                      placeholder="Select City"
-                      maxLength={120}
-                      className="flex-1"
-                    />
-                    <select
-                      value={form.hqState}
-                      onChange={(e) => update("hqState", e.target.value)}
-                      className="border-input focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full flex-1 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs outline-none transition-[color,box-shadow] focus-visible:ring-[3px] md:text-sm"
-                    >
-                      <option value="">Select State</option>
-                      {US_STATE_OPTIONS.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
-                      ))}
-                    </select>
-                    <span className="self-center text-sm text-black/55">or</span>
-                    <Input
-                      value={form.hqZip}
-                      onChange={(e) => update("hqZip", e.target.value)}
-                      placeholder="Enter Zip Code"
-                      inputMode="numeric"
-                      maxLength={10}
-                      className="flex-1"
-                    />
-                  </div>
-                </Label>
+                <div className="sm:col-span-2">
+                  <RadioGroup
+                    label="HQ — Are you based?"
+                    options={HQ_LOCATION_OPTIONS}
+                    value={form.hqLocation}
+                    onChange={(v) => update("hqLocation", v)}
+                  />
+                </div>
               </Grid>
             </Section>
 
             {/* Section B: Scale */}
             <Section title="Scale & complexity">
-              <RadioGroup
-                label="Approximate AUM"
-                options={AUM_OPTIONS}
-                value={form.aum}
-                onChange={(v) => update("aum", v)}
-              />
               <RadioGroup
                 label="Approximate annual revenue (across all entities)"
                 options={REVENUE_OPTIONS}
@@ -438,20 +355,20 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
                 onChange={(v) => update("entityCount", v)}
               />
               <RadioGroup
-                label="Number of operating businesses (if any)"
+                label="Do you operate one or more businesses internally?"
                 options={OPERATING_BIZ_OPTIONS}
                 value={form.operatingBusinesses}
                 onChange={(v) => update("operatingBusinesses", v)}
               />
             </Section>
 
-            {/* Section C: Composition */}
-            <Section title="Entity & investment composition">
-              <CheckboxGrid
-                label="Entity types in your structure"
-                options={ENTITY_TYPE_OPTIONS}
-                values={form.entityTypes}
-                onToggle={(v) => toggle("entityTypes", v)}
+            {/* Section C: Composition (header intentionally hidden) */}
+            <Section>
+              <RadioGroup
+                label="Do you own a 501C3?"
+                options={YES_NO_OPTIONS}
+                value={form.owns501c3}
+                onChange={(v) => update("owns501c3", v)}
               />
               <CheckboxGrid
                 label="Jurisdictions"
@@ -459,119 +376,74 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
                 values={form.jurisdictions}
                 onToggle={(v) => toggle("jurisdictions", v)}
               />
-              <RadioGroup
-                label="Asset / investment location"
-                options={ASSET_LOCATION_OPTIONS}
-                value={form.assetLocation}
-                onChange={(v) => update("assetLocation", v)}
-              />
-              <CheckboxGrid
-                label="Investment types held"
-                options={INVESTMENT_TYPE_OPTIONS}
-                values={form.investmentTypes}
-                onToggle={(v) => toggle("investmentTypes", v)}
-              />
             </Section>
 
             {/* Section D: Current systems */}
             <Section title="Current systems">
-              <Grid>
-                <Field label="General ledger / accounting software">
-                  <Input
-                    value={form.generalLedgerSystem}
-                    onChange={(e) => update("generalLedgerSystem", e.target.value)}
-                    placeholder="QuickBooks, Sage Intacct, NetSuite, Workday, custom…"
-                  />
-                </Field>
-                <Field label="Bill pay / AP system">
-                  <Input
-                    value={form.billPaySystem}
-                    onChange={(e) => update("billPaySystem", e.target.value)}
-                    placeholder="Bill.com, Ramp, Tipalti, in-house…"
-                  />
-                </Field>
-                <Field label="Investment / portfolio reporting platform">
-                  <Input
-                    value={form.investmentReportingSystem}
-                    onChange={(e) => update("investmentReportingSystem", e.target.value)}
-                    placeholder="Addepar, Black Diamond, eFront, Eton, custom…"
-                  />
-                </Field>
-                <Field label="Payroll provider">
-                  <Input
-                    value={form.payrollSystem}
-                    onChange={(e) => update("payrollSystem", e.target.value)}
-                    placeholder="Gusto, ADP, Paychex, Justworks, in-house, N/A…"
-                  />
-                </Field>
-              </Grid>
+              <SystemPicker
+                label="General ledger / accounting software"
+                options={GENERAL_LEDGER_OPTIONS}
+                values={form.generalLedgerSystems}
+                onToggle={(v) => toggle("generalLedgerSystems", v)}
+                otherValue={form.generalLedgerSystemOther}
+                onOtherChange={(v) => update("generalLedgerSystemOther", v)}
+              />
+              <SystemPicker
+                label="Bill pay / AP system"
+                options={BILL_PAY_OPTIONS}
+                values={form.billPaySystems}
+                onToggle={(v) => toggle("billPaySystems", v)}
+                otherValue={form.billPaySystemOther}
+                onOtherChange={(v) => update("billPaySystemOther", v)}
+              />
+              <SystemPicker
+                label="Payroll provider"
+                options={PAYROLL_OPTIONS}
+                values={form.payrollSystems}
+                onToggle={(v) => toggle("payrollSystems", v)}
+                otherValue={form.payrollSystemOther}
+                onOtherChange={(v) => update("payrollSystemOther", v)}
+              />
+              {form.payrollSystems.length > 0 && (
+                <RadioGroup
+                  label="Payroll headcount"
+                  options={PAYROLL_HEADCOUNT_OPTIONS}
+                  value={form.payrollHeadcount}
+                  onChange={(v) => update("payrollHeadcount", v)}
+                />
+              )}
             </Section>
 
             {/* Section E: Close, reporting & volume */}
-            <Section title="Close cadence, reporting & volume">
+            <Section title="Close Cadence">
               <RadioGroup
-                label="Current month-end close timeline"
-                options={CLOSE_TIMELINE_OPTIONS}
+                label="Are you satisfied with your current Month-End Close process & pace?"
+                options={YES_NO_OPTIONS}
                 value={form.monthEndCloseTimeline}
                 onChange={(v) => update("monthEndCloseTimeline", v)}
               />
-              <RadioGroup
-                label="Reporting cadence to principals / family"
-                options={REPORTING_CADENCE_OPTIONS}
-                value={form.reportingCadence}
-                onChange={(v) => update("reportingCadence", v)}
-              />
+            </Section>
+
+            <Section title="AP">
               <RadioGroup
                 label="Approximate monthly bill / invoice volume"
                 options={BILL_VOLUME_OPTIONS}
                 value={form.monthlyBillVolume}
                 onChange={(v) => update("monthlyBillVolume", v)}
               />
+            </Section>
+
+            <Section title="Reconciliation">
               <RadioGroup
-                label="Bank + investment accounts to reconcile"
+                label="Bank, Investment & Credit Card accounts to reconcile"
                 options={ACCOUNTS_OPTIONS}
                 value={form.accountsToReconcile}
                 onChange={(v) => update("accountsToReconcile", v)}
               />
-              <RadioGroup
-                label="Annual K-1 production volume"
-                options={K1_VOLUME_OPTIONS}
-                value={form.annualK1Volume}
-                onChange={(v) => update("annualK1Volume", v)}
-              />
-              <RadioGroup
-                label="Payroll headcount"
-                options={PAYROLL_HEADCOUNT_OPTIONS}
-                value={form.payrollHeadcount}
-                onChange={(v) => update("payrollHeadcount", v)}
-              />
-            </Section>
-
-            {/* Section F: Team composition */}
-            <Section title="Team today">
-              <CheckboxGrid
-                label="Current back-office roles (in-house or outsourced)"
-                options={CURRENT_ROLE_OPTIONS}
-                values={form.currentRoles}
-                onToggle={(v) => toggle("currentRoles", v)}
-              />
-              <RadioGroup
-                label="Current in-house vs outsourced mix"
-                options={OUTSOURCING_MIX_OPTIONS}
-                value={form.outsourcingMix}
-                onChange={(v) => update("outsourcingMix", v)}
-              />
-              <Field label="Team geography (cities / time zones, optional)">
-                <Input
-                  value={form.teamGeography}
-                  onChange={(e) => update("teamGeography", e.target.value)}
-                  placeholder="NYC + remote, distributed across US, all on-site in London…"
-                />
-              </Field>
             </Section>
 
             {/* Section G: Goals */}
-            <Section title="Goals & what's painful today">
+            <Section title="Pain Points & Goals">
               <Field label="What is currently painful, slow, or broken in your accounting / bookkeeping function?">
                 <Textarea
                   value={form.painPoints}
@@ -643,10 +515,12 @@ function SuccessState({ onClose }: { onClose: () => void }) {
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, children }: { title?: string; children: React.ReactNode }) {
   return (
     <section className="flex flex-col gap-5">
-      <h3 className="text-[0.75rem] font-bold uppercase tracking-[0.22em] text-[#0040c9]">{title}</h3>
+      {title && (
+        <h3 className="text-[0.75rem] font-bold uppercase tracking-[0.22em] text-[#0040c9]">{title}</h3>
+      )}
       <div className="flex flex-col gap-5">{children}</div>
     </section>
   );
@@ -710,6 +584,37 @@ function RadioGroup({
         })}
       </div>
     </fieldset>
+  );
+}
+
+function SystemPicker({
+  label,
+  options,
+  values,
+  onToggle,
+  otherValue,
+  onOtherChange,
+}: {
+  label: string;
+  options: string[];
+  values: string[];
+  onToggle: (v: string) => void;
+  otherValue: string;
+  onOtherChange: (v: string) => void;
+}) {
+  return (
+    <div className="flex flex-col gap-3">
+      <CheckboxGrid label={label} options={options} values={values} onToggle={onToggle} />
+      {values.includes("Other") && (
+        <Input
+          value={otherValue}
+          onChange={(e) => onOtherChange(e.target.value)}
+          placeholder="Please specify"
+          maxLength={300}
+          className="sm:max-w-md"
+        />
+      )}
+    </div>
   );
 }
 

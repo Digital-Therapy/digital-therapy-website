@@ -24,36 +24,27 @@ export type AccountingAssessmentInput = {
   additionalWebsites?: string[];
   contactEmail: string;
   contactPhone?: string;
-  hqCity?: string;
-  hqState?: string;
-  hqZip?: string;
+  hqLocation?: string;
   // Scale
-  aum?: string;
   annualRevenue?: string;
   backOfficeSize?: string;
   entityCount?: string;
   operatingBusinesses?: string;
   // Composition
-  entityTypes?: string[];
+  owns501c3?: string;
   jurisdictions?: string[];
-  assetLocation?: string;
-  investmentTypes?: string[];
   // Current systems
-  generalLedgerSystem?: string;
-  billPaySystem?: string;
-  investmentReportingSystem?: string;
-  payrollSystem?: string;
+  generalLedgerSystems?: string[];
+  generalLedgerSystemOther?: string;
+  billPaySystems?: string[];
+  billPaySystemOther?: string;
+  payrollSystems?: string[];
+  payrollSystemOther?: string;
   // Close, reporting & volume
   monthEndCloseTimeline?: string;
-  reportingCadence?: string;
   monthlyBillVolume?: string;
   accountsToReconcile?: string;
-  annualK1Volume?: string;
   payrollHeadcount?: string;
-  // Team composition
-  currentRoles?: string[];
-  outsourcingMix?: string;
-  teamGeography?: string;
   // Goals & timing
   painPoints?: string;
   primaryGoals?: string[];
@@ -144,41 +135,31 @@ export function formatAccountingAssessment(input: AccountingAssessmentInput, id:
     row("Additional websites", input.additionalWebsites) +
     row("Email", input.contactEmail) +
     row("Phone", input.contactPhone) +
-    row("HQ city", input.hqCity) +
-    row("HQ state", input.hqState) +
-    row("HQ zip", input.hqZip) +
+    row("HQ location", input.hqLocation) +
     "\n" +
     "SCALE\n" +
-    row("AUM", input.aum) +
     row("Annual revenue", input.annualRevenue) +
     row("Back-office team size", input.backOfficeSize) +
     row("Number of entities", input.entityCount) +
     row("Operating businesses", input.operatingBusinesses) +
     "\n" +
     "COMPOSITION\n" +
-    row("Entity types", input.entityTypes) +
+    row("Owns a 501C3", input.owns501c3) +
     row("Jurisdictions", input.jurisdictions) +
-    row("Asset / investment location", input.assetLocation) +
-    row("Investment types", input.investmentTypes) +
     "\n" +
     "CURRENT SYSTEMS\n" +
-    row("General ledger / accounting", input.generalLedgerSystem) +
-    row("Bill pay / AP", input.billPaySystem) +
-    row("Investment / portfolio reporting", input.investmentReportingSystem) +
-    row("Payroll", input.payrollSystem) +
+    row("General ledger / accounting", input.generalLedgerSystems) +
+    row("  ↳ Other (specified)", input.generalLedgerSystemOther) +
+    row("Bill pay / AP", input.billPaySystems) +
+    row("  ↳ Other (specified)", input.billPaySystemOther) +
+    row("Payroll", input.payrollSystems) +
+    row("  ↳ Other (specified)", input.payrollSystemOther) +
     "\n" +
     "CLOSE & VOLUME\n" +
-    row("Month-end close timeline", input.monthEndCloseTimeline) +
-    row("Reporting cadence", input.reportingCadence) +
+    row("Satisfied with month-end close", input.monthEndCloseTimeline) +
     row("Monthly bill volume", input.monthlyBillVolume) +
-    row("Bank + investment accounts to reconcile", input.accountsToReconcile) +
-    row("Annual K-1 production", input.annualK1Volume) +
+    row("Bank, investment & credit card accounts to reconcile", input.accountsToReconcile) +
     row("Payroll headcount", input.payrollHeadcount) +
-    "\n" +
-    "TEAM TODAY\n" +
-    row("Current back-office roles", input.currentRoles) +
-    row("In-house vs outsourced mix", input.outsourcingMix) +
-    row("Team geography", input.teamGeography) +
     "\n" +
     "GOALS & PAIN POINTS\n" +
     row("What is painful / broken today", input.painPoints) +
