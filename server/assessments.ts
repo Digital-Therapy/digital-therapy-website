@@ -52,7 +52,6 @@ export type AccountingAssessmentInput = {
   painPoints?: string;
   primaryGoals?: string[];
   timeline?: string;
-  additionalNotes?: string;
   // Meta
   sourcePage?: string;
 };
@@ -171,7 +170,6 @@ export function formatAccountingAssessment(input: AccountingAssessmentInput, id:
     row("What is painful / broken today", input.painPoints) +
     row("Primary goals", input.primaryGoals) +
     row("Timeline / urgency", input.timeline) +
-    row("Additional notes", input.additionalNotes) +
     (input.sourcePage ? `\nSource page: ${input.sourcePage}\n` : "")
   );
 }

@@ -121,7 +121,6 @@ type FormState = {
   painPoints: string;
   primaryGoals: string[];
   timeline: string;
-  additionalNotes: string;
 };
 
 const EMPTY_STATE: FormState = {
@@ -155,7 +154,6 @@ const EMPTY_STATE: FormState = {
   painPoints: "",
   primaryGoals: [],
   timeline: "",
-  additionalNotes: "",
 };
 
 export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
@@ -234,7 +232,6 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
       painPoints: form.painPoints.trim() || undefined,
       primaryGoals: form.primaryGoals.length ? form.primaryGoals : undefined,
       timeline: form.timeline || undefined,
-      additionalNotes: form.additionalNotes.trim() || undefined,
       sourcePage: "/get-started",
     });
   };
@@ -260,13 +257,13 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
           <SuccessState onClose={() => handleOpenChange(false)} />
         ) : (
           <div className="flex flex-col gap-7 pt-4">
-            <p className="text-sm leading-6 text-black/65">
+            <p className="text-[16pt] leading-7 text-black/85">
               Take 5 – 10 minutes to walk us through your office. Only the family-office name, your name, and email
               are required — the rest helps us come back with sharper recommendations.
             </p>
 
             {/* Section A: Profile */}
-            <Section title="About your office">
+            <Section title="About">
               <Grid>
                 <RequiredField label="Name of Family Office">
                   <Input value={form.familyOfficeName} onChange={(e) => update("familyOfficeName", e.target.value)} />
@@ -277,8 +274,8 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
                 <Field label="Title">
                   <Input value={form.contactRole} onChange={(e) => update("contactRole", e.target.value)} />
                 </Field>
-                <Label className="flex flex-col gap-[11px]">
-                  <span className="flex items-center justify-between gap-2 text-sm font-medium text-[#111111]">
+                <Label className="flex flex-col items-start gap-[11px]">
+                  <span className="flex w-full items-center justify-between gap-2 text-sm font-medium text-[#111111]">
                     <span>Website URL</span>
                     {form.extraWebsiteUrls.length < 2 && (
                       <button
@@ -483,19 +480,12 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
                 value={form.timeline}
                 onChange={(v) => update("timeline", v)}
               />
-              <Field label="Anything else we should know? (optional)">
-                <Textarea
-                  value={form.additionalNotes}
-                  onChange={(e) => update("additionalNotes", e.target.value)}
-                  rows={3}
-                />
-              </Field>
             </Section>
 
             {/* Submit */}
             <div className="sticky bottom-0 -mx-6 -mb-6 flex flex-col gap-3 border-t border-black/10 bg-white/95 px-6 py-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-base text-black/55">
-                We respond swiftly. We'll be in touch soon.
+              <p className="text-base text-black/80">
+                We'll be in touch soon.
               </p>
               <div className="flex justify-end gap-2">
                 <Button variant="ghost" onClick={() => handleOpenChange(false)}>
@@ -555,7 +545,7 @@ function Grid({ children }: { children: React.ReactNode }) {
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <Label className="flex flex-col gap-[11px]">
+    <Label className="flex flex-col items-start gap-[11px]">
       <span className="text-sm font-medium text-[#111111]">{label}</span>
       {children}
     </Label>
@@ -564,7 +554,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function RequiredField({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <Label className="flex flex-col gap-[11px]">
+    <Label className="flex flex-col items-start gap-[11px]">
       <span className="text-sm font-medium text-[#111111]">
         {label} <span className="text-[#c83a3a]">*</span>
       </span>

@@ -775,7 +775,6 @@ export const appRouter = router({
           painPoints: z.string().trim().max(4000).optional(),
           primaryGoals: z.array(z.string().trim().max(120)).max(20).optional(),
           timeline: z.string().trim().max(80).optional(),
-          additionalNotes: z.string().trim().max(4000).optional(),
           // Meta
           sourcePage: z.string().trim().max(160).optional(),
         }),
