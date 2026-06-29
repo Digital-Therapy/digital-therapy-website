@@ -158,3 +158,35 @@ export async function forwardVendorToPortal(
     return false;
   }
 }
+
+/**
+ * Forwards a public needs-assessment (Get Started page) to the DT Portal so it
+ * lands in the same back-office system of record as contact + vendor
+ * submissions. The full structured answer set is sent as `payload`; the portal
+ * promotes the headline contact fields to columns. Best-effort like the rest --
+ * the dt_site.needs_assessment write + owner email remain the primary path.
+ */
+export async function forwardAssessmentToPortal(
+  payload: Record<string, unknown> & { kind: string; contactEmail: string }
+): Promise<boolean> {
+  const url = ingestUrl("/api/ingest/assessment");
+  if (!url) return false;
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${ENV.ingestSecret}`,
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      console.warn(`[Portal] assessment forward failed: ${res.status} ${await res.text()}`);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.warn("[Portal] assessment forward error:", error);
+    return false;
+  }
+}
