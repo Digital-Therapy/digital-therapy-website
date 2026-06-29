@@ -518,9 +518,8 @@ function SuccessState({ onClose }: { onClose: () => void }) {
       </span>
       <div className="space-y-2">
         <h3 className="font-display text-2xl tracking-[-0.03em]">Assessment received.</h3>
-        <p className="mx-auto max-w-md text-sm leading-6 text-black/65">
-          Thank you — we will review your responses and follow up within one business day with a recommended next
-          step. If you need us sooner, email <a className="text-[#0A65FF] underline-offset-2 hover:underline" href="mailto:hello@digitaltherapy.io">hello@digitaltherapy.io</a>.
+        <p className="mx-auto max-w-md text-base leading-7 text-black/80">
+          Thank you — We'll be in touch.
         </p>
       </div>
       <Button onClick={onClose}>Close</Button>
