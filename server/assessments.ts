@@ -10,6 +10,7 @@
  * without migrations.
  */
 import { notifyOwner } from "./_core/notification";
+import { forwardAssessmentToPortal } from "./portal";
 import { getPool } from "./vendors";
 
 export const NEEDS_ASSESSMENT_KINDS = ["outsourced_accounting"] as const;
@@ -110,6 +111,14 @@ export async function submitAccountingAssessment(input: AccountingAssessmentInpu
     content: formatAccountingAssessment(input, id),
   }).catch((err) => {
     console.warn("[Assessments] Owner notification failed:", err);
+    return false;
+  });
+
+  // Mirror into the DT Portal (system of record alongside contact + vendor
+  // submissions). Best-effort: the dt_site write + owner email above are the
+  // primary path, so a portal outage never fails the public submission.
+  await forwardAssessmentToPortal({ kind, ...input }).catch((err) => {
+    console.warn("[Assessments] Portal forward failed:", err);
     return false;
   });
 
