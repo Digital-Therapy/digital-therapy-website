@@ -247,8 +247,8 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-6xl">
-        <DialogHeader>
-          <DialogTitle className="font-display text-2xl tracking-[-0.03em]">
+        <DialogHeader className="-mx-6 -mt-6 rounded-t-lg bg-[#0c65ff] px-6 py-7 text-left sm:px-10 sm:py-8">
+          <DialogTitle className="font-display text-2xl tracking-[-0.03em] text-white sm:text-3xl">
             Outsourced Accounting / Bookkeeping — Needs Assessment
           </DialogTitle>
         </DialogHeader>
@@ -494,7 +494,7 @@ export default function NeedsAssessmentDialog({ open, onOpenChange }: Props) {
                 <Button
                   onClick={submit}
                   disabled={!canSubmit || submitMutation.isPending}
-                  className="bg-[#0A65FF] text-white hover:bg-[#0040c9]"
+                  className="bg-[#0c65ff] text-white hover:bg-[#0040c9]"
                 >
                   {submitMutation.isPending && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
                   Submit assessment
