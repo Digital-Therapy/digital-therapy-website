@@ -48,7 +48,6 @@ const financeAccountingSkillGroups: SkillGroup[] = [
   { label: "AI + Automation", items: ["Soraban", "Tax GPT", "CoPilot", "N8N", "Make"] },
   { label: "AP/AR", items: ["Bill.com", "RAMP", "DEEL", "WISE"] },
   { label: "Real Estate Investor Management Portal", items: ["Juniper Square", "Agora", "Appfolio"] },
-  { label: "Hosting", items: ["Verito", "Ace Hosting", "Rightworks"] },
   { label: "Sales Tax", items: ["Stripe", "Avalera", "Numeral"] },
 ];
 
