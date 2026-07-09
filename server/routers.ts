@@ -523,9 +523,12 @@ export const appRouter = router({
       .input(
         z.object({
           id: z.string().trim().min(1).max(64),
+          vendorName: z.string().trim().min(1).max(200),
           bankName: z.string().trim().min(1).max(200),
           routingNumber: z.string().trim().regex(/^\d{9}$/, "Routing number must be 9 digits").max(20),
           accountNumber: z.string().trim().min(4).max(20),
+          accountType: z.enum(["checking", "savings"]),
+          businessAccountAttested: z.boolean(),
         }),
       )
       .mutation(async ({ input }) => {
@@ -564,9 +567,12 @@ export const appRouter = router({
       .input(
         z.object({
           token: z.string().trim().min(16).max(64),
+          vendorName: z.string().trim().min(1).max(200),
           bankName: z.string().trim().min(1).max(200),
           routingNumber: z.string().trim().regex(/^\d{9}$/, "Routing number must be 9 digits").max(20),
           accountNumber: z.string().trim().min(4).max(20),
+          accountType: z.enum(["checking", "savings"]),
+          businessAccountAttested: z.literal(true),
         }),
       )
       .mutation(async ({ input }) => {

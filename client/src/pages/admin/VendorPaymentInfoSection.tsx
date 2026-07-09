@@ -53,25 +53,33 @@ export function VendorPaymentInfoSection({ vendorId, vendorName }: Props) {
   });
 
   const [editing, setEditing] = useState(false);
+  const [vendorNameField, setVendorNameField] = useState("");
   const [bankName, setBankName] = useState("");
   const [routingNumber, setRoutingNumber] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [confirmAccount, setConfirmAccount] = useState("");
+  const [accountType, setAccountType] = useState<"checking" | "savings">("checking");
+  const [businessAttested, setBusinessAttested] = useState(false);
   const [revealedAccount, setRevealedAccount] = useState<string | null>(null);
   const [linkResult, setLinkResult] = useState<{ url: string; expiresAt: string } | null>(null);
 
   const info = infoQuery.data;
   const canSave =
+    vendorNameField.trim().length >= 2 &&
     bankName.trim().length >= 2 &&
     /^\d{9}$/.test(routingNumber.replace(/\s+/g, "")) &&
     accountNumber.replace(/\s+/g, "").length >= 4 &&
-    accountNumber.replace(/\s+/g, "") === confirmAccount.replace(/\s+/g, "");
+    accountNumber.replace(/\s+/g, "") === confirmAccount.replace(/\s+/g, "") &&
+    businessAttested;
 
   const startEdit = () => {
+    setVendorNameField(info?.vendorName ?? vendorName);
     setBankName(info?.bankName ?? "");
     setRoutingNumber(info?.routingNumber ?? "");
     setAccountNumber("");
     setConfirmAccount("");
+    setAccountType(info?.accountType ?? "checking");
+    setBusinessAttested(false);
     setEditing(true);
   };
 
@@ -79,9 +87,12 @@ export function VendorPaymentInfoSection({ vendorId, vendorName }: Props) {
     if (!canSave) return;
     upsertMutation.mutate({
       id: vendorId,
+      vendorName: vendorNameField.trim(),
       bankName: bankName.trim(),
       routingNumber: routingNumber.replace(/\s+/g, ""),
       accountNumber: accountNumber.replace(/\s+/g, ""),
+      accountType,
+      businessAccountAttested: businessAttested,
     });
   };
 
@@ -99,15 +110,27 @@ export function VendorPaymentInfoSection({ vendorId, vendorName }: Props) {
         {/* Saved info summary */}
         {info ? (
           <div className="space-y-3 rounded-lg border border-black/10 bg-white p-4">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <SummaryField label="Vendor name" value={info.vendorName ?? "—"} />
               <SummaryField label="Bank" value={info.bankName} />
               <SummaryField label="Routing number" value={info.routingNumber} mono />
               <SummaryField
-                label="Account number"
+                label={`Account (${info.accountType})`}
                 value={revealedAccount ?? `••••${info.accountNumberLast4}`}
                 mono
               />
             </div>
+            {info.businessAccountAttestedAt && (
+              <p className="text-[0.7rem] font-medium text-black/50">
+                Vendor attested this is a business account on{" "}
+                {new Date(info.businessAccountAttestedAt).toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+                .
+              </p>
+            )}
             <p className="flex flex-wrap items-center gap-2 text-xs text-black/50">
               <span>
                 Last updated {new Date(info.updatedAt).toLocaleDateString(undefined, {
@@ -180,10 +203,36 @@ export function VendorPaymentInfoSection({ vendorId, vendorName }: Props) {
               {info ? "Update payment info" : "Enter payment info"}
             </p>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <Label className="flex flex-col gap-1.5 sm:col-span-2">
+                <span className="text-xs font-medium text-black/70">Vendor / business name</span>
+                <Input value={vendorNameField} onChange={(e) => setVendorNameField(e.target.value)} />
+              </Label>
               <Label className="flex flex-col gap-1.5">
                 <span className="text-xs font-medium text-black/70">Bank name</span>
                 <Input value={bankName} onChange={(e) => setBankName(e.target.value)} placeholder="Chase, Wells Fargo, etc." />
               </Label>
+              <fieldset className="flex flex-col gap-1.5">
+                <legend className="text-xs font-medium text-black/70">Account type</legend>
+                <div className="grid grid-cols-2 gap-2">
+                  {(["checking", "savings"] as const).map((type) => {
+                    const active = accountType === type;
+                    return (
+                      <button
+                        key={type}
+                        type="button"
+                        onClick={() => setAccountType(type)}
+                        className={`h-9 rounded-md border px-3 text-sm font-medium capitalize transition-colors ${
+                          active
+                            ? "border-[#0A65FF] bg-[#0A65FF] text-white"
+                            : "border-black/15 bg-white text-black/75 hover:border-black/30"
+                        }`}
+                      >
+                        {type}
+                      </button>
+                    );
+                  })}
+                </div>
+              </fieldset>
               <Label className="flex flex-col gap-1.5">
                 <span className="text-xs font-medium text-black/70">Routing number (9 digits)</span>
                 <Input
@@ -218,6 +267,17 @@ export function VendorPaymentInfoSection({ vendorId, vendorName }: Props) {
             {accountNumber && confirmAccount && accountNumber !== confirmAccount && (
               <p className="text-xs text-[#c83a3a]">Account numbers do not match.</p>
             )}
+            <label className="flex cursor-pointer items-start gap-2 rounded-md border border-black/10 bg-white p-3">
+              <input
+                type="checkbox"
+                checked={businessAttested}
+                onChange={(e) => setBusinessAttested(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-black/30 text-[#0A65FF] focus:ring-[#0A65FF]"
+              />
+              <span className="text-xs leading-5 text-black/75">
+                I confirm this is a <strong>business bank account</strong> — not a personal account.
+              </span>
+            </label>
             <div className="flex justify-end gap-2">
               <Button variant="ghost" size="sm" onClick={() => setEditing(false)}>
                 Cancel

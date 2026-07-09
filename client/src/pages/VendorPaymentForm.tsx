@@ -16,10 +16,13 @@ export default function VendorPaymentForm() {
   const token = params.token ?? "";
   const tokenQuery = trpc.vendorPayment.lookupToken.useQuery({ token }, { enabled: token.length > 0, retry: false });
 
+  const [vendorName, setVendorName] = useState("");
   const [bankName, setBankName] = useState("");
   const [routingNumber, setRoutingNumber] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [confirmAccount, setConfirmAccount] = useState("");
+  const [accountType, setAccountType] = useState<"checking" | "savings">("checking");
+  const [businessAttested, setBusinessAttested] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,19 +32,24 @@ export default function VendorPaymentForm() {
   });
 
   const canSubmit =
+    vendorName.trim().length >= 2 &&
     bankName.trim().length >= 2 &&
     /^\d{9}$/.test(routingNumber.replace(/\s+/g, "")) &&
     accountNumber.replace(/\s+/g, "").length >= 4 &&
-    accountNumber.replace(/\s+/g, "") === confirmAccount.replace(/\s+/g, "");
+    accountNumber.replace(/\s+/g, "") === confirmAccount.replace(/\s+/g, "") &&
+    businessAttested;
 
   const submit = () => {
     if (!canSubmit) return;
     setError(null);
     submitMutation.mutate({
       token,
+      vendorName: vendorName.trim(),
       bankName: bankName.trim(),
       routingNumber: routingNumber.replace(/\s+/g, ""),
       accountNumber: accountNumber.replace(/\s+/g, ""),
+      accountType,
+      businessAccountAttested: true,
     });
   };
 
@@ -80,6 +88,18 @@ export default function VendorPaymentForm() {
 
             <div className="space-y-5 rounded-2xl border border-black/10 bg-white p-5 shadow-[0_2px_16px_rgba(0,0,0,0.03)] sm:p-6">
               <Label className="flex flex-col gap-2">
+                <span className="text-sm font-medium text-[#111111]">Vendor name</span>
+                <Input
+                  value={vendorName}
+                  onChange={(e) => setVendorName(e.target.value)}
+                  placeholder="Enter your business name"
+                  autoComplete="organization"
+                />
+                <span className="text-xs text-black/50">
+                  Enter your business name exactly as it appears on your Digital Therapy vendor profile.
+                </span>
+              </Label>
+              <Label className="flex flex-col gap-2">
                 <span className="text-sm font-medium text-[#111111]">Bank name</span>
                 <Input
                   value={bankName}
@@ -88,6 +108,28 @@ export default function VendorPaymentForm() {
                   autoComplete="off"
                 />
               </Label>
+              <fieldset className="flex flex-col gap-2">
+                <legend className="text-sm font-medium text-[#111111]">Account type</legend>
+                <div className="grid grid-cols-2 gap-2">
+                  {(["checking", "savings"] as const).map((type) => {
+                    const active = accountType === type;
+                    return (
+                      <button
+                        key={type}
+                        type="button"
+                        onClick={() => setAccountType(type)}
+                        className={`rounded-md border px-3 py-2.5 text-sm font-medium capitalize transition-colors ${
+                          active
+                            ? "border-[#0A65FF] bg-[#0A65FF] text-white"
+                            : "border-black/15 bg-white text-black/75 hover:border-black/30"
+                        }`}
+                      >
+                        {type}
+                      </button>
+                    );
+                  })}
+                </div>
+              </fieldset>
               <Label className="flex flex-col gap-2">
                 <span className="text-sm font-medium text-[#111111]">Routing number</span>
                 <Input
@@ -123,6 +165,18 @@ export default function VendorPaymentForm() {
                   <span className="text-xs text-[#c83a3a]">Account numbers do not match.</span>
                 )}
               </Label>
+
+              <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-black/10 bg-black/[0.02] p-3">
+                <input
+                  type="checkbox"
+                  checked={businessAttested}
+                  onChange={(e) => setBusinessAttested(e.target.checked)}
+                  className="mt-0.5 h-5 w-5 shrink-0 rounded border-black/30 text-[#0A65FF] focus:ring-[#0A65FF]"
+                />
+                <span className="text-sm leading-6 text-[#111111]">
+                  I confirm this is a <strong>business bank account</strong> — not a personal account.
+                </span>
+              </label>
 
               {error && (
                 <div className="flex items-start gap-2 rounded-lg border border-[#c83a3a]/30 bg-[#c83a3a]/[0.06] p-3 text-sm text-[#c83a3a]">

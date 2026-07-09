@@ -17,7 +17,7 @@
  */
 import crypto from "node:crypto";
 import { ENV } from "./_core/env";
-import { getPool } from "./vendors";
+import { getPool, getVendorById } from "./vendors";
 
 const CIPHER_ALGO = "aes-256-gcm";
 
@@ -83,6 +83,14 @@ async function ensureTables() {
        updated_at timestamptz NOT NULL DEFAULT now()
      )`,
   );
+  // Idempotent additions for the second wave: vendor-name attestation, account
+  // type (checking / savings), and a business-account attestation timestamp.
+  await pool.query(
+    `ALTER TABLE dt_site.vendor_payment_info
+       ADD COLUMN IF NOT EXISTS vendor_name text,
+       ADD COLUMN IF NOT EXISTS account_type text NOT NULL DEFAULT 'checking',
+       ADD COLUMN IF NOT EXISTS business_account_attested_at timestamptz`,
+  );
   await pool.query(
     `CREATE TABLE IF NOT EXISTS dt_site.vendor_payment_token (
        id serial PRIMARY KEY,
@@ -105,19 +113,28 @@ async function ensureTables() {
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
+export type AccountType = "checking" | "savings";
+
 export type PaymentInfoSummary = {
+  vendorName: string | null;
   bankName: string;
   routingNumber: string;
   accountNumberLast4: string;
+  accountType: AccountType;
   createdVia: "admin_direct" | "vendor_self_service";
+  businessAccountAttestedAt: string | null;
   createdAt: string;
   updatedAt: string;
 };
 
 export type PaymentInfoInput = {
+  vendorName: string;
   bankName: string;
   routingNumber: string;
   accountNumber: string;
+  accountType: AccountType;
+  /** Vendor-attested that this is a business bank account (not personal). */
+  businessAccountAttested: boolean;
 };
 
 export type PaymentToken = {
@@ -135,18 +152,27 @@ export async function getPaymentInfoSummary(vendorAppId: string): Promise<Paymen
   const pool = await ensureTables();
   if (!pool) return null;
   const r = await pool.query(
-    `SELECT bank_name, routing_number, account_number_last4, created_via, created_at, updated_at
+    `SELECT vendor_name, bank_name, routing_number, account_number_last4, account_type,
+            created_via, business_account_attested_at, created_at, updated_at
        FROM dt_site.vendor_payment_info
       WHERE vendor_application_id = $1`,
     [vendorAppId],
   );
   if (!r.rows.length) return null;
   const row = r.rows[0];
+  const accountType: AccountType = row.account_type === "savings" ? "savings" : "checking";
   return {
+    vendorName: row.vendor_name ?? null,
     bankName: row.bank_name,
     routingNumber: row.routing_number,
     accountNumberLast4: row.account_number_last4,
+    accountType,
     createdVia: row.created_via,
+    businessAccountAttestedAt: row.business_account_attested_at
+      ? row.business_account_attested_at instanceof Date
+        ? row.business_account_attested_at.toISOString()
+        : String(row.business_account_attested_at)
+      : null,
     createdAt: (row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at)) ?? "",
     updatedAt: (row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at)) ?? "",
   };
@@ -176,19 +202,57 @@ export async function upsertPaymentInfo(
   const account = input.accountNumber.replace(/\s+/g, "");
   const last4 = account.slice(-4);
   const ciphertext = encryptAccountNumber(account);
+  const accountType: AccountType = input.accountType === "savings" ? "savings" : "checking";
+  const attestedAt = input.businessAccountAttested ? new Date() : null;
   await pool.query(
     `INSERT INTO dt_site.vendor_payment_info
-       (vendor_application_id, bank_name, routing_number, account_number_last4, account_number_ciphertext, created_via)
-     VALUES ($1,$2,$3,$4,$5,$6)
+       (vendor_application_id, vendor_name, bank_name, routing_number,
+        account_number_last4, account_number_ciphertext, account_type,
+        created_via, business_account_attested_at)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
      ON CONFLICT (vendor_application_id) DO UPDATE
-       SET bank_name = EXCLUDED.bank_name,
+       SET vendor_name = EXCLUDED.vendor_name,
+           bank_name = EXCLUDED.bank_name,
            routing_number = EXCLUDED.routing_number,
            account_number_last4 = EXCLUDED.account_number_last4,
            account_number_ciphertext = EXCLUDED.account_number_ciphertext,
+           account_type = EXCLUDED.account_type,
+           business_account_attested_at = COALESCE(EXCLUDED.business_account_attested_at, dt_site.vendor_payment_info.business_account_attested_at),
            updated_at = now()`,
-    [vendorAppId, input.bankName.trim(), input.routingNumber.replace(/\s+/g, ""), last4, ciphertext, via],
+    [
+      vendorAppId,
+      input.vendorName.trim(),
+      input.bankName.trim(),
+      input.routingNumber.replace(/\s+/g, ""),
+      last4,
+      ciphertext,
+      accountType,
+      via,
+      attestedAt,
+    ],
   );
   return true;
+}
+
+/** Case-insensitive, whitespace-normalized comparison. */
+function normalizeName(s: string): string {
+  return s.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+/** Verifies the entered vendor name matches the vendor's saved company name or
+ * individual name. Returns null on success or a specific error string. */
+async function verifyVendorNameMatch(vendorAppId: string, enteredName: string): Promise<string | null> {
+  const record = await getVendorById(vendorAppId);
+  if (!record) return "We could not find your vendor record.";
+  const candidates = [record.vendor.companyName, record.vendor.name]
+    .filter((v): v is string => !!v)
+    .map(normalizeName);
+  if (candidates.length === 0) return null; // no reference to compare against
+  const entered = normalizeName(enteredName);
+  if (!candidates.includes(entered)) {
+    return "The name you entered does not match our records. Please enter your business name exactly as it appears on your Digital Therapy vendor profile, or contact hello@digitaltherapy.io if you believe this is an error.";
+  }
+  return null;
 }
 
 export async function deletePaymentInfo(vendorAppId: string): Promise<boolean> {
@@ -255,6 +319,11 @@ export async function submitViaToken(token: string, input: PaymentInfoInput): Pr
     if (lookup.reason === "used") return { ok: false, reason: "This link has already been used." };
     return { ok: false, reason: "This link is invalid." };
   }
+  if (!input.businessAccountAttested) {
+    return { ok: false, reason: "You must confirm this is a business bank account." };
+  }
+  const nameError = await verifyVendorNameMatch(lookup.vendorApplicationId, input.vendorName);
+  if (nameError) return { ok: false, reason: nameError };
   await upsertPaymentInfo(lookup.vendorApplicationId, input, "vendor_self_service");
   await pool.query(`UPDATE dt_site.vendor_payment_token SET used_at = now() WHERE token = $1`, [token]);
   return { ok: true };
