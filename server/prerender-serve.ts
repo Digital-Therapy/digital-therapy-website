@@ -52,6 +52,23 @@ export function registerPrerendered(app: Express) {
     `<meta name="twitter:description" content="${SIGN_DESC}" />`,
     `<meta name="twitter:image" content="${SIGN_IMG}" />`,
   ].join("\n    ");
+
+  // Same treatment for the token-gated vendor-payment collection page. Karina
+  // texts these links to vendors — the unfurl needs to look intentional and
+  // never be indexed by crawlers.
+  const PAY_TITLE = "Vendor Payment Info · Digital Therapy";
+  const PAY_DESC = "Enter your bank details securely so Digital Therapy can pay you for project work.";
+  const PAY_META = [
+    `<title>${PAY_TITLE}</title>`,
+    `<meta name="description" content="${PAY_DESC}" />`,
+    `<meta name="robots" content="noindex, nofollow" />`,
+    `<meta property="og:type" content="website" />`,
+    `<meta property="og:title" content="${PAY_TITLE}" />`,
+    `<meta property="og:description" content="${PAY_DESC}" />`,
+    `<meta name="twitter:card" content="summary" />`,
+    `<meta name="twitter:title" content="${PAY_TITLE}" />`,
+    `<meta name="twitter:description" content="${PAY_DESC}" />`,
+  ].join("\n    ");
   // Remove the baked-in homepage tags so they don't win over the signing tags.
   // The title match is bounded with [^<] (NOT [\s\S]) so it can't start at the
   // literal "<title>" inside the index.html template comment and run to the real
@@ -77,6 +94,17 @@ export function registerPrerendered(app: Express) {
     }
     return _signingShell;
   };
+  let _paymentShell: string | null | undefined;
+  const paymentShell = (): string | null => {
+    if (_paymentShell !== undefined) return _paymentShell;
+    try {
+      const html = stripBakedMeta(fs.readFileSync(indexFile, "utf8"));
+      _paymentShell = html.replace("</head>", `  ${PAY_META}\n  </head>`);
+    } catch {
+      _paymentShell = null;
+    }
+    return _paymentShell;
+  };
 
   app.get("*", (req: Request, res: Response, next: NextFunction) => {
     const p = req.path;
@@ -93,6 +121,13 @@ export function registerPrerendered(app: Express) {
       const shell = signingShell();
       if (shell) return res.status(200).type("html").send(shell);
       return next(); // shell unreadable → plain SPA fallback
+    }
+
+    // Token-gated vendor payment-info collection → same treatment.
+    if (p === "/vendor/payment" || p.startsWith("/vendor/payment/")) {
+      const shell = paymentShell();
+      if (shell) return res.status(200).type("html").send(shell);
+      return next();
     }
 
     // Other SPA-only dynamic routes → fall through to the SPA shell (200), not the 404.
