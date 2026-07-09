@@ -25,6 +25,7 @@ import AdminClients from "./pages/admin/AdminClients";
 import AdminPipeline from "./pages/admin/AdminPipeline";
 import NdaSigningPage from "./pages/NdaSigningPage";
 import NdaBatchSigningPage from "./pages/NdaBatchSigningPage";
+import VendorPaymentForm from "./pages/VendorPaymentForm";
 import AdminAccess from "./pages/admin/AdminAccess";
 
 function Router() {
@@ -55,6 +56,9 @@ function Router() {
           route (4 segments) is matched before the single route (3 segments). */}
       <Route path={"/nda/sign/all/:token"} component={NdaBatchSigningPage} />
       <Route path={"/nda/sign/:token"} component={NdaSigningPage} />
+      {/* Public, token-gated vendor payment-info collection — mobile-first form
+          reached via a link Karina texts to the vendor. */}
+      <Route path={"/vendor/payment/:token"} component={VendorPaymentForm} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
@@ -74,7 +78,10 @@ function App() {
   // Hide the public marketing footer/chat on the admin console and the public
   // NDA signing page (app shells, not marketing pages).
   const isAdmin =
-    location.startsWith("/admin") || location.startsWith("/vendorlists") || location.startsWith("/nda/sign");
+    location.startsWith("/admin") ||
+    location.startsWith("/vendorlists") ||
+    location.startsWith("/nda/sign") ||
+    location.startsWith("/vendor/payment");
 
   return (
     <ErrorBoundary>

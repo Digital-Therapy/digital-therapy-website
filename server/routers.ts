@@ -72,6 +72,16 @@ import {
   updateOpportunity,
 } from "./pipeline";
 import { submitAccountingAssessment } from "./assessments";
+import {
+  deletePaymentInfo,
+  generatePaymentToken,
+  getPaymentInfoSummary,
+  listPaymentTokens,
+  lookupPaymentToken,
+  revealAccountNumber,
+  submitViaToken as submitPaymentViaToken,
+  upsertPaymentInfo,
+} from "./vendorPaymentInfo";
 import { vendorStatusValues } from "../drizzle/schema";
 
 // Strip control chars / collapse newlines so user input can't forge extra
@@ -502,6 +512,69 @@ export const appRouter = router({
     adminRemoveComp: adminProcedure
       .input(z.object({ id: z.number().int() }))
       .mutation(async ({ input }) => ({ success: await removeComp(input.id) })),
+
+    // ── Payment info (ACH) ────────────────────────────────────────────────
+    // Bank name + routing are stored plaintext; account number is encrypted
+    // (see server/vendorPaymentInfo.ts). Full-account reveal is OWNER-only.
+    adminGetPaymentInfo: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64) }))
+      .query(async ({ input }) => getPaymentInfoSummary(input.id)),
+    adminUpsertPaymentInfo: adminProcedure
+      .input(
+        z.object({
+          id: z.string().trim().min(1).max(64),
+          bankName: z.string().trim().min(1).max(200),
+          routingNumber: z.string().trim().regex(/^\d{9}$/, "Routing number must be 9 digits").max(20),
+          accountNumber: z.string().trim().min(4).max(20),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const { id, ...fields } = input;
+        return { success: await upsertPaymentInfo(id, fields, "admin_direct") };
+      }),
+    adminDeletePaymentInfo: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64) }))
+      .mutation(async ({ input }) => ({ success: await deletePaymentInfo(input.id) })),
+    adminRevealAccountNumber: ownerProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64) }))
+      .mutation(async ({ input }) => {
+        const accountNumber = await revealAccountNumber(input.id);
+        if (!accountNumber) throw new TRPCError({ code: "NOT_FOUND", message: "No payment info on file." });
+        return { accountNumber };
+      }),
+    adminGeneratePaymentToken: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64) }))
+      .mutation(async ({ input }) => {
+        const result = await generatePaymentToken(input.id);
+        if (!result) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Could not generate token." });
+        return result;
+      }),
+    adminListPaymentTokens: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64) }))
+      .query(async ({ input }) => listPaymentTokens(input.id)),
+  }),
+
+  // Public, token-gated vendor payment-info collection. External vendors land
+  // here from a link Karina texts to their phone.
+  vendorPayment: router({
+    lookupToken: publicProcedure
+      .input(z.object({ token: z.string().trim().min(16).max(64) }))
+      .query(async ({ input }) => lookupPaymentToken(input.token)),
+    submit: publicProcedure
+      .input(
+        z.object({
+          token: z.string().trim().min(16).max(64),
+          bankName: z.string().trim().min(1).max(200),
+          routingNumber: z.string().trim().regex(/^\d{9}$/, "Routing number must be 9 digits").max(20),
+          accountNumber: z.string().trim().min(4).max(20),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const { token, ...fields } = input;
+        const result = await submitPaymentViaToken(token, fields);
+        if (!result.ok) throw new TRPCError({ code: "BAD_REQUEST", message: result.reason });
+        return { ok: true as const };
+      }),
   }),
   // Public, token-gated NDA signing (no auth — external parties sign via link).
   nda: router({

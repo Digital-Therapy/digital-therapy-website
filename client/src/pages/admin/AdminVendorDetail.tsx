@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { ActiveClientEngagements } from "./VendorEngagements";
+import { VendorPaymentInfoSection } from "./VendorPaymentInfoSection";
 import {
   Select,
   SelectContent,
@@ -418,6 +419,7 @@ export default function AdminVendorDetail() {
                 <TabsTrigger value="certs">Certifications ({data.certifications.length})</TabsTrigger>
                 <TabsTrigger value="files">Files ({data.files.length})</TabsTrigger>
                 <TabsTrigger value="cases">Case studies ({data.caseStudies.length})</TabsTrigger>
+                <TabsTrigger value="payment">Payment</TabsTrigger>
               </TabsList>
 
               <TabsContent value="profile" className="space-y-4">
@@ -801,6 +803,10 @@ export default function AdminVendorDetail() {
                     )}
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              <TabsContent value="payment">
+                <VendorPaymentInfoSection vendorId={id} vendorName={data.vendor.name || "this vendor"} />
               </TabsContent>
             </Tabs>
           </>
