@@ -7,6 +7,8 @@
 export type CaseStudy = {
   label: string;
   title: string;
+  /** One-line pitch used in the homepage hover tooltip. */
+  tooltipDescription: string;
   projectDescription: string;
   problemState: string;
   solutionState: string;
@@ -17,6 +19,7 @@ export const caseStudies: CaseStudy[] = [
   {
     label: "Save Time",
     title: "Close Acceleration · Invoice Input Automation",
+    tooltipDescription: "Accelerate your monthly close by automating Invoice Entry!",
     projectDescription:
       "A close-acceleration program for a multi-entity family office's accounts-payable function — replacing manual invoice intake with an automated extract-to-post pipeline.",
     problemState:
@@ -24,11 +27,12 @@ export const caseStudies: CaseStudy[] = [
     solutionState:
       "Digital Therapy built an OCR + AI agent workflow that ingests invoices at the inbox, extracts header & line-item data, classifies by entity & GL account, validates against POs & vendor master, then routes for approval and posts to the GL. Exceptions surface to a single review queue instead of clogging the whole pipeline. The AP team now reviews & approves — they don't retype.",
     impact:
-      "2,000 hours per year returned to the business — two FTEs freed from invoice rekey & redeployed to vendor management, cash forecasting & close review.",
+      "2,000 hours spent annually on manual entry of invoice data were reclaimed for the business — 2 x FTEs could now reallocate 50% of their time to new valuable assignments.",
   },
   {
     label: "Reduce Burn",
     title: "Payment Processing Transformation · Dual Pricing / Cash Discount",
+    tooltipDescription: "Cut $1.5M/year in credit-card processing fees with a Dual Pricing model.",
     projectDescription:
       "A payment-processing transformation for a merchant operation paying high credit-card fees on every transaction.",
     problemState:
@@ -41,6 +45,7 @@ export const caseStudies: CaseStudy[] = [
   {
     label: "Make more money",
     title: "Payroll Transformation · Paychex → Paylocity + WOTC Capture",
+    tooltipDescription: "Auto-capture $1,200 – $9,600 per hire in WOTC tax credits.",
     projectDescription:
       "A payroll platform migration & new-hire onboarding redesign for a family office's portfolio company — moving off Paychex onto Paylocity and wiring tax-credit capture into the hiring workflow.",
     problemState:

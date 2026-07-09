@@ -1,6 +1,5 @@
 import { useLocation } from "wouter";
 import { ArrowUpRight, Mail, Phone } from "lucide-react";
-import { ContactFormDialog } from "@/components/ContactBooking";
 
 const logoUrl = "/dtlogo.webp";
 const markUrl = "/dt-mark.webp";
@@ -32,7 +31,7 @@ const sitemapGroups = [
     title: "Company",
     links: [
       { label: "Team", href: "/team" },
-      { label: "Contact", href: "#contact" },
+      { label: "Contact", href: "mailto:hello@digitaltherapy.io" },
     ],
   },
 ];
@@ -75,7 +74,7 @@ export default function SiteFooter() {
         <div className="grid gap-10 lg:grid-cols-[1.05fr_1.35fr] lg:gap-16">
           <div className="flex flex-col">
             <a href="/" className="-mt-3 block leading-none" aria-label="Digital Therapy home">
-              <img src={logoUrl} alt="Digital Therapy" className="h-40 w-auto object-contain" width={600} height={192}/>
+              <img src={logoUrl} alt="Digital Therapy" className="h-[72px] w-auto object-contain lg:h-[79px]" width={600} height={192}/>
             </a>
             <p className="mt-3 max-w-md text-base leading-7 text-black/80">
               Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & operated businesses.
@@ -113,19 +112,6 @@ export default function SiteFooter() {
                 </h2>
                 <div className="mt-5 space-y-3">
                   {group.links.map((link) => {
-                    if (link.href === "#contact") {
-                      return (
-                        <ContactFormDialog
-                          key={link.label}
-                          variant="secondary"
-                          label={link.label}
-                          context="footer sitemap inquiry"
-                          icon="message"
-                          className="w-full justify-center bg-white/55"
-                        />
-                      );
-                    }
-
                     return (
                       <a
                         key={link.href}

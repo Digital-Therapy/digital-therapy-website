@@ -451,14 +451,13 @@ export default function Thesis() {
                 Digital Therapy delivers one team, one aligned incentive structure, one operating model, and one shared mission for transformation.
               </p>
               <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+                <ContactFormDialog
+                  variant="secondary"
+                  label="Send us a message."
+                  context="thesis fusion-team CTA"
+                  icon="message"
+                />
                 <PrivateBriefingButton />
-                <a
-                  href="/process"
-                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/60 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
-                >
-                  Understand our process.
-                  <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
               </div>
             </motion.div>
           </div>

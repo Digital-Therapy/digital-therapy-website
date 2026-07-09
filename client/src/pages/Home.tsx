@@ -6,9 +6,10 @@
 import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
 import PublicHeader from "@/components/PublicHeader";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { caseStudies } from "@/data/caseStudies";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   BarChart3,
   Bot,
@@ -59,35 +60,45 @@ const operatingLayers: {
   icon: typeof Database;
   image?: string;
   imageAlt?: string;
+  theme: string;
+  outcome: string;
 }[] = [
   {
     eyebrow: "01",
     title: "Search + Verify",
     copy: "Locate critical records, accounts, entities, and documents across all connected & standalone systems. This includes external storage accounts, back-up systems and legacy systems no matter how old & hard to use.",
+    theme: "Know what you have.",
+    outcome: "Visibility",
     icon: Database,
     image: "/sigmund-search.webp",
     imageAlt: "Sigmund searching for records",
   },
   {
     eyebrow: "02",
-    title: "Connect + Pull",
-    copy: "Aggregate final list of approved source data into Warehouse via API, RPA or other workflow automation. All the data must be centralized. If the data is too hard to pull in, we may suggest changing the root system(s).",
+    title: "Connect + Centralize",
+    copy: "Aggregate the final list of approved source data into the Warehouse via API, RPA or other workflow automation. All the data must be centralized. If the data is too hard to pull in, we may suggest changing the root system(s).",
+    theme: "Create one source of truth.",
+    outcome: "Consistency",
     icon: Workflow,
     image: "/sigmund-connect.webp",
     imageAlt: "Sigmund connecting and pulling data from multiple sources",
   },
   {
     eyebrow: "03",
-    title: "Format + Clean",
-    copy: "Evaluate integrity and reconcile data across all systems. Understand & troubleshoot discrepancies & redundancies. Then organize into proper organizational (Table) structures. Once properly cleaned & formatted, the data can be made accessible to dashboard & reporting applications and other automation tools.",
+    title: "Clean + Structure",
+    copy: "Evaluate integrity and reconcile data across all systems. Understand & troubleshoot discrepancies & redundancies. Then organize into proper table structures. Once properly cleaned & formatted, the data can be made accessible to dashboard & reporting applications and other automation tools.",
+    theme: "Make data reliable.",
+    outcome: "Confidence",
     icon: BarChart3,
     image: "/sigmund-clean.webp",
     imageAlt: "Sigmund cleaning and organizing data",
   },
   {
     eyebrow: "04",
-    title: "Query + Report",
-    copy: "Turn structured data into reporting, automation, and AI-enhanced insights that leaders can use to win.",
+    title: "Query + Empower",
+    copy: "Turn structured data into reporting, automation, and AI-enhanced insights leaders can use to win.",
+    theme: "Turn information into action.",
+    outcome: "Competitive Advantage",
     icon: ShieldCheck,
     image: "/sigmund-report.webp",
     imageAlt: "Sigmund delivering a report",
@@ -99,21 +110,24 @@ const fusionTeam = [
     title: "Operations Expert",
     image: "/process-sme.webp",
     imageAlt: "Hand-drawn blue sketch of Digital Therapy's Operations & Process SME",
-    copy: "The Operations SME focuses on people, process & delivery. This expert prizes efficiency, productivity, playbooks, KPIs & SOPs. They turn swirling chaos into digestible organization and reduce complex systems into the right size bites to plan effectively & ensure collective understanding by visualizing workflows to clarify how a business operation occurs now (Current State), highlighting weaknesses (like bottlenecks & redundancies) and optimizing a new process design (or Future State).",
+    copy: "The Operations SME transforms organizational complexity into operational excellence. They specialize in people, process, governance, and execution—building the systems that allow businesses to scale without sacrificing quality or control. They champion efficiency through SOPs, playbooks, KPIs, workflow optimization, and continuous improvement.\n\nBy visualizing how work flows across departments, they establish a collective understanding of the Current State, expose bottlenecks, redundancies, and operational friction, then design a streamlined Future State that improves speed, accountability, and collaboration. Their work creates the operational foundation upon which technology and finance transformation can succeed.",
+    shortCopy: "The Operations SME transforms organizational complexity into operational excellence. They specialize in people, process, governance, and execution.",
   },
   {
     title: "Accounting Expert",
     image: "/arap-sme.webp",
     imageAlt: "Hand-drawn blue sketch of Hunter, Digital Therapy's Finance & Accounting SME",
-    copy: "This SME is not your typical accountant. He does not fear technology & he voraciously embraces automation. They are masters of close acceleration and can tame the most complex AP & AR processes out there. They work intimately with engineers and they’re acutely aware of how they need to support technical team members to assure success as well as what limitations they have and where they need support from tech leaders.",
+    copy: "The Finance & Accounting SME is not your typical accountant. They are transformation leaders who combine deep accounting expertise with a passion for technology, automation, and continuous improvement. They excel at accelerating the monthly close, optimizing AP and AR workflows, strengthening internal controls, and designing scalable financial processes. Working as equal partners with technology and operations SMEs, they understand both the opportunities and limitations of modern systems, allowing them to bridge the gap between financial accuracy and technical execution.",
+    shortCopy: "The Finance & Accounting SME is not your typical accountant. They are transformation leaders who combine deep accounting expertise with a passion for technology, automation, and continuous improvement.",
   },
   {
     title: "Technology Expert",
     image: "/tech-sme.webp",
     imageAlt: "Hand-drawn blue sketch of Milton Rodas, Digital Therapy's Technology SME",
-    copy: "The Technology SME is not an easy resource to find. They need to be trained for a purpose with intention & vigor to achieve the breadth & depth of skills necessary to fill the shoes of this daunting role — They are full stack engineers, data scientists, artists of Robotic Process Automation and masters of AI of the highest order.",
+    copy: "The Technology SME is the cornerstone of every Fusion Team. They are extraordinarily difficult to develop because the role demands an uncommon breadth and depth of expertise. They build software, engineer data platforms, orchestrate automation, leverage AI responsibly, secure complex ecosystems, and architect solutions that scale. But their greatest skill isn’t technical—it’s the ability to connect technology to business strategy, turning complexity into clarity and ideas into measurable results.",
+    shortCopy: "This role demands an uncommon breadth and depth of expertise. They build software, engineer data platforms, orchestrate automation, leverage AI responsibly, secure complex ecosystems, and architect solutions that scale.",
   },
-];
+] as { title: string; image: string; imageAlt: string; copy: string; shortCopy?: string }[];
 
 const automationUseCases = [
   "Custom software & internal tools purpose-built for the work your team actually does — not bloated SaaS retrofitted to fit.",
@@ -146,7 +160,68 @@ export default function Home() {
   const [openCaseStudyIndex, setOpenCaseStudyIndex] = useState<number | null>(null);
   // Controls the contact-form popup launched from the dark "Security and control" section CTA cluster.
   const [contactOpen, setContactOpen] = useState(false);
+  // Controls the "Four steps to Data Empowerment" step-detail lightbox.
+  const [openStepIndex, setOpenStepIndex] = useState<number | null>(null);
+  // Controls the "Read more" popup for Fusion Team member cards that have a short excerpt.
+  const [openFusionIndex, setOpenFusionIndex] = useState<number | null>(null);
   const activeCaseStudy = openCaseStudyIndex !== null ? caseStudies[openCaseStudyIndex] : null;
+  const activeStep = openStepIndex !== null ? operatingLayers[openStepIndex] : null;
+  const activeFusion = openFusionIndex !== null ? fusionTeam[openFusionIndex] : null;
+
+  // Sliding highlight across the three case-study pills to hint that they are
+  // clickable. First cycle fires 3s after mount, then repeats every 30s.
+  // Per cycle: rest on pill 0 for 2s → slide to pill 1 over 2s → rest for 2s →
+  // slide to pill 2 over 2s → rest for 2s → done. The highlight itself is a
+  // single absolutely-positioned overlay that translates horizontally; each
+  // pill picks up white text when the overlay is over (or sliding through) it.
+  // Skipped entirely for prefers-reduced-motion and for viewports below sm
+  // (where the pills stack vertically and horizontal sliding is meaningless).
+  const [highlightPos, setHighlightPos] = useState<number | null>(null);
+  const [whiteSet, setWhiteSet] = useState<Set<number>>(new Set());
+  const highlightRanRef = useRef(false);
+  useEffect(() => {
+    if (highlightRanRef.current) return;
+    highlightRanRef.current = true;
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!window.matchMedia("(min-width: 640px)").matches) return;
+
+    const cleanups: Array<() => void> = [];
+    const schedule = (fn: () => void, ms: number) => {
+      const t = setTimeout(fn, ms);
+      cleanups.push(() => clearTimeout(t));
+    };
+
+    const runCycle = () => {
+      setHighlightPos(0);
+      setWhiteSet(new Set([0]));
+      // While highlight is still resting on pill 0, fade text 0 back to black
+      // so it looks "original" by the time the slide begins.
+      schedule(() => setWhiteSet(new Set()), 1500);
+      // Start slide 0 → 1 with text already black on both pills
+      schedule(() => setHighlightPos(1), 2000);
+      // Slide finished — pill 1 fades to white
+      schedule(() => setWhiteSet(new Set([1])), 4000);
+      // Fade pill 1 back to black before slide starts
+      schedule(() => setWhiteSet(new Set()), 5500);
+      // Start slide 1 → 2
+      schedule(() => setHighlightPos(2), 6000);
+      // Slide finished — pill 2 fades to white
+      schedule(() => setWhiteSet(new Set([2])), 8000);
+      // Fade pill 2 back to black before cycle ends
+      schedule(() => setWhiteSet(new Set()), 9500);
+      // Cycle ends — highlight disappears
+      schedule(() => setHighlightPos(null), 10000);
+    };
+
+    schedule(() => {
+      runCycle();
+      const iv = setInterval(runCycle, 30000);
+      cleanups.push(() => clearInterval(iv));
+    }, 3000);
+
+    return () => cleanups.forEach((c) => c());
+  }, []);
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#111111] selection:bg-[#0A65FF] selection:text-white">
@@ -168,7 +243,7 @@ export default function Home() {
                 Family office<br />transformation<br />that works.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
-                We spend time to learn your eco-system, unique attributes, people &amp; processes. We believe collective understanding is the key to transformation success. That&rsquo;s why we typically work on-site for the first month of a new engagement.
+                We spend time to learn your eco-system, unique attributes, people &amp; processes. We believe in &ldquo;Collective Understanding.&rdquo; That&rsquo;s our secret &mdash; how we achieve transformation success for our clients. That&rsquo;s why we typically work on-site for the first month of a new engagement.
               </p>
               <p className="mt-10 text-base font-bold leading-7 text-black/90">
                 Learn more about our
@@ -202,25 +277,57 @@ export default function Home() {
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
                 <img src={welcomeVisual} alt="Digital Therapy welcome hero — modern family office operating layer surfacing data, workflows, reporting, and automation behind one unified team" className="aspect-[16/8] w-full object-cover object-[center_58%]" width={1536} height={1024}/>
               </div>
-              <p className="mt-6 text-center text-xs font-medium italic text-black/55">
-                Tap the outcomes below to read relevant case studies.
+              <p className="mt-6 text-left text-[11pt] font-medium italic text-black/80">
+                Tap the three outcomes below to read sample case studies:
               </p>
               <div className="relative mt-2 grid gap-1 overflow-hidden rounded-[1.35rem] border border-black/10 bg-white p-1 shadow-[0_18px_45px_rgba(16,24,40,0.08)] sm:grid-cols-3">
-                {caseStudies.map((study, index) => (
-                  <button
-                    key={study.label}
-                    type="button"
-                    onClick={() => setOpenCaseStudyIndex(index)}
-                    aria-label={`See the ${study.label} case study`}
-                    className="group flex items-center justify-center gap-2 rounded-[1rem] px-3 py-3 text-sm font-bold text-[#111111] transition-colors duration-200 hover:bg-[#0A65FF] hover:text-white focus:outline-none focus-visible:bg-[#0A65FF] focus-visible:text-white focus-visible:ring-2 focus-visible:ring-[#0A65FF]/50 focus-visible:ring-offset-2"
-                  >
-                    <span>{study.label}</span>
-                    <Plus
-                      aria-hidden="true"
-                      className="h-4 w-4 shrink-0 text-[#0A65FF] opacity-60 transition-all duration-200 group-hover:rotate-90 group-hover:text-white group-hover:opacity-100 group-focus-visible:rotate-90 group-focus-visible:text-white group-focus-visible:opacity-100"
-                    />
-                  </button>
-                ))}
+                {highlightPos !== null && (
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute left-1 top-1 h-[calc(100%-8px)] w-[calc((100%-16px)/3)] rounded-[1rem] bg-[#0A65FF]/80"
+                    style={{
+                      transform: `translateX(calc(${highlightPos * 100}% + ${highlightPos * 4}px))`,
+                      transition: "transform 2000ms ease-in-out",
+                    }}
+                  />
+                )}
+                {caseStudies.map((study, index) => {
+                  const isWhite = whiteSet.has(index);
+                  return (
+                    <Tooltip key={study.label}>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          onClick={() => setOpenCaseStudyIndex(index)}
+                          aria-label={`See the ${study.label} case study`}
+                          className={`group relative z-10 flex items-center justify-center gap-2 rounded-[1rem] px-3 py-3 text-sm font-bold transition-colors duration-500 focus:outline-none focus-visible:bg-[#0A65FF] focus-visible:text-white focus-visible:ring-2 focus-visible:ring-[#0A65FF]/50 focus-visible:ring-offset-2 ${
+                            isWhite
+                              ? "text-white"
+                              : "text-[#111111] hover:bg-[#0A65FF] hover:text-white"
+                          }`}
+                        >
+                          <span>{study.label}</span>
+                          <Plus
+                            aria-hidden="true"
+                            className={`h-4 w-4 shrink-0 transition-all duration-500 ${
+                              isWhite
+                                ? "rotate-90 text-white opacity-100"
+                                : "text-[#0A65FF] opacity-60 group-hover:rotate-90 group-hover:text-white group-hover:opacity-100 group-focus-visible:rotate-90 group-focus-visible:text-white group-focus-visible:opacity-100"
+                            }`}
+                          />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="top" sideOffset={8} className="max-w-xs px-4 py-3 text-sm text-balance">
+                        <p className="font-semibold">Case Study {index + 1}: {study.label}</p>
+                        <p className="mt-1.5 text-white/85">{study.tooltipDescription}</p>
+                        <p className="mt-2.5 flex items-center gap-1 text-[#6EA8FF]">
+                          View Case Study
+                          <ChevronRight className="h-3.5 w-3.5" />
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  );
+                })}
               </div>
               <div className="mt-6 flex justify-center lg:justify-end">
                 <BookingWidgetDialog
@@ -285,32 +392,55 @@ export default function Home() {
                 Four steps to Data Empowerment.
               </h2>
             </motion.div>
-            <div className="mt-10 grid gap-3 sm:mt-12 sm:gap-4 lg:mt-14 lg:grid-cols-4 lg:gap-5">
-              {operatingLayers.map((layer, index) => {
-                const Icon = layer.icon;
-                return (
-                  <motion.article
-                    key={layer.title}
-                    {...fadeUp}
-                    transition={{ ...fadeUp.transition, delay: index * 0.06 }}
-                    className="group min-h-[230px] border border-white/12 bg-white/[0.06] p-5 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-[#58B8FF]/35 hover:bg-white/[0.10] sm:min-h-[270px] sm:p-6 lg:min-h-[330px] lg:p-7"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[30px] font-light uppercase tracking-[0.22em] text-[#58B8FF]">{layer.eyebrow}</span>
-                      {layer.image ? (
-                        <img
-                          src={layer.image}
-                          alt={layer.imageAlt ?? ""}
-                          className="h-14 w-14 shrink-0 rounded-[1rem] border border-white/15 bg-white object-cover sm:h-16 sm:w-16" width={400} height={400}/>
-                      ) : (
-                        <Icon className="h-5 w-5 text-white/45 transition-colors duration-300 group-hover:text-[#58B8FF] sm:h-6 sm:w-6" />
-                      )}
-                    </div>
-                    <h3 className="mt-10 text-xl font-semibold tracking-[-0.04em] text-white sm:mt-12 sm:text-2xl lg:mt-16">{layer.title}</h3>
-                    <p className="mt-3 text-[0.95rem] leading-6 text-white/78 sm:mt-4 sm:leading-7">{layer.copy}</p>
-                  </motion.article>
-                );
-              })}
+            <div className="relative mt-12 flex flex-col gap-4 sm:mt-14 sm:gap-5">
+              {/* Vertical dashed rail behind the numerals — desktop only, connects steps 1-4 */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute top-14 bottom-14 left-[52px] hidden w-px border-l border-dashed border-white/22 lg:block"
+              />
+              {operatingLayers.map((layer, index) => (
+                <motion.button
+                  key={layer.title}
+                  type="button"
+                  onClick={() => setOpenStepIndex(index)}
+                  aria-label={`See details for step ${layer.eyebrow}: ${layer.title}`}
+                  {...fadeUp}
+                  transition={{ ...fadeUp.transition, delay: index * 0.06 }}
+                  className="group relative flex w-full flex-col gap-6 border border-white/12 bg-white/[0.06] p-6 text-left backdrop-blur-xl transition-all duration-500 hover:border-[#58B8FF]/40 hover:bg-white/[0.10] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#58B8FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#111111] sm:flex-row sm:items-center sm:gap-8 sm:p-7 lg:p-8"
+                >
+                  <div className="flex items-center gap-5 sm:gap-7 lg:gap-8">
+                    <span className="font-display text-[3rem] font-light leading-none tracking-[-0.03em] text-[#58B8FF] sm:text-[3.5rem] lg:min-w-[80px]">
+                      {layer.eyebrow}
+                    </span>
+                    {layer.image && (
+                      <img
+                        src={layer.image}
+                        alt={layer.imageAlt ?? ""}
+                        className="h-20 w-20 shrink-0 rounded-[1.1rem] border border-white/15 bg-white object-cover sm:h-24 sm:w-24"
+                        width={400}
+                        height={400}
+                      />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-display text-2xl tracking-[-0.03em] text-white sm:text-3xl lg:text-[2rem]">
+                      {layer.title}
+                    </h3>
+                    <p className="mt-2 text-lg italic leading-7 text-white/70 sm:text-xl sm:leading-8">
+                      {layer.theme}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3 sm:shrink-0">
+                    <span className="inline-flex items-center rounded-full border border-[#58B8FF]/40 bg-[#58B8FF]/12 px-5 py-2.5 text-[0.72rem] font-bold uppercase tracking-[0.16em] text-[#6EA8FF] transition-colors duration-300 group-hover:border-[#58B8FF]/70 group-hover:bg-[#58B8FF]/20 group-hover:text-[#8FC4FF] sm:text-[0.8rem]">
+                      {layer.outcome}
+                    </span>
+                    <ChevronRight
+                      aria-hidden="true"
+                      className="h-5 w-5 shrink-0 text-white/35 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-[#58B8FF]"
+                    />
+                  </div>
+                </motion.button>
+              ))}
             </div>
           </div>
         </section>
@@ -321,12 +451,12 @@ export default function Home() {
               <div>
                 <SectionLabel>Fusion Team Concept</SectionLabel>
                 <h2 className="font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
-                  Collaboration takes commitment. It can’t be an afterthought.
+                  This team didn&rsquo;t happen by accident. It was purpose-built to be the best.
                 </h2>
               </div>
               <div className="max-w-3xl lg:pb-2">
                 <p className="text-lg leading-8 text-black/80">
-                  Accountants work with accountants &mdash; Engineers with engineers. There’s no organic pathway for these experts to come together &amp; learn to collaborate effectively. So we created the solution ourselves &mdash; a team management nucleus containing three SME leaders who work together as the rule, not the exception.
+                  Accountants work with accountants &mdash; Engineers with engineers. There&rsquo;s no organic pathway for these experts to come together as a team &amp; learn to collaborate effectively. So we made it happen ourselves &mdash; a new structure that teams up Accountants, Engineers &amp; Process Experts into one group to tackle Accounting, Technology &amp; Operations challenges collectively. This team gets things done.
                 </p>
                 <a
                   href="/thesis"
@@ -338,36 +468,66 @@ export default function Home() {
               </div>
             </motion.div>
             <div className="mt-14 grid gap-5 lg:grid-cols-3">
-              {fusionTeam.map((member, index) => (
-                <motion.div
-                  key={member.title}
-                  {...fadeUp}
-                  transition={{ ...fadeUp.transition, delay: index * 0.08 }}
-                  className="relative min-h-[500px] overflow-hidden bg-[#F7F4EE] p-7 lg:p-8"
-                >
-                  <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#0A65FF]/10 blur-2xl" />
-                  <div className="relative flex h-full flex-col">
-                    <img
-                      src={member.image}
-                      alt={member.imageAlt}
-                      className="mx-auto h-24 w-24 shrink-0 rounded-[1.4rem] border border-black/10 bg-white object-cover shadow-[0_16px_35px_rgba(10,101,255,0.10)]" width={600} height={600}/>
-                    <div className="mt-8">
-                      <h3 className="text-center text-2xl font-semibold tracking-[-0.05em]">
-                        {(() => {
-                          const [firstWord, ...rest] = member.title.split(" ");
-                          return (
-                            <>
-                              <span className="text-[#0A65FF]">{firstWord}</span>
-                              {rest.length ? ` ${rest.join(" ")}` : null}
-                            </>
-                          );
-                        })()}
-                      </h3>
-                      <p className="mt-5 text-[0.95rem] leading-7 text-black/82">{member.copy}</p>
+              {fusionTeam.map((member, index) => {
+                const hasReadMore = Boolean(member.shortCopy);
+                const displayCopy = member.shortCopy ?? member.copy;
+                const cardBody = (
+                  <>
+                    <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#0A65FF]/10 blur-2xl" />
+                    <div className="relative flex h-full flex-col">
+                      <img
+                        src={member.image}
+                        alt={member.imageAlt}
+                        className="mx-auto h-24 w-24 shrink-0 rounded-[1.4rem] border border-black/10 bg-white object-cover shadow-[0_16px_35px_rgba(10,101,255,0.10)]" width={600} height={600}/>
+                      <div className="mt-8">
+                        <h3 className="text-center text-2xl font-semibold tracking-[-0.05em]">
+                          {(() => {
+                            const [firstWord, ...rest] = member.title.split(" ");
+                            return (
+                              <>
+                                <span className="text-[#0A65FF]">{firstWord}</span>
+                                {rest.length ? ` ${rest.join(" ")}` : null}
+                              </>
+                            );
+                          })()}
+                        </h3>
+                        <p className="mt-5 text-[0.95rem] leading-7 text-black/82">{displayCopy}</p>
+                        {hasReadMore && (
+                          <p className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#0A65FF] transition-transform duration-300 group-hover:translate-x-0.5">
+                            Read more
+                            <ChevronRight className="h-4 w-4" />
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </>
+                );
+                if (hasReadMore) {
+                  return (
+                    <motion.button
+                      key={member.title}
+                      type="button"
+                      onClick={() => setOpenFusionIndex(index)}
+                      aria-label={`Read the full ${member.title} description`}
+                      {...fadeUp}
+                      transition={{ ...fadeUp.transition, delay: index * 0.08 }}
+                      className="group relative min-h-[500px] overflow-hidden bg-[#F7F4EE] p-7 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_45px_rgba(10,101,255,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF] focus-visible:ring-offset-2 lg:p-8"
+                    >
+                      {cardBody}
+                    </motion.button>
+                  );
+                }
+                return (
+                  <motion.div
+                    key={member.title}
+                    {...fadeUp}
+                    transition={{ ...fadeUp.transition, delay: index * 0.08 }}
+                    className="relative min-h-[500px] overflow-hidden bg-[#F7F4EE] p-7 lg:p-8"
+                  >
+                    {cardBody}
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -510,6 +670,105 @@ export default function Home() {
                     </p>
                     <p className="mt-3 text-base leading-7 text-black/85">{quadrant.body}</p>
                   </div>
+                ))}
+              </div>
+            </>
+          ) : null}
+        </DialogContent>
+      </Dialog>
+
+      {/* Step-detail lightbox: opens when one of the four Data Empowerment cards is clicked */}
+      <Dialog open={openStepIndex !== null} onOpenChange={(v) => !v && setOpenStepIndex(null)}>
+        <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[820px] sm:rounded-[2rem]">
+          {activeStep ? (
+            <>
+              <DialogHeader className="border-b border-black/10 bg-white px-8 pb-7 pt-8 text-left sm:px-10 sm:pt-10">
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-7">
+                  <span className="font-display text-[3rem] font-light leading-none tracking-[-0.03em] text-[#0A65FF] sm:text-[3.5rem]">
+                    {activeStep.eyebrow}
+                  </span>
+                  {activeStep.image && (
+                    <img
+                      src={activeStep.image}
+                      alt={activeStep.imageAlt ?? ""}
+                      className="h-20 w-20 shrink-0 rounded-[1.1rem] border border-black/10 bg-white object-cover sm:h-24 sm:w-24"
+                      width={400}
+                      height={400}
+                    />
+                  )}
+                  <div className="flex-1">
+                    <p className="text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                      Four Steps to Data Empowerment
+                    </p>
+                    <DialogTitle className="mt-2 font-display text-3xl leading-[1.1] tracking-[-0.03em] text-[#111111] sm:text-4xl">
+                      {activeStep.title}
+                    </DialogTitle>
+                    <p className="mt-2 text-lg italic leading-7 text-black/60 sm:text-xl">
+                      {activeStep.theme}
+                    </p>
+                  </div>
+                </div>
+              </DialogHeader>
+              <div className="flex flex-col gap-8 px-8 py-9 sm:px-10 sm:py-10">
+                <div>
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                    What we do
+                  </p>
+                  <p className="mt-3 text-base leading-8 text-black/85 sm:text-lg">
+                    {activeStep.copy}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-3 border-t border-black/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                    Outcome
+                  </p>
+                  <span className="inline-flex items-center self-start rounded-full border border-[#0A65FF]/35 bg-[#0A65FF]/8 px-5 py-2.5 text-sm font-bold uppercase tracking-[0.16em] text-[#0040c9] sm:self-auto">
+                    {activeStep.outcome}
+                  </span>
+                </div>
+              </div>
+            </>
+          ) : null}
+        </DialogContent>
+      </Dialog>
+
+      {/* Fusion Team member popup: opens when a card with a short excerpt is clicked */}
+      <Dialog open={openFusionIndex !== null} onOpenChange={(v) => !v && setOpenFusionIndex(null)}>
+        <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[720px] sm:rounded-[2rem]">
+          {activeFusion ? (
+            <>
+              <DialogHeader className="border-b border-black/10 bg-white px-8 pb-7 pt-8 text-left sm:px-10 sm:pt-10">
+                <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-6">
+                  <img
+                    src={activeFusion.image}
+                    alt={activeFusion.imageAlt}
+                    className="h-24 w-24 shrink-0 rounded-[1.4rem] border border-black/10 bg-white object-cover shadow-[0_16px_35px_rgba(10,101,255,0.10)]"
+                    width={600}
+                    height={600}
+                  />
+                  <div>
+                    <p className="text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                      Fusion Team
+                    </p>
+                    <DialogTitle className="mt-2 font-display text-3xl leading-[1.1] tracking-[-0.03em] text-[#111111] sm:text-4xl">
+                      {(() => {
+                        const [firstWord, ...rest] = activeFusion.title.split(" ");
+                        return (
+                          <>
+                            <span className="text-[#0A65FF]">{firstWord}</span>
+                            {rest.length ? ` ${rest.join(" ")}` : null}
+                          </>
+                        );
+                      })()}
+                    </DialogTitle>
+                  </div>
+                </div>
+              </DialogHeader>
+              <div className="flex flex-col gap-5 px-8 py-9 sm:px-10 sm:py-10">
+                {activeFusion.copy.split("\n\n").map((paragraph, i) => (
+                  <p key={i} className="text-base leading-8 text-black/85 sm:text-lg">
+                    {paragraph}
+                  </p>
                 ))}
               </div>
             </>

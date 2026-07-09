@@ -33,9 +33,11 @@ type PublicHeaderProps = {
 };
 
 function navClassName(label: string, activeLabel?: string) {
+  const base =
+    "text-base font-normal decoration-[#0A65FF] decoration-2 underline-offset-[6px] hover:font-bold hover:underline";
   return label === activeLabel
-    ? "text-base font-normal text-[#0A65FF]"
-    : "text-base font-normal text-black/80 transition-colors duration-300 hover:text-black";
+    ? `${base} text-[#0A65FF]`
+    : `${base} text-black/80 transition-colors duration-300 hover:text-black`;
 }
 
 function getNavHref(item: (typeof primaryNavItems)[number], useHomeAnchorLinks?: boolean) {
@@ -74,7 +76,7 @@ export default function PublicHeader({
     <header className={`fixed left-0 right-0 top-0 z-50 border-b border-black/8 ${headerClassName} backdrop-blur-xl`}>
       <div className="mx-auto flex h-20 w-full max-w-[1280px] items-center justify-start gap-4 px-4 sm:px-6 lg:justify-between lg:px-8">
         <a href={logoHref} className="-ml-3 flex shrink-0 items-center gap-3" aria-label="Digital Therapy home">
-          <img src={logoUrl} alt="Digital Therapy" className="h-[60px] w-auto object-contain lg:h-[66px]" width={600} height={192}/>
+          <img src={logoUrl} alt="Digital Therapy" className="h-[72px] w-auto object-contain lg:h-[79px]" width={600} height={192}/>
         </a>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary navigation">
@@ -152,7 +154,7 @@ export default function PublicHeader({
             </SheetHeader>
             <div className="mt-8 flex flex-col gap-8">
               <a href={logoHref} className="inline-flex items-center gap-3" aria-label="Digital Therapy home">
-                <img src={logoUrl} alt="Digital Therapy" className="h-[60px] w-auto object-contain" width={600} height={192}/>
+                <img src={logoUrl} alt="Digital Therapy" className="h-[72px] w-auto object-contain" width={600} height={192}/>
               </a>
               <nav className="flex flex-col gap-1" aria-label="Primary mobile navigation">
                 {primaryNavItems.map((item) => (

@@ -72,7 +72,7 @@ const discoveryOutputs = [
   },
   {
     number: "02",
-    title: "Visualized Operations | Current State w/ Pain Points Heat Map + New State",
+    title: "Visualized Operations",
     copy: "A visual operating model that shows how work happens today, where friction concentrates, and how the future-state workflow should operate.",
     icon: Workflow,
     details: [
@@ -84,7 +84,7 @@ const discoveryOutputs = [
   },
   {
     number: "03",
-    title: "Project Plan | Implementation Roadmap",
+    title: "Project Plan",
     copy: "A practical implementation plan that converts discovery into sequenced workstreams, ownership, timelines, and risk controls.",
     icon: BarChart3,
     details: [
@@ -397,7 +397,7 @@ export default function OurApproach() {
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">Illustrative case example</p>
                   <h3 className="mt-4 font-display text-[clamp(2rem,3vw,3.2rem)] leading-[0.94] tracking-[-0.06em] text-[#111111]">
-                    From close backlog to rhythmic reliability.
+                    From close backlog to rhythm &amp; reliability.
                   </h3>
                   <p className="mt-5 text-sm leading-7 text-black/75">
                     Example scenario, not a quoted client result: a multi-entity family office enters each month 20+ days behind, with AP approvals, AR follow-up, reconciliations, and reporting evidence scattered across inboxes, spreadsheets, and accounting exports.

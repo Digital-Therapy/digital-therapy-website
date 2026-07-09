@@ -653,7 +653,7 @@ export default function Team() {
                 Work with us
               </div>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.9] tracking-[-0.07em]">
-                Book 30 minutes with us. Transformation starts with a chat.
+                Transformation starts with a chat.
               </h2>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-white/64">
                 Bring us your pain points, see game-changing custom solutions already deployed for some of New York City’s largest and most discerning family offices, and leave with a practical view of where technology, operations, and accounting expertise can create value first.
