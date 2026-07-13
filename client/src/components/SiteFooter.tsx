@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { ArrowUpRight, Mail, Phone } from "lucide-react";
+import { ContactFormDialog } from "@/components/ContactBooking";
 
 const logoUrl = "/dtlogo.webp";
 const markUrl = "/dt-mark.webp";
@@ -31,7 +33,7 @@ const sitemapGroups = [
     title: "Company",
     links: [
       { label: "Team", href: "/team" },
-      { label: "Contact", href: "mailto:hello@digitaltherapy.io" },
+      { label: "Contact", href: "#contact" },
     ],
   },
 ];
@@ -40,6 +42,8 @@ export default function SiteFooter() {
   // Hide the "Become a Digital Therapy vendor" CTA when the user is already on
   // the Vendors page — the CTA's purpose is to drive them there.
   const [pathname] = useLocation();
+  // Contact link opens the contact-form popup (not the visitor's email client).
+  const [contactOpen, setContactOpen] = useState(false);
 
   const showVendorCta = pathname !== "/vendors";
 
@@ -77,7 +81,7 @@ export default function SiteFooter() {
               <img src={logoUrl} alt="Digital Therapy" className="h-[72px] w-auto object-contain lg:h-[79px]" width={600} height={192}/>
             </a>
             <p className="mt-3 max-w-md text-base leading-7 text-black/80">
-              Digital Therapy builds private data, workflow, reporting, and automation systems for modern family offices & operated businesses.
+              Digital Therapy builds custom Technology, Accounting &amp; Operations solutions for family offices and their operating businesses.
             </p>
             <div className="mt-7 flex flex-col gap-4 text-base font-semibold text-[#111111]">
               <a
@@ -112,6 +116,19 @@ export default function SiteFooter() {
                 </h2>
                 <div className="mt-5 space-y-3">
                   {group.links.map((link) => {
+                    if (link.href === "#contact") {
+                      return (
+                        <button
+                          key={link.href}
+                          type="button"
+                          onClick={() => setContactOpen(true)}
+                          className={footerLinkClasses}
+                        >
+                          <span>{link.label}</span>
+                          <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                        </button>
+                      );
+                    }
                     return (
                       <a
                         key={link.href}
@@ -160,6 +177,15 @@ export default function SiteFooter() {
           <div aria-hidden="true" className="hidden sm:block" />
         </div>
       </div>
+
+      {/* Controlled contact-form popup — mounted here so the footer Contact
+          link can toggle it without rendering its own trigger button. */}
+      <ContactFormDialog
+        open={contactOpen}
+        onOpenChange={setContactOpen}
+        hideTrigger
+        context="footer sitemap inquiry"
+      />
     </footer>
   );
 }
