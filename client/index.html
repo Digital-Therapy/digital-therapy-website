@@ -263,6 +263,20 @@
         })("67c20a822f6250e8270dfafc");
       })();
     </script>
+
+    <!-- Preload the homepage hero LCP image. Uses imagesrcset/imagesizes so
+         the browser fetches the size that will actually be rendered — no
+         wasted bytes on mobile. Only matters for the "/" route, but preload
+         is harmless on other routes (they still show the header logo which
+         is a different asset). -->
+    <link
+      rel="preload"
+      as="image"
+      href="/welcome-hero-1600.webp"
+      imagesrcset="/welcome-hero-800.webp 800w, /welcome-hero-1200.webp 1200w, /welcome-hero-1600.webp 1600w"
+      imagesizes="(max-width: 1024px) 100vw, 60vw"
+      fetchpriority="high"
+    />
   </head>
 
   <body>

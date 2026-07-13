@@ -24,7 +24,6 @@ import {
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
 const markUrl = "/dt-mark.webp";
-const welcomeVisual = "/welcome-hero.webp";
 const heroVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_hero_operating_layer-TEdtu9wcNJkxBt4PK2JKyo.webp";
 const boardroomVisual =
@@ -275,7 +274,17 @@ export default function Home() {
             >
               <div className="pointer-events-none absolute -inset-6 rounded-[2.6rem] bg-[#0A65FF]/10 blur-3xl" />
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
-                <img src={welcomeVisual} alt="Digital Therapy welcome hero — modern family office operating layer surfacing data, workflows, reporting, and automation behind one unified team" className="aspect-[16/8] w-full object-cover object-[center_58%]" width={1536} height={1024}/>
+                <img
+                  src="/welcome-hero-1600.webp"
+                  srcSet="/welcome-hero-800.webp 800w, /welcome-hero-1200.webp 1200w, /welcome-hero-1600.webp 1600w"
+                  sizes="(max-width: 1024px) 100vw, 60vw"
+                  alt="Digital Therapy welcome hero — modern family office operating layer surfacing data, workflows, reporting, and automation behind one unified team"
+                  className="aspect-[16/8] w-full object-cover object-[center_58%]"
+                  width={1536}
+                  height={1024}
+                  fetchPriority="high"
+                  decoding="async"
+                />
               </div>
               <p className="mt-6 text-left text-[11pt] font-medium italic text-black/80">
                 Tap the three outcomes below to read sample case studies:
