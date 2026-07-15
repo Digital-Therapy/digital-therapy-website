@@ -35,7 +35,6 @@ const markUrl = "/dt-mark.webp";
 const boardroomVisual =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_family_office_boardroom-UvecEVLEaVqpouVEhEb9mw.webp";
 const headshots = {
-  harryDublinsky: "/team/harry.avif",
   bruceDitman: "/team/bruce-blue.webp",
   lironDavid: "/team/liron.avif",
   jonathanKobrin: "/team/jon.avif",
@@ -109,7 +108,6 @@ const groups: Array<{
         bio: "Kennedy Kraner is a bookkeeper with four years of experience in property management accounting, transaction categorization, and financial record-keeping across multi-property portfolios. She brings proficiency in Rent Manager, QuickBooks, and Microsoft Office, along with additional capabilities in web development and graphic design.",
       },
       { name: "Rick Toussaint, CPA", role: "Tax + Pubco Reporting", imageUrl: headshots.rickToussaint },
-      { name: "Harry Dublinsky, CPA", role: "CPA", imageUrl: headshots.harryDublinsky },
     ],
   },
   {
