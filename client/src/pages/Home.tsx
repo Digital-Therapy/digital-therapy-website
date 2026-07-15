@@ -238,7 +238,7 @@ export default function Home() {
           <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-10 py-20 lg:grid-cols-[0.92fr_1.08fr] lg:py-28">
             <motion.div {...fadeUp}>
               <SectionLabel>secure family office automation</SectionLabel>
-              <h1 className="max-w-4xl font-display text-[70px] leading-[0.92] tracking-[-0.06em] text-[#111111]">
+              <h1 className="max-w-4xl font-display text-[70px] leading-[1] tracking-[-0.06em] text-[#111111]">
                 Family office<br />transformation<br />that works.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">

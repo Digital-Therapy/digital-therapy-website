@@ -77,9 +77,9 @@ export const ROUTE_META: Record<string, RouteMeta> = {
     priority: 0.7,
   },
   "/get-started": {
-    title: "Get Started | Digital Therapy",
+    title: "Outsourced Accounting Intake Assessment | Digital Therapy",
     description:
-      "Intake assessments by discipline -- take 5-10 minutes to walk us through your operation. We come back within one business day with what we see and a recommended next step.",
+      "Take 5-10 minutes to walk us through your accounting operation. We come back within one business day with what we see and a recommended next step.",
     priority: 0.85,
   },
   "/terms": {
