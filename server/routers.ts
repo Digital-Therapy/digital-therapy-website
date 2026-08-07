@@ -62,6 +62,7 @@ import {
   addActivity,
   closeLost,
   closeWon,
+  completeNextStep,
   createOpportunity,
   deleteOpportunity,
   duplicateOpportunity,
@@ -738,6 +739,8 @@ export const appRouter = router({
           prospectSource: z.string().trim().max(120).optional(),
           stage: z.enum(OPPORTUNITY_STAGES).optional(),
           estValueCents: z.number().int().min(0).nullable().optional(),
+          estRecurringValueCents: z.number().int().min(0).nullable().optional(),
+          estRecurringCadence: z.enum(["monthly", "quarterly", "bi_annually", "annually"]).nullable().optional(),
           estCloseDate: z.string().trim().max(40).optional(),
           probabilityPct: z.number().int().min(0).max(100).nullable().optional(),
           ownerEmail: z.string().trim().max(320).optional(),
@@ -759,6 +762,8 @@ export const appRouter = router({
           prospectSource: z.string().trim().max(120).optional(),
           title: z.string().trim().min(1).max(240).optional(),
           estValueCents: z.number().int().min(0).nullable().optional(),
+          estRecurringValueCents: z.number().int().min(0).nullable().optional(),
+          estRecurringCadence: z.enum(["monthly", "quarterly", "bi_annually", "annually"]).nullable().optional(),
           estCloseDate: z.string().trim().max(40).optional(),
           probabilityPct: z.number().int().min(0).max(100).nullable().optional(),
           ownerEmail: z.string().trim().max(320).optional(),
@@ -810,6 +815,11 @@ export const appRouter = router({
     remove: adminProcedure
       .input(z.object({ id: z.number().int() }))
       .mutation(async ({ input }) => ({ success: await deleteOpportunity(input.id) })),
+    completeTask: adminProcedure
+      .input(z.object({ id: z.number().int() }))
+      .mutation(async ({ input, ctx }) => ({
+        success: await completeNextStep(input.id, ctx.user.email ?? null),
+      })),
     duplicate: adminProcedure
       .input(
         z.object({

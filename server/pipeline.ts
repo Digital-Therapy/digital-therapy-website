@@ -28,6 +28,9 @@ export type OpportunityStage = (typeof OPPORTUNITY_STAGES)[number];
 export const ACTIVITY_KINDS = ["note", "call", "email", "meeting", "stage_change", "system"] as const;
 export type ActivityKind = (typeof ACTIVITY_KINDS)[number];
 
+export const RECURRING_CADENCES = ["monthly", "quarterly", "bi_annually", "annually"] as const;
+export type RecurringCadence = (typeof RECURRING_CADENCES)[number];
+
 export type Opportunity = {
   id: number;
   kind: OpportunityKind;
@@ -40,6 +43,8 @@ export type Opportunity = {
   title: string;
   stage: OpportunityStage;
   estValueCents: number | null;
+  estRecurringValueCents: number | null;
+  estRecurringCadence: RecurringCadence | null;
   estCloseDate: string | null;
   probabilityPct: number | null;
   ownerEmail: string | null;
@@ -104,6 +109,12 @@ async function ensureTables() {
   );
   await pool.query(`CREATE INDEX IF NOT EXISTS opportunity_stage_idx ON dt_site.opportunity (stage)`);
   await pool.query(`CREATE INDEX IF NOT EXISTS opportunity_client_idx ON dt_site.opportunity (client_id)`);
+  // Recurring-value fields (added later — idempotent).
+  await pool.query(
+    `ALTER TABLE dt_site.opportunity
+       ADD COLUMN IF NOT EXISTS est_recurring_value_cents bigint,
+       ADD COLUMN IF NOT EXISTS est_recurring_cadence text`,
+  );
   await pool.query(
     `CREATE TABLE IF NOT EXISTS dt_site.opportunity_activity (
        id serial PRIMARY KEY,
@@ -123,6 +134,7 @@ async function ensureTables() {
 const OPPORTUNITY_COLUMNS = `
   o.id, o.kind, o.client_id, o.prospect_name, o.prospect_company, o.prospect_email,
   o.prospect_phone, o.prospect_source, o.title, o.stage, o.est_value_cents,
+  o.est_recurring_value_cents, o.est_recurring_cadence,
   o.est_close_date, o.probability_pct, o.owner_email, o.next_step, o.next_step_due,
   o.notes, o.loss_reason, o.resulting_client_id, o.resulting_project_id,
   o.closed_at, o.created_at, o.updated_at,
@@ -159,6 +171,10 @@ function isKind(value: unknown): value is OpportunityKind {
   return typeof value === "string" && (OPPORTUNITY_KINDS as readonly string[]).includes(value);
 }
 
+function isCadence(value: unknown): value is RecurringCadence {
+  return typeof value === "string" && (RECURRING_CADENCES as readonly string[]).includes(value);
+}
+
 function mapOpportunityRow(r: Record<string, unknown>): OpportunityWithJoins {
   return {
     id: r.id as number,
@@ -172,6 +188,8 @@ function mapOpportunityRow(r: Record<string, unknown>): OpportunityWithJoins {
     title: r.title as string,
     stage: isStage(r.stage) ? r.stage : "intake",
     estValueCents: asNumber(r.est_value_cents),
+    estRecurringValueCents: asNumber(r.est_recurring_value_cents),
+    estRecurringCadence: isCadence(r.est_recurring_cadence) ? r.est_recurring_cadence : null,
     estCloseDate: asString(r.est_close_date),
     probabilityPct: asNumber(r.probability_pct),
     ownerEmail: asString(r.owner_email),
@@ -253,6 +271,8 @@ export type OpportunityCreateInput = {
   prospectSource?: string;
   stage?: OpportunityStage;
   estValueCents?: number | null;
+  estRecurringValueCents?: number | null;
+  estRecurringCadence?: RecurringCadence | null;
   estCloseDate?: string;
   probabilityPct?: number | null;
   ownerEmail?: string;
@@ -271,9 +291,10 @@ export async function createOpportunity(
   const r = await pool.query(
     `INSERT INTO dt_site.opportunity
        (kind, client_id, prospect_name, prospect_company, prospect_email, prospect_phone,
-        prospect_source, title, stage, est_value_cents, est_close_date, probability_pct,
+        prospect_source, title, stage, est_value_cents, est_recurring_value_cents,
+        est_recurring_cadence, est_close_date, probability_pct,
         owner_email, next_step, next_step_due, notes)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
      RETURNING id`,
     [
       input.kind,
@@ -286,6 +307,8 @@ export async function createOpportunity(
       input.title,
       stage,
       input.estValueCents ?? null,
+      input.estRecurringValueCents ?? null,
+      input.estRecurringCadence ?? null,
       input.estCloseDate ?? null,
       input.probabilityPct ?? null,
       input.ownerEmail ?? authorEmail ?? null,
@@ -313,6 +336,8 @@ export type OpportunityUpdateInput = {
   prospectSource?: string;
   title?: string;
   estValueCents?: number | null;
+  estRecurringValueCents?: number | null;
+  estRecurringCadence?: RecurringCadence | null;
   estCloseDate?: string;
   probabilityPct?: number | null;
   ownerEmail?: string;
@@ -330,6 +355,8 @@ const UPDATE_COL_BY_FIELD: Record<keyof OpportunityUpdateInput, string> = {
   prospectSource: "prospect_source",
   title: "title",
   estValueCents: "est_value_cents",
+  estRecurringValueCents: "est_recurring_value_cents",
+  estRecurringCadence: "est_recurring_cadence",
   estCloseDate: "est_close_date",
   probabilityPct: "probability_pct",
   ownerEmail: "owner_email",
@@ -428,6 +455,8 @@ export async function duplicateOpportunity(
       prospectSource: input.kind === "new_client" ? input.prospectSource : undefined,
       stage: "intake",
       estValueCents: source.estValueCents,
+      estRecurringValueCents: source.estRecurringValueCents,
+      estRecurringCadence: source.estRecurringCadence,
       estCloseDate: source.estCloseDate ?? undefined,
       probabilityPct: source.probabilityPct,
       ownerEmail: source.ownerEmail ?? authorEmail ?? undefined,
@@ -448,6 +477,36 @@ export async function duplicateOpportunity(
     }
   }
   return created;
+}
+
+/**
+ * Mark the current Next Step on an opportunity as done. Records a system
+ * activity ("Completed task: ...") preserving the history, then clears the
+ * next_step + next_step_due fields so the task disappears from the outstanding
+ * list. No-op if the opportunity has no next step.
+ */
+export async function completeNextStep(opportunityId: number, authorEmail: string | null): Promise<boolean> {
+  const pool = await ensureTables();
+  if (!pool) return false;
+  const r = await pool.query(
+    `SELECT next_step FROM dt_site.opportunity WHERE id = $1`,
+    [opportunityId],
+  );
+  if (!r.rows.length) return false;
+  const nextStep = r.rows[0].next_step as string | null;
+  if (!nextStep || !nextStep.trim()) return false;
+  await pool.query(
+    `INSERT INTO dt_site.opportunity_activity (opportunity_id, kind, body, author_email)
+     VALUES ($1, 'system', $2, $3)`,
+    [opportunityId, `Completed task: ${nextStep}`, authorEmail],
+  );
+  await pool.query(
+    `UPDATE dt_site.opportunity
+       SET next_step = NULL, next_step_due = NULL, updated_at = now()
+     WHERE id = $1`,
+    [opportunityId],
+  );
+  return true;
 }
 
 export async function deleteOpportunity(id: number): Promise<boolean> {

@@ -76,6 +76,8 @@ function CreateDialog({ onOpenChange }: { onOpenChange: (open: boolean) => void 
   const [prospectSource, setProspectSource] = useState("");
   const [title, setTitle] = useState("");
   const [estValue, setEstValue] = useState("");
+  const [estRecurringValue, setEstRecurringValue] = useState("");
+  const [estRecurringCadence, setEstRecurringCadence] = useState<"" | "monthly" | "quarterly" | "bi_annually" | "annually">("");
   const [estCloseDate, setEstCloseDate] = useState("");
   const [probability, setProbability] = useState("");
   const [nextStep, setNextStep] = useState("");
@@ -98,6 +100,8 @@ function CreateDialog({ onOpenChange }: { onOpenChange: (open: boolean) => void 
       prospectPhone: kind === "new_client" ? prospectPhone.trim() || undefined : undefined,
       prospectSource: kind === "new_client" ? prospectSource.trim() || undefined : undefined,
       estValueCents: dollarsToCents(estValue),
+      estRecurringValueCents: dollarsToCents(estRecurringValue),
+      estRecurringCadence: estRecurringCadence || null,
       estCloseDate: estCloseDate || undefined,
       probabilityPct: probability ? Math.min(100, Math.max(0, Number(probability))) : null,
       nextStep: nextStep.trim() || undefined,
@@ -204,6 +208,32 @@ function CreateDialog({ onOpenChange }: { onOpenChange: (open: boolean) => void 
           </div>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <Field label="Est. recurring value ($)">
+              <Input
+                value={estRecurringValue}
+                onChange={(e) => setEstRecurringValue(e.target.value)}
+                placeholder="5000"
+                inputMode="numeric"
+              />
+            </Field>
+            <Field label="Recurring cadence">
+              <select
+                value={estRecurringCadence}
+                onChange={(e) =>
+                  setEstRecurringCadence(e.target.value as "" | "monthly" | "quarterly" | "bi_annually" | "annually")
+                }
+                className="h-10 rounded-md border border-black/15 bg-white px-3 text-sm focus:border-[#0A65FF] focus:outline-none"
+              >
+                <option value="">—</option>
+                <option value="monthly">Monthly</option>
+                <option value="quarterly">Quarterly</option>
+                <option value="bi_annually">Bi-Annually</option>
+                <option value="annually">Annually</option>
+              </select>
+            </Field>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field label="Next step">
               <Input
                 value={nextStep}
@@ -288,6 +318,8 @@ function EditDialog({ opportunityId, onOpenChange }: { opportunityId: number; on
 
   const [title, setTitle] = useState("");
   const [estValue, setEstValue] = useState("");
+  const [estRecurringValue, setEstRecurringValue] = useState("");
+  const [estRecurringCadence, setEstRecurringCadence] = useState<"" | "monthly" | "quarterly" | "bi_annually" | "annually">("");
   const [estCloseDate, setEstCloseDate] = useState("");
   const [probability, setProbability] = useState("");
   const [nextStep, setNextStep] = useState("");
@@ -316,6 +348,8 @@ function EditDialog({ opportunityId, onOpenChange }: { opportunityId: number; on
     if (!opp) return;
     setTitle(opp.title);
     setEstValue(centsToDollars(opp.estValueCents));
+    setEstRecurringValue(centsToDollars(opp.estRecurringValueCents));
+    setEstRecurringCadence(opp.estRecurringCadence ?? "");
     setEstCloseDate(opp.estCloseDate ?? "");
     setProbability(opp.probabilityPct == null ? "" : String(opp.probabilityPct));
     setNextStep(opp.nextStep ?? "");
@@ -412,6 +446,36 @@ function EditDialog({ opportunityId, onOpenChange }: { opportunityId: number; on
                   inputMode="numeric"
                   disabled={isClosed}
                 />
+              </Field>
+              <Field label="Est. recurring value ($)">
+                <Input
+                  value={estRecurringValue}
+                  onChange={(e) => setEstRecurringValue(e.target.value)}
+                  onBlur={() => {
+                    const cents = dollarsToCents(estRecurringValue);
+                    if (cents !== opp.estRecurringValueCents) saveField({ estRecurringValueCents: cents });
+                  }}
+                  inputMode="numeric"
+                  disabled={isClosed}
+                />
+              </Field>
+              <Field label="Recurring cadence">
+                <select
+                  value={estRecurringCadence}
+                  onChange={(e) => {
+                    const v = e.target.value as "" | "monthly" | "quarterly" | "bi_annually" | "annually";
+                    setEstRecurringCadence(v);
+                    if ((opp.estRecurringCadence ?? "") !== v) saveField({ estRecurringCadence: v || null });
+                  }}
+                  disabled={isClosed}
+                  className="h-9 rounded-md border border-black/15 bg-white px-3 text-sm focus:border-[#0A65FF] focus:outline-none disabled:opacity-50"
+                >
+                  <option value="">—</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="quarterly">Quarterly</option>
+                  <option value="bi_annually">Bi-Annually</option>
+                  <option value="annually">Annually</option>
+                </select>
               </Field>
               <Field label="Est. close date">
                 <Input

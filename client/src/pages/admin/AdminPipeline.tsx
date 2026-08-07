@@ -14,11 +14,12 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/lib/trpc";
 import type { inferRouterOutputs } from "@trpc/server";
-import { AlertCircle, ChevronDown, ChevronRight, Plus, TrendingUp } from "lucide-react";
+import { AlertCircle, ChevronDown, ChevronRight, ListChecks, Plus, TrendingUp } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import type { AppRouter } from "../../../../server/routers";
 import OpportunityDialog from "./OpportunityDialog";
+import { PipelineTasksDialog } from "./PipelineTasksDialog";
 
 type OpportunityListItem = inferRouterOutputs<AppRouter>["pipeline"]["list"][number];
 
@@ -67,6 +68,7 @@ export default function AdminPipeline() {
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [creating, setCreating] = useState(false);
+  const [tasksOpen, setTasksOpen] = useState(false);
   const [kindFilter, setKindFilter] = useState<KindFilter>("all");
   const [showClosed, setShowClosed] = useState(false);
   const [collapsedStages, setCollapsedStages] = useState<Set<StageKey>>(
@@ -130,10 +132,16 @@ export default function AdminPipeline() {
               promotes the opportunity to a real client + project on the Clients &amp; Projects tab.
             </p>
           </div>
-          <Button onClick={() => setCreating(true)} className="shrink-0">
-            <Plus className="mr-1.5 h-4 w-4" />
-            Add opportunity
-          </Button>
+          <div className="flex shrink-0 items-center gap-2">
+            <Button variant="outline" onClick={() => setTasksOpen(true)}>
+              <ListChecks className="mr-1.5 h-4 w-4" />
+              Tasks
+            </Button>
+            <Button onClick={() => setCreating(true)}>
+              <Plus className="mr-1.5 h-4 w-4" />
+              Add opportunity
+            </Button>
+          </div>
         </div>
 
         {/* Stat tiles */}
@@ -249,6 +257,15 @@ export default function AdminPipeline() {
             }}
           />
         )}
+
+        <PipelineTasksDialog
+          open={tasksOpen}
+          onOpenChange={setTasksOpen}
+          onOpenOpportunity={(id) => {
+            setTasksOpen(false);
+            setEditingId(id);
+          }}
+        />
       </div>
     </AdminLayout>
   );
