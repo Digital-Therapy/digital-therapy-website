@@ -64,6 +64,7 @@ import {
   closeWon,
   createOpportunity,
   deleteOpportunity,
+  duplicateOpportunity,
   getOpportunity,
   listOpportunities,
   OPPORTUNITY_KINDS,
@@ -809,6 +810,26 @@ export const appRouter = router({
     remove: adminProcedure
       .input(z.object({ id: z.number().int() }))
       .mutation(async ({ input }) => ({ success: await deleteOpportunity(input.id) })),
+    duplicate: adminProcedure
+      .input(
+        z.object({
+          sourceId: z.number().int(),
+          kind: z.enum(OPPORTUNITY_KINDS),
+          clientId: z.number().int().nullable().optional(),
+          prospectName: z.string().trim().max(200).optional(),
+          prospectCompany: z.string().trim().max(200).optional(),
+          prospectEmail: z.string().trim().max(320).optional(),
+          prospectPhone: z.string().trim().max(60).optional(),
+          prospectSource: z.string().trim().max(120).optional(),
+          title: z.string().trim().max(240).optional(),
+        }),
+      )
+      .mutation(async ({ input, ctx }) => {
+        const { sourceId, ...fields } = input;
+        const created = await duplicateOpportunity(sourceId, fields, ctx.user.email ?? null);
+        if (!created) throw new TRPCError({ code: "NOT_FOUND", message: "Source opportunity not found." });
+        return created;
+      }),
   }),
 
   // Public-facing needs-assessment intake forms (Get Started page). Submissions

@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { CheckCircle2, Loader2, Phone, Trash2, XCircle } from "lucide-react";
+import { CheckCircle2, Copy, Loader2, Phone, Trash2, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -274,6 +274,15 @@ function EditDialog({ opportunityId, onOpenChange }: { opportunityId: number; on
       onOpenChange(false);
     },
   });
+  const clientsQuery = trpc.clients.list.useQuery();
+  const duplicateMutation = trpc.pipeline.duplicate.useMutation({
+    onSuccess: () => {
+      utils.pipeline.list.invalidate();
+      toast.success("Opportunity duplicated — new one is in Intake.");
+      onOpenChange(false);
+    },
+    onError: (e) => toast.error(e.message || "Could not duplicate."),
+  });
 
   const opp = oppQuery.data;
 
@@ -294,6 +303,14 @@ function EditDialog({ opportunityId, onOpenChange }: { opportunityId: number; on
   // Close-lost inline confirmation
   const [confirmingLost, setConfirmingLost] = useState(false);
   const [lossReason, setLossReason] = useState("");
+  // Duplicate inline confirmation
+  const [confirmingDuplicate, setConfirmingDuplicate] = useState(false);
+  const [dupKind, setDupKind] = useState<"new_project" | "new_client">("new_project");
+  const [dupClientId, setDupClientId] = useState<number | "">("");
+  const [dupProspectCompany, setDupProspectCompany] = useState("");
+  const [dupProspectName, setDupProspectName] = useState("");
+  const [dupProspectEmail, setDupProspectEmail] = useState("");
+  const [dupTitle, setDupTitle] = useState("");
 
   useEffect(() => {
     if (!opp) return;
@@ -577,6 +594,98 @@ function EditDialog({ opportunityId, onOpenChange }: { opportunityId: number; on
                       </Button>
                     </div>
                   </div>
+                ) : confirmingDuplicate ? (
+                  <div className="flex flex-col gap-3 rounded-2xl border border-[#0A65FF]/30 bg-[#0A65FF]/5 p-4">
+                    <p className="text-sm font-medium text-[#111111]">Duplicate this opportunity for a new customer</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {(
+                        [
+                          { value: "new_project", label: "Existing client" },
+                          { value: "new_client", label: "New prospect" },
+                        ] as const
+                      ).map((opt) => {
+                        const active = dupKind === opt.value;
+                        return (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => setDupKind(opt.value)}
+                            className={`rounded-md border px-3 py-2 text-sm transition-colors ${
+                              active
+                                ? "border-[#0A65FF] bg-[#0A65FF] text-white"
+                                : "border-black/15 bg-white text-black/75 hover:border-black/30"
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {dupKind === "new_project" ? (
+                      <Field label="Existing client">
+                        <select
+                          value={dupClientId}
+                          onChange={(e) => setDupClientId(e.target.value === "" ? "" : Number(e.target.value))}
+                          className="h-10 rounded-md border border-black/15 bg-white px-3 text-sm focus:border-[#0A65FF] focus:outline-none"
+                        >
+                          <option value="">Select a client…</option>
+                          {(clientsQuery.data ?? []).map((c) => (
+                            <option key={c.id} value={c.id}>
+                              {c.name}
+                            </option>
+                          ))}
+                        </select>
+                      </Field>
+                    ) : (
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <Field label="Prospect company">
+                          <Input value={dupProspectCompany} onChange={(e) => setDupProspectCompany(e.target.value)} />
+                        </Field>
+                        <Field label="Contact name">
+                          <Input value={dupProspectName} onChange={(e) => setDupProspectName(e.target.value)} />
+                        </Field>
+                        <Field label="Contact email">
+                          <Input type="email" value={dupProspectEmail} onChange={(e) => setDupProspectEmail(e.target.value)} />
+                        </Field>
+                      </div>
+                    )}
+                    <Field label="Title (optional — leave blank to keep current)">
+                      <Input value={dupTitle} onChange={(e) => setDupTitle(e.target.value)} placeholder={opp.title} />
+                    </Field>
+                    <p className="text-xs text-black/55">
+                      Copies title, value, close date, probability, next step, owner, and notes. Stage resets to Intake.
+                      Activity history is not copied.
+                    </p>
+                    <div className="flex justify-end gap-2">
+                      <Button variant="ghost" onClick={() => setConfirmingDuplicate(false)}>
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          duplicateMutation.mutate({
+                            sourceId: opportunityId,
+                            kind: dupKind,
+                            clientId: dupKind === "new_project" ? (dupClientId === "" ? null : Number(dupClientId)) : null,
+                            prospectCompany:
+                              dupKind === "new_client" ? dupProspectCompany.trim() || undefined : undefined,
+                            prospectName:
+                              dupKind === "new_client" ? dupProspectName.trim() || undefined : undefined,
+                            prospectEmail:
+                              dupKind === "new_client" ? dupProspectEmail.trim() || undefined : undefined,
+                            title: dupTitle.trim() || undefined,
+                          })
+                        }
+                        disabled={
+                          duplicateMutation.isPending ||
+                          (dupKind === "new_project" && dupClientId === "") ||
+                          (dupKind === "new_client" && dupProspectCompany.trim().length < 2 && dupProspectName.trim().length < 2)
+                        }
+                      >
+                        {duplicateMutation.isPending && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
+                        Duplicate
+                      </Button>
+                    </div>
+                  </div>
                 ) : (
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <Button
@@ -593,6 +702,21 @@ function EditDialog({ opportunityId, onOpenChange }: { opportunityId: number; on
                       Delete
                     </Button>
                     <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setDupKind(opp.kind);
+                          setDupClientId(opp.clientId ?? "");
+                          setDupProspectCompany("");
+                          setDupProspectName("");
+                          setDupProspectEmail("");
+                          setDupTitle("");
+                          setConfirmingDuplicate(true);
+                        }}
+                      >
+                        <Copy className="mr-1.5 h-4 w-4" />
+                        Duplicate
+                      </Button>
                       <Button variant="outline" onClick={() => setConfirmingLost(true)}>
                         <XCircle className="mr-1.5 h-4 w-4" />
                         Close-lost

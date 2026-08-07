@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { trpc, type RouterOutputs } from "@/lib/trpc";
+import { formatClientId, formatProjectId } from "@/lib/utils";
 import { Check, ChevronDown, ChevronRight, FileText, Pencil, Plus, ShieldCheck, Star, Trash2, Users, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -111,6 +112,12 @@ export function ClientCard({ client, vendors }: { client: ClientRow; vendors: Ve
               {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </button>
             <CardTitle className="truncate text-lg">{client.name}</CardTitle>
+            <span
+              className="rounded bg-black/[0.05] px-1.5 py-0.5 font-mono text-[0.7rem] font-medium text-black/60"
+              title="Client ID"
+            >
+              {formatClientId(client.id)}
+            </span>
             {!client.active ? <Badge variant="outline">On Deck</Badge> : null}
             {client.ndaWall ? (
               <Badge className="gap-1 bg-amber-100 font-normal text-amber-800 hover:bg-amber-100">
@@ -579,6 +586,12 @@ export function ClientCard({ client, vendors }: { client: ClientRow; vendors: Ve
                 >
                   <div className="flex items-center gap-2 text-sm">
                     <span>{project.name}</span>
+                    <span
+                      className="rounded bg-black/[0.05] px-1.5 py-0.5 font-mono text-[0.65rem] font-medium text-black/60"
+                      title="Project ID"
+                    >
+                      {formatProjectId(project.id)}
+                    </span>
                     {!project.active ? <Badge variant="outline">On Deck</Badge> : null}
                   </div>
                   <div className="flex items-center gap-3">

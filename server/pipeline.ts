@@ -391,6 +391,65 @@ export async function addActivity(
   return mapActivityRow(r.rows[0]);
 }
 
+/**
+ * Duplicate an existing opportunity for a different customer. Copies the deal
+ * fields (title, value, close date, probability, next step, notes) but takes a
+ * fresh kind + client/prospect selection, resets stage to "intake", and clears
+ * any close/promoted-project state. Does NOT copy the activity history.
+ */
+export type DuplicateOpportunityInput = {
+  kind: OpportunityKind;
+  clientId?: number | null;
+  prospectName?: string;
+  prospectCompany?: string;
+  prospectEmail?: string;
+  prospectPhone?: string;
+  prospectSource?: string;
+  /** Optional title override — defaults to the source opportunity title. */
+  title?: string;
+};
+
+export async function duplicateOpportunity(
+  sourceId: number,
+  input: DuplicateOpportunityInput,
+  authorEmail: string | null,
+): Promise<OpportunityWithJoins | null> {
+  const source = await getOpportunity(sourceId);
+  if (!source) return null;
+  const created = await createOpportunity(
+    {
+      kind: input.kind,
+      title: (input.title ?? source.title).trim() || source.title,
+      clientId: input.kind === "new_project" ? input.clientId ?? null : null,
+      prospectName: input.kind === "new_client" ? input.prospectName : undefined,
+      prospectCompany: input.kind === "new_client" ? input.prospectCompany : undefined,
+      prospectEmail: input.kind === "new_client" ? input.prospectEmail : undefined,
+      prospectPhone: input.kind === "new_client" ? input.prospectPhone : undefined,
+      prospectSource: input.kind === "new_client" ? input.prospectSource : undefined,
+      stage: "intake",
+      estValueCents: source.estValueCents,
+      estCloseDate: source.estCloseDate ?? undefined,
+      probabilityPct: source.probabilityPct,
+      ownerEmail: source.ownerEmail ?? authorEmail ?? undefined,
+      nextStep: source.nextStep ?? undefined,
+      nextStepDue: source.nextStepDue ?? undefined,
+      notes: source.notes ?? undefined,
+    },
+    authorEmail,
+  );
+  if (created) {
+    const pool = await ensureTables();
+    if (pool) {
+      await pool.query(
+        `INSERT INTO dt_site.opportunity_activity (opportunity_id, kind, body, author_email)
+         VALUES ($1, 'system', $2, $3)`,
+        [created.id, `Duplicated from opportunity #${sourceId} (${source.title})`, authorEmail],
+      );
+    }
+  }
+  return created;
+}
+
 export async function deleteOpportunity(id: number): Promise<boolean> {
   const pool = await ensureTables();
   if (!pool) return false;
