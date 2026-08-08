@@ -233,7 +233,14 @@ export default function AdminPipeline() {
             </p>
           </div>
         ) : viewMode === "kanban" ? (
-          <KanbanView opportunities={filtered} showClosed={showClosed} onOpen={(id) => setEditingId(id)} />
+          <KanbanView
+            opportunities={filtered}
+            showClosed={showClosed}
+            onOpen={(id) => setEditingId(id)}
+            onStageChange={(id, stage) =>
+              setStageMutation.mutate({ id, stage }, { onSuccess: () => utils.pipeline.get.invalidate({ id }) })
+            }
+          />
         ) : viewMode === "calendar" ? (
           <CalendarView opportunities={filtered} onOpen={(id) => setEditingId(id)} />
         ) : (
@@ -397,10 +404,12 @@ function KanbanView({
   opportunities,
   showClosed,
   onOpen,
+  onStageChange,
 }: {
   opportunities: OpportunityListItem[];
   showClosed: boolean;
   onOpen: (id: number) => void;
+  onStageChange: (id: number, stage: StageKey) => void;
 }) {
   const stagesToShow = showClosed ? STAGE_ORDER : STAGE_ORDER.filter((s) => OPEN_STAGES.includes(s.key));
   const grouped = useMemo(() => {
@@ -413,13 +422,47 @@ function KanbanView({
     return m;
   }, [opportunities]);
 
+  const [draggedId, setDraggedId] = useState<number | null>(null);
+  const [dragOverStage, setDragOverStage] = useState<StageKey | null>(null);
+
+  const handleDrop = (targetStage: StageKey) => {
+    if (draggedId == null) return;
+    const dragged = opportunities.find((o) => o.id === draggedId);
+    if (dragged && dragged.stage !== targetStage) onStageChange(draggedId, targetStage);
+    setDraggedId(null);
+    setDragOverStage(null);
+  };
+
   return (
     <div className={`grid gap-3 overflow-x-auto ${showClosed ? "lg:grid-cols-7" : "lg:grid-cols-5"} sm:grid-cols-2 grid-cols-1`}>
       {stagesToShow.map(({ key, label }) => {
         const rows = grouped.get(key) ?? [];
         const groupValue = rows.reduce((s, r) => s + (r.estValueCents ?? 0), 0);
+        const isDragOver = dragOverStage === key;
         return (
-          <div key={key} className="flex min-h-[200px] flex-col rounded-2xl border border-black/10 bg-black/[0.02] p-2">
+          <div
+            key={key}
+            onDragOver={(e) => {
+              if (draggedId == null) return;
+              e.preventDefault();
+              e.dataTransfer.dropEffect = "move";
+              if (dragOverStage !== key) setDragOverStage(key);
+            }}
+            onDragLeave={(e) => {
+              // Only clear when leaving the column itself, not entering a child.
+              if (e.currentTarget.contains(e.relatedTarget as Node)) return;
+              if (dragOverStage === key) setDragOverStage(null);
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              handleDrop(key);
+            }}
+            className={`flex min-h-[200px] flex-col rounded-2xl border p-2 transition-colors ${
+              isDragOver
+                ? "border-[#0A65FF] bg-[#0A65FF]/[0.06] ring-2 ring-[#0A65FF]/40"
+                : "border-black/10 bg-black/[0.02]"
+            }`}
+          >
             <div className="mb-2 flex items-center gap-2 px-1.5 py-1">
               <span className="text-[0.7rem] font-bold uppercase tracking-[0.14em] text-black/55">{label}</span>
               <span className="rounded-full bg-black/[0.06] px-1.5 py-0.5 text-[0.65rem] font-medium text-black/60">
@@ -431,9 +474,23 @@ function KanbanView({
             </div>
             <div className="flex flex-col gap-2">
               {rows.length === 0 ? (
-                <p className="px-1.5 py-4 text-center text-[0.7rem] text-black/35">Empty</p>
+                <p className="px-1.5 py-4 text-center text-[0.7rem] text-black/35">
+                  {isDragOver ? "Drop here" : "Empty"}
+                </p>
               ) : (
-                rows.map((o) => <KanbanCard key={o.id} opportunity={o} onOpen={() => onOpen(o.id)} />)
+                rows.map((o) => (
+                  <KanbanCard
+                    key={o.id}
+                    opportunity={o}
+                    onOpen={() => onOpen(o.id)}
+                    isDragging={draggedId === o.id}
+                    onDragStart={() => setDraggedId(o.id)}
+                    onDragEnd={() => {
+                      setDraggedId(null);
+                      setDragOverStage(null);
+                    }}
+                  />
+                ))
               )}
             </div>
           </div>
@@ -443,7 +500,19 @@ function KanbanView({
   );
 }
 
-function KanbanCard({ opportunity, onOpen }: { opportunity: OpportunityListItem; onOpen: () => void }) {
+function KanbanCard({
+  opportunity,
+  onOpen,
+  isDragging,
+  onDragStart,
+  onDragEnd,
+}: {
+  opportunity: OpportunityListItem;
+  onOpen: () => void;
+  isDragging: boolean;
+  onDragStart: () => void;
+  onDragEnd: () => void;
+}) {
   const overdue = isOverdue(opportunity.nextStepDue);
   const party =
     opportunity.kind === "new_project"
@@ -453,7 +522,17 @@ function KanbanCard({ opportunity, onOpen }: { opportunity: OpportunityListItem;
     <button
       type="button"
       onClick={onOpen}
-      className="group flex w-full flex-col gap-1.5 rounded-xl border border-black/8 bg-white p-3 text-left shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-all hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_6px_18px_rgba(10,101,255,0.10)]"
+      draggable
+      onDragStart={(e) => {
+        // Some browsers require setData for the drag to actually initiate.
+        e.dataTransfer.setData("text/plain", String(opportunity.id));
+        e.dataTransfer.effectAllowed = "move";
+        onDragStart();
+      }}
+      onDragEnd={onDragEnd}
+      className={`group flex w-full cursor-grab flex-col gap-1.5 rounded-xl border border-black/8 bg-white p-3 text-left shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-all hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_6px_18px_rgba(10,101,255,0.10)] active:cursor-grabbing ${
+        isDragging ? "opacity-40 ring-2 ring-[#0A65FF]" : ""
+      }`}
     >
       <p className="text-sm font-semibold leading-tight text-[#111111]">{opportunity.title}</p>
       <p className="truncate text-xs text-black/55">{party}</p>
