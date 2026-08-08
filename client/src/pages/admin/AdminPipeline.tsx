@@ -26,7 +26,7 @@ type OpportunityListItem = inferRouterOutputs<AppRouter>["pipeline"]["list"][num
 const STAGE_ORDER = [
   { key: "intake", label: "Intake" },
   { key: "qualified", label: "Qualified" },
-  { key: "discovery", label: "Discovery" },
+  { key: "discovery", label: "Brief" },
   { key: "proposal", label: "Proposal" },
   { key: "negotiation", label: "Negotiation" },
   { key: "closed_won", label: "Closed-Won" },
