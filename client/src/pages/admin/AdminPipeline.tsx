@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/lib/trpc";
 import type { inferRouterOutputs } from "@trpc/server";
-import { AlertCircle, ChevronDown, ChevronRight, ListChecks, Plus, TrendingUp } from "lucide-react";
+import { AlertCircle, Calendar as CalendarIcon, ChevronDown, ChevronLeft, ChevronRight, Columns3, LayoutList, ListChecks, Plus, TrendingUp } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import type { AppRouter } from "../../../../server/routers";
@@ -69,6 +69,7 @@ export default function AdminPipeline() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [creating, setCreating] = useState(false);
   const [tasksOpen, setTasksOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"list" | "kanban" | "calendar">("list");
   const [kindFilter, setKindFilter] = useState<KindFilter>("all");
   const [showClosed, setShowClosed] = useState(false);
   const [collapsedStages, setCollapsedStages] = useState<Set<StageKey>>(
@@ -133,6 +134,34 @@ export default function AdminPipeline() {
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
+            {/* View mode toggle */}
+            <div className="inline-flex rounded-md border border-black/10 bg-white p-0.5">
+              {(
+                [
+                  { key: "list", label: "List", icon: LayoutList },
+                  { key: "kanban", label: "Kanban", icon: Columns3 },
+                  { key: "calendar", label: "Calendar", icon: CalendarIcon },
+                ] as const
+              ).map((v) => {
+                const active = viewMode === v.key;
+                const Icon = v.icon;
+                return (
+                  <button
+                    key={v.key}
+                    type="button"
+                    onClick={() => setViewMode(v.key)}
+                    aria-label={`${v.label} view`}
+                    title={`${v.label} view`}
+                    className={`inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium transition-colors ${
+                      active ? "bg-[#0A65FF] text-white" : "text-black/65 hover:text-black/85"
+                    }`}
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">{v.label}</span>
+                  </button>
+                );
+              })}
+            </div>
             <Button variant="outline" onClick={() => setTasksOpen(true)}>
               <ListChecks className="mr-1.5 h-4 w-4" />
               Tasks
@@ -203,6 +232,10 @@ export default function AdminPipeline() {
                 : "No opportunities match this filter."}
             </p>
           </div>
+        ) : viewMode === "kanban" ? (
+          <KanbanView opportunities={filtered} showClosed={showClosed} onOpen={(id) => setEditingId(id)} />
+        ) : viewMode === "calendar" ? (
+          <CalendarView opportunities={filtered} onOpen={(id) => setEditingId(id)} />
         ) : (
           <div className="space-y-4">
             {STAGE_ORDER.map(({ key, label }) => {
@@ -353,6 +386,232 @@ function Row({
             </option>
           ))}
         </select>
+      </div>
+    </div>
+  );
+}
+
+// ─── Kanban view ────────────────────────────────────────────────────────────
+
+function KanbanView({
+  opportunities,
+  showClosed,
+  onOpen,
+}: {
+  opportunities: OpportunityListItem[];
+  showClosed: boolean;
+  onOpen: (id: number) => void;
+}) {
+  const stagesToShow = showClosed ? STAGE_ORDER : STAGE_ORDER.filter((s) => OPEN_STAGES.includes(s.key));
+  const grouped = useMemo(() => {
+    const m = new Map<StageKey, OpportunityListItem[]>();
+    for (const s of STAGE_ORDER) m.set(s.key, []);
+    for (const o of opportunities) {
+      const k = (m.has(o.stage as StageKey) ? (o.stage as StageKey) : "intake") as StageKey;
+      m.get(k)!.push(o);
+    }
+    return m;
+  }, [opportunities]);
+
+  return (
+    <div className={`grid gap-3 overflow-x-auto ${showClosed ? "lg:grid-cols-7" : "lg:grid-cols-5"} sm:grid-cols-2 grid-cols-1`}>
+      {stagesToShow.map(({ key, label }) => {
+        const rows = grouped.get(key) ?? [];
+        const groupValue = rows.reduce((s, r) => s + (r.estValueCents ?? 0), 0);
+        return (
+          <div key={key} className="flex min-h-[200px] flex-col rounded-2xl border border-black/10 bg-black/[0.02] p-2">
+            <div className="mb-2 flex items-center gap-2 px-1.5 py-1">
+              <span className="text-[0.7rem] font-bold uppercase tracking-[0.14em] text-black/55">{label}</span>
+              <span className="rounded-full bg-black/[0.06] px-1.5 py-0.5 text-[0.65rem] font-medium text-black/60">
+                {rows.length}
+              </span>
+              {groupValue > 0 && (
+                <span className="ml-auto text-[0.65rem] font-medium text-black/50">{formatMoney(groupValue)}</span>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              {rows.length === 0 ? (
+                <p className="px-1.5 py-4 text-center text-[0.7rem] text-black/35">Empty</p>
+              ) : (
+                rows.map((o) => <KanbanCard key={o.id} opportunity={o} onOpen={() => onOpen(o.id)} />)
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function KanbanCard({ opportunity, onOpen }: { opportunity: OpportunityListItem; onOpen: () => void }) {
+  const overdue = isOverdue(opportunity.nextStepDue);
+  const party =
+    opportunity.kind === "new_project"
+      ? opportunity.clientName ?? "(unset client)"
+      : opportunity.prospectCompany || opportunity.prospectName || "(unnamed prospect)";
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className="group flex w-full flex-col gap-1.5 rounded-xl border border-black/8 bg-white p-3 text-left shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-all hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_6px_18px_rgba(10,101,255,0.10)]"
+    >
+      <p className="text-sm font-semibold leading-tight text-[#111111]">{opportunity.title}</p>
+      <p className="truncate text-xs text-black/55">{party}</p>
+      <div className="mt-1 flex items-center justify-between gap-2 text-[0.7rem] text-black/55">
+        <span>{formatMoney(opportunity.estValueCents)}</span>
+        {opportunity.estCloseDate && <span>{formatDate(opportunity.estCloseDate)}</span>}
+      </div>
+      {opportunity.nextStep && (
+        <p
+          className={`mt-1 flex items-start gap-1 text-[0.7rem] leading-4 ${
+            overdue ? "font-medium text-[#c83a3a]" : "text-black/60"
+          }`}
+        >
+          {overdue && <AlertCircle className="mt-0.5 h-3 w-3 shrink-0" />}
+          <span className="line-clamp-2">{opportunity.nextStep}</span>
+        </p>
+      )}
+    </button>
+  );
+}
+
+// ─── Calendar view ──────────────────────────────────────────────────────────
+
+function CalendarView({
+  opportunities,
+  onOpen,
+}: {
+  opportunities: OpportunityListItem[];
+  onOpen: (id: number) => void;
+}) {
+  const [cursor, setCursor] = useState(() => {
+    const now = new Date();
+    return { year: now.getFullYear(), month: now.getMonth() };
+  });
+
+  const monthLabel = new Date(cursor.year, cursor.month, 1).toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
+  // Events keyed by ISO yyyy-mm-dd.
+  const eventsByDate = useMemo(() => {
+    const m = new Map<string, OpportunityListItem[]>();
+    for (const o of opportunities) {
+      if (!o.estCloseDate) continue;
+      const key = o.estCloseDate.slice(0, 10);
+      const bucket = m.get(key);
+      if (bucket) bucket.push(o);
+      else m.set(key, [o]);
+    }
+    return m;
+  }, [opportunities]);
+
+  // Build the grid: 6 rows × 7 cols starting on Sunday.
+  const firstOfMonth = new Date(cursor.year, cursor.month, 1);
+  const startDay = firstOfMonth.getDay(); // 0 = Sun
+  const daysInMonth = new Date(cursor.year, cursor.month + 1, 0).getDate();
+  const todayIso = new Date().toISOString().slice(0, 10);
+
+  const cells: { date: Date | null; iso: string | null }[] = [];
+  for (let i = 0; i < startDay; i++) cells.push({ date: null, iso: null });
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(cursor.year, cursor.month, d);
+    const iso = `${cursor.year}-${String(cursor.month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    cells.push({ date, iso });
+  }
+  while (cells.length % 7 !== 0) cells.push({ date: null, iso: null });
+
+  const prevMonth = () =>
+    setCursor(({ year, month }) => (month === 0 ? { year: year - 1, month: 11 } : { year, month: month - 1 }));
+  const nextMonth = () =>
+    setCursor(({ year, month }) => (month === 11 ? { year: year + 1, month: 0 } : { year, month: month + 1 }));
+  const goToday = () => {
+    const now = new Date();
+    setCursor({ year: now.getFullYear(), month: now.getMonth() });
+  };
+
+  return (
+    <div className="rounded-2xl border border-black/10 bg-white">
+      {/* Toolbar */}
+      <div className="flex items-center gap-3 border-b border-black/10 px-4 py-3">
+        <div className="inline-flex items-center rounded-md border border-black/10">
+          <button
+            type="button"
+            onClick={prevMonth}
+            aria-label="Previous month"
+            className="p-1.5 text-black/60 hover:bg-black/5 hover:text-black/90"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={nextMonth}
+            aria-label="Next month"
+            className="border-l border-black/10 p-1.5 text-black/60 hover:bg-black/5 hover:text-black/90"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+        <span className="text-sm font-semibold text-[#111111]">{monthLabel}</span>
+        <button
+          type="button"
+          onClick={goToday}
+          className="ml-auto rounded-md border border-black/10 px-2.5 py-1 text-xs font-medium text-black/70 hover:bg-black/5"
+        >
+          Today
+        </button>
+      </div>
+      {/* Day-of-week header */}
+      <div className="grid grid-cols-7 border-b border-black/10 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-black/45">
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
+          <div key={d} className="px-2 py-2 text-center">
+            {d}
+          </div>
+        ))}
+      </div>
+      {/* Grid */}
+      <div className="grid grid-cols-7">
+        {cells.map((cell, i) => {
+          if (!cell.iso || !cell.date) {
+            return <div key={i} className="min-h-[96px] border-b border-r border-black/5 bg-black/[0.02]" />;
+          }
+          const events = eventsByDate.get(cell.iso) ?? [];
+          const isToday = cell.iso === todayIso;
+          const isWeekend = cell.date.getDay() === 0 || cell.date.getDay() === 6;
+          return (
+            <div
+              key={i}
+              className={`min-h-[96px] border-b border-r border-black/5 p-1.5 ${
+                isWeekend ? "bg-black/[0.015]" : "bg-white"
+              }`}
+            >
+              <div
+                className={`mb-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[0.7rem] font-semibold ${
+                  isToday ? "bg-[#0A65FF] text-white" : "text-black/60"
+                }`}
+              >
+                {cell.date.getDate()}
+              </div>
+              <div className="flex flex-col gap-1">
+                {events.slice(0, 3).map((o) => (
+                  <button
+                    key={o.id}
+                    type="button"
+                    onClick={() => onOpen(o.id)}
+                    title={o.title}
+                    className="truncate rounded bg-[#0A65FF]/10 px-1.5 py-0.5 text-left text-[0.65rem] font-medium text-[#0040c9] transition-colors hover:bg-[#0A65FF] hover:text-white"
+                  >
+                    {o.title}
+                  </button>
+                ))}
+                {events.length > 3 && (
+                  <span className="px-1.5 text-[0.6rem] text-black/50">+{events.length - 3} more</span>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
