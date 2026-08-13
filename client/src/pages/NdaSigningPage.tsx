@@ -154,7 +154,7 @@ export default function NdaSigningPage() {
               <Checkbox checked={authorityCert} onCheckedChange={(v) => setAuthorityCert(v === true)} className="mt-1" />
               <span>
                 I certify that I am authorized to sign this Agreement on behalf of <strong>{vendorCompany}</strong>, and
-                that I own at least 20% of it.
+                that I own at least 20% of this entity.
               </span>
             </label>
           ) : null}

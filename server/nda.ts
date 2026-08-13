@@ -407,7 +407,7 @@ export async function signNda(
   }
   // The vendor must affirm signing authority + >= 20% ownership before executing.
   if (signer.party === "vendor" && certifiedAuthority !== true) {
-    return { ok: false, error: "Please confirm you are authorized to sign and own at least 20% of your company." };
+    return { ok: false, error: "Please confirm you are authorized to sign and own at least 20% of this entity." };
   }
   await pool.query(
     `UPDATE dt_site.nda_signer SET signed_at=now(), signature_text=$2, signed_ip=$3, signed_user_agent=$4, authority_certified=$5 WHERE id=$1`,
