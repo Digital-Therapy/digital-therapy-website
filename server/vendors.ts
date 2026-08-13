@@ -449,7 +449,10 @@ function rowToRecord(row: any, files: VendorRecord["files"]): VendorRecord {
     personalLinkedin: asString(row.dt_personal_linkedin) ?? asString(row.personalLinkedin),
     companySocial: asString(row.dt_company_social) ?? asString(row.companySocial),
     phone: asString(row.dt_phone),
-    title: asString(row.dt_title),
+    // Applicant "role" is the same concept as admin "title" — pre-populate the
+    // admin field with what they entered so the admin isn't retyping. Admin
+    // override wins once set.
+    title: asString(row.dt_title)?.trim() || asString(row.role),
     links: parseJsonArray(row.dt_links)
       .map((l) => ({ label: l?.label ? String(l.label) : "", url: l?.url ? String(l.url) : "" }))
       .filter((l) => l.url),
