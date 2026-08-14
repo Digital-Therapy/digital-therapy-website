@@ -82,6 +82,12 @@ export const ROUTE_META: Record<string, RouteMeta> = {
       "Take 5-10 minutes to walk us through your accounting operation. We come back within one business day with what we see and a recommended next step.",
     priority: 0.85,
   },
+  "/contact": {
+    title: "Contact | Digital Therapy",
+    description:
+      "Send Digital Therapy a message. Quiet questions, full briefs, and everything in between are welcome -- we come back shortly.",
+    priority: 0.7,
+  },
   "/terms": {
     title: "Terms of Service | Digital Therapy",
     description: "Digital Therapy terms of service.",

@@ -19,6 +19,7 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Vendors from "./pages/Vendors";
 import GetStarted from "./pages/GetStarted";
+import Contact from "./pages/Contact";
 import AdminVendors from "./pages/admin/AdminVendors";
 import AdminVendorDetail from "./pages/admin/AdminVendorDetail";
 import AdminClients from "./pages/admin/AdminClients";
@@ -44,6 +45,7 @@ function Router() {
       <Route path={"/accessibility"} component={Accessibility} />
       <Route path={"/team"} component={Team} />
       <Route path={"/get-started"} component={GetStarted} />
+      <Route path={"/contact"} component={Contact} />
       {/* Protected admin console — auth/role-gated in AdminLayout, guarded
           server-side by adminProcedure. Intentionally excluded from
           scripts/prerender.mjs ROUTES (auth-gated, not for the sitemap). */}
