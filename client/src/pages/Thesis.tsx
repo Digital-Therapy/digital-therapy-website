@@ -3,7 +3,10 @@
  * Presents the structural consulting problem and Digital Therapy's Fusion Team solution
  * using the established quiet-luxury family-office visual system.
  */
-import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
+import {
+  BookingWidgetDialog,
+  ContactFormDialog,
+} from "@/components/ContactBooking";
 import PublicHeader from "@/components/PublicHeader";
 import { motion } from "framer-motion";
 import {
@@ -30,8 +33,7 @@ import {
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
 const markUrl = "/dt-mark.webp";
-const boardroomVisual =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_family_office_boardroom-UvecEVLEaVqpouVEhEb9mw.webp";
+const boardroomVisual = "/dt-family-office-boardroom.webp";
 const wealthMapVisual = "/fragmented-route.webp";
 
 const fadeUp = {
@@ -75,34 +77,56 @@ const fusionDisciplines = [
   {
     title: "Operations Expert",
     role: "Process architecture, workflow optimization, SOPs, playbooks, KPI design, delivery systems, and organizational clarity.",
-    outcome: "Transforms operational chaos into structured, scalable systems by mapping current-state workflows, identifying bottlenecks, and designing future-state processes.",
+    outcome:
+      "Transforms operational chaos into structured, scalable systems by mapping current-state workflows, identifying bottlenecks, and designing future-state processes.",
     icon: Workflow,
     image: "/process-sme.webp",
-    imageAlt: "Hand-drawn blue sketch of Digital Therapy's Operations & Process SME",
+    imageAlt:
+      "Hand-drawn blue sketch of Digital Therapy's Operations & Process SME",
   },
   {
     title: "Accounting Expert",
     role: "Automation-forward accounting operations, AP and AR transformation, close acceleration, data integrity, workflow sequencing, AI, and RPA.",
-    outcome: "Connects finance, operations, and technology so controls, reporting evidence, system dependencies, and implementation realities are designed together.",
+    outcome:
+      "Connects finance, operations, and technology so controls, reporting evidence, system dependencies, and implementation realities are designed together.",
     icon: ClipboardCheck,
     image: "/arap-sme.webp",
-    imageAlt: "Hand-drawn blue sketch of Hunter, Digital Therapy's Finance & Accounting SME",
+    imageAlt:
+      "Hand-drawn blue sketch of Hunter, Digital Therapy's Finance & Accounting SME",
   },
   {
     title: "Technology Expert",
     role: "Full-stack engineering, data architecture, AI systems, integrations, robotic process automation, and technical execution.",
-    outcome: "Acts as a systems architect who understands operational and financial realities alongside engineering requirements.",
+    outcome:
+      "Acts as a systems architect who understands operational and financial realities alongside engineering requirements.",
     icon: Code2,
     image: "/tech-sme.webp",
-    imageAlt: "Hand-drawn blue sketch of Milton Rodas, Digital Therapy's Technology SME",
+    imageAlt:
+      "Hand-drawn blue sketch of Milton Rodas, Digital Therapy's Technology SME",
   },
 ];
 
 const comparisonRows = [
-  ["Operating structure", "Competing practice groups", "One permanent Fusion Team"],
-  ["Economics", "Transfer pricing and utilization politics", "Shared incentives and unified accountability"],
-  ["Delivery rhythm", "Fragmented handoffs across departments", "Integrated execution across operations, accounting, and technology"],
-  ["Technology adoption", "Bolted-on tools after advisory work", "Data, automation, AI, and workflow design embedded from day one"],
+  [
+    "Operating structure",
+    "Competing practice groups",
+    "One permanent Fusion Team",
+  ],
+  [
+    "Economics",
+    "Transfer pricing and utilization politics",
+    "Shared incentives and unified accountability",
+  ],
+  [
+    "Delivery rhythm",
+    "Fragmented handoffs across departments",
+    "Integrated execution across operations, accounting, and technology",
+  ],
+  [
+    "Technology adoption",
+    "Bolted-on tools after advisory work",
+    "Data, automation, AI, and workflow design embedded from day one",
+  ],
 ];
 
 const solutionPrinciples = [
@@ -112,8 +136,17 @@ const solutionPrinciples = [
   "No fragmented accountability",
 ];
 
-function PrivateBriefingButton({ variant = "primary" }: { variant?: "primary" | "secondary" }) {
-  return <BookingWidgetDialog variant={variant} context="thesis page family-office booking" />;
+function PrivateBriefingButton({
+  variant = "primary",
+}: {
+  variant?: "primary" | "secondary";
+}) {
+  return (
+    <BookingWidgetDialog
+      variant={variant}
+      context="thesis page family-office booking"
+    />
+  );
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -132,27 +165,28 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 const THESIS_ARTICLE_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "Article",
-  "mainEntityOfPage": {
+  mainEntityOfPage: {
     "@type": "WebPage",
     "@id": "https://www.digitaltherapy.io/thesis",
   },
-  "headline": "Why family-office transformation needs one trained team",
-  "alternativeHeadline": "The Digital Therapy Thesis: Fusion Teams over Practice Groups",
-  "description":
+  headline: "Why family-office transformation needs one trained team",
+  alternativeHeadline:
+    "The Digital Therapy Thesis: Fusion Teams over Practice Groups",
+  description:
     "Firm architecture itself prevents effective collaboration. Accounting practices, engineering teams, and operations consultants compete for revenue and utilization — producing predictable failures for family-office clients with one shared systems problem. The Digital Therapy thesis lays out the structural alternative: Fusion Teams.",
-  "url": "https://www.digitaltherapy.io/thesis",
-  "datePublished": "2024-02-15",
-  "dateModified": "2026-06-01",
-  "author": {
+  url: "https://www.digitaltherapy.io/thesis",
+  datePublished: "2024-02-15",
+  dateModified: "2026-06-01",
+  author: {
     "@id": "https://www.digitaltherapy.io/team#jonathan-kobrin",
   },
-  "publisher": {
+  publisher: {
     "@id": "https://www.digitaltherapy.io/#organization",
   },
-  "image": "https://www.digitaltherapy.io/fragmented-route.webp",
-  "articleSection": "Thesis",
-  "inLanguage": "en-US",
-  "keywords": [
+  image: "https://www.digitaltherapy.io/fragmented-route.webp",
+  articleSection: "Thesis",
+  inLanguage: "en-US",
+  keywords: [
     "Family office transformation",
     "Fusion Team",
     "Silo culture",
@@ -160,7 +194,7 @@ const THESIS_ARTICLE_SCHEMA = {
     "Accounting transformation",
     "Operating model",
   ],
-  "about": [
+  about: [
     { "@id": "https://www.digitaltherapy.io/team#jonathan-kobrin" },
     { "@id": "https://www.digitaltherapy.io/#organization" },
   ],
@@ -175,7 +209,9 @@ export default function Thesis() {
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(THESIS_ARTICLE_SCHEMA) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(THESIS_ARTICLE_SCHEMA),
+        }}
       />
       <PublicHeader
         activeLabel="Thesis"
@@ -190,10 +226,18 @@ export default function Thesis() {
             <motion.div {...fadeUp}>
               <SectionLabel>Why we exist</SectionLabel>
               <h1 className="max-w-4xl font-display text-[60px] leading-[0.88] tracking-[-0.07em] text-[#111111]">
-                Practice based firms<br />fall short.
+                Practice based firms
+                <br />
+                fall short.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
-                Most transformation initiatives fail — not because firms lack smart people — because firm structure & culture rewards silo behavior & disincentivizes cross-functional collaboration. Digital Therapy solves this fragmentation with a “Fusion Team” — custom built & trained to overcome complex business & data challenges touching Operations, Accounting, & Technology. These days, that’s just about everything.
+                Most transformation initiatives fail — not because firms lack
+                smart people — because firm structure & culture rewards silo
+                behavior & disincentivizes cross-functional collaboration.
+                Digital Therapy solves this fragmentation with a “Fusion Team” —
+                custom built & trained to overcome complex business & data
+                challenges touching Operations, Accounting, & Technology. These
+                days, that’s just about everything.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <PrivateBriefingButton />
@@ -215,14 +259,30 @@ export default function Thesis() {
             >
               <div className="absolute -inset-6 rounded-[2.6rem] bg-[#0A65FF]/10 blur-3xl" />
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
-                <img src={boardroomVisual} alt="Integrated advisory team strategy session" className="aspect-[16/12] w-full object-cover" width={1920} height={1080}/>
+                <img
+                  src={boardroomVisual}
+                  alt="Executive reviewing consolidated family office data in a modern boardroom"
+                  className="aspect-[16/12] w-full object-cover"
+                  width={1536}
+                  height={1024}
+                />
                 <div className="absolute bottom-5 left-5 right-5 rounded-[1.35rem] border border-white/70 bg-white/76 p-5 backdrop-blur-xl">
                   <div className="flex items-start gap-4">
-                    <img src={markUrl} alt="" className="mt-1 h-9 w-9 object-contain" width={197} height={227}/>
+                    <img
+                      src={markUrl}
+                      alt=""
+                      className="mt-1 h-9 w-9 object-contain"
+                      width={197}
+                      height={227}
+                    />
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Fusion Team model</p>
+                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">
+                        Fusion Team model
+                      </p>
                       <p className="mt-2 text-sm leading-6 text-black/82">
-                        One accountable unit beneath the CEO: operations, accounting, and technology working from the same mission.
+                        One accountable unit beneath the CEO: operations,
+                        accounting, and technology working from the same
+                        mission.
                       </p>
                     </div>
                   </div>
@@ -240,13 +300,20 @@ export default function Thesis() {
                 Firm architecture prevents effective collaboration.
               </h2>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-black/80">
-                Accounting practices operate independently from engineering teams. Operations consultants work separately from finance. Each group protects its own revenue, utilization, and client control, producing predictable delivery failures for clients with one shared systems problem.
+                Accounting practices operate independently from engineering
+                teams. Operations consultants work separately from finance. Each
+                group protects its own revenue, utilization, and client control,
+                producing predictable delivery failures for clients with one
+                shared systems problem.
               </p>
               <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {problemSignals.map((signal) => {
+                {problemSignals.map(signal => {
                   const [firstWord, ...restWords] = signal.split(" ");
                   return (
-                    <div key={signal} className="rounded-full border border-black/10 bg-[#F7F4EE] px-4 py-3 text-center text-[14px] font-medium uppercase leading-tight tracking-[0.14em] text-black/80">
+                    <div
+                      key={signal}
+                      className="rounded-full border border-black/10 bg-[#F7F4EE] px-4 py-3 text-center text-[14px] font-medium uppercase leading-tight tracking-[0.14em] text-black/80"
+                    >
                       {firstWord}
                       {restWords.length ? (
                         <>
@@ -276,9 +343,15 @@ export default function Thesis() {
                         <Icon className="h-6 w-6" />
                       </div>
                       <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">{failure.eyebrow}</p>
-                        <h3 className="mt-2 font-display text-3xl tracking-[-0.05em]">{failure.title}</h3>
-                        <p className="mt-4 text-base leading-7 text-black/80">{failure.copy}</p>
+                        <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                          {failure.eyebrow}
+                        </p>
+                        <h3 className="mt-2 font-display text-3xl tracking-[-0.05em]">
+                          {failure.title}
+                        </h3>
+                        <p className="mt-4 text-base leading-7 text-black/80">
+                          {failure.copy}
+                        </p>
                       </div>
                     </div>
                   </motion.article>
@@ -297,40 +370,72 @@ export default function Thesis() {
               </h2>
               <div className="mt-10 space-y-6 text-lg leading-8 text-black/85">
                 <p>
-                  Most transformation programs fail because the team doing the work never bothers to learn how the business actually runs. They optimize in a vacuum, automate broken processes, and hand over solutions that don&rsquo;t survive first contact with real operations.
+                  Most transformation programs fail because the team doing the
+                  work never bothers to learn how the business actually runs.
+                  They optimize in a vacuum, automate broken processes, and hand
+                  over solutions that don&rsquo;t survive first contact with
+                  real operations.
                 </p>
                 <p>
-                  Digital Therapy was built to work differently. We focus on the intersection of technology, operations, and accounting &mdash; three functions that have to move together for transformation to stick. Before we touch a system, we learn the business: how it makes money, where the bottlenecks live, how leadership makes decisions, and what the team on the ground actually deals with day to day.
+                  Digital Therapy was built to work differently. We focus on the
+                  intersection of technology, operations, and accounting &mdash;
+                  three functions that have to move together for transformation
+                  to stick. Before we touch a system, we learn the business: how
+                  it makes money, where the bottlenecks live, how leadership
+                  makes decisions, and what the team on the ground actually
+                  deals with day to day.
                 </p>
                 <p>
-                  That diagnostic-first approach is what allows us to deliver outcomes that hold, not just impressive demos that collapse after the first month. Our team brings backgrounds that don&rsquo;t naturally converge in the market: senior technologists, finance operators, and process designers working as a single unit, not siloed workstreams trading handoffs and playing pass the buck.
+                  That diagnostic-first approach is what allows us to deliver
+                  outcomes that hold, not just impressive demos that collapse
+                  after the first month. Our team brings backgrounds that
+                  don&rsquo;t naturally converge in the market: senior
+                  technologists, finance operators, and process designers
+                  working as a single unit, not siloed workstreams trading
+                  handoffs and playing pass the buck.
                 </p>
               </div>
               <p className="mt-8 border-l-2 border-[#0A65FF] pl-6 font-display text-2xl leading-[1.3] tracking-[-0.02em] text-[#111111]">
-                The result is modernization you control &mdash; with infrastructure, processes, and reporting that scale on your terms.
+                The result is modernization you control &mdash; with
+                infrastructure, processes, and reporting that scale on your
+                terms.
               </p>
             </motion.div>
           </div>
         </section>
 
-        <section id="solution" className="relative overflow-hidden bg-[#F7F4EE] py-24 lg:py-32">
+        <section
+          id="solution"
+          className="relative overflow-hidden bg-[#F7F4EE] py-24 lg:py-32"
+        >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_18%,rgba(10,101,255,0.10),transparent_30%)]" />
           <div className="container relative">
             <motion.div {...fadeUp} className="mx-auto max-w-4xl text-center">
               <SectionLabel>Fusion teams by digital therapy</SectionLabel>
               <h2 className="font-display text-[55px] leading-[0.9] tracking-[-0.065em]">
-                One trained team.<br />Not “collaborating” practices.
+                One trained team.
+                <br />
+                Not “collaborating” practices.
               </h2>
               <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-black/80">
-                Digital Therapy’s Fusion Team model was built to eliminate structural failure at the root. Rather than assembling temporary teams from competing departments, the Fusion Team is a permanent leadership layer composed of deeply aligned operations, accounting, and technology disciplines.
+                Digital Therapy’s Fusion Team model was built to eliminate
+                structural failure at the root. Rather than assembling temporary
+                teams from competing departments, the Fusion Team is a permanent
+                leadership layer composed of deeply aligned operations,
+                accounting, and technology disciplines.
               </p>
             </motion.div>
 
             <motion.div {...fadeUp} className="mt-14 grid gap-4 md:grid-cols-4">
-              {solutionPrinciples.map((principle) => (
-                <div key={principle} className="rounded-[1.6rem] border border-black/8 bg-white/70 p-5 text-center shadow-[0_18px_50px_rgba(17,17,17,0.06)] backdrop-blur">
+              {solutionPrinciples.map(principle => (
+                <div
+                  key={principle}
+                  className="rounded-[1.6rem] border border-black/8 bg-white/70 p-5 text-center shadow-[0_18px_50px_rgba(17,17,17,0.06)] backdrop-blur"
+                >
                   <BadgeCheck className="mx-auto h-6 w-6 text-[#0A65FF]" />
-                  <p className="mt-4 text-sm font-bold uppercase tracking-[0.16em] text-black/85">{principle}</p>
+                  <p className="mt-4 text-sm font-bold uppercase tracking-[0.16em] text-black/85">
+                    {principle}
+                  </p>
                 </div>
               ))}
             </motion.div>
@@ -347,10 +452,14 @@ export default function Thesis() {
                     <img
                       src={discipline.image}
                       alt={discipline.imageAlt}
-                      className="h-24 w-24 shrink-0 rounded-[1.4rem] border border-black/10 bg-white object-cover shadow-[0_16px_35px_rgba(10,101,255,0.10)]" width={600} height={600}/>
+                      className="h-24 w-24 shrink-0 rounded-[1.4rem] border border-black/10 bg-white object-cover shadow-[0_16px_35px_rgba(10,101,255,0.10)]"
+                      width={600}
+                      height={600}
+                    />
                     <h3 className="mt-6 font-display text-3xl tracking-[-0.05em]">
                       {(() => {
-                        const [firstWord, ...rest] = discipline.title.split(" ");
+                        const [firstWord, ...rest] =
+                          discipline.title.split(" ");
                         return (
                           <>
                             <span className="text-[#0A65FF]">{firstWord}</span>
@@ -359,8 +468,12 @@ export default function Thesis() {
                         );
                       })()}
                     </h3>
-                    <p className="mt-4 text-base leading-7 text-black/80">{discipline.role}</p>
-                    <p className="mt-5 border-t border-black/10 pt-5 text-base leading-7 text-black/85">{discipline.outcome}</p>
+                    <p className="mt-4 text-base leading-7 text-black/80">
+                      {discipline.role}
+                    </p>
+                    <p className="mt-5 border-t border-black/10 pt-5 text-base leading-7 text-black/85">
+                      {discipline.outcome}
+                    </p>
                   </motion.article>
                 );
               })}
@@ -370,23 +483,43 @@ export default function Thesis() {
 
         <section className="bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-            <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2.2rem] border border-black/8 bg-[#F7F4EE] p-3 shadow-[0_30px_90px_rgba(17,17,17,0.10)]">
-              <img src={wealthMapVisual} alt="Diagram of the fragmented advisory route family offices take" className="h-[560px] w-full rounded-[1.75rem] object-cover" width={1200} height={800}/>
+            <motion.div
+              {...fadeUp}
+              className="relative overflow-hidden rounded-[2.2rem] border border-black/8 bg-[#F7F4EE] p-3 shadow-[0_30px_90px_rgba(17,17,17,0.10)]"
+            >
+              <img
+                src={wealthMapVisual}
+                alt="Diagram of the fragmented advisory route family offices take"
+                className="h-[560px] w-full rounded-[1.75rem] object-cover"
+                width={1200}
+                height={800}
+              />
               <div className="absolute bottom-8 left-8 right-8 rounded-[1.45rem] border border-white/70 bg-white/78 p-5 backdrop-blur-xl">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">One systems problem</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">
+                  One systems problem
+                </p>
                 <p className="mt-2 text-sm leading-6 text-black/82">
-                  Modern family offices no longer have separate technology, operations, and accounting challenges. They have one systems problem.
+                  Modern family offices no longer have separate technology,
+                  operations, and accounting challenges. They have one systems
+                  problem.
                 </p>
               </div>
             </motion.div>
 
-            <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
+            <motion.div
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.08 }}
+            >
               <SectionLabel>Why family offices need this</SectionLabel>
               <h2 className="font-display text-[55px] leading-[0.9] tracking-[-0.06em]">
                 Fragmented advisors isn’t the road to success.
               </h2>
               <p className="mt-7 text-lg leading-8 text-black/80">
-                Family-office leaders need one team that can see the full architecture: process, controls, data, workflow, automation, AI, integrations, and execution discipline. The Fusion Team succeeds or fails together, so collaboration is no longer optional; it is the operating model itself.
+                Family-office leaders need one team that can see the full
+                architecture: process, controls, data, workflow, automation, AI,
+                integrations, and execution discipline. The Fusion Team succeeds
+                or fails together, so collaboration is no longer optional; it is
+                the operating model itself.
               </p>
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
                 {[
@@ -394,12 +527,17 @@ export default function Thesis() {
                   { title: "Aligned incentive structure", icon: ShieldCheck },
                   { title: "Integrated data foundation", icon: Database },
                   { title: "Automation-ready delivery", icon: BrainCircuit },
-                ].map((item) => {
+                ].map(item => {
                   const Icon = item.icon;
                   return (
-                    <div key={item.title} className="flex items-center gap-3 border-t border-black/10 pt-4">
+                    <div
+                      key={item.title}
+                      className="flex items-center gap-3 border-t border-black/10 pt-4"
+                    >
                       <Icon className="h-5 w-5 text-[#0A65FF]" />
-                      <span className="text-sm font-bold uppercase tracking-[0.14em] text-black/85">{item.title}</span>
+                      <span className="text-sm font-bold uppercase tracking-[0.14em] text-black/85">
+                        {item.title}
+                      </span>
                     </div>
                   );
                 })}
@@ -410,30 +548,47 @@ export default function Thesis() {
 
         <section className="bg-[#111111] py-24 text-white lg:py-32">
           <div className="container">
-            <motion.div {...fadeUp} className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+            <motion.div
+              {...fadeUp}
+              className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-start"
+            >
               <div>
-                <SectionLabel>Traditional Advisory vs. Fusion Teams</SectionLabel>
+                <SectionLabel>
+                  Traditional Advisory vs. Fusion Teams
+                </SectionLabel>
                 <h2 className="font-display text-[54px] leading-[0.9] tracking-[-0.06em]">
-                  Small changes.<br />Big Impact.
+                  Small changes.
+                  <br />
+                  Big Impact.
                 </h2>
                 <p className="mt-7 text-lg leading-8 text-white/62">
-                  Traditional firms attempt collaboration between competing departments. Fusion Teams eliminate the competition entirely by creating one shared mission and one accountable delivery structure.
+                  Traditional firms attempt collaboration between competing
+                  departments. Fusion Teams eliminate the competition entirely
+                  by creating one shared mission and one accountable delivery
+                  structure.
                 </p>
               </div>
               <div className="overflow-hidden rounded-[2rem] border border-white/12 bg-white/[0.04]">
-                {comparisonRows.map(([dimension, traditional, fusion], index) => (
-                  <div key={dimension} className="grid gap-0 border-b border-white/10 last:border-b-0 md:grid-cols-[0.8fr_1fr_1fr]">
-                    <div className="bg-white/[0.04] px-5 py-5 text-xs font-bold uppercase tracking-[0.18em] text-white/58">{dimension}</div>
-                    <div className="flex items-start gap-3 px-5 py-5 text-sm leading-6 text-white/58">
-                      <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-white/34" />
-                      {traditional}
+                {comparisonRows.map(
+                  ([dimension, traditional, fusion], index) => (
+                    <div
+                      key={dimension}
+                      className="grid gap-0 border-b border-white/10 last:border-b-0 md:grid-cols-[0.8fr_1fr_1fr]"
+                    >
+                      <div className="bg-white/[0.04] px-5 py-5 text-xs font-bold uppercase tracking-[0.18em] text-white/58">
+                        {dimension}
+                      </div>
+                      <div className="flex items-start gap-3 px-5 py-5 text-sm leading-6 text-white/58">
+                        <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-white/34" />
+                        {traditional}
+                      </div>
+                      <div className="flex items-start gap-3 px-5 py-5 text-sm font-semibold leading-6 text-white">
+                        <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-[#6EA8FF]" />
+                        {fusion}
+                      </div>
                     </div>
-                    <div className="flex items-start gap-3 px-5 py-5 text-sm font-semibold leading-6 text-white">
-                      <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-[#6EA8FF]" />
-                      {fusion}
-                    </div>
-                  </div>
-                ))}
+                  )
+                )}
               </div>
             </motion.div>
           </div>
@@ -445,10 +600,14 @@ export default function Thesis() {
             <motion.div {...fadeUp} className="mx-auto max-w-4xl">
               <SectionLabel>Your fusion team can do it</SectionLabel>
               <h2 className="font-display text-[55px] leading-[0.88] tracking-[-0.07em]">
-                Family offices need one solution team<br />for one fused problem.
+                Family offices need one solution team
+                <br />
+                for one fused problem.
               </h2>
               <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-black/80">
-                Digital Therapy delivers one team, one aligned incentive structure, one operating model, and one shared mission for transformation.
+                Digital Therapy delivers one team, one aligned incentive
+                structure, one operating model, and one shared mission for
+                transformation.
               </p>
               <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
                 <ContactFormDialog

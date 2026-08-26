@@ -3,10 +3,22 @@
  * Preserve light ivory surfaces, charcoal typography, restrained Digital Therapy blue,
  * image-led section rhythm, and concise family-office advisory positioning.
  */
-import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
+import {
+  BookingWidgetDialog,
+  ContactFormDialog,
+} from "@/components/ContactBooking";
 import PublicHeader from "@/components/PublicHeader";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { caseStudies } from "@/data/caseStudies";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
@@ -24,12 +36,9 @@ import {
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
 const markUrl = "/dt-mark.webp";
-const heroVisual =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_hero_operating_layer-TEdtu9wcNJkxBt4PK2JKyo.webp";
-const boardroomVisual =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_family_office_boardroom-UvecEVLEaVqpouVEhEb9mw.webp";
-const securityVisual =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_security_automation-Z4CfAdsU9T8pybHF6A7NLi.webp";
+const heroVisual = "/dt-operating-layer.webp";
+const boardroomVisual = "/dt-family-office-boardroom.webp";
+const securityVisual = "/dt-security-automation.webp";
 
 const fadeUp = {
   initial: { opacity: 0, y: 28 },
@@ -108,25 +117,37 @@ const fusionTeam = [
   {
     title: "Operations Expert",
     image: "/process-sme.webp",
-    imageAlt: "Hand-drawn blue sketch of Digital Therapy's Operations & Process SME",
+    imageAlt:
+      "Hand-drawn blue sketch of Digital Therapy's Operations & Process SME",
     copy: "The Operations SME transforms organizational complexity into operational excellence. They specialize in people, process, governance, and execution—building the systems that allow businesses to scale without sacrificing quality or control. They champion efficiency through SOPs, playbooks, KPIs, workflow optimization, and continuous improvement.\n\nBy visualizing how work flows across departments, they establish a collective understanding of the Current State, expose bottlenecks, redundancies, and operational friction, then design a streamlined Future State that improves speed, accountability, and collaboration. Their work creates the operational foundation upon which technology and finance transformation can succeed.",
-    shortCopy: "The Operations SME transforms organizational complexity into operational excellence. They specialize in people, process, governance, and execution.",
+    shortCopy:
+      "The Operations SME transforms organizational complexity into operational excellence. They specialize in people, process, governance, and execution.",
   },
   {
     title: "Accounting Expert",
     image: "/arap-sme.webp",
-    imageAlt: "Hand-drawn blue sketch of Hunter, Digital Therapy's Finance & Accounting SME",
+    imageAlt:
+      "Hand-drawn blue sketch of Hunter, Digital Therapy's Finance & Accounting SME",
     copy: "The Finance & Accounting SME is not your typical accountant. They are transformation leaders who combine deep accounting expertise with a passion for technology, automation, and continuous improvement. They excel at accelerating the monthly close, optimizing AP and AR workflows, strengthening internal controls, and designing scalable financial processes. Working as equal partners with technology and operations SMEs, they understand both the opportunities and limitations of modern systems, allowing them to bridge the gap between financial accuracy and technical execution.",
-    shortCopy: "The Finance & Accounting SME is not your typical accountant. They are transformation leaders who combine deep accounting expertise with a passion for technology, automation, and continuous improvement.",
+    shortCopy:
+      "The Finance & Accounting SME is not your typical accountant. They are transformation leaders who combine deep accounting expertise with a passion for technology, automation, and continuous improvement.",
   },
   {
     title: "Technology Expert",
     image: "/tech-sme.webp",
-    imageAlt: "Hand-drawn blue sketch of Milton Rodas, Digital Therapy's Technology SME",
+    imageAlt:
+      "Hand-drawn blue sketch of Milton Rodas, Digital Therapy's Technology SME",
     copy: "The Technology SME is the cornerstone of every Fusion Team. They are extraordinarily difficult to develop because the role demands an uncommon breadth and depth of expertise. They build software, engineer data platforms, orchestrate automation, leverage AI responsibly, secure complex ecosystems, and architect solutions that scale. But their greatest skill isn’t technical—it’s the ability to connect technology to business strategy, turning complexity into clarity and ideas into measurable results.",
-    shortCopy: "This role demands an uncommon breadth and depth of expertise. They build software, engineer data platforms, orchestrate automation, leverage AI responsibly, secure complex ecosystems, and architect solutions that scale.",
+    shortCopy:
+      "This role demands an uncommon breadth and depth of expertise. They build software, engineer data platforms, orchestrate automation, leverage AI responsibly, secure complex ecosystems, and architect solutions that scale.",
   },
-] as { title: string; image: string; imageAlt: string; copy: string; shortCopy?: string }[];
+] as {
+  title: string;
+  image: string;
+  imageAlt: string;
+  copy: string;
+  shortCopy?: string;
+}[];
 
 const automationUseCases = [
   "Custom software & internal tools purpose-built for the work your team actually does — not bloated SaaS retrofitted to fit.",
@@ -135,15 +156,35 @@ const automationUseCases = [
 ];
 
 const securityPrinciples = [
-  { title: "Private deployment", copy: "On-premises, offline, or controlled infrastructure options when sensitivity requires it." },
-  { title: "Role-based access", copy: "Users see only the data, reports, and workflows appropriate to their mandate." },
-  { title: "Auditability", copy: "Key workflows, changes, approvals, and data flows remain documented and reviewable." },
-  { title: "Secure integration", copy: "Encrypted access and controlled connection patterns reduce unnecessary exposure." },
+  {
+    title: "Private deployment",
+    copy: "On-premises, offline, or controlled infrastructure options when sensitivity requires it.",
+  },
+  {
+    title: "Role-based access",
+    copy: "Users see only the data, reports, and workflows appropriate to their mandate.",
+  },
+  {
+    title: "Auditability",
+    copy: "Key workflows, changes, approvals, and data flows remain documented and reviewable.",
+  },
+  {
+    title: "Secure integration",
+    copy: "Encrypted access and controlled connection patterns reduce unnecessary exposure.",
+  },
 ];
 
-
-function PrivateBriefingButton({ variant = "primary" }: { variant?: "primary" | "secondary" }) {
-  return <BookingWidgetDialog variant={variant} context="homepage family-office booking" />;
+function PrivateBriefingButton({
+  variant = "primary",
+}: {
+  variant?: "primary" | "secondary";
+}) {
+  return (
+    <BookingWidgetDialog
+      variant={variant}
+      context="homepage family-office booking"
+    />
+  );
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -156,16 +197,21 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 export default function Home() {
-  const [openCaseStudyIndex, setOpenCaseStudyIndex] = useState<number | null>(null);
+  const [openCaseStudyIndex, setOpenCaseStudyIndex] = useState<number | null>(
+    null
+  );
   // Controls the contact-form popup launched from the dark "Security and control" section CTA cluster.
   const [contactOpen, setContactOpen] = useState(false);
   // Controls the "Four steps to Data Empowerment" step-detail lightbox.
   const [openStepIndex, setOpenStepIndex] = useState<number | null>(null);
   // Controls the "Read more" popup for Fusion Team member cards that have a short excerpt.
   const [openFusionIndex, setOpenFusionIndex] = useState<number | null>(null);
-  const activeCaseStudy = openCaseStudyIndex !== null ? caseStudies[openCaseStudyIndex] : null;
-  const activeStep = openStepIndex !== null ? operatingLayers[openStepIndex] : null;
-  const activeFusion = openFusionIndex !== null ? fusionTeam[openFusionIndex] : null;
+  const activeCaseStudy =
+    openCaseStudyIndex !== null ? caseStudies[openCaseStudyIndex] : null;
+  const activeStep =
+    openStepIndex !== null ? operatingLayers[openStepIndex] : null;
+  const activeFusion =
+    openFusionIndex !== null ? fusionTeam[openFusionIndex] : null;
 
   // Sliding highlight across the three case-study pills to hint that they are
   // clickable. First cycle fires 3s after mount, then repeats every 30s.
@@ -219,7 +265,7 @@ export default function Home() {
       cleanups.push(() => clearInterval(iv));
     }, 3000);
 
-    return () => cleanups.forEach((c) => c());
+    return () => cleanups.forEach(c => c());
   }, []);
 
   return (
@@ -239,10 +285,19 @@ export default function Home() {
             <motion.div {...fadeUp}>
               <SectionLabel>secure family office automation</SectionLabel>
               <h1 className="max-w-4xl font-display text-[70px] leading-[1] tracking-[-0.06em] text-[#111111]">
-                Family office<br />transformation<br />that works.
+                Family office
+                <br />
+                transformation
+                <br />
+                that works.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
-                We spend time to learn your eco-system, unique attributes, people &amp; processes. We believe in &ldquo;Collective Understanding.&rdquo; That&rsquo;s our secret &mdash; how we achieve transformation success for our clients. That&rsquo;s why we typically work on-site for the first month of a new engagement.
+                We spend time to learn your eco-system, unique attributes,
+                people &amp; processes. We believe in &ldquo;Collective
+                Understanding.&rdquo; That&rsquo;s our secret &mdash; how we
+                achieve transformation success for our clients. That&rsquo;s why
+                we typically work on-site for the first month of a new
+                engagement.
               </p>
               <p className="mt-10 text-base font-bold leading-7 text-black/90">
                 Learn more about our
@@ -326,9 +381,17 @@ export default function Home() {
                           />
                         </button>
                       </TooltipTrigger>
-                      <TooltipContent side="top" sideOffset={8} className="max-w-xs px-4 py-3 text-sm text-balance">
-                        <p className="font-semibold">Case Study {index + 1}: {study.label}</p>
-                        <p className="mt-1.5 text-white/85">{study.tooltipDescription}</p>
+                      <TooltipContent
+                        side="top"
+                        sideOffset={8}
+                        className="max-w-xs px-4 py-3 text-sm text-balance"
+                      >
+                        <p className="font-semibold">
+                          Case Study {index + 1}: {study.label}
+                        </p>
+                        <p className="mt-1.5 text-white/85">
+                          {study.tooltipDescription}
+                        </p>
                         <p className="mt-2.5 flex items-center gap-1 text-[#6EA8FF]">
                           View Case Study
                           <ChevronRight className="h-3.5 w-3.5" />
@@ -351,33 +414,62 @@ export default function Home() {
 
         <section id="complexity" className="bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-            <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.11)]">
-              <img src={boardroomVisual} alt="Modern family office boardroom" className="aspect-[16/11] w-full object-cover" width={1920} height={1080}/>
+            <motion.div
+              {...fadeUp}
+              className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.11)]"
+            >
+              <img
+                src={boardroomVisual}
+                alt="Modern family office boardroom"
+                className="aspect-[16/11] w-full object-cover"
+                width={1536}
+                height={1024}
+              />
               <div className="absolute left-5 top-5 rounded-full border border-white/70 bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-black/78 backdrop-blur-xl">
                 Great wealth requires great infrastructure.
               </div>
             </motion.div>
-            <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
+            <motion.div
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.08 }}
+            >
               <SectionLabel>Why the back office breaks</SectionLabel>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.4rem)] leading-[0.92] tracking-[-0.06em]">
-                <span className="text-[1.15em] font-bold text-[#0A65FF]">C</span>
-                <span className="font-sans text-[0.78em] italic text-black/55">o</span>
-                <span className="font-bold underline decoration-2 underline-offset-4">m</span>
+                <span className="text-[1.15em] font-bold text-[#0A65FF]">
+                  C
+                </span>
+                <span className="font-sans text-[0.78em] italic text-black/55">
+                  o
+                </span>
+                <span className="font-bold underline decoration-2 underline-offset-4">
+                  m
+                </span>
                 <span className="text-[1.35em] font-light">p</span>
-                <span className="align-super text-[0.55em] italic text-[#0A65FF]">L</span>
-                <span className="font-sans text-[0.9em] font-bold italic text-[#58B8FF]">e</span>
+                <span className="align-super text-[0.55em] italic text-[#0A65FF]">
+                  L
+                </span>
+                <span className="font-sans text-[0.9em] font-bold italic text-[#58B8FF]">
+                  e
+                </span>
                 <span className="text-[1.3em] font-light italic">x</span>
                 <span className="align-sub text-[0.7em] font-bold">i</span>
-                <span className="font-sans font-light underline decoration-2 underline-offset-4">T</span>
+                <span className="font-sans font-light underline decoration-2 underline-offset-4">
+                  T
+                </span>
                 <span className="text-[0.85em] italic text-[#0A65FF]">y</span>
                 {" = Cost"}
               </h2>
               <p className="mt-6 text-lg leading-8 text-black/80">
-                Mature family offices coordinate more than investments. Digital Therapy targets Complexity Friction that compounds across accounting, reporting, technology, and governance.
+                Mature family offices coordinate more than investments. Digital
+                Therapy targets Complexity Friction that compounds across
+                accounting, reporting, technology, and governance.
               </p>
               <div className="mt-9 space-y-4">
-                {complexityPoints.map((point) => (
-                  <div key={point} className="flex gap-4 border-t border-black/10 pt-4">
+                {complexityPoints.map(point => (
+                  <div
+                    key={point}
+                    className="flex gap-4 border-t border-black/10 pt-4"
+                  >
                     <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#0A65FF] text-white">
                       <Check className="h-3.5 w-3.5" />
                     </span>
@@ -389,7 +481,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="operating-layer" className="relative overflow-hidden bg-[#111111] py-24 text-white lg:py-32">
+        <section
+          id="operating-layer"
+          className="relative overflow-hidden bg-[#111111] py-24 text-white lg:py-32"
+        >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(10,101,255,0.32),transparent_35%),linear-gradient(135deg,#111111_0%,#1C1C1C_100%)]" />
           <div className="container relative">
             <motion.div {...fadeUp} className="max-w-4xl">
@@ -456,16 +551,27 @@ export default function Home() {
 
         <section id="fusion-team" className="bg-white py-24 lg:py-32">
           <div className="container">
-            <motion.div {...fadeUp} className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
+            <motion.div
+              {...fadeUp}
+              className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end"
+            >
               <div>
                 <SectionLabel>Fusion Team Concept</SectionLabel>
                 <h2 className="font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
-                  This team didn&rsquo;t happen by accident. It was purpose-built to be the best.
+                  This team didn&rsquo;t happen by accident. It was
+                  purpose-built to be the best.
                 </h2>
               </div>
               <div className="max-w-3xl lg:pb-2">
                 <p className="text-lg leading-8 text-black/80">
-                  Accountants work with accountants &mdash; Engineers with engineers. There&rsquo;s no organic pathway for these experts to come together as a team &amp; learn to collaborate effectively. So we made it happen ourselves &mdash; a new structure that teams up Accountants, Engineers &amp; Process Experts into one group to tackle Accounting, Technology &amp; Operations challenges collectively. This team gets things done.
+                  Accountants work with accountants &mdash; Engineers with
+                  engineers. There&rsquo;s no organic pathway for these experts
+                  to come together as a team &amp; learn to collaborate
+                  effectively. So we made it happen ourselves &mdash; a new
+                  structure that teams up Accountants, Engineers &amp; Process
+                  Experts into one group to tackle Accounting, Technology &amp;
+                  Operations challenges collectively. This team gets things
+                  done.
                 </p>
                 <a
                   href="/thesis"
@@ -487,20 +593,28 @@ export default function Home() {
                       <img
                         src={member.image}
                         alt={member.imageAlt}
-                        className="mx-auto h-24 w-24 shrink-0 rounded-[1.4rem] border border-black/10 bg-white object-cover shadow-[0_16px_35px_rgba(10,101,255,0.10)]" width={600} height={600}/>
+                        className="mx-auto h-24 w-24 shrink-0 rounded-[1.4rem] border border-black/10 bg-white object-cover shadow-[0_16px_35px_rgba(10,101,255,0.10)]"
+                        width={600}
+                        height={600}
+                      />
                       <div className="mt-8">
                         <h3 className="text-center text-2xl font-semibold tracking-[-0.05em]">
                           {(() => {
-                            const [firstWord, ...rest] = member.title.split(" ");
+                            const [firstWord, ...rest] =
+                              member.title.split(" ");
                             return (
                               <>
-                                <span className="text-[#0A65FF]">{firstWord}</span>
+                                <span className="text-[#0A65FF]">
+                                  {firstWord}
+                                </span>
                                 {rest.length ? ` ${rest.join(" ")}` : null}
                               </>
                             );
                           })()}
                         </h3>
-                        <p className="mt-5 text-[0.95rem] leading-7 text-black/82">{displayCopy}</p>
+                        <p className="mt-5 text-[0.95rem] leading-7 text-black/82">
+                          {displayCopy}
+                        </p>
                         {hasReadMore && (
                           <p className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#0A65FF] transition-transform duration-300 group-hover:translate-x-0.5">
                             Read more
@@ -543,20 +657,40 @@ export default function Home() {
 
         <section className="bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
-            <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
-              <img src="/aicutsheads.webp" alt="AI automation reducing headcount and growing revenue" className="aspect-[3/2] w-full object-cover" loading="lazy" decoding="async" width={1200} height={800}/>
+            <motion.div
+              {...fadeUp}
+              className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.1)]"
+            >
+              <img
+                src="/aicutsheads.webp"
+                alt="AI automation reducing headcount and growing revenue"
+                className="aspect-[3/2] w-full object-cover"
+                loading="lazy"
+                decoding="async"
+                width={1200}
+                height={800}
+              />
             </motion.div>
-            <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
+            <motion.div
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.08 }}
+            >
               <SectionLabel>Automation and AI</SectionLabel>
               <h2 className="font-display text-[64px] leading-[0.95] tracking-[-0.04em]">
-                Grow Revenue.<br />Not Headcount.
+                Grow Revenue.
+                <br />
+                Not Headcount.
               </h2>
               <p className="mt-6 text-lg leading-8 text-black/80">
-                Digital Therapy builds software, process flows &amp; automations that multiply the capacity of your workforce.
+                Digital Therapy builds software, process flows &amp; automations
+                that multiply the capacity of your workforce.
               </p>
               <div className="mt-8 space-y-3">
-                {automationUseCases.map((useCase) => (
-                  <div key={useCase} className="flex gap-4 rounded-2xl border border-black/8 bg-[#F7F4EE]/70 p-4">
+                {automationUseCases.map(useCase => (
+                  <div
+                    key={useCase}
+                    className="flex gap-4 rounded-2xl border border-black/8 bg-[#F7F4EE]/70 p-4"
+                  >
                     <Bot className="mt-1 h-5 w-5 shrink-0 text-[#0A65FF]" />
                     <p className="leading-7 text-black/82">{useCase}</p>
                   </div>
@@ -566,7 +700,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="security" className="relative overflow-hidden bg-[#111111] py-24 text-white lg:py-32">
+        <section
+          id="security"
+          className="relative overflow-hidden bg-[#111111] py-24 text-white lg:py-32"
+        >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(10,101,255,0.32),transparent_35%),linear-gradient(135deg,#111111_0%,#1C1C1C_100%)]" />
           <div className="container relative grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
             <motion.div {...fadeUp}>
@@ -575,7 +712,8 @@ export default function Home() {
                 Privacy &amp; security are top priority.
               </h2>
               <p className="mt-6 text-lg leading-8 text-white/62">
-                Digital Therapy builds secure systems to keep family office data private, organized, and accessible only to the right people.
+                Digital Therapy builds secure systems to keep family office data
+                private, organized, and accessible only to the right people.
               </p>
               {/*
                 CTA cluster matches the Team page closing "Work with us" pattern:
@@ -613,8 +751,12 @@ export default function Home() {
                   className="border border-white/12 bg-white/[0.06] p-7 backdrop-blur-xl"
                 >
                   <LockKeyhole className="h-6 w-6 text-[#58B8FF]" />
-                  <h3 className="mt-10 text-2xl font-semibold tracking-[-0.04em]">{principle.title}</h3>
-                  <p className="mt-4 leading-7 text-white/58">{principle.copy}</p>
+                  <h3 className="mt-10 text-2xl font-semibold tracking-[-0.04em]">
+                    {principle.title}
+                  </h3>
+                  <p className="mt-4 leading-7 text-white/58">
+                    {principle.copy}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -624,12 +766,20 @@ export default function Home() {
         <section className="relative overflow-hidden bg-[#F7F4EE] py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr]">
             <motion.div {...fadeUp}>
-              <img src={markUrl} alt="Digital Therapy" className="h-14 w-14 object-contain" width={197} height={227}/>
+              <img
+                src={markUrl}
+                alt="Digital Therapy"
+                className="h-14 w-14 object-contain"
+                width={197}
+                height={227}
+              />
               <h2 className="mt-9 font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
                 Let’s get started.
               </h2>
               <p className="mt-7 max-w-2xl text-xl leading-8 text-black/80">
-                In 20 minutes, we can explore current pain points, identify how Digital Therapy can deliver meaningful value, and tour one or two custom solutions deployed for existing clients.
+                In 20 minutes, we can explore current pain points, identify how
+                Digital Therapy can deliver meaningful value, and tour one or
+                two custom solutions deployed for existing clients.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <PrivateBriefingButton />
@@ -640,15 +790,27 @@ export default function Home() {
                 />
               </div>
             </motion.div>
-            <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
-              <img src={heroVisual} alt="Digital Therapy abstract operating layer" className="aspect-[16/11] w-full object-cover" width={1920} height={1080}/>
+            <motion.div
+              {...fadeUp}
+              className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_28px_80px_rgba(16,24,40,0.1)]"
+            >
+              <img
+                src={heroVisual}
+                alt="Digital Therapy operating layer: source systems unified into a governed data warehouse"
+                className="aspect-[16/11] w-full object-cover"
+                width={1536}
+                height={1152}
+              />
             </motion.div>
           </div>
         </section>
       </main>
 
       {/* Case-study lightbox: opens when a Save Time / Reduce Burn / Make more money pill is clicked */}
-      <Dialog open={openCaseStudyIndex !== null} onOpenChange={(v) => !v && setOpenCaseStudyIndex(null)}>
+      <Dialog
+        open={openCaseStudyIndex !== null}
+        onOpenChange={v => !v && setOpenCaseStudyIndex(null)}
+      >
         <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[1100px] sm:rounded-[2rem]">
           {activeCaseStudy ? (
             <>
@@ -665,19 +827,33 @@ export default function Home() {
               </DialogHeader>
               <div className="grid gap-px overflow-hidden bg-black/10 sm:grid-cols-2">
                 {[
-                  { label: "Project Description", body: activeCaseStudy.projectDescription },
-                  { label: "Problem State", body: activeCaseStudy.problemState },
-                  { label: "Solution State", body: activeCaseStudy.solutionState },
+                  {
+                    label: "Project Description",
+                    body: activeCaseStudy.projectDescription,
+                  },
+                  {
+                    label: "Problem State",
+                    body: activeCaseStudy.problemState,
+                  },
+                  {
+                    label: "Solution State",
+                    body: activeCaseStudy.solutionState,
+                  },
                   { label: "Impact", body: activeCaseStudy.impact },
                 ].map((quadrant, quadrantIndex) => (
-                  <div key={quadrant.label} className="bg-[#F7F4EE] px-8 py-7 sm:px-10 sm:py-9">
+                  <div
+                    key={quadrant.label}
+                    className="bg-[#F7F4EE] px-8 py-7 sm:px-10 sm:py-9"
+                  >
                     <p className="flex items-center gap-2.5 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
                       <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#0A65FF] text-[0.75rem] font-bold text-white">
                         {quadrantIndex + 1}
                       </span>
                       {quadrant.label}
                     </p>
-                    <p className="mt-3 text-base leading-7 text-black/85">{quadrant.body}</p>
+                    <p className="mt-3 text-base leading-7 text-black/85">
+                      {quadrant.body}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -687,7 +863,10 @@ export default function Home() {
       </Dialog>
 
       {/* Step-detail lightbox: opens when one of the four Data Empowerment cards is clicked */}
-      <Dialog open={openStepIndex !== null} onOpenChange={(v) => !v && setOpenStepIndex(null)}>
+      <Dialog
+        open={openStepIndex !== null}
+        onOpenChange={v => !v && setOpenStepIndex(null)}
+      >
         <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[820px] sm:rounded-[2rem]">
           {activeStep ? (
             <>
@@ -742,7 +921,10 @@ export default function Home() {
       </Dialog>
 
       {/* Fusion Team member popup: opens when a card with a short excerpt is clicked */}
-      <Dialog open={openFusionIndex !== null} onOpenChange={(v) => !v && setOpenFusionIndex(null)}>
+      <Dialog
+        open={openFusionIndex !== null}
+        onOpenChange={v => !v && setOpenFusionIndex(null)}
+      >
         <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[720px] sm:rounded-[2rem]">
           {activeFusion ? (
             <>
@@ -761,7 +943,8 @@ export default function Home() {
                     </p>
                     <DialogTitle className="mt-2 font-display text-3xl leading-[1.1] tracking-[-0.03em] text-[#111111] sm:text-4xl">
                       {(() => {
-                        const [firstWord, ...rest] = activeFusion.title.split(" ");
+                        const [firstWord, ...rest] =
+                          activeFusion.title.split(" ");
                         return (
                           <>
                             <span className="text-[#0A65FF]">{firstWord}</span>
@@ -775,7 +958,10 @@ export default function Home() {
               </DialogHeader>
               <div className="flex flex-col gap-5 px-8 py-9 sm:px-10 sm:py-10">
                 {activeFusion.copy.split("\n\n").map((paragraph, i) => (
-                  <p key={i} className="text-base leading-8 text-black/85 sm:text-lg">
+                  <p
+                    key={i}
+                    className="text-base leading-8 text-black/85 sm:text-lg"
+                  >
                     {paragraph}
                   </p>
                 ))}
@@ -784,7 +970,6 @@ export default function Home() {
           ) : null}
         </DialogContent>
       </Dialog>
-
     </div>
   );
 }

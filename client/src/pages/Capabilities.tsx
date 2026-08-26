@@ -3,9 +3,17 @@
  * Moves the capabilities narrative out of the Home page and adds the typical customer requests
  * using the established quiet-luxury family-office visual system.
  */
-import { BookingWidgetDialog, ContactFormDialog } from "@/components/ContactBooking";
+import {
+  BookingWidgetDialog,
+  ContactFormDialog,
+} from "@/components/ContactBooking";
 import PublicHeader from "@/components/PublicHeader";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { caseStudies } from "@/data/caseStudies";
 import { motion } from "framer-motion";
 import {
@@ -26,8 +34,7 @@ import { useState } from "react";
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
 const markUrl = "/dt-mark.webp";
 const wealthMapVisual = "/dt-talk-to-your-data.webp";
-const securityVisual =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663423043272/KoBQvcXLgm3E62hnyhkGPf/dt_security_automation-Z4CfAdsU9T8pybHF6A7NLi.webp";
+const securityVisual = "/dt-security-automation.webp";
 
 const fadeUp = {
   initial: { opacity: 0, y: 28 },
@@ -57,7 +64,8 @@ const capabilities = [
     copy: "Close acceleration, AP and AR workflow improvement, reporting evidence, control design, and automation-forward accounting support.",
     icon: ClipboardCheck,
     tool: "/close-faster.webp",
-    toolAlt: "Squeeze your month-end-close down to a week — four-phase framework",
+    toolAlt:
+      "Squeeze your month-end-close down to a week — four-phase framework",
     toolButtonLabel: "See close framework",
   },
   {
@@ -113,8 +121,17 @@ const deliveryLayers = [
   },
 ];
 
-function PrivateBriefingButton({ variant = "primary" }: { variant?: "primary" | "secondary" }) {
-  return <BookingWidgetDialog variant={variant} context="capabilities page family-office booking" />;
+function PrivateBriefingButton({
+  variant = "primary",
+}: {
+  variant?: "primary" | "secondary";
+}) {
+  return (
+    <BookingWidgetDialog
+      variant={variant}
+      context="capabilities page family-office booking"
+    />
+  );
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -127,9 +144,16 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 export default function Capabilities() {
-  const [openCaseStudyIndex, setOpenCaseStudyIndex] = useState<number | null>(null);
-  const [openTool, setOpenTool] = useState<{ src: string; alt: string; title: string } | null>(null);
-  const activeCaseStudy = openCaseStudyIndex !== null ? caseStudies[openCaseStudyIndex] : null;
+  const [openCaseStudyIndex, setOpenCaseStudyIndex] = useState<number | null>(
+    null
+  );
+  const [openTool, setOpenTool] = useState<{
+    src: string;
+    alt: string;
+    title: string;
+  } | null>(null);
+  const activeCaseStudy =
+    openCaseStudyIndex !== null ? caseStudies[openCaseStudyIndex] : null;
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#111111] selection:bg-[#0A65FF] selection:text-white">
@@ -149,10 +173,17 @@ export default function Capabilities() {
                 Ask your data anything!
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
-                Digital Therapy builds private data, automation, accounting, and reporting capabilities for family offices that need confidence across sensitive information, complex assets, and lean operating teams.
+                Digital Therapy builds private data, automation, accounting, and
+                reporting capabilities for family offices that need confidence
+                across sensitive information, complex assets, and lean operating
+                teams.
               </p>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-                <BookingWidgetDialog variant="primary" context="capabilities page family-office booking" label="Show me!" />
+                <BookingWidgetDialog
+                  variant="primary"
+                  context="capabilities page family-office booking"
+                  label="Show me!"
+                />
                 <a
                   href="#typical-requests"
                   className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/55 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
@@ -170,13 +201,30 @@ export default function Capabilities() {
             >
               <div className="absolute -inset-6 rounded-[2.8rem] bg-[#0A65FF]/10 blur-3xl" />
               <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
-                <img src={wealthMapVisual} alt="Executive talking to a dashboard via voice — sales analytics responding in real time" className="aspect-[16/12] w-full object-cover" width={1536} height={1024}/>
+                <img
+                  src={wealthMapVisual}
+                  alt="Executive talking to a dashboard via voice — sales analytics responding in real time"
+                  className="aspect-[16/12] w-full object-cover"
+                  width={1536}
+                  height={1024}
+                />
                 <div className="absolute bottom-5 left-5 right-5 rounded-[1.35rem] border border-white/70 bg-white/76 p-5 backdrop-blur-xl">
                   <div className="flex items-start gap-4">
-                    <img src={markUrl} alt="" className="mt-1 h-10 w-10 object-contain" width={197} height={227}/>
+                    <img
+                      src={markUrl}
+                      alt=""
+                      className="mt-1 h-10 w-10 object-contain"
+                      width={197}
+                      height={227}
+                    />
                     <div>
-                      <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">Talk to your data</div>
-                      <p className="mt-2 text-sm leading-6 text-black/82">Once your data is unified &amp; configured, query your collective database by just asking questions.</p>
+                      <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">
+                        Talk to your data
+                      </div>
+                      <p className="mt-2 text-sm leading-6 text-black/82">
+                        Once your data is unified &amp; configured, query your
+                        collective database by just asking questions.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -193,7 +241,9 @@ export default function Capabilities() {
                 Transformation Case Studies
               </h2>
               <p className="mt-6 text-lg leading-8 text-black/80">
-                Three real Digital Therapy engagements — anonymized in respect of client privacy. Click any card for the full Project Description, Problem State, Solution State, and Impact.
+                Three real Digital Therapy engagements — anonymized in respect
+                of client privacy. Click any card for the full Project
+                Description, Problem State, Solution State, and Impact.
               </p>
             </motion.div>
 
@@ -227,7 +277,10 @@ export default function Capabilities() {
           </div>
 
           {/* Case-study modal: 4-quadrant layout (Project Description / Problem State / Solution State / Impact) */}
-          <Dialog open={openCaseStudyIndex !== null} onOpenChange={(v) => !v && setOpenCaseStudyIndex(null)}>
+          <Dialog
+            open={openCaseStudyIndex !== null}
+            onOpenChange={v => !v && setOpenCaseStudyIndex(null)}
+          >
             <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[1100px] sm:rounded-[2rem]">
               {activeCaseStudy ? (
                 <>
@@ -244,19 +297,33 @@ export default function Capabilities() {
                   </DialogHeader>
                   <div className="grid gap-px overflow-hidden bg-black/10 sm:grid-cols-2">
                     {[
-                      { label: "Project Description", body: activeCaseStudy.projectDescription },
-                      { label: "Problem State", body: activeCaseStudy.problemState },
-                      { label: "Solution State", body: activeCaseStudy.solutionState },
+                      {
+                        label: "Project Description",
+                        body: activeCaseStudy.projectDescription,
+                      },
+                      {
+                        label: "Problem State",
+                        body: activeCaseStudy.problemState,
+                      },
+                      {
+                        label: "Solution State",
+                        body: activeCaseStudy.solutionState,
+                      },
                       { label: "Impact", body: activeCaseStudy.impact },
                     ].map((quadrant, quadrantIndex) => (
-                      <div key={quadrant.label} className="bg-[#F7F4EE] px-8 py-7 sm:px-10 sm:py-9">
+                      <div
+                        key={quadrant.label}
+                        className="bg-[#F7F4EE] px-8 py-7 sm:px-10 sm:py-9"
+                      >
                         <p className="flex items-center gap-2.5 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
                           <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#0A65FF] text-[0.75rem] font-bold text-white">
                             {quadrantIndex + 1}
                           </span>
                           {quadrant.label}
                         </p>
-                        <p className="mt-3 text-base leading-7 text-black/85">{quadrant.body}</p>
+                        <p className="mt-3 text-base leading-7 text-black/85">
+                          {quadrant.body}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -267,18 +334,26 @@ export default function Capabilities() {
         </section>
 
         {/* Tool lightbox — opens when "See the tool" is clicked on any capability card */}
-        <Dialog open={openTool !== null} onOpenChange={(v) => !v && setOpenTool(null)}>
+        <Dialog
+          open={openTool !== null}
+          onOpenChange={v => !v && setOpenTool(null)}
+        >
           <DialogContent className="max-h-[92vh] w-full max-w-[95vw] overflow-y-auto border-white/80 bg-[#F7F4EE] p-0 text-[#111111] shadow-[0_42px_120px_rgba(17,17,17,0.28)] sm:max-w-[1280px] sm:rounded-[2rem]">
             {openTool ? (
               <>
                 <DialogHeader className="px-8 pt-8 sm:px-10 sm:pt-10">
-                  <DialogTitle className="font-display text-3xl tracking-[-0.04em] sm:text-4xl">{openTool.title}</DialogTitle>
+                  <DialogTitle className="font-display text-3xl tracking-[-0.04em] sm:text-4xl">
+                    {openTool.title}
+                  </DialogTitle>
                 </DialogHeader>
                 <div className="px-8 pb-8 pt-6 sm:px-10 sm:pb-10">
                   <img
                     src={openTool.src}
                     alt={openTool.alt}
-                    className="block w-full rounded-2xl border border-black/10 bg-white" width={1536} height={1024}/>
+                    className="block w-full rounded-2xl border border-black/10 bg-white"
+                    width={1536}
+                    height={1024}
+                  />
                 </div>
               </>
             ) : null}
@@ -296,9 +371,36 @@ export default function Capabilities() {
             <div className="mt-14 grid gap-5 lg:grid-cols-3">
               {capabilities.map((capability, index) => {
                 const Icon = capability.icon;
-                const tool = "tool" in capability ? (capability as { tool?: string; toolAlt?: string; toolButtonLabel?: string }).tool : undefined;
-                const toolAlt = "toolAlt" in capability ? (capability as { tool?: string; toolAlt?: string; toolButtonLabel?: string }).toolAlt : undefined;
-                const toolButtonLabel = "toolButtonLabel" in capability ? (capability as { tool?: string; toolAlt?: string; toolButtonLabel?: string }).toolButtonLabel : undefined;
+                const tool =
+                  "tool" in capability
+                    ? (
+                        capability as {
+                          tool?: string;
+                          toolAlt?: string;
+                          toolButtonLabel?: string;
+                        }
+                      ).tool
+                    : undefined;
+                const toolAlt =
+                  "toolAlt" in capability
+                    ? (
+                        capability as {
+                          tool?: string;
+                          toolAlt?: string;
+                          toolButtonLabel?: string;
+                        }
+                      ).toolAlt
+                    : undefined;
+                const toolButtonLabel =
+                  "toolButtonLabel" in capability
+                    ? (
+                        capability as {
+                          tool?: string;
+                          toolAlt?: string;
+                          toolButtonLabel?: string;
+                        }
+                      ).toolButtonLabel
+                    : undefined;
                 return (
                   <motion.article
                     key={capability.title}
@@ -307,15 +409,27 @@ export default function Capabilities() {
                     className="group relative min-h-[330px] border border-black/10 bg-white/72 p-7 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-[#0A65FF] hover:bg-white hover:ring-2 hover:ring-[#0A65FF] hover:ring-offset-0"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">0{index + 1}</span>
+                      <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                        0{index + 1}
+                      </span>
                       <Icon className="h-6 w-6 text-black/48 transition-colors duration-300 group-hover:text-[#0A65FF]" />
                     </div>
-                    <h3 className="mt-16 text-2xl font-semibold tracking-[-0.04em]">{capability.title}</h3>
-                    <p className="mt-4 leading-7 text-black/78">{capability.copy}</p>
+                    <h3 className="mt-16 text-2xl font-semibold tracking-[-0.04em]">
+                      {capability.title}
+                    </h3>
+                    <p className="mt-4 leading-7 text-black/78">
+                      {capability.copy}
+                    </p>
                     {tool ? (
                       <button
                         type="button"
-                        onClick={() => setOpenTool({ src: tool, alt: toolAlt ?? capability.title, title: capability.title })}
+                        onClick={() =>
+                          setOpenTool({
+                            src: tool,
+                            alt: toolAlt ?? capability.title,
+                            title: capability.title,
+                          })
+                        }
                         className="absolute bottom-6 right-6 inline-flex items-center gap-1.5 rounded-full bg-[#0A65FF] px-4 py-2 text-xs font-semibold text-white opacity-0 shadow-[0_12px_30px_rgba(10,101,255,0.30)] transition-all duration-300 group-hover:opacity-100 group-focus-within:opacity-100 hover:bg-[#004ed1] focus:outline-none focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
                       >
                         {toolButtonLabel ?? "See the tool"}
@@ -331,10 +445,22 @@ export default function Capabilities() {
 
         <section className="bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
-            <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.1)]">
-              <img src={securityVisual} alt="Secure automation and AI workflow visualization" className="aspect-[16/12] w-full object-cover" width={1920} height={1080}/>
+            <motion.div
+              {...fadeUp}
+              className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.1)]"
+            >
+              <img
+                src={securityVisual}
+                alt="Balancing speed and intelligence with security and privacy by design"
+                className="aspect-[16/12] w-full object-cover"
+                width={1200}
+                height={900}
+              />
             </motion.div>
-            <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
+            <motion.div
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.08 }}
+            >
               <SectionLabel>Delivery architecture</SectionLabel>
               <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.92] tracking-[-0.06em]">
                 Fully integrated & securely on-prem.
@@ -350,11 +476,17 @@ export default function Capabilities() {
                       className="border-t border-black/10 pt-5"
                     >
                       <div className="flex items-center justify-between gap-4">
-                        <span className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">{layer.eyebrow}</span>
+                        <span className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                          {layer.eyebrow}
+                        </span>
                         <Icon className="h-5 w-5 text-black/42" />
                       </div>
-                      <h3 className="mt-5 text-xl font-semibold tracking-[-0.04em]">{layer.title}</h3>
-                      <p className="mt-3 text-sm leading-6 text-black/80">{layer.copy}</p>
+                      <h3 className="mt-5 text-xl font-semibold tracking-[-0.04em]">
+                        {layer.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-6 text-black/80">
+                        {layer.copy}
+                      </p>
                     </motion.div>
                   );
                 })}
@@ -369,21 +501,41 @@ export default function Capabilities() {
             <motion.div {...fadeUp}>
               <SectionLabel>Private by design</SectionLabel>
               <h2 className="font-display text-[44px] leading-[1.1] tracking-[-0.04em] text-white">
-                Privacy &amp; Security are paramount!<br />
-                But so is Speed &amp; Intelligence.<br />
+                Privacy &amp; Security are paramount!
+                <br />
+                But so is Speed &amp; Intelligence.
+                <br />
                 How do you choose?
               </h2>
               <img
                 src="/balance-scale.webp"
                 alt="Balance scale weighing Speed & Intelligence against Security & Privacy, with the message: You need both. And we can give that to you."
-                className="mt-10 w-full rounded-2xl border border-white/10" loading="lazy" decoding="async" width={1200} height={800}/>
+                className="mt-10 w-full rounded-2xl border border-white/10"
+                loading="lazy"
+                decoding="async"
+                width={1200}
+                height={800}
+              />
             </motion.div>
-            <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }} className="border border-white/12 bg-white/[0.06] p-8 backdrop-blur-xl">
+            <motion.div
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.08 }}
+              className="border border-white/12 bg-white/[0.06] p-8 backdrop-blur-xl"
+            >
               <p className="text-xl leading-9 text-white/70">
-                Digital Therapy works fluently across cloud platforms, but prefers deploying wholly-owned, custom applications on-prem. We run AI models offline by default &mdash; toggled online only for updates or short-lived tasks &mdash; and install identity-based access management that handles permissions by role, project, entity, title, or any attribute you assign.
+                Digital Therapy works fluently across cloud platforms, but
+                prefers deploying wholly-owned, custom applications on-prem. We
+                run AI models offline by default &mdash; toggled online only for
+                updates or short-lived tasks &mdash; and install identity-based
+                access management that handles permissions by role, project,
+                entity, title, or any attribute you assign.
               </p>
               <p className="mt-6 text-xl leading-9 text-white/70">
-                <strong className="font-bold text-[#0A65FF]">Our Mission:</strong> Deliver speed &amp; intelligence to family offices without compromising privacy &amp; security.
+                <strong className="font-bold text-[#0A65FF]">
+                  Our Mission:
+                </strong>{" "}
+                Deliver speed &amp; intelligence to family offices without
+                compromising privacy &amp; security.
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <PrivateBriefingButton />
@@ -397,7 +549,6 @@ export default function Capabilities() {
           </div>
         </section>
       </main>
-
     </div>
   );
 }
