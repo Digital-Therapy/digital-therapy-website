@@ -27,6 +27,7 @@ import AdminPipeline from "./pages/admin/AdminPipeline";
 import NdaSigningPage from "./pages/NdaSigningPage";
 import NdaBatchSigningPage from "./pages/NdaBatchSigningPage";
 import VendorPaymentForm from "./pages/VendorPaymentForm";
+import VendorHeadshotForm from "./pages/VendorHeadshotForm";
 import AdminAccess from "./pages/admin/AdminAccess";
 
 function Router() {
@@ -61,6 +62,7 @@ function Router() {
       {/* Public, token-gated vendor payment-info collection — mobile-first form
           reached via a link Karina texts to the vendor. */}
       <Route path={"/vendor/payment/:token"} component={VendorPaymentForm} />
+      <Route path={"/vendor/headshot/:token"} component={VendorHeadshotForm} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
@@ -83,7 +85,8 @@ function App() {
     location.startsWith("/admin") ||
     location.startsWith("/vendorlists") ||
     location.startsWith("/nda/sign") ||
-    location.startsWith("/vendor/payment");
+    location.startsWith("/vendor/payment") ||
+    location.startsWith("/vendor/headshot");
 
   return (
     <ErrorBoundary>

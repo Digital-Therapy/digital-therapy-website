@@ -69,6 +69,21 @@ export function registerPrerendered(app: Express) {
     `<meta name="twitter:title" content="${PAY_TITLE}" />`,
     `<meta name="twitter:description" content="${PAY_DESC}" />`,
   ].join("\n    ");
+
+  // Same treatment for token-gated vendor headshot uploads.
+  const HEAD_TITLE = "Upload Headshots · Digital Therapy";
+  const HEAD_DESC = "Upload fresh headshots so Digital Therapy has a current photo of you on file.";
+  const HEAD_META = [
+    `<title>${HEAD_TITLE}</title>`,
+    `<meta name="description" content="${HEAD_DESC}" />`,
+    `<meta name="robots" content="noindex, nofollow" />`,
+    `<meta property="og:type" content="website" />`,
+    `<meta property="og:title" content="${HEAD_TITLE}" />`,
+    `<meta property="og:description" content="${HEAD_DESC}" />`,
+    `<meta name="twitter:card" content="summary" />`,
+    `<meta name="twitter:title" content="${HEAD_TITLE}" />`,
+    `<meta name="twitter:description" content="${HEAD_DESC}" />`,
+  ].join("\n    ");
   // Remove the baked-in homepage tags so they don't win over the signing tags.
   // The title match is bounded with [^<] (NOT [\s\S]) so it can't start at the
   // literal "<title>" inside the index.html template comment and run to the real
@@ -105,6 +120,17 @@ export function registerPrerendered(app: Express) {
     }
     return _paymentShell;
   };
+  let _headshotShell: string | null | undefined;
+  const headshotShell = (): string | null => {
+    if (_headshotShell !== undefined) return _headshotShell;
+    try {
+      const html = stripBakedMeta(fs.readFileSync(indexFile, "utf8"));
+      _headshotShell = html.replace("</head>", `  ${HEAD_META}\n  </head>`);
+    } catch {
+      _headshotShell = null;
+    }
+    return _headshotShell;
+  };
 
   app.get("*", (req: Request, res: Response, next: NextFunction) => {
     const p = req.path;
@@ -126,6 +152,13 @@ export function registerPrerendered(app: Express) {
     // Token-gated vendor payment-info collection → same treatment.
     if (p === "/vendor/payment" || p.startsWith("/vendor/payment/")) {
       const shell = paymentShell();
+      if (shell) return res.status(200).type("html").send(shell);
+      return next();
+    }
+
+    // Token-gated vendor headshot upload → same treatment.
+    if (p === "/vendor/headshot" || p.startsWith("/vendor/headshot/")) {
+      const shell = headshotShell();
       if (shell) return res.status(200).type("html").send(shell);
       return next();
     }

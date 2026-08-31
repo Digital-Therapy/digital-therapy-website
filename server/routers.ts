@@ -84,6 +84,14 @@ import {
   submitViaToken as submitPaymentViaToken,
   upsertPaymentInfo,
 } from "./vendorPaymentInfo";
+import {
+  deleteHeadshot,
+  generateHeadshotToken,
+  listHeadshots,
+  listHeadshotTokens,
+  lookupHeadshotToken,
+  submitHeadshotsViaToken,
+} from "./vendorHeadshots";
 import { vendorStatusValues } from "../drizzle/schema";
 
 // Strip control chars / collapse newlines so user input can't forge extra
@@ -557,6 +565,55 @@ export const appRouter = router({
     adminListPaymentTokens: adminProcedure
       .input(z.object({ id: z.string().trim().min(1).max(64) }))
       .query(async ({ input }) => listPaymentTokens(input.id)),
+
+    // ── Headshots ─────────────────────────────────────────────────────────
+    // Admin can request fresh headshots from a vendor via a token-gated link.
+    // Vendor uploads up to 3 images through the /vendor/headshot/:token page.
+    adminListHeadshots: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64) }))
+      .query(async ({ input }) => listHeadshots(input.id)),
+    adminDeleteHeadshot: adminProcedure
+      .input(z.object({ id: z.number().int() }))
+      .mutation(async ({ input }) => ({ success: await deleteHeadshot(input.id) })),
+    adminGenerateHeadshotToken: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64) }))
+      .mutation(async ({ input }) => {
+        const result = await generateHeadshotToken(input.id);
+        if (!result) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Could not generate link." });
+        return result;
+      }),
+    adminListHeadshotTokens: adminProcedure
+      .input(z.object({ id: z.string().trim().min(1).max(64) }))
+      .query(async ({ input }) => listHeadshotTokens(input.id)),
+  }),
+
+  // Public, token-gated vendor headshot upload. Vendor lands here from a link
+  // Karina texts them.
+  vendorHeadshot: router({
+    lookupToken: publicProcedure
+      .input(z.object({ token: z.string().trim().min(16).max(64) }))
+      .query(async ({ input }) => lookupHeadshotToken(input.token)),
+    submit: publicProcedure
+      .input(
+        z.object({
+          token: z.string().trim().min(16).max(64),
+          files: z
+            .array(
+              z.object({
+                filename: z.string().trim().min(1).max(260),
+                mimeType: z.string().trim().min(1).max(120),
+                dataBase64: z.string().min(4),
+              }),
+            )
+            .min(1)
+            .max(3),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const result = await submitHeadshotsViaToken(input.token, input.files);
+        if (!result.ok) throw new TRPCError({ code: "BAD_REQUEST", message: result.reason });
+        return { ok: true as const, uploaded: result.uploaded };
+      }),
   }),
 
   // Public, token-gated vendor payment-info collection. External vendors land
