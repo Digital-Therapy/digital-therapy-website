@@ -41,7 +41,6 @@ const headshots = {
   bruceDitman: "/team/bruce-blue.webp",
   lironDavid: "/team/liron.avif",
   jonathanKobrin: "/team/jon.avif",
-  hunterAtkins: "/team/hunter.webp",
   miltonRodas: "/team/milton.webp",
   kennedyKraner: "/team/kennedy.avif",
   rickToussaint: "/team/rick.avif",
@@ -84,14 +83,6 @@ const leaders: TeamPerson[] = [
     specialty: "Systems architecture, integration, and technical execution.",
     imageUrl: headshots.miltonRodas,
     bio: "Former Tesla and Stellantis Lead Project Architect + Automation Engineer.",
-  },
-  {
-    name: "Hunter Atkins, CPA",
-    role: "CPA",
-    specialty:
-      "Accounting leadership, financial controls, and reporting operations.",
-    imageUrl: headshots.hunterAtkins,
-    bio: "Hunter Atkins is a licensed CPA and MBA specializing in accounting transformation, process automation, and AI-driven workflow design.\n\nAt Digital Therapy, he leads engagements for family office and small business clients, including ERP migrations, custom-built accounts-payable automation platforms, consolidated investment reporting dashboards, and fractional controllership.\n\nHe has also delivered multiple courses and educational series on AI and automation for accounting professionals.\n\nHunter brings over five years of prior experience in cost accounting, financial reporting, and month-end close management across manufacturing and public accounting environments.",
   },
 ];
 
@@ -483,7 +474,7 @@ export default function Team() {
                           alt={leader.name}
                           // Jonathan + Milton get object-top so their photos read with more
                           // headroom (the top of the original frame stays visible, pushing
-                          // the head lower in the card). Hunter stays centered.
+                          // the head lower in the card).
                           className={`h-64 w-full object-cover ${
                             leader.name === "Jonathan Kobrin" ||
                             leader.name === "Milton Rodas"
