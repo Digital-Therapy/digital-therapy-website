@@ -42,7 +42,6 @@ const headshots = {
   lironDavid: "/team/liron.avif",
   jonathanKobrin: "/team/jon.avif",
   miltonRodas: "/team/milton.webp",
-  kennedyKraner: "/team/kennedy.avif",
   rickToussaint: "/team/rick.avif",
   stanGretov: "/team/stan.webp",
   vadimLitvak: "/team/vadim.avif",
@@ -98,12 +97,6 @@ const groups: Array<{
       "The finance bench brings bookkeeping, tax, public-company reporting, and real-estate accounting expertise into transformation work from day one.",
     icon: CircleDollarSign,
     members: [
-      {
-        name: "Kennedy Kraner",
-        role: "Bookkeeper",
-        imageUrl: headshots.kennedyKraner,
-        bio: "Kennedy Kraner is a bookkeeper with four years of experience in property management accounting, transaction categorization, and financial record-keeping across multi-property portfolios. She brings proficiency in Rent Manager, QuickBooks, and Microsoft Office, along with additional capabilities in web development and graphic design.",
-      },
       {
         name: "Rick Toussaint, CPA",
         role: "Tax + Pubco Reporting",
