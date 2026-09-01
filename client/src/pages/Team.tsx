@@ -47,7 +47,6 @@ const headshots = {
   vadimLitvak: "/team/vadim.avif",
   valerioMirof: "/team/valerio.avif",
   geoffHorn: "/team/geoff-blue.webp",
-  dariaShulenko: "/team/daria.avif",
   dougGray: "/team/doug-blue.webp",
 };
 
@@ -120,11 +119,6 @@ const groups: Array<{
         name: "Vadim Litvak",
         role: "Director of SEO",
         imageUrl: headshots.vadimLitvak,
-      },
-      {
-        name: "Daria Shulenko",
-        role: "Designer",
-        imageUrl: headshots.dariaShulenko,
       },
       {
         name: "Valerio Mirof",
