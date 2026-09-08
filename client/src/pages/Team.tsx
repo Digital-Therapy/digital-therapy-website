@@ -72,6 +72,28 @@ const groups: Array<{
   members: TeamPerson[];
 }> = [
   {
+    label: "Strategy, Operations + Management",
+    description:
+      "Senior operators who structure capital, run complex programs, and translate strategy into repeatable execution across geographies and stakeholder groups.",
+    icon: Compass,
+    members: [
+      {
+        name: "Jonathan Kobrin",
+        role: "Founder & CEO",
+        specialty:
+          "Operating model, transformation strategy, and client leadership.",
+        imageUrl: headshots.jonathanKobrin,
+        isFounder: true,
+      },
+      {
+        name: "Aaron Graf",
+        role: "Strategy, Operations + Management",
+        imageUrl: headshots.aaronGraf,
+        bio: "Aaron Graf is a senior real-estate executive with two decades of experience originating, financing, and scaling housing platforms. Since 2021 he has been Executive Director of Nehemiah HDFC, moving the organization from junior-partner to senior-partner developer with full P&L responsibility. He has originated a 1,350-unit, $900M pipeline, asset-manages a 680-unit affordable portfolio, and expanded the platform from Brooklyn into Washington, D.C., Maryland, New Jersey, and North Carolina — structuring capital across HPD subsidies, LIHTC equity, construction debt, and credit facilities.\n\nEarlier, Aaron co-founded LG Fairmont, a tech-enabled brokerage built on a proprietary CRM and operations platform. It grew to roughly 300 agents and $3B+ in annual production, made the Inc. 5000 in 2017 and 2018, and exited to Compass (NYSE: COMP) in 2022; it is now the second-highest-producing mega team in Manhattan.\n\nBefore that, he founded AJG Capital Group, developed three gut-rehab condominium projects, placed construction capital for clients, and helped the FDIC wind down more than $500M in REO. He began his career originating and underwriting construction and permanent loans at the Community Preservation Corporation. Aaron holds an MBA in Finance with a real-estate concentration from Columbia Business School and a B.A. in Economics from Kenyon College.",
+      },
+    ],
+  },
+  {
     label: "Finance + Accounting",
     description:
       "The finance bench brings bookkeeping, tax, public-company reporting, and real-estate accounting expertise into transformation work from day one.",
@@ -93,28 +115,6 @@ const groups: Array<{
         role: "Tax Advisor + Financial Executive",
         imageUrl: headshots.louKurpis,
         bio: "Lou Kurpis is a seasoned Certified Public Accountant with more than 40 years as a CPA and 50 years of financial and accounting experience. He provides clients with expertise in tax advisory and planning, accounting, financial reporting, business structuring, and strategic financial guidance.\n\nIn addition to his extensive CPA practice experience, Lou has served as a CFO, Controller, and Finance Director, giving him a unique ability to advise clients from both a tax and operational perspective. His experience spans numerous industries, including transportation, CPG, food and beverage, wholesale distribution, and manufacturing.\n\nLou brings decades of practical experience helping business owners and companies navigate complex tax, accounting, and financial decisions.",
-      },
-    ],
-  },
-  {
-    label: "Strategy, Operations + Management",
-    description:
-      "Senior operators who structure capital, run complex programs, and translate strategy into repeatable execution across geographies and stakeholder groups.",
-    icon: Compass,
-    members: [
-      {
-        name: "Jonathan Kobrin",
-        role: "Founder & CEO",
-        specialty:
-          "Operating model, transformation strategy, and client leadership.",
-        imageUrl: headshots.jonathanKobrin,
-        isFounder: true,
-      },
-      {
-        name: "Aaron Graf",
-        role: "Strategy, Operations + Management",
-        imageUrl: headshots.aaronGraf,
-        bio: "Aaron Graf is a senior real-estate executive with two decades of experience originating, financing, and scaling housing platforms. Since 2021 he has been Executive Director of Nehemiah HDFC, moving the organization from junior-partner to senior-partner developer with full P&L responsibility. He has originated a 1,350-unit, $900M pipeline, asset-manages a 680-unit affordable portfolio, and expanded the platform from Brooklyn into Washington, D.C., Maryland, New Jersey, and North Carolina — structuring capital across HPD subsidies, LIHTC equity, construction debt, and credit facilities.\n\nEarlier, Aaron co-founded LG Fairmont, a tech-enabled brokerage built on a proprietary CRM and operations platform. It grew to roughly 300 agents and $3B+ in annual production, made the Inc. 5000 in 2017 and 2018, and exited to Compass (NYSE: COMP) in 2022; it is now the second-highest-producing mega team in Manhattan.\n\nBefore that, he founded AJG Capital Group, developed three gut-rehab condominium projects, placed construction capital for clients, and helped the FDIC wind down more than $500M in REO. He began his career originating and underwriting construction and permanent loans at the Community Preservation Corporation. Aaron holds an MBA in Finance with a real-estate concentration from Columbia Business School and a B.A. in Economics from Kenyon College.",
       },
     ],
   },
