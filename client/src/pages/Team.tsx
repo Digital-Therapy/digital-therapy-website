@@ -69,24 +69,6 @@ type TeamPerson = {
   isFounder?: boolean;
 };
 
-const leaders: TeamPerson[] = [
-  {
-    name: "Jonathan Kobrin",
-    role: "Founder & CEO",
-    specialty:
-      "Operating model, transformation strategy, and client leadership.",
-    imageUrl: headshots.jonathanKobrin,
-    isFounder: true,
-  },
-  {
-    name: "Milton Rodas",
-    role: "Chief Solution Engineer",
-    specialty: "Systems architecture, integration, and technical execution.",
-    imageUrl: headshots.miltonRodas,
-    bio: "Former Tesla and Stellantis Lead Project Architect + Automation Engineer.",
-  },
-];
-
 const groups: Array<{
   label: string;
   description: string;
@@ -124,6 +106,14 @@ const groups: Array<{
       "Senior operators who structure capital, run complex programs, and translate strategy into repeatable execution across geographies and stakeholder groups.",
     icon: Compass,
     members: [
+      {
+        name: "Jonathan Kobrin",
+        role: "Founder & CEO",
+        specialty:
+          "Operating model, transformation strategy, and client leadership.",
+        imageUrl: headshots.jonathanKobrin,
+        isFounder: true,
+      },
       {
         name: "Aaron Graf",
         role: "Strategy, Operations + Management",
@@ -308,7 +298,7 @@ function MemberBioDialog({
 }: {
   member: TeamPerson;
   children: React.ReactNode;
-  // "booking" → Apollo 30-min calendar (leaders only).
+  // "booking" → Apollo 30-min calendar.
   // "message" → routed message to intake@digitaltherapy.io tagged to this individual.
   cta?: "booking" | "message";
 }) {
@@ -478,123 +468,6 @@ export default function Team() {
           className="scroll-mt-24 border-b border-black/8 bg-white py-24"
         >
           <div className="container">
-            <motion.div {...fadeUp} className="max-w-3xl">
-              <SectionLabel>Leadership</SectionLabel>
-              <h2 className="font-display text-[clamp(2.6rem,5vw,5.2rem)] leading-[0.95] tracking-[-0.06em]">
-                Leaders
-              </h2>
-            </motion.div>
-            <div className="mt-12 flex flex-wrap justify-center gap-15 sm:justify-start">
-              {leaders.map((leader, index) => {
-                const cardInner = (
-                  <>
-                    <div className="absolute right-0 top-0 h-28 w-28 rounded-bl-[4rem] bg-[#0A65FF]/8" />
-                    {leader.imageUrl ? (
-                      <div className="relative -m-3 mb-7 overflow-hidden rounded-[1.6rem] bg-[#0A65FF]/8">
-                        <img
-                          src={leader.imageUrl}
-                          alt={leader.name}
-                          // Jonathan + Milton get object-top so their photos read with more
-                          // headroom (the top of the original frame stays visible, pushing
-                          // the head lower in the card).
-                          className={`h-64 w-full object-cover ${
-                            leader.name === "Jonathan Kobrin" ||
-                            leader.name === "Milton Rodas"
-                              ? "object-top"
-                              : "object-center"
-                          }`}
-                          width={800}
-                          height={800}
-                        />
-                      </div>
-                    ) : (
-                      <InitialMark name={leader.name} />
-                    )}
-                    <p
-                      className={`${leader.imageUrl ? "mt-0" : "mt-8"} text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]`}
-                    >
-                      {leader.role}
-                    </p>
-                    <h3 className="mt-3 font-display text-4xl leading-none tracking-[-0.05em]">
-                      {leader.name}
-                    </h3>
-                    <p className="mt-5 text-sm leading-6 text-black/78">
-                      {leader.specialty}
-                    </p>
-                    {leader.isFounder || leader.bio ? (
-                      <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#0A65FF] transition-transform duration-300 group-hover:translate-x-1">
-                        Read bio
-                        <ChevronRight className="h-4 w-4" />
-                      </span>
-                    ) : null}
-                  </>
-                );
-
-                // Leader cards lock at ~336px wide (20% wider than the Alliance cards) and never grow with the browser.
-                const cardBaseClasses =
-                  "group relative w-full max-w-[360px] sm:w-[336px] overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] p-7 shadow-[0_20px_55px_rgba(17,17,17,0.06)]";
-
-                if (leader.isFounder) {
-                  return (
-                    <FounderStoryDialog key={leader.name} leader={leader}>
-                      <motion.button
-                        type="button"
-                        aria-label={`Read bio: ${leader.name}`}
-                        data-testid="founder-card-trigger"
-                        {...fadeUp}
-                        transition={{
-                          ...fadeUp.transition,
-                          delay: index * 0.08,
-                        }}
-                        className={`${cardBaseClasses} text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE]`}
-                      >
-                        {cardInner}
-                      </motion.button>
-                    </FounderStoryDialog>
-                  );
-                }
-
-                if (leader.bio) {
-                  return (
-                    // Leaders keep the Apollo 30-min booking CTA.
-                    <MemberBioDialog
-                      key={leader.name}
-                      member={leader}
-                      cta="booking"
-                    >
-                      <motion.button
-                        type="button"
-                        aria-label={`Read profile: ${leader.name}`}
-                        {...fadeUp}
-                        transition={{
-                          ...fadeUp.transition,
-                          delay: index * 0.08,
-                        }}
-                        className={`${cardBaseClasses} text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F4EE]`}
-                      >
-                        {cardInner}
-                      </motion.button>
-                    </MemberBioDialog>
-                  );
-                }
-
-                return (
-                  <motion.article
-                    key={leader.name}
-                    {...fadeUp}
-                    transition={{ ...fadeUp.transition, delay: index * 0.08 }}
-                    className={`${cardBaseClasses} transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)]`}
-                  >
-                    {cardInner}
-                  </motion.article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section className="border-b border-black/8 bg-white py-24">
-          <div className="container">
             <motion.div
               {...fadeUp}
               className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end"
@@ -643,8 +516,7 @@ export default function Team() {
                                   src={member.imageUrl}
                                   alt={member.name}
                                   // Valerio gets object-top so his headshot reads with more
-                                  // headroom in the small avatar tile, matching the lift on
-                                  // Jonathan + Milton's leader cards.
+                                  // headroom in the small avatar tile.
                                   className={`h-20 w-20 shrink-0 rounded-[1.35rem] border border-black/8 object-cover shadow-[0_18px_45px_rgba(17,17,17,0.08)] ${
                                     member.name === "Valerio Mirof"
                                       ? "object-top"
@@ -666,6 +538,27 @@ export default function Team() {
                               </div>
                             </div>
                           );
+
+                          // Founder (Jonathan) opens the bespoke Founder story
+                          // dialog with the booking CTA — same treatment he had
+                          // on the retired Leaders section.
+                          if (member.isFounder) {
+                            return (
+                              <FounderStoryDialog
+                                key={`${group.label}-${member.name}-${member.role}`}
+                                leader={member}
+                              >
+                                <button
+                                  type="button"
+                                  aria-label={`Read bio: ${member.name}`}
+                                  data-testid="founder-card-trigger"
+                                  className="w-full rounded-[1.4rem] border border-black/7 bg-white p-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_18px_45px_rgba(17,17,17,0.06)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                                >
+                                  {cardInner}
+                                </button>
+                              </FounderStoryDialog>
+                            );
+                          }
 
                           if (member.bio) {
                             return (
