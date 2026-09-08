@@ -48,6 +48,8 @@ const headshots = {
   valerioMirof: "/team/valerio.avif",
   geoffHorn: "/team/geoff-blue.webp",
   dougGray: "/team/doug-blue.webp",
+  matthewTreem: "/team/matthew.webp",
+  louKurpis: "/team/lou.webp",
 };
 
 const fadeUp = {
@@ -104,7 +106,13 @@ const groups: Array<{
       {
         name: "Matthew Treem",
         role: "Fractional CFO + Debt Advisory",
+        imageUrl: headshots.matthewTreem,
         bio: "Matthew Treem is a finance executive specializing in Fractional CFO and Debt Advisory. He offers 20 years of experience across commercial banking and corporate finance.\n\nMatthew spent eight years at Bank of America Merrill Lynch focused on middle-market commercial clientele. He has advised on more than $500 million of corporate and commercial real-estate financing. His banking background provides a strong foundation in credit underwriting, capital structuring, and lender requirements.\n\nToday, Matthew serves as a fractional CFO and strategic advisor to privately held and lower-middle-market companies, helping management teams improve financial operations, working capital, cash flow, profitability, and access to capital.\n\nHe also advises companies on debt financing, including asset-based lending, bank lines of credit, SBA and acquisition financing, and private credit. Matthew combines the credit discipline of a commercial banker with the hands-on perspective of a CFO to help companies strengthen liquidity, fund growth, and create long-term enterprise value.",
+      },
+      {
+        name: "Lou Kurpis, CPA",
+        role: "CPA",
+        imageUrl: headshots.louKurpis,
       },
     ],
   },
