@@ -440,10 +440,14 @@ export default function Team() {
                                 <img
                                   src={member.imageUrl}
                                   alt={member.name}
-                                  // Valerio gets object-top so his headshot reads with more
-                                  // headroom in the small avatar tile.
+                                  // Valerio + Matthew get object-top so their
+                                  // headshots read with more headroom in the
+                                  // small avatar tile (their source frames sit
+                                  // tight to the top and would otherwise crop
+                                  // hair).
                                   className={`h-20 w-20 shrink-0 rounded-[1.35rem] border border-black/8 object-cover shadow-[0_18px_45px_rgba(17,17,17,0.08)] ${
-                                    member.name === "Valerio Mirof"
+                                    member.name === "Valerio Mirof" ||
+                                    member.name === "Matthew Treem"
                                       ? "object-top"
                                       : "object-center"
                                   }`}
