@@ -22,7 +22,6 @@ import { motion } from "framer-motion";
 import {
   BadgeCheck,
   Building2,
-  ChevronDown,
   ChevronRight,
   CircleDollarSign,
   Code2,
@@ -34,9 +33,6 @@ import {
   UsersRound,
 } from "lucide-react";
 
-const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const markUrl = "/dt-mark.webp";
-const boardroomVisual = "/dt-family-office-boardroom.webp";
 const headshots = {
   bruceDitman: "/team/bruce-blue.webp",
   lironDavid: "/team/liron.avif",
@@ -392,77 +388,6 @@ export default function Team() {
       />
 
       <main className="pt-20">
-        <section className="relative overflow-hidden border-b border-black/8">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(10,101,255,0.10),transparent_31%),linear-gradient(115deg,#F7F4EE_0%,#FFFFFF_48%,#EEF4FF_100%)]" />
-          <div className="container relative grid min-h-[720px] items-center gap-12 py-20 lg:grid-cols-[0.94fr_1.06fr] lg:py-28">
-            <motion.div {...fadeUp}>
-              <SectionLabel>Our team</SectionLabel>
-              <h1 className="max-w-4xl font-display text-[70px] leading-[0.95] tracking-[-0.05em] text-[#111111]">
-                Purpose-built for
-                <br />
-                family-office transformation.
-              </h1>
-              <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
-                Digital Therapy brings technology, operations, and accounting
-                specialists into one coordinated team.
-              </p>
-              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-                <PrimaryCta />
-                <a
-                  href="#team-cards"
-                  onClick={event => {
-                    event.preventDefault();
-                    document
-                      .getElementById("team-cards")
-                      ?.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }}
-                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/55 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
-                >
-                  Meet the team.
-                  <ChevronDown className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-1" />
-                </a>
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, x: 35 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              transition={{ duration: 0.9, ease: "easeOut" as const }}
-              className="relative"
-            >
-              <div className="absolute -left-8 -top-8 h-32 w-32 rounded-full bg-[#0A65FF]/10 blur-2xl" />
-              <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white/50 p-3 shadow-[0_30px_90px_rgba(17,17,17,0.13)] backdrop-blur">
-                <img
-                  src={boardroomVisual}
-                  alt="Executive reviewing consolidated family office data in a modern boardroom"
-                  className="h-[500px] w-full rounded-[1.75rem] object-cover"
-                  width={1536}
-                  height={1024}
-                />
-                <div className="absolute bottom-7 left-7 right-7 rounded-[1.45rem] border border-white/60 bg-white/78 p-5 shadow-[0_18px_45px_rgba(17,17,17,0.10)] backdrop-blur-xl">
-                  <div className="flex items-start gap-4">
-                    <img
-                      src={markUrl}
-                      alt=""
-                      className="mt-1 h-9 w-9 object-contain"
-                      width={197}
-                      height={227}
-                    />
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">
-                        One accountable team
-                      </p>
-                      <p className="mt-2 text-sm leading-6 text-black/82">
-                        Technology, accounting, operations, automation, and
-                        advisors aligned around measurable operating outcomes.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
         <section
           id="team-cards"
           className="scroll-mt-24 border-b border-black/8 bg-white py-24"
