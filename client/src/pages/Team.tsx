@@ -111,8 +111,9 @@ const groups: Array<{
       },
       {
         name: "Lou Kurpis, CPA",
-        role: "CPA",
+        role: "Tax Advisor + Financial Executive",
         imageUrl: headshots.louKurpis,
+        bio: "Lou Kurpis is a seasoned Certified Public Accountant with more than 40 years as a CPA and 50 years of financial and accounting experience. He provides clients with expertise in tax advisory and planning, accounting, financial reporting, business structuring, and strategic financial guidance.\n\nIn addition to his extensive CPA practice experience, Lou has served as a CFO, Controller, and Finance Director, giving him a unique ability to advise clients from both a tax and operational perspective. His experience spans numerous industries, including transportation, CPG, food and beverage, wholesale distribution, and manufacturing.\n\nLou brings decades of practical experience helping business owners and companies navigate complex tax, accounting, and financial decisions.",
       },
     ],
   },
