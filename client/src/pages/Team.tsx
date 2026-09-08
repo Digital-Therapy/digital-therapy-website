@@ -116,6 +116,11 @@ const groups: Array<{
         imageUrl: headshots.louKurpis,
         bio: "Lou Kurpis is a seasoned Certified Public Accountant with more than 40 years as a CPA and 50 years of financial and accounting experience. He provides clients with expertise in tax advisory and planning, accounting, financial reporting, business structuring, and strategic financial guidance.\n\nIn addition to his extensive CPA practice experience, Lou has served as a CFO, Controller, and Finance Director, giving him a unique ability to advise clients from both a tax and operational perspective. His experience spans numerous industries, including transportation, CPG, food and beverage, wholesale distribution, and manufacturing.\n\nLou brings decades of practical experience helping business owners and companies navigate complex tax, accounting, and financial decisions.",
       },
+      {
+        name: "Geoff Horn",
+        role: "Payments Partner",
+        imageUrl: headshots.geoffHorn,
+      },
     ],
   },
   {
@@ -179,13 +184,6 @@ const extendedNetwork: Array<
     group: "Advisor",
     icon: BadgeCheck,
     imageUrl: headshots.dougGray,
-  },
-  {
-    name: "Geoff Horn",
-    role: "Payments Partner",
-    group: "Partner",
-    icon: Landmark,
-    imageUrl: headshots.geoffHorn,
   },
 ];
 
@@ -527,15 +525,13 @@ export default function Team() {
         <section className="border-b border-black/8 bg-[#F7F4EE] py-24">
           <div className="container">
             <motion.div {...fadeUp} className="max-w-3xl">
-              <SectionLabel>Advisors &amp; Partners</SectionLabel>
+              <SectionLabel>Advisors</SectionLabel>
             </motion.div>
 
             {/*
-              Section is now split into TWO sub-sections rendered in this order:
-              1. "Advisors" — every person in extendedNetwork with group === "Advisor".
-              2. "Partners" — every person in extendedNetwork with group === "Partner".
-              The card-rendering loop is shared between both via the renderPersonCard helper
-              defined below so behavior (image overrides, hover, dialog wrapping) stays in sync.
+              Renders every person in extendedNetwork with group === "Advisor".
+              (The "Partners" sub-section was retired after Geoff Horn moved into
+              Finance + Accounting.)
             */}
             {(() => {
               const cardClasses =
@@ -621,34 +617,18 @@ export default function Team() {
               const advisors = extendedNetwork.filter(
                 p => p.group === "Advisor"
               );
-              const partners = extendedNetwork.filter(
-                p => p.group === "Partner"
-              );
 
               return (
-                <>
-                  <div className="mt-6">
-                    <h2 className="font-display text-[clamp(2.5rem,5vw,4.8rem)] leading-[0.96] tracking-[-0.06em]">
-                      Advisors
-                    </h2>
-                    <div className="mt-12 flex flex-wrap justify-center gap-[42px] sm:justify-start">
-                      {advisors.map((person, index) =>
-                        renderPersonCard(person, index)
-                      )}
-                    </div>
+                <div className="mt-6">
+                  <h2 className="font-display text-[clamp(2.5rem,5vw,4.8rem)] leading-[0.96] tracking-[-0.06em]">
+                    Advisors
+                  </h2>
+                  <div className="mt-12 flex flex-wrap justify-center gap-[42px] sm:justify-start">
+                    {advisors.map((person, index) =>
+                      renderPersonCard(person, index)
+                    )}
                   </div>
-
-                  <div className="mt-20">
-                    <h2 className="font-display text-[clamp(2.5rem,5vw,4.8rem)] leading-[0.96] tracking-[-0.06em]">
-                      Partners
-                    </h2>
-                    <div className="mt-12 flex flex-wrap justify-center gap-[42px] sm:justify-start">
-                      {partners.map((person, index) =>
-                        renderPersonCard(person, index)
-                      )}
-                    </div>
-                  </div>
-                </>
+                </div>
               );
             })()}
           </div>
