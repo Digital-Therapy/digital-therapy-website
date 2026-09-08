@@ -91,7 +91,7 @@ const groups: Array<{
   members: TeamPerson[];
 }> = [
   {
-    label: "Tax & Accounting",
+    label: "Finance + Accounting",
     description:
       "The finance bench brings bookkeeping, tax, public-company reporting, and real-estate accounting expertise into transformation work from day one.",
     icon: CircleDollarSign,
