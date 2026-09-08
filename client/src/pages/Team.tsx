@@ -139,6 +139,12 @@ const groups: Array<{
     icon: Code2,
     members: [
       {
+        name: "Milton Rodas",
+        role: "CTO",
+        imageUrl: headshots.miltonRodas,
+        bio: "Former Tesla and Stellantis Lead Project Architect + Automation Engineer.",
+      },
+      {
         name: "Stan Gretov",
         role: "Team Lead: Websites + BPO",
         imageUrl: headshots.stanGretov,
