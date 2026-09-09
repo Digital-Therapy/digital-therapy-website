@@ -115,15 +115,6 @@ const operatingLayers: {
 
 const fusionTeam = [
   {
-    title: "Operations Expert",
-    image: "/process-sme.webp",
-    imageAlt:
-      "Hand-drawn blue sketch of Digital Therapy's Operations & Process SME",
-    copy: "The Operations SME transforms organizational complexity into operational excellence. They specialize in people, process, governance, and execution—building the systems that allow businesses to scale without sacrificing quality or control. They champion efficiency through SOPs, playbooks, KPIs, workflow optimization, and continuous improvement.\n\nBy visualizing how work flows across departments, they establish a collective understanding of the Current State, expose bottlenecks, redundancies, and operational friction, then design a streamlined Future State that improves speed, accountability, and collaboration. Their work creates the operational foundation upon which technology and finance transformation can succeed.",
-    shortCopy:
-      "The Operations SME transforms organizational complexity into operational excellence. They specialize in people, process, governance, and execution.",
-  },
-  {
     title: "Accounting Expert",
     image: "/arap-sme.webp",
     imageAlt:
@@ -556,7 +547,7 @@ export default function Home() {
               className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end"
             >
               <div>
-                <SectionLabel>Fusion Team Concept</SectionLabel>
+                <SectionLabel>Team Concept</SectionLabel>
                 <h2 className="font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
                   This team didn&rsquo;t happen by accident. It was
                   purpose-built to be the best.
@@ -568,10 +559,11 @@ export default function Home() {
                   engineers. There&rsquo;s no organic pathway for these experts
                   to come together as a team &amp; learn to collaborate
                   effectively. So we made it happen ourselves &mdash; a new
-                  structure that teams up Accountants, Engineers &amp; Process
-                  Experts into one group to tackle Accounting, Technology &amp;
-                  Operations challenges collectively. This team gets things
-                  done.
+                  structure in which Accountants &amp; Engineers are
+                  inseparable partners collaborating to tackle complex
+                  business challenges together. It may sound like a simple
+                  edit but that&rsquo;s what makes Digital Therapy
+                  transformation teams so capable.
                 </p>
                 <a
                   href="/thesis"
@@ -582,7 +574,7 @@ export default function Home() {
                 </a>
               </div>
             </motion.div>
-            <div className="mt-14 grid gap-5 lg:grid-cols-3">
+            <div className="mt-14 grid gap-5 lg:grid-cols-2">
               {fusionTeam.map((member, index) => {
                 const hasReadMore = Boolean(member.shortCopy);
                 const displayCopy = member.shortCopy ?? member.copy;
