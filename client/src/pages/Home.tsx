@@ -336,10 +336,27 @@ export default function Home() {
                   decoding="async"
                 />
               </div>
-              <p className="mt-6 text-left text-[11pt] font-medium italic text-black/80">
+              <div className="mt-6 flex justify-center lg:justify-end">
+                <BookingWidgetDialog
+                  variant="primary"
+                  context="homepage hero image-side booking"
+                  className="w-full min-w-[260px] whitespace-nowrap px-8 py-4 text-base shadow-[0_26px_70px_rgba(10,101,255,0.32)] sm:w-auto sm:min-w-[300px]"
+                />
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <section
+          id="case-studies"
+          className="border-b border-black/8 bg-white py-14 lg:py-16"
+        >
+          <div className="container">
+            <motion.div {...fadeUp} className="mx-auto max-w-3xl">
+              <p className="text-center text-[11pt] font-medium italic text-black/80">
                 Tap the three outcomes below to read sample case studies:
               </p>
-              <div className="relative mt-2 grid gap-1 overflow-hidden rounded-[1.35rem] border border-black/10 bg-white p-1 shadow-[0_18px_45px_rgba(16,24,40,0.08)] sm:grid-cols-3">
+              <div className="relative mt-4 grid gap-1 overflow-hidden rounded-[1.35rem] border border-black/10 bg-white p-1 shadow-[0_18px_45px_rgba(16,24,40,0.08)] sm:grid-cols-3">
                 {highlightPos !== null && (
                   <div
                     aria-hidden="true"
@@ -395,13 +412,6 @@ export default function Home() {
                     </Tooltip>
                   );
                 })}
-              </div>
-              <div className="mt-6 flex justify-center lg:justify-end">
-                <BookingWidgetDialog
-                  variant="primary"
-                  context="homepage hero image-side booking"
-                  className="w-full min-w-[260px] whitespace-nowrap px-8 py-4 text-base shadow-[0_26px_70px_rgba(10,101,255,0.32)] sm:w-auto sm:min-w-[300px]"
-                />
               </div>
             </motion.div>
           </div>
