@@ -550,7 +550,8 @@ export default function Home() {
                 <SectionLabel>Team Concept</SectionLabel>
                 <h2 className="font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
                   Our team approach may not feel revolutionary at first but
-                  the results certainly are.
+                  the impact on transformation outcomes is anything but
+                  subtle.
                 </h2>
               </div>
               <div className="max-w-3xl lg:pb-2">
