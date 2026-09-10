@@ -549,8 +549,8 @@ export default function Home() {
               <div>
                 <SectionLabel>Team Concept</SectionLabel>
                 <h2 className="font-display text-[54px] leading-[0.92] tracking-[-0.06em]">
-                  This team didn&rsquo;t happen by accident. It was
-                  purpose-built to be the best.
+                  Our team approach may not feel revolutionary at first but
+                  the results certainly are.
                 </h2>
               </div>
               <div className="max-w-3xl lg:pb-2">
