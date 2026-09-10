@@ -288,7 +288,7 @@ export default function Home() {
                 that works.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
-                At Digital Therapy, we don&rsquo;t consider Technology,
+                At Digital Therapy, we don&rsquo;t look at Technology,
                 Operations &amp; Accounting as separate functions. In the real
                 world, these functions are utterly &amp; inseparably entangled
                 &mdash; Aren&rsquo;t they? So we built a real team that really
