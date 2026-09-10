@@ -116,6 +116,9 @@ const operatingLayers: {
 const fusionTeam = [
   {
     title: "Finance + Accounting Experts",
+    // Portion of `title` rendered in DT blue; the rest stays charcoal.
+    // Falls back to the first word when omitted.
+    titleHighlight: "Finance + Accounting",
     image: "/arap-sme.webp",
     imageAlt:
       "Hand-drawn blue sketch of Hunter, Digital Therapy's Finance & Accounting SME",
@@ -124,7 +127,8 @@ const fusionTeam = [
       "The Finance & Accounting SME is not your typical accountant. They are transformation leaders who combine deep accounting expertise with a passion for technology, automation, and continuous improvement.",
   },
   {
-    title: "Senior Engineers",
+    title: "Full Stack Engineers + AI Experts",
+    titleHighlight: "Full Stack Engineers + AI",
     image: "/tech-sme.webp",
     imageAlt:
       "Hand-drawn blue sketch of Milton Rodas, Digital Therapy's Technology SME",
@@ -134,6 +138,7 @@ const fusionTeam = [
   },
 ] as {
   title: string;
+  titleHighlight?: string;
   image: string;
   imageAlt: string;
   copy: string;
@@ -593,14 +598,21 @@ export default function Home() {
                       <div className="mt-8">
                         <h3 className="text-center text-2xl font-semibold tracking-[-0.05em]">
                           {(() => {
-                            const [firstWord, ...rest] =
-                              member.title.split(" ");
+                            // Highlight either the explicit titleHighlight
+                            // prefix (when provided) or, for backward
+                            // compatibility, just the first word.
+                            const highlight =
+                              member.titleHighlight ??
+                              member.title.split(" ")[0];
+                            const tail = member.title.startsWith(highlight)
+                              ? member.title.slice(highlight.length)
+                              : "";
                             return (
                               <>
                                 <span className="text-[#0A65FF]">
-                                  {firstWord}
+                                  {highlight}
                                 </span>
-                                {rest.length ? ` ${rest.join(" ")}` : null}
+                                {tail || null}
                               </>
                             );
                           })()}
