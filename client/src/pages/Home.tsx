@@ -380,7 +380,7 @@ export default function Home() {
                 <h2 className="font-display text-[clamp(2.6rem,4.6vw,3.8rem)] leading-[0.95] tracking-[-0.055em] text-[#111111]">
                   Case Studies
                 </h2>
-                <p className="mt-6 text-lg font-medium italic leading-7 text-black/80 sm:text-xl sm:leading-8">
+                <p className="mt-6 text-lg font-bold italic leading-7 text-[#111111] sm:text-xl sm:leading-8">
                   Tap any of the three outcomes to read a sample case study.
                 </p>
               </div>
