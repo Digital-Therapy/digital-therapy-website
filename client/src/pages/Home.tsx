@@ -370,11 +370,23 @@ export default function Home() {
           className="border-b border-black/8 bg-white py-14 lg:py-16"
         >
           <div className="container">
-            <motion.div {...fadeUp} className="mx-auto max-w-4xl">
-              <p className="text-center text-lg font-medium italic leading-7 text-black/80 sm:text-xl sm:leading-8">
-                Tap the three outcomes below to read sample case studies:
-              </p>
-              <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            <motion.div
+              {...fadeUp}
+              className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-14"
+            >
+              {/* Left: section title */}
+              <div>
+                <SectionLabel>Case Studies</SectionLabel>
+                <h2 className="font-display text-[clamp(2.6rem,4.6vw,3.8rem)] leading-[0.95] tracking-[-0.055em] text-[#111111]">
+                  Case Studies
+                </h2>
+                <p className="mt-6 text-lg font-medium italic leading-7 text-black/80 sm:text-xl sm:leading-8">
+                  Tap any of the three outcomes to read a sample case study.
+                </p>
+              </div>
+
+              {/* Right: three prominent stacked cards */}
+              <div className="grid gap-4">
                 {caseStudies.map((study, index) => {
                   const isActive = highlightPos === index;
                   return (
@@ -384,19 +396,21 @@ export default function Home() {
                           type="button"
                           onClick={() => setOpenCaseStudyIndex(index)}
                           aria-label={`See the ${study.label} case study`}
-                          className={`group relative flex items-center justify-center gap-2 rounded-[1.35rem] border px-4 py-5 text-sm font-bold shadow-[0_14px_38px_rgba(16,24,40,0.06)] transition-colors duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/50 focus-visible:ring-offset-2 ${
+                          className={`group relative flex w-full items-center justify-between gap-4 rounded-[1.4rem] border px-6 py-6 text-left shadow-[0_14px_38px_rgba(16,24,40,0.06)] transition-colors duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/50 focus-visible:ring-offset-2 sm:px-8 sm:py-7 ${
                             isActive
                               ? "border-[#0A65FF] bg-[#0A65FF] text-white"
                               : "border-black/10 bg-white text-[#111111] hover:border-[#0A65FF]/40 hover:bg-[#0A65FF] hover:text-white"
                           }`}
                         >
-                          <span>{study.label}</span>
+                          <span className="font-display text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">
+                            {study.label}
+                          </span>
                           <Plus
                             aria-hidden="true"
-                            className={`h-4 w-4 shrink-0 transition-all duration-500 ${
+                            className={`h-6 w-6 shrink-0 transition-all duration-500 sm:h-7 sm:w-7 ${
                               isActive
                                 ? "rotate-90 text-white opacity-100"
-                                : "text-[#0A65FF] opacity-60 group-hover:rotate-90 group-hover:text-white group-hover:opacity-100 group-focus-visible:rotate-90 group-focus-visible:text-white group-focus-visible:opacity-100"
+                                : "text-[#0A65FF] opacity-70 group-hover:rotate-90 group-hover:text-white group-hover:opacity-100 group-focus-visible:rotate-90 group-focus-visible:text-white group-focus-visible:opacity-100"
                             }`}
                           />
                         </button>
