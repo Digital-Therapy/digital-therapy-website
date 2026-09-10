@@ -43,6 +43,12 @@ const fadeUp = {
   transition: { duration: 0.65, ease: "easeOut" },
 } as const;
 
+const automationUseCases = [
+  "Custom software & internal tools purpose-built for the work your team actually does — not bloated SaaS retrofitted to fit.",
+  "Redesigned process flows that remove bottlenecks, clarify handoffs, and let lean teams handle higher volume without adding headcount.",
+  "Targeted automation across intake, reconciliation, reporting & approvals — replacing the repetitive work that would otherwise require another hire.",
+];
+
 const capabilities = [
   {
     title: "Entity + Cashflow Mapping",
@@ -490,6 +496,51 @@ export default function Capabilities() {
                     </motion.div>
                   );
                 })}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <section className="bg-[#F7F4EE] py-24 lg:py-32">
+          <div className="container grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+            <motion.div
+              {...fadeUp}
+              className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_28px_80px_rgba(16,24,40,0.1)]"
+            >
+              <img
+                src="/aicutsheads.webp"
+                alt="AI automation reducing headcount and growing revenue"
+                className="aspect-[3/2] w-full object-cover"
+                loading="lazy"
+                decoding="async"
+                width={1200}
+                height={800}
+              />
+            </motion.div>
+            <motion.div
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.08 }}
+            >
+              <SectionLabel>Automation and AI</SectionLabel>
+              <h2 className="font-display text-[64px] leading-[0.95] tracking-[-0.04em]">
+                Grow Revenue.
+                <br />
+                Not Headcount.
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-black/80">
+                Digital Therapy builds software, process flows &amp; automations
+                that multiply the capacity of your workforce.
+              </p>
+              <div className="mt-8 space-y-3">
+                {automationUseCases.map(useCase => (
+                  <div
+                    key={useCase}
+                    className="flex gap-4 rounded-2xl border border-black/8 bg-white p-4"
+                  >
+                    <Bot className="mt-1 h-5 w-5 shrink-0 text-[#0A65FF]" />
+                    <p className="leading-7 text-black/82">{useCase}</p>
+                  </div>
+                ))}
               </div>
             </motion.div>
           </div>
