@@ -291,7 +291,7 @@ export default function Home() {
                 At Digital Therapy, we don&rsquo;t look at Technology,
                 Operations &amp; Accounting as separate functions. In the real
                 world, these functions are utterly &amp; inseparably entangled
-                &mdash; Aren&rsquo;t they? So we built a real team that really
+                &mdash; Aren&rsquo;t they? So we built the team that really
                 has what it really takes. Really.
               </p>
               <p className="mt-10 text-base font-bold leading-7 text-black/90">
