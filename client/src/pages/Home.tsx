@@ -244,7 +244,6 @@ export default function Home() {
   // Skipped entirely for prefers-reduced-motion and for viewports below sm
   // (where the pills stack vertically and horizontal sliding is meaningless).
   const [highlightPos, setHighlightPos] = useState<number | null>(null);
-  const [whiteSet, setWhiteSet] = useState<Set<number>>(new Set());
   const highlightRanRef = useRef(false);
   useEffect(() => {
     if (highlightRanRef.current) return;
@@ -259,26 +258,13 @@ export default function Home() {
       cleanups.push(() => clearTimeout(t));
     };
 
+    // Cards are now independent tiles, so the highlight just steps through
+    // them (0 → 1 → 2 → off) instead of sliding a shared rect between pills.
     const runCycle = () => {
       setHighlightPos(0);
-      setWhiteSet(new Set([0]));
-      // While highlight is still resting on pill 0, fade text 0 back to black
-      // so it looks "original" by the time the slide begins.
-      schedule(() => setWhiteSet(new Set()), 1500);
-      // Start slide 0 → 1 with text already black on both pills
       schedule(() => setHighlightPos(1), 2000);
-      // Slide finished — pill 1 fades to white
-      schedule(() => setWhiteSet(new Set([1])), 4000);
-      // Fade pill 1 back to black before slide starts
-      schedule(() => setWhiteSet(new Set()), 5500);
-      // Start slide 1 → 2
-      schedule(() => setHighlightPos(2), 6000);
-      // Slide finished — pill 2 fades to white
-      schedule(() => setWhiteSet(new Set([2])), 8000);
-      // Fade pill 2 back to black before cycle ends
-      schedule(() => setWhiteSet(new Set()), 9500);
-      // Cycle ends — highlight disappears
-      schedule(() => setHighlightPos(null), 10000);
+      schedule(() => setHighlightPos(2), 4000);
+      schedule(() => setHighlightPos(null), 6000);
     };
 
     schedule(() => {
@@ -381,23 +367,13 @@ export default function Home() {
           className="border-b border-black/8 bg-white py-14 lg:py-16"
         >
           <div className="container">
-            <motion.div {...fadeUp} className="mx-auto max-w-3xl">
-              <p className="text-center text-[11pt] font-medium italic text-black/80">
+            <motion.div {...fadeUp} className="mx-auto max-w-4xl">
+              <p className="text-center text-lg font-medium italic leading-7 text-black/80 sm:text-xl sm:leading-8">
                 Tap the three outcomes below to read sample case studies:
               </p>
-              <div className="relative mt-4 grid gap-1 overflow-hidden rounded-[1.35rem] border border-black/10 bg-white p-1 shadow-[0_18px_45px_rgba(16,24,40,0.08)] sm:grid-cols-3">
-                {highlightPos !== null && (
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute left-1 top-1 h-[calc(100%-8px)] w-[calc((100%-16px)/3)] rounded-[1rem] bg-[#0A65FF]/80"
-                    style={{
-                      transform: `translateX(calc(${highlightPos * 100}% + ${highlightPos * 4}px))`,
-                      transition: "transform 2000ms ease-in-out",
-                    }}
-                  />
-                )}
+              <div className="mt-8 grid gap-4 sm:grid-cols-3">
                 {caseStudies.map((study, index) => {
-                  const isWhite = whiteSet.has(index);
+                  const isActive = highlightPos === index;
                   return (
                     <Tooltip key={study.label}>
                       <TooltipTrigger asChild>
@@ -405,17 +381,17 @@ export default function Home() {
                           type="button"
                           onClick={() => setOpenCaseStudyIndex(index)}
                           aria-label={`See the ${study.label} case study`}
-                          className={`group relative z-10 flex items-center justify-center gap-2 rounded-[1rem] px-3 py-3 text-sm font-bold transition-colors duration-500 focus:outline-none focus-visible:bg-[#0A65FF] focus-visible:text-white focus-visible:ring-2 focus-visible:ring-[#0A65FF]/50 focus-visible:ring-offset-2 ${
-                            isWhite
-                              ? "text-white"
-                              : "text-[#111111] hover:bg-[#0A65FF] hover:text-white"
+                          className={`group relative flex items-center justify-center gap-2 rounded-[1.35rem] border px-4 py-5 text-sm font-bold shadow-[0_14px_38px_rgba(16,24,40,0.06)] transition-colors duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/50 focus-visible:ring-offset-2 ${
+                            isActive
+                              ? "border-[#0A65FF] bg-[#0A65FF] text-white"
+                              : "border-black/10 bg-white text-[#111111] hover:border-[#0A65FF]/40 hover:bg-[#0A65FF] hover:text-white"
                           }`}
                         >
                           <span>{study.label}</span>
                           <Plus
                             aria-hidden="true"
                             className={`h-4 w-4 shrink-0 transition-all duration-500 ${
-                              isWhite
+                              isActive
                                 ? "rotate-90 text-white opacity-100"
                                 : "text-[#0A65FF] opacity-60 group-hover:rotate-90 group-hover:text-white group-hover:opacity-100 group-focus-visible:rotate-90 group-focus-visible:text-white group-focus-visible:opacity-100"
                             }`}
