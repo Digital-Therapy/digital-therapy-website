@@ -121,7 +121,7 @@ const fusionTeam = [
     titleHighlight: "Finance + Accounting",
     image: "/arap-sme.webp",
     imageAlt:
-      "Hand-drawn blue sketch of Hunter, Digital Therapy's Finance & Accounting SME",
+      "Hand-drawn blue sketch of Matthew Treem, Digital Therapy's Finance & Accounting SME",
     copy: "The Finance & Accounting SME is not your typical accountant. They are transformation leaders who combine deep accounting expertise with a passion for technology, automation, and continuous improvement. They excel at accelerating the monthly close, optimizing AP and AR workflows, strengthening internal controls, and designing scalable financial processes. Working as equal partners with technology and operations SMEs, they understand both the opportunities and limitations of modern systems, allowing them to bridge the gap between financial accuracy and technical execution.",
     shortCopy:
       "The Finance & Accounting SME is not your typical accountant. They are transformation leaders who combine deep accounting expertise with a passion for technology, automation, and continuous improvement.",
