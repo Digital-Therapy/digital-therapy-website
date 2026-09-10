@@ -115,7 +115,7 @@ const operatingLayers: {
 
 const fusionTeam = [
   {
-    title: "Accounting Expert",
+    title: "Finance + Accounting Experts",
     image: "/arap-sme.webp",
     imageAlt:
       "Hand-drawn blue sketch of Hunter, Digital Therapy's Finance & Accounting SME",
@@ -124,7 +124,7 @@ const fusionTeam = [
       "The Finance & Accounting SME is not your typical accountant. They are transformation leaders who combine deep accounting expertise with a passion for technology, automation, and continuous improvement.",
   },
   {
-    title: "Technology Expert",
+    title: "Senior Engineers",
     image: "/tech-sme.webp",
     imageAlt:
       "Hand-drawn blue sketch of Milton Rodas, Digital Therapy's Technology SME",
