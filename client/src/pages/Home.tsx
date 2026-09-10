@@ -288,12 +288,11 @@ export default function Home() {
                 that works.
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
-                We spend time to learn your eco-system, unique attributes,
-                people &amp; processes. We believe in &ldquo;Collective
-                Understanding.&rdquo; That&rsquo;s our secret &mdash; how we
-                achieve transformation success for our clients. That&rsquo;s why
-                we typically work on-site for the first month of a new
-                engagement.
+                At Digital Therapy, we don&rsquo;t consider Technology,
+                Operations &amp; Accounting as separate functions. In the real
+                world, these functions are utterly &amp; inseparably entangled
+                &mdash; Aren&rsquo;t they? So we built a real team that really
+                has what it really takes. Really.
               </p>
               <p className="mt-10 text-base font-bold leading-7 text-black/90">
                 Learn more about our
