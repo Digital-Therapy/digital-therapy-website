@@ -328,7 +328,7 @@ export default function Home() {
                   src="/welcome-hero-1600.webp"
                   srcSet="/welcome-hero-800.webp 800w, /welcome-hero-1200.webp 1200w, /welcome-hero-1600.webp 1600w"
                   sizes="(max-width: 1024px) 100vw, 60vw"
-                  alt="Digital Therapy welcome hero — modern family office operating layer surfacing data, workflows, reporting, and automation behind one unified team"
+                  alt="Digital Therapy welcome graphic — Technology, Operations, and Accounting rendered as three interlocked translucent rings around one unified team"
                   className="aspect-[16/8] w-full object-cover object-[center_58%]"
                   width={1536}
                   height={1024}
