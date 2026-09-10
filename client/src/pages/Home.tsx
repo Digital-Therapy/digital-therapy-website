@@ -192,9 +192,10 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Draws a hand-drawn-feeling wavy blue underline beneath its children. Purely
-// decorative — wraps text in a relative inline-block and overlays an SVG stroke
-// stretched to the word's width. Use for the "real / really" emphases in the
+// Draws a hand-drawn-feeling blue underline beneath its children — a single
+// straight stroke angled from lower-left to upper-right. Purely decorative;
+// wraps text in a relative inline-block and overlays an SVG stroke stretched
+// to the word's width. Use for the "real / really" emphases in the
 // welcome-section copy.
 function Handwritten({ children }: { children: React.ReactNode }) {
   return (
@@ -204,13 +205,15 @@ function Handwritten({ children }: { children: React.ReactNode }) {
         aria-hidden="true"
         viewBox="0 0 100 10"
         preserveAspectRatio="none"
-        className="pointer-events-none absolute left-0 top-full -mt-0.5 h-[6px] w-full text-[#0A65FF]"
+        className="pointer-events-none absolute left-0 top-full -mt-0.5 h-[7px] w-full text-[#0A65FF]"
       >
-        <path
-          d="M1.5 6 Q 18 1.5 38 5 T 72 4.5 T 98.5 5.5"
-          fill="none"
+        <line
+          x1="1"
+          y1="8"
+          x2="99"
+          y2="2"
           stroke="currentColor"
-          strokeWidth="2.4"
+          strokeWidth="3"
           strokeLinecap="round"
         />
       </svg>
