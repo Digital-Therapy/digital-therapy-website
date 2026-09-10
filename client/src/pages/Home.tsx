@@ -329,7 +329,7 @@ export default function Home() {
                   srcSet="/welcome-hero-800.webp 800w, /welcome-hero-1200.webp 1200w, /welcome-hero-1600.webp 1600w"
                   sizes="(max-width: 1024px) 100vw, 60vw"
                   alt="Digital Therapy welcome graphic — Technology, Operations, and Accounting rendered as three interlocked translucent rings around one unified team"
-                  className="aspect-[16/8] w-full object-cover object-[center_58%]"
+                  className="aspect-[3/2] w-full object-cover object-center"
                   width={1536}
                   height={1024}
                   fetchPriority="high"
