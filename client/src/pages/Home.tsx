@@ -279,7 +279,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_10%,rgba(10,101,255,0.09),transparent_32%),linear-gradient(115deg,#F7F4EE_0%,#FFFFFF_50%,#EEF4FF_100%)]" />
           <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-10 py-20 lg:grid-cols-[0.92fr_1.08fr] lg:py-28">
             <motion.div {...fadeUp}>
-              <SectionLabel>secure family office automation</SectionLabel>
+              <SectionLabel>Secure Family Office AI + Automation</SectionLabel>
               <h1 className="max-w-4xl font-display text-[70px] leading-[1] tracking-[-0.06em] text-[#111111]">
                 Family office
                 <br />
