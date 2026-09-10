@@ -192,6 +192,32 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
+// Draws a hand-drawn-feeling wavy blue underline beneath its children. Purely
+// decorative — wraps text in a relative inline-block and overlays an SVG stroke
+// stretched to the word's width. Use for the "real / really" emphases in the
+// welcome-section copy.
+function Handwritten({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="relative inline-block whitespace-nowrap">
+      {children}
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 100 10"
+        preserveAspectRatio="none"
+        className="pointer-events-none absolute left-0 top-full -mt-0.5 h-[6px] w-full text-[#0A65FF]"
+      >
+        <path
+          d="M1.5 6 Q 18 1.5 38 5 T 72 4.5 T 98.5 5.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.4"
+          strokeLinecap="round"
+        />
+      </svg>
+    </span>
+  );
+}
+
 export default function Home() {
   const [openCaseStudyIndex, setOpenCaseStudyIndex] = useState<number | null>(
     null
@@ -289,10 +315,13 @@ export default function Home() {
               </h1>
               <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
                 At Digital Therapy, we don&rsquo;t look at Technology,
-                Operations &amp; Accounting as separate functions. In the real
-                world, these functions are utterly &amp; inseparably entangled
-                &mdash; Aren&rsquo;t they? So we built the team that really
-                has what it really takes. Really.
+                Operations &amp; Accounting as separate functions. In the{" "}
+                <Handwritten>real</Handwritten> world, these functions are
+                utterly &amp; inseparably entangled &mdash; Aren&rsquo;t they?
+                So we built the team that{" "}
+                <Handwritten>really</Handwritten> has what it{" "}
+                <Handwritten>really</Handwritten> takes.{" "}
+                <Handwritten>Really</Handwritten>.
               </p>
               <p className="mt-10 text-base font-bold leading-7 text-black/90">
                 Learn more about our
