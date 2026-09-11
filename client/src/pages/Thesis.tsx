@@ -27,7 +27,6 @@ import {
   ShieldCheck,
   Sparkles,
   UsersRound,
-  Workflow,
   XCircle,
 } from "lucide-react";
 
@@ -74,16 +73,6 @@ const structuralFailures = [
 ];
 
 const fusionDisciplines = [
-  {
-    title: "Operations Expert",
-    role: "Process architecture, workflow optimization, SOPs, playbooks, KPI design, delivery systems, and organizational clarity.",
-    outcome:
-      "Transforms operational chaos into structured, scalable systems by mapping current-state workflows, identifying bottlenecks, and designing future-state processes.",
-    icon: Workflow,
-    image: "/process-sme.webp",
-    imageAlt:
-      "Hand-drawn blue sketch of Digital Therapy's Operations & Process SME",
-  },
   {
     title: "Accounting Expert",
     role: "Automation-forward accounting operations, AP and AR transformation, close acceleration, data integrity, workflow sequencing, AI, and RPA.",
@@ -440,7 +429,7 @@ export default function Thesis() {
               ))}
             </motion.div>
 
-            <div className="mt-16 grid gap-6 lg:grid-cols-3">
+            <div className="mt-16 grid gap-6 lg:grid-cols-2">
               {fusionDisciplines.map((discipline, index) => {
                 return (
                   <motion.article
