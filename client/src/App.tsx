@@ -2,7 +2,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch, useLocation } from "wouter";
-import { ChatWidget } from "./components/ChatWidget";
 import { RouteSeo } from "./components/RouteSeo";
 import ErrorBoundary from "./components/ErrorBoundary";
 import SiteFooter from "./components/SiteFooter";
@@ -99,7 +98,6 @@ function App() {
           <Toaster />
           <Router />
           {!isAdmin && <SiteFooter />}
-          {!isAdmin && <ChatWidget />}
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
