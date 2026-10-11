@@ -70,7 +70,9 @@ import {
   listOpportunities,
   OPPORTUNITY_KINDS,
   OPPORTUNITY_STAGES,
+  RECURRING_CADENCES,
   setStage,
+  SetStageError,
   updateOpportunity,
 } from "./pipeline";
 import { submitAccountingAssessment } from "./assessments";
@@ -835,9 +837,19 @@ export const appRouter = router({
       }),
     setStage: adminProcedure
       .input(z.object({ id: z.number().int(), stage: z.enum(OPPORTUNITY_STAGES) }))
-      .mutation(async ({ input, ctx }) => ({
-        success: await setStage(input.id, input.stage, ctx.user.email ?? null),
-      })),
+      .mutation(async ({ input, ctx }) => {
+        try {
+          return { success: await setStage(input.id, input.stage, ctx.user.email ?? null) };
+        } catch (err) {
+          if (err instanceof SetStageError) {
+            // Surface as BAD_REQUEST so the UI can detect the dedicated flow
+            // is required (close-won needs the contracted value prompt,
+            // close-lost needs a reason).
+            throw new TRPCError({ code: "BAD_REQUEST", message: err.message });
+          }
+          throw err;
+        }
+      }),
     addActivity: adminProcedure
       .input(
         z.object({
@@ -856,6 +868,12 @@ export const appRouter = router({
           id: z.number().int(),
           projectName: z.string().trim().min(1).max(200).optional(),
           clientName: z.string().trim().min(1).max(200).optional(),
+          // Contracted deal values — the admin confirms (or overrides) the
+          // estimate at close. nullable so an existing non-null estimate can be
+          // explicitly cleared from the UI if needed.
+          contractedValueCents: z.number().int().nonnegative().nullable().optional(),
+          contractedRecurringValueCents: z.number().int().nonnegative().nullable().optional(),
+          contractedRecurringCadence: z.enum(RECURRING_CADENCES).nullable().optional(),
         }),
       )
       .mutation(async ({ input, ctx }) => {

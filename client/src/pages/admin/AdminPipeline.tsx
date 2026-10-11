@@ -67,11 +67,34 @@ export default function AdminPipeline() {
   });
 
   const [editingId, setEditingId] = useState<number | null>(null);
+  // When a drag or dropdown routes an opp to a closed stage we open the
+  // OpportunityDialog with this action so the contracted-value (won) or loss
+  // reason (lost) prompt fires instead of silently flipping stage.
+  const [editingAction, setEditingAction] = useState<"confirm_won" | "confirm_lost" | undefined>(undefined);
   const [creating, setCreating] = useState(false);
   const [tasksOpen, setTasksOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"list" | "kanban" | "calendar">("list");
   const [kindFilter, setKindFilter] = useState<KindFilter>("all");
   const [showClosed, setShowClosed] = useState(false);
+
+  // Centralized stage-change handler. Direct setStage() for all open stages;
+  // for closed stages, open the dialog on the matching confirmation panel so
+  // the user confirms the contracted deal value (won) or the loss reason
+  // (lost). The server also rejects direct setStage() to closed stages — this
+  // keeps the UI from racing to a toast error.
+  const changeStage = (id: number, stage: StageKey) => {
+    if (stage === "closed_won") {
+      setEditingAction("confirm_won");
+      setEditingId(id);
+      return;
+    }
+    if (stage === "closed_lost") {
+      setEditingAction("confirm_lost");
+      setEditingId(id);
+      return;
+    }
+    setStageMutation.mutate({ id, stage }, { onSuccess: () => utils.pipeline.get.invalidate({ id }) });
+  };
   const [collapsedStages, setCollapsedStages] = useState<Set<StageKey>>(
     () => new Set<StageKey>(["closed_won", "closed_lost"]),
   );
@@ -237,9 +260,7 @@ export default function AdminPipeline() {
             opportunities={filtered}
             showClosed={showClosed}
             onOpen={(id) => setEditingId(id)}
-            onStageChange={(id, stage) =>
-              setStageMutation.mutate({ id, stage }, { onSuccess: () => utils.pipeline.get.invalidate({ id }) })
-            }
+            onStageChange={changeStage}
           />
         ) : viewMode === "calendar" ? (
           <CalendarView opportunities={filtered} onOpen={(id) => setEditingId(id)} />
@@ -273,9 +294,7 @@ export default function AdminPipeline() {
                           key={o.id}
                           opportunity={o}
                           onOpen={() => setEditingId(o.id)}
-                          onStageChange={(stage) =>
-                            setStageMutation.mutate({ id: o.id, stage }, { onSuccess: () => utils.pipeline.get.invalidate({ id: o.id }) })
-                          }
+                          onStageChange={(stage) => changeStage(o.id, stage)}
                         />
                       ))}
                     </div>
@@ -289,10 +308,12 @@ export default function AdminPipeline() {
         {(creating || editingId != null) && (
           <OpportunityDialog
             opportunityId={editingId}
+            initialAction={editingAction}
             onOpenChange={(open) => {
               if (!open) {
                 setCreating(false);
                 setEditingId(null);
+                setEditingAction(undefined);
               }
             }}
           />

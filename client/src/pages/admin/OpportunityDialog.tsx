@@ -23,6 +23,14 @@ import { toast } from "sonner";
 type Props = {
   opportunityId: number | null;
   onOpenChange: (open: boolean) => void;
+  /**
+   * Pre-open one of the close confirmation panels when the dialog mounts.
+   * Used when the admin drags an opportunity onto the Closed-Won / Closed-Lost
+   * kanban column or picks a closed stage from the row dropdown — the dialog
+   * opens straight on the correct prompt so the contracted-value (won) or loss
+   * reason (lost) is captured instead of silently flipping stage.
+   */
+  initialAction?: "confirm_won" | "confirm_lost";
 };
 
 type Kind = "new_project" | "new_client";
@@ -49,9 +57,9 @@ function centsToDollars(cents: number | null): string {
   return String(Math.round(cents / 100));
 }
 
-export default function OpportunityDialog({ opportunityId, onOpenChange }: Props) {
+export default function OpportunityDialog({ opportunityId, onOpenChange, initialAction }: Props) {
   if (opportunityId == null) return <CreateDialog onOpenChange={onOpenChange} />;
-  return <EditDialog opportunityId={opportunityId} onOpenChange={onOpenChange} />;
+  return <EditDialog opportunityId={opportunityId} onOpenChange={onOpenChange} initialAction={initialAction} />;
 }
 
 // ── Create ───────────────────────────────────────────────────────────────────
@@ -267,7 +275,15 @@ function CreateDialog({ onOpenChange }: { onOpenChange: (open: boolean) => void 
 
 // ── Edit ────────────────────────────────────────────────────────────────────
 
-function EditDialog({ opportunityId, onOpenChange }: { opportunityId: number; onOpenChange: (open: boolean) => void }) {
+function EditDialog({
+  opportunityId,
+  onOpenChange,
+  initialAction,
+}: {
+  opportunityId: number;
+  onOpenChange: (open: boolean) => void;
+  initialAction?: "confirm_won" | "confirm_lost";
+}) {
   const utils = trpc.useUtils();
   const oppQuery = trpc.pipeline.get.useQuery({ id: opportunityId });
   const updateMutation = trpc.pipeline.update.useMutation({
@@ -332,6 +348,14 @@ function EditDialog({ opportunityId, onOpenChange }: { opportunityId: number; on
   const [confirmingWon, setConfirmingWon] = useState(false);
   const [wonClientName, setWonClientName] = useState("");
   const [wonProjectName, setWonProjectName] = useState("");
+  // Contracted deal values confirmed/overridden at close-won time. Dollars for
+  // the UI; converted to cents on submit. Pre-filled from the estimate so the
+  // common case ("deal closed at the number we quoted") is a single click.
+  const [contractedValue, setContractedValue] = useState("");
+  const [contractedRecurringValue, setContractedRecurringValue] = useState("");
+  const [contractedRecurringCadence, setContractedRecurringCadence] = useState<
+    "" | "monthly" | "quarterly" | "bi_annually" | "annually"
+  >("");
   // Close-lost inline confirmation
   const [confirmingLost, setConfirmingLost] = useState(false);
   const [lossReason, setLossReason] = useState("");
@@ -357,7 +381,32 @@ function EditDialog({ opportunityId, onOpenChange }: { opportunityId: number; on
     setNotes(opp.notes ?? "");
     setWonClientName(opp.prospectCompany ?? opp.prospectName ?? "");
     setWonProjectName(opp.title);
+    // Seed contracted values from whatever is already on record: the previously
+    // captured contracted amount if the deal has been closed-won once (edge
+    // case: re-closing after an open), otherwise the current estimate. Either
+    // way the admin lands on a sensible default to confirm or override.
+    setContractedValue(centsToDollars(opp.contractedValueCents ?? opp.estValueCents));
+    setContractedRecurringValue(
+      centsToDollars(opp.contractedRecurringValueCents ?? opp.estRecurringValueCents),
+    );
+    setContractedRecurringCadence(
+      opp.contractedRecurringCadence ?? opp.estRecurringCadence ?? "",
+    );
   }, [opp]);
+
+  // When the parent opens the dialog with a pre-staged action (kanban drag or
+  // row dropdown routed to a closed stage), open the matching confirmation
+  // panel as soon as the opp data is loaded. Only runs for not-yet-closed
+  // opportunities so a re-opened closed deal doesn't blow past its existing
+  // state.
+  useEffect(() => {
+    if (!opp || !initialAction) return;
+    if (opp.stage === "closed_won" || opp.stage === "closed_lost") return;
+    if (initialAction === "confirm_won") setConfirmingWon(true);
+    if (initialAction === "confirm_lost") setConfirmingLost(true);
+    // Only react to the initial action once per opp — ignore later re-renders.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opp?.id, initialAction]);
 
   const isClosed = opp?.stage === "closed_won" || opp?.stage === "closed_lost";
 
@@ -420,8 +469,36 @@ function EditDialog({ opportunityId, onOpenChange }: { opportunityId: number; on
             {/* Linked-after-close info */}
             {opp.resultingProjectId != null && (
               <div className="rounded-2xl border border-[#0A65FF]/20 bg-[#0A65FF]/5 p-3 text-sm text-[#0040c9]">
-                Promoted to project <strong>{opp.resultingProjectName}</strong>
-                {opp.resultingClientName ? <> on <strong>{opp.resultingClientName}</strong></> : null}.
+                <p>
+                  Promoted to project <strong>{opp.resultingProjectName}</strong>
+                  {opp.resultingClientName ? <> on <strong>{opp.resultingClientName}</strong></> : null}.
+                </p>
+                {opp.contractedValueCents != null && (
+                  <p className="mt-1.5 text-xs text-[#0040c9]/85">
+                    Contracted at{" "}
+                    <strong>
+                      ${(opp.contractedValueCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                    </strong>
+                    {opp.contractedRecurringValueCents != null && (
+                      <>
+                        {" "}
+                        + ${(opp.contractedRecurringValueCents / 100).toLocaleString("en-US", {
+                          maximumFractionDigits: 0,
+                        })}{" "}
+                        {opp.contractedRecurringCadence?.replace("_", "-") ?? "recurring"}
+                      </>
+                    )}
+                    {opp.estValueCents != null && opp.estValueCents !== opp.contractedValueCents && (
+                      <>
+                        {" "}
+                        <span className="text-[#0040c9]/60">
+                          (estimated ${(opp.estValueCents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })})
+                        </span>
+                      </>
+                    )}
+                    .
+                  </p>
+                )}
               </div>
             )}
 
@@ -609,22 +686,82 @@ function EditDialog({ opportunityId, onOpenChange }: { opportunityId: number; on
                     <Field label="Project name">
                       <Input value={wonProjectName} onChange={(e) => setWonProjectName(e.target.value)} />
                     </Field>
+                    <div className="border-t border-[#0A65FF]/15 pt-3">
+                      <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-[#0040c9]">
+                        Contracted deal value
+                      </p>
+                      <p className="mt-1 text-xs text-black/60">
+                        Pre-filled from the estimate. Confirm or override to match the signed contract.
+                      </p>
+                      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <Field label="Contracted value ($)">
+                          <Input
+                            value={contractedValue}
+                            onChange={(e) => setContractedValue(e.target.value)}
+                            placeholder={centsToDollars(opp.estValueCents) || "0"}
+                            inputMode="numeric"
+                          />
+                        </Field>
+                        <Field label="Contracted recurring value ($)">
+                          <Input
+                            value={contractedRecurringValue}
+                            onChange={(e) => setContractedRecurringValue(e.target.value)}
+                            placeholder={centsToDollars(opp.estRecurringValueCents) || "0"}
+                            inputMode="numeric"
+                          />
+                        </Field>
+                        <Field label="Recurring cadence" className="sm:col-span-2">
+                          <select
+                            value={contractedRecurringCadence}
+                            onChange={(e) =>
+                              setContractedRecurringCadence(
+                                e.target.value as "" | "monthly" | "quarterly" | "bi_annually" | "annually",
+                              )
+                            }
+                            className="h-10 rounded-md border border-black/15 bg-white px-3 text-sm focus:border-[#0A65FF] focus:outline-none"
+                          >
+                            <option value="">—</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="quarterly">Quarterly</option>
+                            <option value="bi_annually">Bi-Annually</option>
+                            <option value="annually">Annually</option>
+                          </select>
+                        </Field>
+                      </div>
+                    </div>
                     <div className="flex justify-end gap-2">
                       <Button variant="ghost" onClick={() => setConfirmingWon(false)}>
                         Cancel
                       </Button>
                       <Button
-                        onClick={() =>
+                        onClick={() => {
+                          const contractedCents = dollarsToCents(contractedValue);
+                          const contractedRecurringCents = dollarsToCents(contractedRecurringValue);
                           closeWonMutation.mutate(
                             {
                               id: opportunityId,
                               projectName: wonProjectName.trim() || undefined,
-                              clientName: opp.kind === "new_client" ? wonClientName.trim() || undefined : undefined,
+                              clientName:
+                                opp.kind === "new_client" ? wonClientName.trim() || undefined : undefined,
+                              // Explicit null when the field was cleared, so the
+                              // DB column is actually blanked instead of silently
+                              // falling back to the estimate on the server.
+                              contractedValueCents: contractedValue.trim() === "" ? null : contractedCents,
+                              contractedRecurringValueCents:
+                                contractedRecurringValue.trim() === "" ? null : contractedRecurringCents,
+                              contractedRecurringCadence:
+                                contractedRecurringCadence === "" ? null : contractedRecurringCadence,
                             },
                             { onSuccess: () => setConfirmingWon(false) },
-                          )
+                          );
+                        }}
+                        disabled={
+                          closeWonMutation.isPending ||
+                          !wonProjectName.trim() ||
+                          (opp.kind === "new_client" && !wonClientName.trim()) ||
+                          // Must have a valid contracted value when the field has content.
+                          (contractedValue.trim() !== "" && dollarsToCents(contractedValue) == null)
                         }
-                        disabled={closeWonMutation.isPending || !wonProjectName.trim() || (opp.kind === "new_client" && !wonClientName.trim())}
                       >
                         {closeWonMutation.isPending && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
                         Confirm close-won

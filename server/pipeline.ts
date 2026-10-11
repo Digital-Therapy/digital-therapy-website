@@ -52,6 +52,11 @@ export type Opportunity = {
   nextStepDue: string | null;
   notes: string | null;
   lossReason: string | null;
+  // Contracted deal values — captured at close-won time, independent of the
+  // original estimate so forecast vs. actuals stays legible.
+  contractedValueCents: number | null;
+  contractedRecurringValueCents: number | null;
+  contractedRecurringCadence: RecurringCadence | null;
   resultingClientId: number | null;
   resultingProjectId: number | null;
   closedAt: string | null;
@@ -115,6 +120,14 @@ async function ensureTables() {
        ADD COLUMN IF NOT EXISTS est_recurring_value_cents bigint,
        ADD COLUMN IF NOT EXISTS est_recurring_cadence text`,
   );
+  // Contracted deal-value fields — captured at close-won time and kept
+  // alongside the estimate so forecast-vs-actual stays visible.
+  await pool.query(
+    `ALTER TABLE dt_site.opportunity
+       ADD COLUMN IF NOT EXISTS contracted_value_cents bigint,
+       ADD COLUMN IF NOT EXISTS contracted_recurring_value_cents bigint,
+       ADD COLUMN IF NOT EXISTS contracted_recurring_cadence text`,
+  );
   await pool.query(
     `CREATE TABLE IF NOT EXISTS dt_site.opportunity_activity (
        id serial PRIMARY KEY,
@@ -136,7 +149,9 @@ const OPPORTUNITY_COLUMNS = `
   o.prospect_phone, o.prospect_source, o.title, o.stage, o.est_value_cents,
   o.est_recurring_value_cents, o.est_recurring_cadence,
   o.est_close_date, o.probability_pct, o.owner_email, o.next_step, o.next_step_due,
-  o.notes, o.loss_reason, o.resulting_client_id, o.resulting_project_id,
+  o.notes, o.loss_reason,
+  o.contracted_value_cents, o.contracted_recurring_value_cents, o.contracted_recurring_cadence,
+  o.resulting_client_id, o.resulting_project_id,
   o.closed_at, o.created_at, o.updated_at,
   c.name AS client_name,
   rc.name AS resulting_client_name,
@@ -197,6 +212,11 @@ function mapOpportunityRow(r: Record<string, unknown>): OpportunityWithJoins {
     nextStepDue: asString(r.next_step_due),
     notes: asString(r.notes),
     lossReason: asString(r.loss_reason),
+    contractedValueCents: asNumber(r.contracted_value_cents),
+    contractedRecurringValueCents: asNumber(r.contracted_recurring_value_cents),
+    contractedRecurringCadence: isCadence(r.contracted_recurring_cadence)
+      ? r.contracted_recurring_cadence
+      : null,
     resultingClientId: asNumber(r.resulting_client_id),
     resultingProjectId: asNumber(r.resulting_project_id),
     closedAt: asString(r.closed_at),
@@ -384,7 +404,32 @@ export async function updateOpportunity(id: number, fields: OpportunityUpdateInp
   return true;
 }
 
+export class SetStageError extends Error {
+  code: "requires_close_won_flow" | "requires_close_lost_flow";
+  constructor(code: "requires_close_won_flow" | "requires_close_lost_flow", message: string) {
+    super(message);
+    this.code = code;
+    this.name = "SetStageError";
+  }
+}
+
 export async function setStage(id: number, stage: OpportunityStage, authorEmail: string | null): Promise<boolean> {
+  // Closed stages must flow through the dedicated close-won / close-lost
+  // endpoints so the admin is prompted for the contracted deal value and the
+  // loss reason respectively — see closeWon() / closeLost(). Routing a bare
+  // setStage() to one of those would silently skip the prompt.
+  if (stage === "closed_won") {
+    throw new SetStageError(
+      "requires_close_won_flow",
+      "Use the close-won flow to confirm the contracted deal value — stage cannot be set directly to closed-won.",
+    );
+  }
+  if (stage === "closed_lost") {
+    throw new SetStageError(
+      "requires_close_lost_flow",
+      "Use the close-lost flow to record the loss reason — stage cannot be set directly to closed-lost.",
+    );
+  }
   const pool = await ensureTables();
   if (!pool) return false;
   await pool.query(
@@ -521,6 +566,16 @@ export type CloseWonInput = {
   projectName?: string;
   /** When kind=new_client, the client name to create. Defaults to prospect_company. */
   clientName?: string;
+  /**
+   * Final negotiated project value in cents. Required when closing-won so the
+   * admin confirms (or overrides) the original estimate against the signed
+   * contract. Pass null to explicitly clear.
+   */
+  contractedValueCents?: number | null;
+  /** Final negotiated recurring value in cents (optional). */
+  contractedRecurringValueCents?: number | null;
+  /** Cadence for the recurring value. Required when contractedRecurringValueCents is set. */
+  contractedRecurringCadence?: RecurringCadence | null;
 };
 
 export type CloseWonResult = {
@@ -573,6 +628,21 @@ export async function closeWon(
   const project = await createProject(clientId, projectName);
   if (!project) return { ok: false, clientId, projectId: null, reason: "Could not create project." };
 
+  // Contracted-value handling: when the caller passed values, write them;
+  // when they omitted the fields entirely, fall back to the current estimate
+  // so a closed-won deal always has a contracted value on record. Explicit
+  // null still clears.
+  const contractedValueCents =
+    input.contractedValueCents === undefined ? opp.estValueCents : input.contractedValueCents;
+  const contractedRecurringValueCents =
+    input.contractedRecurringValueCents === undefined
+      ? opp.estRecurringValueCents
+      : input.contractedRecurringValueCents;
+  const contractedRecurringCadence =
+    input.contractedRecurringCadence === undefined
+      ? opp.estRecurringCadence
+      : input.contractedRecurringCadence;
+
   await pool.query(
     `UPDATE dt_site.opportunity
        SET stage = 'closed_won',
@@ -580,16 +650,75 @@ export async function closeWon(
            updated_at = now(),
            client_id = COALESCE(client_id, $2),
            resulting_client_id = $2,
-           resulting_project_id = $3
+           resulting_project_id = $3,
+           contracted_value_cents = $4,
+           contracted_recurring_value_cents = $5,
+           contracted_recurring_cadence = $6
      WHERE id = $1`,
-    [id, clientId, project.id],
+    [
+      id,
+      clientId,
+      project.id,
+      contractedValueCents,
+      contractedRecurringValueCents,
+      contractedRecurringCadence,
+    ],
+  );
+  const closeNote = buildCloseWonActivityBody(
+    projectName,
+    opp.estValueCents,
+    contractedValueCents,
+    opp.estRecurringValueCents,
+    contractedRecurringValueCents,
+    opp.estRecurringCadence,
+    contractedRecurringCadence,
   );
   await pool.query(
     `INSERT INTO dt_site.opportunity_activity (opportunity_id, kind, body, author_email)
      VALUES ($1, 'system', $2, $3)`,
-    [id, `Closed-won → created project "${projectName}".`, authorEmail],
+    [id, closeNote, authorEmail],
   );
   return { ok: true, clientId, projectId: project.id };
+}
+
+/**
+ * Formats the activity-log line stamped when a deal closes-won. Always names
+ * the resulting project; appends an "Estimated $X → Contracted $Y" line when
+ * the two values differ, and a parallel line for recurring value when present.
+ * Keeps the log self-describing so audits don't need to cross-reference row
+ * state at the moment of close.
+ */
+function buildCloseWonActivityBody(
+  projectName: string,
+  estValueCents: number | null,
+  contractedValueCents: number | null,
+  estRecurringValueCents: number | null,
+  contractedRecurringValueCents: number | null,
+  estRecurringCadence: RecurringCadence | null,
+  contractedRecurringCadence: RecurringCadence | null,
+): string {
+  const lines = [`Closed-won → created project "${projectName}".`];
+  const fmt = (c: number | null): string =>
+    c == null ? "—" : `$${(c / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
+  if (contractedValueCents !== estValueCents) {
+    lines.push(`Project value: estimated ${fmt(estValueCents)} → contracted ${fmt(contractedValueCents)}.`);
+  } else if (contractedValueCents != null) {
+    lines.push(`Project value confirmed at ${fmt(contractedValueCents)}.`);
+  }
+  const cadLabel = (c: RecurringCadence | null): string => (c ? c.replace("_", "-") : "—");
+  if (
+    contractedRecurringValueCents !== estRecurringValueCents ||
+    contractedRecurringCadence !== estRecurringCadence
+  ) {
+    if (contractedRecurringValueCents != null || estRecurringValueCents != null) {
+      lines.push(
+        `Recurring value: estimated ${fmt(estRecurringValueCents)} ${cadLabel(estRecurringCadence)} → contracted ${fmt(contractedRecurringValueCents)} ${cadLabel(contractedRecurringCadence)}.`,
+      );
+    }
+  } else if (contractedRecurringValueCents != null) {
+    lines.push(`Recurring value confirmed at ${fmt(contractedRecurringValueCents)} ${cadLabel(contractedRecurringCadence)}.`);
+  }
+  return lines.join(" ");
 }
 
 export async function closeLost(id: number, reason: string | null, authorEmail: string | null): Promise<boolean> {
