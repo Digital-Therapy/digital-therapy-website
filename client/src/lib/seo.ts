@@ -128,6 +128,14 @@ const PREFIX_META: { prefix: string; meta: RouteMeta }[] = [
     },
   },
   {
+    prefix: "/offer",
+    meta: {
+      title: "Project Offer · Digital Therapy",
+      description: "Review, accept and e-sign your Digital Therapy project offer.",
+      noindex: true,
+    },
+  },
+  {
     prefix: "/vendorlists",
     meta: { title: "Vendor Lists · Digital Therapy", description: "Digital Therapy admin console.", noindex: true },
   },
