@@ -542,6 +542,19 @@ export async function getVendorById(id: string) {
   return toDetail(r, records);
 }
 
+/** The (non-removed) vendor whose primary or alternate email matches, or null.
+ * Used to tie an offer letter emailed from the doc's line items to the vendor's
+ * existing Vendor Program record (and its ACH info). */
+export async function findVendorByEmail(email: string) {
+  const want = email.trim().toLowerCase();
+  if (!want) return null;
+  const records = await loadRecords();
+  const r = records.find(
+    (x) => !x.removed && [x.email, ...(x.altEmails ?? [])].some((e) => (e ?? "").trim().toLowerCase() === want),
+  );
+  return r ? toDetail(r, records) : null;
+}
+
 /** Compact full profiles for the selected ids (order preserved) — used for the
  * one-page-per-vendor PDF export. */
 export async function getVendorsForExport(ids: string[]) {

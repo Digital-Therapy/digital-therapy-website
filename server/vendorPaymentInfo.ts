@@ -241,7 +241,7 @@ function normalizeName(s: string): string {
 
 /** Verifies the entered vendor name matches the vendor's saved company name or
  * individual name. Returns null on success or a specific error string. */
-async function verifyVendorNameMatch(vendorAppId: string, enteredName: string): Promise<string | null> {
+export async function verifyVendorNameMatch(vendorAppId: string, enteredName: string): Promise<string | null> {
   const record = await getVendorById(vendorAppId);
   if (!record) return "We could not find your vendor record.";
   const candidates = [record.vendor.companyName, record.vendor.name]

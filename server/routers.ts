@@ -77,6 +77,16 @@ import {
 } from "./pipeline";
 import { submitAccountingAssessment } from "./assessments";
 import {
+  confirmOfferAch,
+  getOfferByToken,
+  listOffers,
+  markOfferBooking,
+  sendOffers,
+  signOffer,
+  updateOfferAch,
+  voidOffer,
+} from "./offers";
+import {
   deletePaymentInfo,
   generatePaymentToken,
   getPaymentInfoSummary,
@@ -690,6 +700,91 @@ export const appRouter = router({
         const ua = (ctx.req.headers["user-agent"] as string) || null;
         return signBatch(input.token, input.ndaIds, input.signatureText, ip, ua);
       }),
+  }),
+  // Vendor offer letters: admin sends from the doc's line items; vendors accept
+  // via a public, token-gated page (sign -> ACH -> book tech onboarding).
+  offers: router({
+    adminList: adminProcedure.query(async () => listOffers()),
+    adminSend: adminProcedure
+      .input(
+        z.object({
+          engagement: z.object({
+            clientName: z.string().trim().min(1).max(240),
+            clientObjective: z.string().trim().max(2000).default(""),
+            projectName: z.string().trim().max(240).default(""),
+            kickoffDate: z.string().trim().max(120).default(""),
+            completionDate: z.string().trim().max(120).default(""),
+            projectLead: z.string().trim().max(240).default(""),
+            responseDeadline: z.string().trim().max(240).default(""),
+            paymentTerms: z.string().trim().max(500).default(""),
+          }),
+          rows: z
+            .array(
+              z.object({
+                vendorName: z.string().trim().max(200).default(""),
+                vendorEmail: z.string().trim().max(320).default(""),
+                role: z.string().trim().max(500).default(""),
+                pricingModel: z.string().trim().max(120).default(""),
+                requested: z.string().trim().max(240).default(""),
+                offered: z.string().trim().max(240).default(""),
+                offeredTotal: z.string().trim().max(120).default(""),
+              }),
+            )
+            .min(1)
+            .max(50),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const result = await sendOffers(input.engagement, input.rows);
+        if (!result) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Offers are unavailable (no database)." });
+        return result;
+      }),
+    adminVoid: adminProcedure
+      .input(z.object({ id: z.number().int() }))
+      .mutation(async ({ input }) => ({ success: await voidOffer(input.id) })),
+    getByToken: publicProcedure
+      .input(z.object({ token: z.string().trim().min(16).max(64) }))
+      .query(async ({ input, ctx }) => {
+        if (ndaRateLimited(clientIp(ctx.req)))
+          throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many requests. Please wait a moment." });
+        return getOfferByToken(input.token);
+      }),
+    sign: publicProcedure
+      .input(z.object({ token: z.string().trim().min(16).max(64), signatureText: z.string().trim().min(2).max(160) }))
+      .mutation(async ({ input, ctx }) => {
+        const ip = clientIp(ctx.req);
+        if (ndaRateLimited(ip))
+          throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many attempts. Please wait a moment." });
+        return signOffer(input.token, input.signatureText, ip, (ctx.req.headers["user-agent"] as string) || null);
+      }),
+    confirmAch: publicProcedure
+      .input(z.object({ token: z.string().trim().min(16).max(64) }))
+      .mutation(async ({ input, ctx }) => {
+        if (ndaRateLimited(clientIp(ctx.req)))
+          throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many attempts. Please wait a moment." });
+        return confirmOfferAch(input.token);
+      }),
+    updateAch: publicProcedure
+      .input(
+        z.object({
+          token: z.string().trim().min(16).max(64),
+          vendorName: z.string().trim().min(1).max(200),
+          bankName: z.string().trim().min(1).max(200),
+          routingNumber: z.string().trim().regex(/^\d{9}$/, "Routing number must be 9 digits").max(20),
+          accountNumber: z.string().trim().min(4).max(20),
+          accountType: z.enum(["checking", "savings"]),
+          businessAccountAttested: z.literal(true),
+        }),
+      )
+      .mutation(async ({ input, ctx }) => {
+        if (ndaRateLimited(clientIp(ctx.req)))
+          throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many attempts. Please wait a moment." });
+        const { token, ...fields } = input;
+        return updateOfferAch(token, fields);
+      }),
+    markBooking: publicProcedure
+      .input(z.object({ token: z.string().trim().min(16).max(64) }))
+      .mutation(async ({ input }) => markOfferBooking(input.token)),
   }),
   // Clients & projects management (dedicated admin manager).
   clients: router({

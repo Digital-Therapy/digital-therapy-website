@@ -28,6 +28,8 @@ import NdaBatchSigningPage from "./pages/NdaBatchSigningPage";
 import VendorPaymentForm from "./pages/VendorPaymentForm";
 import VendorHeadshotForm from "./pages/VendorHeadshotForm";
 import AdminAccess from "./pages/admin/AdminAccess";
+import AdminOffers from "./pages/admin/AdminOffers";
+import OfferAcceptPage from "./pages/OfferAcceptPage";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -54,6 +56,7 @@ function Router() {
       <Route path={"/admin/clients"} component={AdminClients} />
       <Route path={"/admin/pipeline"} component={AdminPipeline} />
       <Route path={"/admin/access"} component={AdminAccess} />
+      <Route path={"/admin/offers"} component={AdminOffers} />
       {/* Public, token-gated NDA signing — no auth, not prerendered. The batch
           route (4 segments) is matched before the single route (3 segments). */}
       <Route path={"/nda/sign/all/:token"} component={NdaBatchSigningPage} />
@@ -62,6 +65,8 @@ function Router() {
           reached via a link Karina texts to the vendor. */}
       <Route path={"/vendor/payment/:token"} component={VendorPaymentForm} />
       <Route path={"/vendor/headshot/:token"} component={VendorHeadshotForm} />
+      {/* Public, token-gated vendor offer acceptance (sign -> ACH -> onboarding). */}
+      <Route path={"/offer/:token"} component={OfferAcceptPage} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
@@ -85,7 +90,8 @@ function App() {
     location.startsWith("/vendorlists") ||
     location.startsWith("/nda/sign") ||
     location.startsWith("/vendor/payment") ||
-    location.startsWith("/vendor/headshot");
+    location.startsWith("/vendor/headshot") ||
+    location.startsWith("/offer/");
 
   return (
     <ErrorBoundary>
