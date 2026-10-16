@@ -33,9 +33,10 @@ const offerLink = (token: string) => `${SITE_BASE}/offer/${token}`;
 const newToken = () => crypto.randomBytes(24).toString("base64url");
 const REPLY_TO = "hello@digitaltherapy.io";
 
-/** Milton's booking page for the technology onboarding. Unset -> the page tells
- * the vendor Milton will email times. */
-export const techOnboardingUrl = () => (process.env.TECH_ONBOARDING_BOOKING_URL || "").trim() || null;
+/** Milton's Google Calendar booking page for the technology onboarding;
+ * TECH_ONBOARDING_BOOKING_URL overrides it. */
+const MILTON_BOOKING_URL = "https://calendar.app.google/Sic7LyTnAhRMbG7j7";
+export const techOnboardingUrl = () => (process.env.TECH_ONBOARDING_BOOKING_URL || "").trim() || MILTON_BOOKING_URL;
 
 let _ready = false;
 async function ensureOfferSchema() {
