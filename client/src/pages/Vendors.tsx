@@ -53,7 +53,7 @@ const financeAccountingSkillGroups: SkillGroup[] = [
 
 const vendorTypes = [
   {
-    title: "Technology Vendors",
+    title: "Technology Experts",
     highlightedWords: ["Technology"],
     summary:
       "Full-stack engineers, AI specialists, RPA builders, systems architects, integration & data engineers.",
@@ -62,7 +62,7 @@ const vendorTypes = [
     buttonLabel: "Apply Now",
   },
   {
-    title: "Finance & Accounting Vendors",
+    title: "Finance & Accounting Experts",
     highlightedWords: ["Finance", "Accounting"],
     summary:
       "CPAs, controllers, AP/AR specialists, close-cycle leaders, tax & reporting practitioners.",
@@ -72,7 +72,7 @@ const vendorTypes = [
     skillGroups: financeAccountingSkillGroups,
   },
   {
-    title: "Marketing Vendors",
+    title: "Marketing Experts",
     highlightedWords: ["Marketing"],
     summary:
       "Brand strategists, web & SEO specialists, content & campaign operators, marketing automation experts.",
