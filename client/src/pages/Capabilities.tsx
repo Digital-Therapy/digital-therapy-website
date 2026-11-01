@@ -239,7 +239,90 @@ export default function Capabilities() {
           </div>
         </section>
 
-        <section id="typical-requests" className="bg-white py-24 lg:py-32">
+        <section className="bg-white py-24 lg:py-32">
+          <div className="container">
+            <motion.div {...fadeUp} className="max-w-4xl">
+              <SectionLabel>Core capabilities</SectionLabel>
+              <h2 className="font-display text-[clamp(2.7rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.06em]">
+                Digital Therapy offers a toolbox for complex wealth.
+              </h2>
+            </motion.div>
+            <div className="mt-14 grid gap-5 lg:grid-cols-3">
+              {capabilities.map((capability, index) => {
+                const Icon = capability.icon;
+                const tool =
+                  "tool" in capability
+                    ? (
+                        capability as {
+                          tool?: string;
+                          toolAlt?: string;
+                          toolButtonLabel?: string;
+                        }
+                      ).tool
+                    : undefined;
+                const toolAlt =
+                  "toolAlt" in capability
+                    ? (
+                        capability as {
+                          tool?: string;
+                          toolAlt?: string;
+                          toolButtonLabel?: string;
+                        }
+                      ).toolAlt
+                    : undefined;
+                const toolButtonLabel =
+                  "toolButtonLabel" in capability
+                    ? (
+                        capability as {
+                          tool?: string;
+                          toolAlt?: string;
+                          toolButtonLabel?: string;
+                        }
+                      ).toolButtonLabel
+                    : undefined;
+                return (
+                  <motion.article
+                    key={capability.title}
+                    {...fadeUp}
+                    transition={{ ...fadeUp.transition, delay: index * 0.06 }}
+                    className="group relative min-h-[330px] border border-black/10 bg-white/72 p-7 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-[#0A65FF] hover:bg-white hover:ring-2 hover:ring-[#0A65FF] hover:ring-offset-0"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                        0{index + 1}
+                      </span>
+                      <Icon className="h-6 w-6 text-black/48 transition-colors duration-300 group-hover:text-[#0A65FF]" />
+                    </div>
+                    <h3 className="mt-16 text-2xl font-semibold tracking-[-0.04em]">
+                      {capability.title}
+                    </h3>
+                    <p className="mt-4 leading-7 text-black/78">
+                      {capability.copy}
+                    </p>
+                    {tool ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setOpenTool({
+                            src: tool,
+                            alt: toolAlt ?? capability.title,
+                            title: capability.title,
+                          })
+                        }
+                        className="absolute bottom-6 right-6 inline-flex items-center gap-1.5 rounded-full bg-[#0A65FF] px-4 py-2 text-xs font-semibold text-white opacity-0 shadow-[0_12px_30px_rgba(10,101,255,0.30)] transition-all duration-300 group-hover:opacity-100 group-focus-within:opacity-100 hover:bg-[#004ed1] focus:outline-none focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                      >
+                        {toolButtonLabel ?? "See the tool"}
+                        <ChevronRight className="h-3.5 w-3.5" />
+                      </button>
+                    ) : null}
+                  </motion.article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section id="typical-requests" className="bg-[#F7F4EE] py-24 lg:py-32">
           <div className="container">
             <motion.div {...fadeUp} className="max-w-4xl">
               <SectionLabel>Outcomes for family offices</SectionLabel>
@@ -365,89 +448,6 @@ export default function Capabilities() {
             ) : null}
           </DialogContent>
         </Dialog>
-
-        <section className="bg-[#F7F4EE] py-24 lg:py-32">
-          <div className="container">
-            <motion.div {...fadeUp} className="max-w-4xl">
-              <SectionLabel>Core capabilities</SectionLabel>
-              <h2 className="font-display text-[clamp(2.7rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.06em]">
-                Digital Therapy offers a toolbox for complex wealth.
-              </h2>
-            </motion.div>
-            <div className="mt-14 grid gap-5 lg:grid-cols-3">
-              {capabilities.map((capability, index) => {
-                const Icon = capability.icon;
-                const tool =
-                  "tool" in capability
-                    ? (
-                        capability as {
-                          tool?: string;
-                          toolAlt?: string;
-                          toolButtonLabel?: string;
-                        }
-                      ).tool
-                    : undefined;
-                const toolAlt =
-                  "toolAlt" in capability
-                    ? (
-                        capability as {
-                          tool?: string;
-                          toolAlt?: string;
-                          toolButtonLabel?: string;
-                        }
-                      ).toolAlt
-                    : undefined;
-                const toolButtonLabel =
-                  "toolButtonLabel" in capability
-                    ? (
-                        capability as {
-                          tool?: string;
-                          toolAlt?: string;
-                          toolButtonLabel?: string;
-                        }
-                      ).toolButtonLabel
-                    : undefined;
-                return (
-                  <motion.article
-                    key={capability.title}
-                    {...fadeUp}
-                    transition={{ ...fadeUp.transition, delay: index * 0.06 }}
-                    className="group relative min-h-[330px] border border-black/10 bg-white/72 p-7 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-[#0A65FF] hover:bg-white hover:ring-2 hover:ring-[#0A65FF] hover:ring-offset-0"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
-                        0{index + 1}
-                      </span>
-                      <Icon className="h-6 w-6 text-black/48 transition-colors duration-300 group-hover:text-[#0A65FF]" />
-                    </div>
-                    <h3 className="mt-16 text-2xl font-semibold tracking-[-0.04em]">
-                      {capability.title}
-                    </h3>
-                    <p className="mt-4 leading-7 text-black/78">
-                      {capability.copy}
-                    </p>
-                    {tool ? (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setOpenTool({
-                            src: tool,
-                            alt: toolAlt ?? capability.title,
-                            title: capability.title,
-                          })
-                        }
-                        className="absolute bottom-6 right-6 inline-flex items-center gap-1.5 rounded-full bg-[#0A65FF] px-4 py-2 text-xs font-semibold text-white opacity-0 shadow-[0_12px_30px_rgba(10,101,255,0.30)] transition-all duration-300 group-hover:opacity-100 group-focus-within:opacity-100 hover:bg-[#004ed1] focus:outline-none focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
-                      >
-                        {toolButtonLabel ?? "See the tool"}
-                        <ChevronRight className="h-3.5 w-3.5" />
-                      </button>
-                    ) : null}
-                  </motion.article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
 
         <section className="bg-white py-24 lg:py-32">
           <div className="container grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
