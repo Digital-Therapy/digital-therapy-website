@@ -22,17 +22,13 @@ import {
   Building2,
   ChevronRight,
   ClipboardCheck,
-  Database,
   FileSearch,
   Network,
-  ShieldCheck,
   Sparkles,
-  Workflow,
 } from "lucide-react";
 import { useState } from "react";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const securityVisual = "/dt-security-automation.webp";
 
 const fadeUp = {
   initial: { opacity: 0, y: 28 },
@@ -95,33 +91,6 @@ const capabilities = [
     tool: "/insights.webp",
     toolAlt: "Digital Therapy insights and reporting tool",
     toolButtonLabel: "More on Insights",
-  },
-];
-
-const deliveryLayers = [
-  {
-    eyebrow: "01",
-    title: "Data foundation",
-    copy: "Digital Therapy starts by establishing governed source-of-truth logic across entities, assets, accounts, documents, and roles.",
-    icon: Database,
-  },
-  {
-    eyebrow: "02",
-    title: "Workflow automation",
-    copy: "Manual intake, reconciliation, approvals, reporting cycles, and recurring tasks become controlled operating workflows.",
-    icon: Workflow,
-  },
-  {
-    eyebrow: "03",
-    title: "AI operating intelligence",
-    copy: "LLM-enabled tools are designed around privacy, access rules, retrieval boundaries, and practical owner questions.",
-    icon: Bot,
-  },
-  {
-    eyebrow: "04",
-    title: "Security and control",
-    copy: "Role-based access, private infrastructure options, auditability, and deployment patterns keep the office in control.",
-    icon: ShieldCheck,
   },
 ];
 
@@ -385,58 +354,6 @@ export default function Capabilities() {
               className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-[#F7F4EE] shadow-[0_28px_80px_rgba(16,24,40,0.1)]"
             >
               <img
-                src={securityVisual}
-                alt="Balancing speed and intelligence with security and privacy by design"
-                className="aspect-[16/12] w-full object-cover"
-                width={1200}
-                height={900}
-              />
-            </motion.div>
-            <motion.div
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.08 }}
-            >
-              <SectionLabel>Delivery architecture</SectionLabel>
-              <h2 className="font-display text-[clamp(2.7rem,5vw,5.5rem)] leading-[0.92] tracking-[-0.06em]">
-                Fully integrated & securely on-prem.
-              </h2>
-              <div className="mt-9 grid gap-4 sm:grid-cols-2">
-                {deliveryLayers.map((layer, index) => {
-                  const Icon = layer.icon;
-                  return (
-                    <motion.div
-                      key={layer.title}
-                      {...fadeUp}
-                      transition={{ ...fadeUp.transition, delay: index * 0.05 }}
-                      className="border-t border-black/10 pt-5"
-                    >
-                      <div className="flex items-center justify-between gap-4">
-                        <span className="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
-                          {layer.eyebrow}
-                        </span>
-                        <Icon className="h-5 w-5 text-black/42" />
-                      </div>
-                      <h3 className="mt-5 text-xl font-semibold tracking-[-0.04em]">
-                        {layer.title}
-                      </h3>
-                      <p className="mt-3 text-sm leading-6 text-black/80">
-                        {layer.copy}
-                      </p>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        <section className="bg-[#F7F4EE] py-24 lg:py-32">
-          <div className="container grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
-            <motion.div
-              {...fadeUp}
-              className="relative overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_28px_80px_rgba(16,24,40,0.1)]"
-            >
-              <img
                 src="/aicutsheads.webp"
                 alt="AI automation reducing headcount and growing revenue"
                 className="aspect-[3/2] w-full object-cover"
@@ -464,7 +381,7 @@ export default function Capabilities() {
                 {automationUseCases.map(useCase => (
                   <div
                     key={useCase}
-                    className="flex gap-4 rounded-2xl border border-black/8 bg-white p-4"
+                    className="flex gap-4 rounded-2xl border border-black/8 bg-[#F7F4EE] p-4"
                   >
                     <Bot className="mt-1 h-5 w-5 shrink-0 text-[#0A65FF]" />
                     <p className="leading-7 text-black/82">{useCase}</p>
