@@ -82,7 +82,7 @@ const vendorTypes = [
     skillGroups: marketingSkillGroups,
   },
   {
-    title: "Family Office Vendors",
+    title: "Family Office Experts",
     highlightedWords: ["Family", "Office"],
     summary:
       "Family-office operators, principals' chiefs of staff, governance specialists, private-wealth advisors.",
