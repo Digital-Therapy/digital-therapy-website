@@ -124,7 +124,7 @@ const groups: Array<{
     ],
   },
   {
-    label: "Engineering & Digital Growth",
+    label: "Engineering + AI Team",
     description:
       "The technology bench supports websites, search visibility, product design, engineering, and digital infrastructure required for durable systems.",
     icon: Code2,
