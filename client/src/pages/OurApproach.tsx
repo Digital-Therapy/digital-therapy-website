@@ -58,7 +58,7 @@ const discoveryTracks = [
     ],
     icon: ClipboardCheck,
     image: "/arap-sme.webp",
-    imageAlt: "Hand-drawn blue sketch portrait of Hunter, Digital Therapy's Finance & Accounting SME",
+    imageAlt: "Hand-drawn blue sketch portrait of Matthew Treem, Digital Therapy's Finance & Accounting SME",
   },
 ];
 
