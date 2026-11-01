@@ -418,17 +418,26 @@ export default function Team() {
                     }}
                     className="rounded-[2.2rem] border border-black/8 bg-[#F7F4EE] p-6 shadow-[0_20px_65px_rgba(17,17,17,0.055)] lg:p-8"
                   >
-                    <div className="grid gap-8 lg:grid-cols-[0.42fr_0.58fr] lg:items-start">
-                      <div>
-                        <div className="flex h-13 w-13 items-center justify-center rounded-2xl bg-[#0A65FF]/10 text-[#0A65FF]">
+                    {/*
+                      Group layout stacks the icon + label + description above
+                      the member grid so each card gets the full container
+                      width to split across 2 columns (previously the
+                      0.42/0.58 split starved the cards and names like
+                      "Jonathan Kobrin" wrapped mid-text at normal viewports).
+                    */}
+                    <div className="flex flex-col gap-8">
+                      <div className="flex items-start gap-5">
+                        <div className="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl bg-[#0A65FF]/10 text-[#0A65FF]">
                           <Icon className="h-6 w-6" />
                         </div>
-                        <h3 className="mt-7 font-display text-4xl tracking-[-0.055em]">
-                          {group.label}
-                        </h3>
-                        <p className="mt-4 max-w-md text-sm leading-6 text-black/78">
-                          {group.description}
-                        </p>
+                        <div>
+                          <h3 className="font-display text-4xl tracking-[-0.055em]">
+                            {group.label}
+                          </h3>
+                          <p className="mt-3 max-w-2xl text-sm leading-6 text-black/78">
+                            {group.description}
+                          </p>
+                        </div>
                       </div>
                       <div className="grid gap-4 sm:grid-cols-2">
                         {group.members.map(member => {
