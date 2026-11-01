@@ -118,7 +118,7 @@ const groups: Array<{
       },
       {
         name: "Geoff Horn",
-        role: "Payments Partner",
+        role: "Payment Processing",
         imageUrl: headshots.geoffHorn,
       },
     ],
