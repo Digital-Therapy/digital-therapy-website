@@ -32,8 +32,6 @@ import {
 import { useState } from "react";
 
 const logoUrl = "/manus-storage/DTLOGO_OFFICIAL_94b0fe5f.png";
-const markUrl = "/dt-mark.webp";
-const wealthMapVisual = "/dt-talk-to-your-data.webp";
 const securityVisual = "/dt-security-automation.webp";
 
 const fadeUp = {
@@ -170,75 +168,6 @@ export default function Capabilities() {
       />
 
       <main className="pt-20">
-        <section className="relative overflow-hidden border-b border-black/8">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_12%,rgba(10,101,255,0.11),transparent_34%),linear-gradient(115deg,#F7F4EE_0%,#FFFFFF_54%,#EEF4FF_100%)]" />
-          <div className="container relative grid min-h-[calc(100vh-5rem)] items-center gap-12 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:py-28">
-            <motion.div {...fadeUp}>
-              <SectionLabel>Capabilities built for complex wealth</SectionLabel>
-              <h1 className="max-w-4xl font-display text-[60px] leading-[0.88] tracking-[-0.07em] text-[#111111]">
-                Ask your data anything!
-              </h1>
-              <p className="mt-8 max-w-2xl text-xl leading-8 text-black/80">
-                Digital Therapy builds private data, automation, accounting, and
-                reporting capabilities for family offices that need confidence
-                across sensitive information, complex assets, and lean operating
-                teams.
-              </p>
-              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-                <BookingWidgetDialog
-                  variant="primary"
-                  context="capabilities page family-office booking"
-                  label="Show me!"
-                />
-                <a
-                  href="#typical-requests"
-                  className="group inline-flex items-center justify-center gap-2 rounded-full border border-black/12 bg-white/55 px-6 py-3 text-sm font-semibold text-black transition-all duration-300 hover:border-[#0A65FF]/50 hover:text-[#0A65FF]"
-                >
-                  See more solutions
-                  <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, x: 35 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              transition={{ duration: 0.9, ease: "easeOut" as const }}
-              className="relative"
-            >
-              <div className="absolute -inset-6 rounded-[2.8rem] bg-[#0A65FF]/10 blur-3xl" />
-              <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
-                <img
-                  src={wealthMapVisual}
-                  alt="Executive talking to a dashboard via voice — sales analytics responding in real time"
-                  className="aspect-[16/12] w-full object-cover"
-                  width={1536}
-                  height={1024}
-                />
-                <div className="absolute bottom-5 left-5 right-5 rounded-[1.35rem] border border-white/70 bg-white/76 p-5 backdrop-blur-xl">
-                  <div className="flex items-start gap-4">
-                    <img
-                      src={markUrl}
-                      alt=""
-                      className="mt-1 h-10 w-10 object-contain"
-                      width={197}
-                      height={227}
-                    />
-                    <div>
-                      <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#0A65FF]">
-                        Talk to your data
-                      </div>
-                      <p className="mt-2 text-sm leading-6 text-black/82">
-                        Once your data is unified &amp; configured, query your
-                        collective database by just asking questions.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
         <section className="bg-white py-24 lg:py-32">
           <div className="container">
             <motion.div {...fadeUp} className="max-w-4xl">
