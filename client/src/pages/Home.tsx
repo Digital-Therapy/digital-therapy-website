@@ -300,8 +300,7 @@ export default function Home() {
                 Operations &amp; Accounting as separate functions. In the{" "}
                 <Handwritten>real</Handwritten> world, these functions are
                 utterly &amp; inseparably entangled &mdash; Aren&rsquo;t they?
-                So we built the team that{" "}
-                <Handwritten>really</Handwritten> has what it{" "}
+                So we built the team that has what it{" "}
                 <Handwritten>really</Handwritten> takes.{" "}
                 <Handwritten>Really</Handwritten>.
               </p>
