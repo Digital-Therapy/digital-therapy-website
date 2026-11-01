@@ -59,7 +59,7 @@ const vendorTypes = [
       "Full-stack engineers, AI specialists, RPA builders, systems architects, integration & data engineers.",
     icon: Code2,
     context: "vendor application: Technology Vendor",
-    buttonLabel: "Apply as Technology Vendor",
+    buttonLabel: "Apply Now",
   },
   {
     title: "Finance & Accounting Vendors",
@@ -68,7 +68,7 @@ const vendorTypes = [
       "CPAs, controllers, AP/AR specialists, close-cycle leaders, tax & reporting practitioners.",
     icon: BarChart3,
     context: "vendor application: Finance & Accounting Vendor",
-    buttonLabel: "Apply as Finance & Accounting Vendor",
+    buttonLabel: "Apply Now",
     skillGroups: financeAccountingSkillGroups,
   },
   {
@@ -78,7 +78,7 @@ const vendorTypes = [
       "Brand strategists, web & SEO specialists, content & campaign operators, marketing automation experts.",
     icon: Briefcase,
     context: "vendor application: Marketing Vendor",
-    buttonLabel: "Apply as Marketing Vendor",
+    buttonLabel: "Apply Now",
     skillGroups: marketingSkillGroups,
   },
   {
@@ -88,7 +88,7 @@ const vendorTypes = [
       "Family-office operators, principals' chiefs of staff, governance specialists, private-wealth advisors.",
     icon: Landmark,
     context: "vendor application: Family Office Vendor",
-    buttonLabel: "Apply as Family Office Vendor",
+    buttonLabel: "Apply Now",
     skillGroups: familyOfficeSkillGroups,
   },
 ];
