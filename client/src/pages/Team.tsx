@@ -364,9 +364,9 @@ function InitialMark({ name }: { name: string }) {
     .toUpperCase();
 
   return (
-    <div className="relative flex h-48 w-48 shrink-0 items-center justify-center rounded-[1.8rem] border border-black/8 bg-white shadow-[0_18px_45px_rgba(17,17,17,0.07)]">
-      <div className="absolute inset-3 rounded-[1.4rem] bg-[radial-gradient(circle_at_25%_20%,rgba(10,101,255,0.16),transparent_45%),linear-gradient(135deg,#FFFFFF,#EEF4FF)]" />
-      <span className="relative font-display text-5xl tracking-[-0.05em] text-[#111111]">
+    <div className="relative flex h-36 w-36 shrink-0 items-center justify-center rounded-xl border border-black/8 bg-white">
+      <div className="absolute inset-2 rounded-[0.6rem] bg-[radial-gradient(circle_at_25%_20%,rgba(10,101,255,0.16),transparent_45%),linear-gradient(135deg,#FFFFFF,#EEF4FF)]" />
+      <span className="relative font-display text-4xl tracking-[-0.05em] text-[#111111]">
         {initials || "DT"}
       </span>
     </div>
@@ -432,8 +432,12 @@ export default function Team() {
                       </div>
                       <div className="grid gap-4 sm:grid-cols-2">
                         {group.members.map(member => {
+                          // Arrow glyph after the name is a click affordance
+                          // (like the reference layout) — only show it when
+                          // the card actually opens something.
+                          const isClickable = Boolean(member.isFounder || member.bio);
                           const cardInner = (
-                            <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-5">
                               {member.imageUrl ? (
                                 <img
                                   src={member.imageUrl}
@@ -442,7 +446,7 @@ export default function Team() {
                                   // headshots read with more headroom in the
                                   // avatar tile (their source frames sit tight
                                   // to the top and would otherwise crop hair).
-                                  className={`h-48 w-48 shrink-0 rounded-[1.8rem] border border-black/8 object-cover shadow-[0_18px_45px_rgba(17,17,17,0.08)] ${
+                                  className={`h-36 w-36 shrink-0 rounded-xl border border-black/8 object-cover ${
                                     member.name === "Valerio Mirof" ||
                                     member.name === "Matthew Treem"
                                       ? "object-top"
@@ -454,11 +458,19 @@ export default function Team() {
                               ) : (
                                 <InitialMark name={member.name} />
                               )}
-                              <div>
-                                <h4 className="font-display text-3xl leading-none tracking-[-0.045em]">
+                              <div className="min-w-0">
+                                <h4 className="text-lg font-bold leading-tight tracking-[-0.01em] text-[#111111]">
                                   {member.name}
+                                  {isClickable && (
+                                    <span
+                                      aria-hidden="true"
+                                      className="ml-1.5 inline-block text-[#0A65FF] transition-transform duration-200 group-hover:translate-x-0.5"
+                                    >
+                                      &rarr;
+                                    </span>
+                                  )}
                                 </h4>
-                                <p className="mt-3 text-sm font-bold uppercase tracking-[0.16em] text-black/44">
+                                <p className="mt-1.5 text-sm leading-5 text-black/58">
                                   {member.role}
                                 </p>
                               </div>
@@ -478,7 +490,7 @@ export default function Team() {
                                   type="button"
                                   aria-label={`Read bio: ${member.name}`}
                                   data-testid="founder-card-trigger"
-                                  className="w-full rounded-[1.6rem] border border-black/7 bg-white p-6 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_18px_45px_rgba(17,17,17,0.06)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                                  className="group w-full rounded-xl border border-black/8 bg-white p-5 text-left shadow-[0_1px_2px_rgba(17,17,17,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_14px_32px_rgba(17,17,17,0.08)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
                                 >
                                   {cardInner}
                                 </button>
@@ -495,7 +507,7 @@ export default function Team() {
                                 <button
                                   type="button"
                                   aria-label={`Read profile: ${member.name}`}
-                                  className="w-full rounded-[1.6rem] border border-black/7 bg-white p-6 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_18px_45px_rgba(17,17,17,0.06)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                                  className="group w-full rounded-xl border border-black/8 bg-white p-5 text-left shadow-[0_1px_2px_rgba(17,17,17,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_14px_32px_rgba(17,17,17,0.08)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
                                 >
                                   {cardInner}
                                 </button>
@@ -506,7 +518,7 @@ export default function Team() {
                           return (
                             <article
                               key={`${group.label}-${member.name}-${member.role}`}
-                              className="rounded-[1.6rem] border border-black/7 bg-white p-6"
+                              className="rounded-xl border border-black/8 bg-white p-5 shadow-[0_1px_2px_rgba(17,17,17,0.04)]"
                             >
                               {cardInner}
                             </article>
