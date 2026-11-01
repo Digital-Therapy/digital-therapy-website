@@ -364,9 +364,9 @@ function InitialMark({ name }: { name: string }) {
     .toUpperCase();
 
   return (
-    <div className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-[1.35rem] border border-black/8 bg-white shadow-[0_18px_45px_rgba(17,17,17,0.07)]">
-      <div className="absolute inset-2 rounded-[1rem] bg-[radial-gradient(circle_at_25%_20%,rgba(10,101,255,0.16),transparent_45%),linear-gradient(135deg,#FFFFFF,#EEF4FF)]" />
-      <span className="relative font-display text-2xl tracking-[-0.05em] text-[#111111]">
+    <div className="relative flex h-48 w-48 shrink-0 items-center justify-center rounded-[1.8rem] border border-black/8 bg-white shadow-[0_18px_45px_rgba(17,17,17,0.07)]">
+      <div className="absolute inset-3 rounded-[1.4rem] bg-[radial-gradient(circle_at_25%_20%,rgba(10,101,255,0.16),transparent_45%),linear-gradient(135deg,#FFFFFF,#EEF4FF)]" />
+      <span className="relative font-display text-5xl tracking-[-0.05em] text-[#111111]">
         {initials || "DT"}
       </span>
     </div>
@@ -430,20 +430,19 @@ export default function Team() {
                           {group.description}
                         </p>
                       </div>
-                      <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="grid gap-4 sm:grid-cols-2">
                         {group.members.map(member => {
                           const cardInner = (
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-6">
                               {member.imageUrl ? (
                                 <img
                                   src={member.imageUrl}
                                   alt={member.name}
                                   // Valerio + Matthew get object-top so their
                                   // headshots read with more headroom in the
-                                  // small avatar tile (their source frames sit
-                                  // tight to the top and would otherwise crop
-                                  // hair).
-                                  className={`h-20 w-20 shrink-0 rounded-[1.35rem] border border-black/8 object-cover shadow-[0_18px_45px_rgba(17,17,17,0.08)] ${
+                                  // avatar tile (their source frames sit tight
+                                  // to the top and would otherwise crop hair).
+                                  className={`h-48 w-48 shrink-0 rounded-[1.8rem] border border-black/8 object-cover shadow-[0_18px_45px_rgba(17,17,17,0.08)] ${
                                     member.name === "Valerio Mirof" ||
                                     member.name === "Matthew Treem"
                                       ? "object-top"
@@ -456,10 +455,10 @@ export default function Team() {
                                 <InitialMark name={member.name} />
                               )}
                               <div>
-                                <h4 className="font-display text-2xl leading-none tracking-[-0.045em]">
+                                <h4 className="font-display text-3xl leading-none tracking-[-0.045em]">
                                   {member.name}
                                 </h4>
-                                <p className="mt-2 text-xs font-bold uppercase tracking-[0.16em] text-black/44">
+                                <p className="mt-3 text-sm font-bold uppercase tracking-[0.16em] text-black/44">
                                   {member.role}
                                 </p>
                               </div>
@@ -479,7 +478,7 @@ export default function Team() {
                                   type="button"
                                   aria-label={`Read bio: ${member.name}`}
                                   data-testid="founder-card-trigger"
-                                  className="w-full rounded-[1.4rem] border border-black/7 bg-white p-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_18px_45px_rgba(17,17,17,0.06)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                                  className="w-full rounded-[1.6rem] border border-black/7 bg-white p-6 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_18px_45px_rgba(17,17,17,0.06)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
                                 >
                                   {cardInner}
                                 </button>
@@ -496,7 +495,7 @@ export default function Team() {
                                 <button
                                   type="button"
                                   aria-label={`Read profile: ${member.name}`}
-                                  className="w-full rounded-[1.4rem] border border-black/7 bg-white p-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_18px_45px_rgba(17,17,17,0.06)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                                  className="w-full rounded-[1.6rem] border border-black/7 bg-white p-6 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_18px_45px_rgba(17,17,17,0.06)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
                                 >
                                   {cardInner}
                                 </button>
@@ -507,7 +506,7 @@ export default function Team() {
                           return (
                             <article
                               key={`${group.label}-${member.name}-${member.role}`}
-                              className="rounded-[1.4rem] border border-black/7 bg-white p-5"
+                              className="rounded-[1.6rem] border border-black/7 bg-white p-6"
                             >
                               {cardInner}
                             </article>
