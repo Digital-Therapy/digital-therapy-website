@@ -137,7 +137,7 @@ const groups: Array<{
       },
       {
         name: "Stan Gretov",
-        role: "Team Lead: Websites + BPO",
+        role: "Offshore BPO Leader",
         imageUrl: headshots.stanGretov,
         bio: "Web design, development and marketing expert with over 10 years of experience in the tech industry.\n\nConstantly looking to expand our reach in the world of web and digital marketing.",
       },
