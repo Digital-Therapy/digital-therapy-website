@@ -7,7 +7,7 @@ import { Fragment, useState } from "react";
 import PublicHeader from "@/components/PublicHeader";
 import { VendorApplicationDialog, type SkillGroup } from "@/components/VendorApplicationDialog";
 import { motion } from "framer-motion";
-import { ArrowRight, BarChart3, Briefcase, Code2, Landmark } from "lucide-react";
+import { ArrowRight, BarChart3, Briefcase, Code2, Landmark, Scale, TrendingUp } from "lucide-react";
 
 const fadeUp = {
   initial: { opacity: 0, y: 28 },
@@ -90,6 +90,24 @@ const vendorTypes = [
     context: "vendor application: Family Office Vendor",
     buttonLabel: "Apply Now",
     skillGroups: familyOfficeSkillGroups,
+  },
+  {
+    title: "Legal Experts",
+    highlightedWords: ["Legal"],
+    summary:
+      "Business attorneys, corporate counsel, trust & estate lawyers, M&A specialists, compliance & regulatory advisors.",
+    icon: Scale,
+    context: "vendor application: Legal Vendor",
+    buttonLabel: "Apply Now",
+  },
+  {
+    title: "Fractional CFO Providers",
+    highlightedWords: ["Fractional", "CFO"],
+    summary:
+      "Senior finance executives available on a fractional basis — strategic planning, capital structure, cash management, investor reporting.",
+    icon: TrendingUp,
+    context: "vendor application: Fractional CFO Vendor",
+    buttonLabel: "Apply Now",
   },
 ];
 
