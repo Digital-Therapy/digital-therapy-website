@@ -705,50 +705,59 @@ export function VendorApplicationDialog({
               </label>
             </fieldset>
 
-            <fieldset className="space-y-5">
-              <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
-                Skills{selectedSkills.size > 0 ? ` (${selectedSkills.size} selected)` : ""}
-              </legend>
-              <p className="-mt-2 text-xs text-black/60">Check every tool or capability you have hands-on experience with.</p>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {skillGroups.map((group) => (
-                  <div key={group.label} className="rounded-[1rem] border border-black/10 bg-[#F7F4EE]/60 p-4">
-                    <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[#0A65FF]">{group.label}</p>
-                    <div className="mt-3 space-y-2">
-                      {group.items.map((item) => {
-                        const id = `skill-${vendorTypeLabel.replace(/\s+/g, "-")}-${item.replace(/[^a-zA-Z0-9]/g, "-")}`;
-                        const checked = selectedSkills.has(item);
-                        return (
-                          <label
-                            key={item}
-                            htmlFor={id}
-                            className="flex cursor-pointer items-center gap-2 text-sm leading-5 text-black/85"
-                          >
-                            <input
-                              id={id}
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() => toggleSkill(item)}
-                              className="h-4 w-4 shrink-0 cursor-pointer rounded border border-black/30 accent-[#0A65FF]"
-                            />
-                            <span>{item}</span>
-                          </label>
-                        );
-                      })}
+            {/*
+              Skills + Additional platforms section. Suppressed when the caller
+              passes skillGroups: [] (e.g. the Legal Experts card) — nothing in
+              that practice benefits from a tool checklist, and showing an empty
+              Skills header reads as a bug. On submit, selectedSkills stays
+              empty and form.additionalSkills stays its initial empty string.
+            */}
+            {skillGroups.length > 0 && (
+              <fieldset className="space-y-5">
+                <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                  Skills{selectedSkills.size > 0 ? ` (${selectedSkills.size} selected)` : ""}
+                </legend>
+                <p className="-mt-2 text-xs text-black/60">Check every tool or capability you have hands-on experience with.</p>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {skillGroups.map((group) => (
+                    <div key={group.label} className="rounded-[1rem] border border-black/10 bg-[#F7F4EE]/60 p-4">
+                      <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[#0A65FF]">{group.label}</p>
+                      <div className="mt-3 space-y-2">
+                        {group.items.map((item) => {
+                          const id = `skill-${vendorTypeLabel.replace(/\s+/g, "-")}-${item.replace(/[^a-zA-Z0-9]/g, "-")}`;
+                          const checked = selectedSkills.has(item);
+                          return (
+                            <label
+                              key={item}
+                              htmlFor={id}
+                              className="flex cursor-pointer items-center gap-2 text-sm leading-5 text-black/85"
+                            >
+                              <input
+                                id={id}
+                                type="checkbox"
+                                checked={checked}
+                                onChange={() => toggleSkill(item)}
+                                className="h-4 w-4 shrink-0 cursor-pointer rounded border border-black/30 accent-[#0A65FF]"
+                              />
+                              <span>{item}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-              <label className="block flex flex-col gap-3 text-sm font-semibold text-black/74">
-                Additional platforms / coding languages
-                <Textarea
-                  value={form.additionalSkills}
-                  onChange={(event) => updateField("additionalSkills", event.target.value)}
-                  placeholder="List any other platforms or coding languages you'd like tagged to your profile (e.g. Rust, GoLang, Snowflake, Looker, etc.) — comma-separated is fine."
-                  className="min-h-[90px] resize-none"
-                />
-              </label>
-            </fieldset>
+                  ))}
+                </div>
+                <label className="block flex flex-col gap-3 text-sm font-semibold text-black/74">
+                  Additional platforms / coding languages
+                  <Textarea
+                    value={form.additionalSkills}
+                    onChange={(event) => updateField("additionalSkills", event.target.value)}
+                    placeholder="List any other platforms or coding languages you'd like tagged to your profile (e.g. Rust, GoLang, Snowflake, Looker, etc.) — comma-separated is fine."
+                    className="min-h-[90px] resize-none"
+                  />
+                </label>
+              </fieldset>
+            )}
 
             <fieldset className="space-y-5">
               <legend className="mb-1 text-[0.7rem] font-bold uppercase tracking-[0.22em] text-[#0A65FF]">

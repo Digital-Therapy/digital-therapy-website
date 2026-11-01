@@ -99,6 +99,11 @@ const vendorTypes = [
     icon: Scale,
     context: "vendor application: Legal Vendor",
     buttonLabel: "Apply Now",
+    // Legal applicants don't benefit from the tool/platform checklist — their
+    // relevant practice areas and bar admissions belong under Certifications
+    // and the free-text fields instead. Empty array suppresses the whole
+    // Skills section in VendorApplicationDialog.
+    skillGroups: [],
   },
   {
     title: "Fractional CFO Providers",
