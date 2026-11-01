@@ -439,7 +439,13 @@ export default function Team() {
                           </p>
                         </div>
                       </div>
-                      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                      {/*
+                        Flex-wrap with fixed-width cards (not stretching grid)
+                        so the member cards match the Advisors section exactly:
+                        each tile locks at 280px wide and the row wraps as the
+                        count grows.
+                      */}
+                      <div className="flex flex-wrap justify-center gap-[42px] sm:justify-start">
                         {group.members.map(member => {
                           // Portrait-on-top card treatment mirroring the
                           // Advisors section below. Image is full-width of the
@@ -493,7 +499,7 @@ export default function Team() {
                                   type="button"
                                   aria-label={`Read bio: ${member.name}`}
                                   data-testid="founder-card-trigger"
-                                  className="w-full overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 text-left shadow-[0_18px_45px_rgba(17,17,17,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                                  className="w-full max-w-[300px] overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 text-left shadow-[0_18px_45px_rgba(17,17,17,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2 sm:w-[280px]"
                                 >
                                   {cardInner}
                                 </button>
@@ -510,7 +516,7 @@ export default function Team() {
                                 <button
                                   type="button"
                                   aria-label={`Read profile: ${member.name}`}
-                                  className="w-full overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 text-left shadow-[0_18px_45px_rgba(17,17,17,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                                  className="w-full max-w-[300px] overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 text-left shadow-[0_18px_45px_rgba(17,17,17,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2 sm:w-[280px]"
                                 >
                                   {cardInner}
                                 </button>
@@ -521,7 +527,7 @@ export default function Team() {
                           return (
                             <article
                               key={`${group.label}-${member.name}-${member.role}`}
-                              className="overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 shadow-[0_18px_45px_rgba(17,17,17,0.05)]"
+                              className="w-full max-w-[300px] overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 shadow-[0_18px_45px_rgba(17,17,17,0.05)] sm:w-[280px]"
                             >
                               {cardInner}
                             </article>
