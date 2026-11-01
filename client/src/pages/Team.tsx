@@ -439,51 +439,45 @@ export default function Team() {
                           </p>
                         </div>
                       </div>
-                      <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                         {group.members.map(member => {
-                          // Arrow glyph after the name is a click affordance
-                          // (like the reference layout) — only show it when
-                          // the card actually opens something.
-                          const isClickable = Boolean(member.isFounder || member.bio);
+                          // Portrait-on-top card treatment mirroring the
+                          // Advisors section below. Image is full-width of the
+                          // card with a warm blue backdrop; name + role stack
+                          // underneath, role in DT blue.
                           const cardInner = (
-                            <div className="flex items-center gap-5">
+                            <>
                               {member.imageUrl ? (
-                                <img
-                                  src={member.imageUrl}
-                                  alt={member.name}
-                                  // Valerio + Matthew get object-top so their
-                                  // headshots read with more headroom in the
-                                  // avatar tile (their source frames sit tight
-                                  // to the top and would otherwise crop hair).
-                                  className={`h-36 w-36 shrink-0 rounded-xl border border-black/8 object-cover ${
-                                    member.name === "Valerio Mirof" ||
-                                    member.name === "Matthew Treem"
-                                      ? "object-top"
-                                      : "object-center"
-                                  }`}
-                                  width={800}
-                                  height={800}
-                                />
+                                <div className="-mx-2 -mt-2 mb-5 overflow-hidden rounded-[1.35rem] bg-[#0A65FF]/8">
+                                  <img
+                                    src={member.imageUrl}
+                                    alt={member.name}
+                                    // Valerio + Matthew get object-top so their
+                                    // headshots read with more headroom in the
+                                    // taller tile (source frames sit tight to
+                                    // the top and would otherwise crop hair).
+                                    className={`h-56 w-full object-cover ${
+                                      member.name === "Valerio Mirof" ||
+                                      member.name === "Matthew Treem"
+                                        ? "object-top"
+                                        : "object-center"
+                                    }`}
+                                    width={800}
+                                    height={800}
+                                  />
+                                </div>
                               ) : (
-                                <InitialMark name={member.name} />
+                                <div className="-mx-2 -mt-2 mb-5 flex h-56 items-center justify-center rounded-[1.35rem] bg-[#0A65FF]/8">
+                                  <InitialMark name={member.name} />
+                                </div>
                               )}
-                              <div className="min-w-0">
-                                <h4 className="text-lg font-bold leading-tight tracking-[-0.01em] text-[#111111]">
-                                  {member.name}
-                                  {isClickable && (
-                                    <span
-                                      aria-hidden="true"
-                                      className="ml-1.5 inline-block text-[#0A65FF] transition-transform duration-200 group-hover:translate-x-0.5"
-                                    >
-                                      &rarr;
-                                    </span>
-                                  )}
-                                </h4>
-                                <p className="mt-1.5 text-sm leading-5 text-black/58">
-                                  {member.role}
-                                </p>
-                              </div>
-                            </div>
+                              <h4 className="font-display text-3xl tracking-[-0.05em] text-[#111111]">
+                                {member.name}
+                              </h4>
+                              <p className="mt-2 text-sm font-semibold text-[#0A65FF]">
+                                {member.role}
+                              </p>
+                            </>
                           );
 
                           // Founder (Jonathan) opens the bespoke Founder story
@@ -499,7 +493,7 @@ export default function Team() {
                                   type="button"
                                   aria-label={`Read bio: ${member.name}`}
                                   data-testid="founder-card-trigger"
-                                  className="group w-full rounded-xl border border-black/8 bg-white p-5 text-left shadow-[0_1px_2px_rgba(17,17,17,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_14px_32px_rgba(17,17,17,0.08)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                                  className="w-full overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 text-left shadow-[0_18px_45px_rgba(17,17,17,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
                                 >
                                   {cardInner}
                                 </button>
@@ -516,7 +510,7 @@ export default function Team() {
                                 <button
                                   type="button"
                                   aria-label={`Read profile: ${member.name}`}
-                                  className="group w-full rounded-xl border border-black/8 bg-white p-5 text-left shadow-[0_1px_2px_rgba(17,17,17,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0A65FF]/35 hover:shadow-[0_14px_32px_rgba(17,17,17,0.08)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
+                                  className="w-full overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 text-left shadow-[0_18px_45px_rgba(17,17,17,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0A65FF]/35 hover:shadow-[0_28px_70px_rgba(17,17,17,0.10)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A65FF]/55 focus-visible:ring-offset-2"
                                 >
                                   {cardInner}
                                 </button>
@@ -527,7 +521,7 @@ export default function Team() {
                           return (
                             <article
                               key={`${group.label}-${member.name}-${member.role}`}
-                              className="rounded-xl border border-black/8 bg-white p-5 shadow-[0_1px_2px_rgba(17,17,17,0.04)]"
+                              className="overflow-hidden rounded-[1.75rem] border border-black/8 bg-white p-6 shadow-[0_18px_45px_rgba(17,17,17,0.05)]"
                             >
                               {cardInner}
                             </article>
