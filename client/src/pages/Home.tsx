@@ -299,8 +299,7 @@ export default function Home() {
                 At Digital Therapy, we don&rsquo;t look at Technology,
                 Operations &amp; Accounting as separate functions. In the{" "}
                 <Handwritten>real</Handwritten> world, these functions are
-                inseparably entangled &mdash; Aren&rsquo;t they?
-                So we built the team that has what it{" "}
+                inseparably entangled. So we built the team that has what it{" "}
                 <Handwritten>really</Handwritten> takes.{" "}
                 <Handwritten>Really</Handwritten>.
               </p>
