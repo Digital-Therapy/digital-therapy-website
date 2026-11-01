@@ -38,12 +38,12 @@ const fadeUp = {
 } as const;
 
 const specs = [
-  { value: "12-Core", label: "CPU", icon: Cpu },
-  { value: "16-Core", label: "GPU", icon: Cpu },
-  { value: "16-Core", label: "Neural Engine", icon: Brain },
-  { value: "48 GB", label: "Memory", icon: Server },
-  { value: "2 TB", label: "SSD Storage", icon: HardDrive },
-  { value: "1 Gbps", label: "Ethernet", icon: Network },
+  { value: "36-Core", label: "CPU", icon: Cpu },
+  { value: "80-Core", label: "GPU", icon: Cpu },
+  { value: "32-Core", label: "Neural Engine", icon: Brain },
+  { value: "256 GB", label: "Unified Memory", icon: Server },
+  { value: "8 TB", label: "SSD Storage", icon: HardDrive },
+  { value: "10 Gb", label: "Ethernet", icon: Network },
 ];
 
 const sandboxOne = [
@@ -159,9 +159,9 @@ export default function DTBrain() {
               </p>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-black/80">
                 Digital Therapy sets up a private, on-premises automation
-                environment powered by Apple M4 Pro. No cloud dependency. No
-                data leaves your ecosystem. That is real security and true
-                privacy.
+                environment powered by Apple&rsquo;s Mac Studio with the M5
+                Ultra chip. No cloud dependency. No data leaves your
+                ecosystem. That is real security and true privacy.
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <PrivateBriefingButton />
@@ -204,7 +204,7 @@ export default function DTBrain() {
                       </div>
                     </div>
                     <div className="hidden rounded-full border border-[#0A65FF]/20 bg-[#0A65FF]/8 px-4 py-2 text-sm font-bold text-[#0A65FF] sm:block">
-                      Apple M4 Pro
+                      Apple M5 Ultra
                     </div>
                   </div>
                 </div>
@@ -283,11 +283,11 @@ export default function DTBrain() {
                       DT Brain core
                     </div>
                     <div className="mt-2 text-3xl font-semibold tracking-[-0.05em]">
-                      Apple M4 Pro automation hub
+                      Apple M5 Ultra automation hub
                     </div>
                   </div>
                   <div className="rounded-full border border-black/10 bg-white/70 px-4 py-2 text-sm font-bold text-black/78">
-                    1 Gbps Ethernet
+                    10 Gb Ethernet
                   </div>
                 </div>
 
