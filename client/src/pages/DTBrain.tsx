@@ -464,8 +464,8 @@ export default function DTBrain() {
                 Private deployment conversation
               </div>
               <h2 className="max-w-4xl font-display text-[clamp(2.7rem,5.3vw,5.8rem)] leading-[0.9] tracking-[-0.06em]">
-                Book 30 min to see where Digital Therapy&rsquo;s On-prem AI
-                solutions can deliver value first.
+                Book a time &mdash; Learn what Digital Therapy can do for you
+                with On-prem AI.
               </h2>
             </motion.div>
             <motion.div {...fadeUp} className="lg:justify-self-end">
