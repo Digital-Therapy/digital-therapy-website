@@ -152,7 +152,7 @@ export default function DTBrain() {
                 On-prem AI Hub
               </h1>
               <p className="mt-8 max-w-2xl text-2xl font-semibold leading-9 tracking-[-0.035em] text-[#0A65FF]">
-                In your office. On your hardware. Under your control.
+                Your office. Your hardware. Your control.
               </p>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-black/80">
                 Digital Therapy sets up a private AI Hub on-prem.
