@@ -156,11 +156,29 @@ export default function DTBrain() {
                 control.
               </p>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-black/80">
-                Digital Therapy sets up a private, on-premises automation
-                environment powered by Apple&rsquo;s Mac Studio with the M5
-                Ultra chip. No cloud dependency. No data leaves your
-                ecosystem. That is real security and true privacy.
+                Digital Therapy sets up a private AI Hub on-prem &mdash;
+                behind your firewall.
               </p>
+              <div className="mt-7 max-w-2xl">
+                <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
+                  Specs
+                </p>
+                <div className="mt-4 grid gap-3">
+                  {[
+                    "Powered by Apple’s Mac Studio & M5 Ultra chip.",
+                    "No cloud dependency.",
+                    "Your data never leaves your ecosystem. That’s the security you want.",
+                  ].map(item => (
+                    <div
+                      key={item}
+                      className="flex items-start gap-3 text-base leading-7 text-black/82"
+                    >
+                      <CheckCircle2 className="mt-0.5 h-5 w-5 flex-none text-[#0A65FF]" />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <PrivateBriefingButton />
                 <a
