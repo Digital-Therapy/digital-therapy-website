@@ -155,8 +155,7 @@ export default function DTBrain() {
                 In your office. On your hardware. Under your control.
               </p>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-black/80">
-                Digital Therapy sets up a private AI Hub on-prem &mdash;
-                behind your firewall.
+                Digital Therapy sets up a private AI Hub on-prem.
               </p>
               <div className="mt-7 max-w-2xl">
                 <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
@@ -167,6 +166,7 @@ export default function DTBrain() {
                     "Powered by Apple’s Mac Studio & M5 Ultra chip.",
                     "No cloud dependency.",
                     "Your data never leaves your ecosystem. That’s the security you want.",
+                    "Behind your firewall.",
                   ].map(item => (
                     <div
                       key={item}
