@@ -193,21 +193,6 @@ export default function DTBrain() {
                   width={1672}
                   height={941}
                 />
-                <div className="absolute inset-x-5 bottom-5 rounded-[1.4rem] border border-white/70 bg-white/82 p-5 shadow-[0_18px_50px_rgba(16,24,40,0.12)] backdrop-blur-xl">
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <div className="text-xs font-bold uppercase tracking-[0.22em] text-[#0A65FF]">
-                        Secure perimeter
-                      </div>
-                      <div className="mt-2 text-xl font-semibold tracking-[-0.04em]">
-                        On-premises automation environment
-                      </div>
-                    </div>
-                    <div className="hidden rounded-full border border-[#0A65FF]/20 bg-[#0A65FF]/8 px-4 py-2 text-sm font-bold text-[#0A65FF] sm:block">
-                      Apple M5 Ultra
-                    </div>
-                  </div>
-                </div>
               </div>
             </motion.div>
           </div>
