@@ -164,8 +164,7 @@ export default function DTBrain() {
                 <div className="mt-4 grid gap-3">
                   {[
                     "Powered by Apple’s Mac Studio & M5 Ultra chip.",
-                    "No cloud dependency.",
-                    "Deployed behind your firewall.",
+                    "No cloud dependency — deployed behind your firewall.",
                     "Data never leaves your ecosystem. That’s real security.",
                   ].map(item => (
                     <div
