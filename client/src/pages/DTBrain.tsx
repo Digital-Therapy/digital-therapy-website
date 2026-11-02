@@ -166,7 +166,7 @@ export default function DTBrain() {
                     "Powered by Apple’s Mac Studio & M5 Ultra chip.",
                     "No cloud dependency.",
                     "Data never leaves your ecosystem. That’s real security.",
-                    "Behind your firewall.",
+                    "Deployed behind your firewall.",
                   ].map(item => (
                     <div
                       key={item}
