@@ -188,10 +188,10 @@ export default function DTBrain() {
               <div className="relative overflow-hidden rounded-[2.25rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
                 <img
                   src={securityVisual}
-                  alt="Balancing speed and intelligence with security and privacy by design"
-                  className="aspect-[16/11] w-full object-cover"
-                  width={1200}
-                  height={900}
+                  alt="DT Brain diagram — Mac Studio with Apple M5 Ultra wired into the family office's technology, operations, and accounting workflows, with proposed configuration (36-core CPU, 80-core GPU, 32-core Neural Engine, 256 GB unified memory, 8 TB storage) and supporting hardware listed below"
+                  className="aspect-[16/9] w-full object-cover"
+                  width={1672}
+                  height={941}
                 />
                 <div className="absolute inset-x-5 bottom-5 rounded-[1.4rem] border border-white/70 bg-white/82 p-5 shadow-[0_18px_50px_rgba(16,24,40,0.12)] backdrop-blur-xl">
                   <div className="flex items-center justify-between gap-4">
