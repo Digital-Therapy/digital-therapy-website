@@ -198,15 +198,24 @@ export default function DTBrain() {
               transition={{ duration: 0.9, ease: "easeOut" as const }}
               className="relative"
             >
+              {/*
+                Frame styled to echo the "DT Brain core" card two sections
+                down: nested outer-white tray with a thin blue-tinted gradient
+                inset. The infographic sits inside the gradient inset so its
+                pale-blue backdrop blends into the frame rather than fighting
+                the solid-white wrapper the previous version used.
+              */}
               <div className="absolute -inset-6 rounded-[2.8rem] bg-[#0A65FF]/12 blur-3xl" />
-              <div className="relative overflow-hidden rounded-[2.25rem] border border-white/80 bg-white shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
-                <img
-                  src={securityVisual}
-                  alt="DT Brain diagram — 'Intelligence & Power. In your office.' On-Prem AI for private family offices. Mac Studio with Apple M5 Ultra as a local LLM, data, and workflow hub, wired into technology, operations, and accounting workflows, with Control and De-Risk callouts beneath."
-                  className="aspect-[4/3] w-full object-cover"
-                  width={1448}
-                  height={1086}
-                />
+              <div className="relative rounded-[2.25rem] border border-black/8 bg-white p-3 shadow-[0_42px_110px_rgba(16,24,40,0.14)]">
+                <div className="overflow-hidden rounded-[1.9rem] border border-[#0A65FF]/18 bg-[linear-gradient(145deg,#ffffff_0%,#eef5ff_100%)]">
+                  <img
+                    src={securityVisual}
+                    alt="DT Brain diagram — 'Intelligence & Power. In your office.' On-Prem AI for private family offices. Mac Studio with Apple M5 Ultra as a local LLM, data, and workflow hub, wired into technology, operations, and accounting workflows, with Control and De-Risk callouts beneath."
+                    className="aspect-[4/3] w-full object-cover"
+                    width={1448}
+                    height={1086}
+                  />
+                </div>
               </div>
             </motion.div>
           </div>
