@@ -8,7 +8,7 @@
 import NeedsAssessmentDialog from "@/components/NeedsAssessmentDialog";
 import PublicHeader from "@/components/PublicHeader";
 import { motion } from "framer-motion";
-import { ArrowUpRight, CalendarCheck, Calculator, ShieldAlert, Sparkles } from "lucide-react";
+import { ArrowUpRight, CalendarCheck, Calculator, CreditCard, Database, Server, ShieldAlert, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -40,7 +40,7 @@ export default function GetStarted() {
         </motion.div>
 
         {/* Assessment cards */}
-        <div className="mx-auto mt-14 grid max-w-4xl gap-5 sm:grid-cols-2">
+        <div className="mx-auto mt-14 grid max-w-6xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <ClickableAssessmentCard
             delay={0}
             eyebrow="Finance & operations"
@@ -88,6 +88,45 @@ export default function GetStarted() {
               toast("AI Opportunity Assessment coming soon.", {
                 description:
                   "In the meantime, book a call and we'll walk your current workflows together.",
+              })
+            }
+          />
+          <ClickableAssessmentCard
+            delay={0.2}
+            eyebrow="Core systems"
+            icon={Database}
+            title="ERP Assessment"
+            body="Review your current ERP footprint — modules in use, integrations, workarounds, and reporting gaps — to identify what to consolidate, replace, or extend."
+            onClick={() =>
+              toast("ERP Assessment coming soon.", {
+                description:
+                  "In the meantime, book a call and we'll walk your current ERP setup together.",
+              })
+            }
+          />
+          <ClickableAssessmentCard
+            delay={0.25}
+            eyebrow="IT & infrastructure"
+            icon={Server}
+            title="IT Assessment"
+            body="Inventory your systems, security posture, vendor stack, and operational risk. We’ll return a ranked list of upgrades, consolidations, and gaps to close."
+            onClick={() =>
+              toast("IT Assessment coming soon.", {
+                description:
+                  "In the meantime, book a call and we'll walk your IT landscape together.",
+              })
+            }
+          />
+          <ClickableAssessmentCard
+            delay={0.3}
+            eyebrow="Payments"
+            icon={CreditCard}
+            title="Payments Opportunity Assessment"
+            body="Map where payments live today — bank rails, card processors, ACH, approval workflow — and surface where to cut fees, delay, and manual lift."
+            onClick={() =>
+              toast("Payments Opportunity Assessment coming soon.", {
+                description:
+                  "In the meantime, book a call and we'll walk your payments stack together.",
               })
             }
           />
