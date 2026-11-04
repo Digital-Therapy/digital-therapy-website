@@ -8,8 +8,9 @@
 import NeedsAssessmentDialog from "@/components/NeedsAssessmentDialog";
 import PublicHeader from "@/components/PublicHeader";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Calculator } from "lucide-react";
+import { ArrowUpRight, CalendarCheck, Calculator, ShieldAlert } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const fadeUp = {
   initial: { opacity: 0, y: 28 },
@@ -39,7 +40,7 @@ export default function GetStarted() {
         </motion.div>
 
         {/* Assessment cards */}
-        <div className="mx-auto mt-14 max-w-xl">
+        <div className="mx-auto mt-14 grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <ClickableAssessmentCard
             delay={0}
             eyebrow="Finance & operations"
@@ -47,6 +48,35 @@ export default function GetStarted() {
             title="Outsourced Accounting / Bookkeeping"
             body="Evaluate your current accounting workflow, close cadence, and reporting cadence to identify what to standardize, automate, and hand off."
             onClick={() => setAccountingOpen(true)}
+          />
+          <ClickableAssessmentCard
+            delay={0.05}
+            eyebrow="Close acceleration"
+            icon={CalendarCheck}
+            title="Monthly Close Assessment"
+            body="Walk us through your close calendar, bottlenecks, and reporting cadence. We’ll flag where automation and sequencing can compress the cycle."
+            // TODO: dedicated Monthly Close assessment dialog. For now the
+            // card opens a soft placeholder so Karina can wire a real dialog
+            // without the card living only in a comment.
+            onClick={() =>
+              toast("Monthly Close Assessment coming soon.", {
+                description:
+                  "In the meantime, use the Accounting assessment or book a call — we'll handle intake directly.",
+              })
+            }
+          />
+          <ClickableAssessmentCard
+            delay={0.1}
+            eyebrow="Risk & controls"
+            icon={ShieldAlert}
+            title="Risk Assessments"
+            body="Surface operational, financial, and technology risks across the office — ranked by severity and likelihood, with mitigation priorities."
+            onClick={() =>
+              toast("Risk Assessments coming soon.", {
+                description:
+                  "In the meantime, book a call and we'll walk your risk register together.",
+              })
+            }
           />
         </div>
       </main>
