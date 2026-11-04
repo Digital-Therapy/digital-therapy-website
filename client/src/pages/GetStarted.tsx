@@ -8,7 +8,7 @@
 import NeedsAssessmentDialog from "@/components/NeedsAssessmentDialog";
 import PublicHeader from "@/components/PublicHeader";
 import { motion } from "framer-motion";
-import { ArrowUpRight, CalendarCheck, Calculator, ShieldAlert } from "lucide-react";
+import { ArrowUpRight, CalendarCheck, Calculator, ShieldAlert, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -40,7 +40,7 @@ export default function GetStarted() {
         </motion.div>
 
         {/* Assessment cards */}
-        <div className="mx-auto mt-14 grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto mt-14 grid max-w-4xl gap-5 sm:grid-cols-2">
           <ClickableAssessmentCard
             delay={0}
             eyebrow="Finance & operations"
@@ -75,6 +75,19 @@ export default function GetStarted() {
               toast("Risk Assessments coming soon.", {
                 description:
                   "In the meantime, book a call and we'll walk your risk register together.",
+              })
+            }
+          />
+          <ClickableAssessmentCard
+            delay={0.15}
+            eyebrow="AI + automation"
+            icon={Sparkles}
+            title="AI Opportunity Assessment"
+            body="Map your workflows against where AI and automation actually pay off. You’ll get a ranked opportunity list with payback, risk, and the right sequence to build."
+            onClick={() =>
+              toast("AI Opportunity Assessment coming soon.", {
+                description:
+                  "In the meantime, book a call and we'll walk your current workflows together.",
               })
             }
           />
