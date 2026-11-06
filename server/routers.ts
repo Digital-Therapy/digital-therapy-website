@@ -75,7 +75,7 @@ import {
   SetStageError,
   updateOpportunity,
 } from "./pipeline";
-import { submitAccountingAssessment } from "./assessments";
+import { submitAccountingAssessment, submitMonthlyCloseAssessment } from "./assessments";
 import {
   confirmOfferAch,
   getOfferByToken,
@@ -1061,6 +1061,43 @@ export const appRouter = router({
       )
       .mutation(async ({ input }) => {
         const { id } = await submitAccountingAssessment(input);
+        return { success: true, id };
+      }),
+    submitMonthlyClose: publicProcedure
+      .input(
+        z.object({
+          // Section 1
+          closeDuration: z.string().trim().max(80).optional(),
+          hasOrganizedVendorList: z.string().trim().max(20).optional(),
+          monthlyInvoiceCount: z.string().trim().max(40).optional(),
+          invoiceChannelCount: z.string().trim().max(40).optional(),
+          invoiceChannels: z.array(z.string().trim().max(120)).max(20).optional(),
+          invoiceChannelsOther: z.string().trim().max(300).optional(),
+          // Section 2
+          centralInvoiceIntake: z.string().trim().max(60).optional(),
+          invoiceApprovalMethod: z.string().trim().max(120).optional(),
+          teamHoursOnInvoices: z.string().trim().max(60).optional(),
+          lateInvoiceFrequency: z.string().trim().max(40).optional(),
+          // Section 3
+          entityCount: z.string().trim().max(40).optional(),
+          usesCloseChecklist: z.string().trim().max(80).optional(),
+          closeDelayActivities: z.array(z.string().trim().max(160)).max(20).optional(),
+          closeDelayActivitiesOther: z.string().trim().max(300).optional(),
+          reportConfidence: z.string().trim().max(60).optional(),
+          improvementGoals: z.array(z.string().trim().max(160)).max(20).optional(),
+          improvementGoalsOther: z.string().trim().max(300).optional(),
+          additionalNotes: z.string().trim().max(4000).optional(),
+          // Contact
+          contactName: z.string().trim().min(1).max(200),
+          contactEmail: z.string().trim().email().max(320),
+          familyOfficeName: z.string().trim().max(200).optional(),
+          contactRole: z.string().trim().max(200).optional(),
+          // Meta
+          sourcePage: z.string().trim().max(160).optional(),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const { id } = await submitMonthlyCloseAssessment(input);
         return { success: true, id };
       }),
   }),

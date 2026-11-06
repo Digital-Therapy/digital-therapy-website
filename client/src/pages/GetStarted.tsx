@@ -5,6 +5,7 @@
  * Bookkeeping) that collects family-office profile, scale, and current state.
  * Submissions persist to dt_site.needs_assessment and trigger an owner email.
  */
+import MonthlyCloseAssessmentDialog from "@/components/MonthlyCloseAssessmentDialog";
 import NeedsAssessmentDialog from "@/components/NeedsAssessmentDialog";
 import PublicHeader from "@/components/PublicHeader";
 import { motion } from "framer-motion";
@@ -21,6 +22,7 @@ const fadeUp = {
 
 export default function GetStarted() {
   const [accountingOpen, setAccountingOpen] = useState(false);
+  const [monthlyCloseOpen, setMonthlyCloseOpen] = useState(false);
   return (
     <div className="min-h-screen bg-[#f8f8f7] text-[#111111]">
       <PublicHeader activeLabel="Get Started" bookingContext="get-started page booking" />
@@ -55,15 +57,7 @@ export default function GetStarted() {
             icon={CalendarCheck}
             title="Monthly Close Assessment"
             body="Walk us through your close calendar, bottlenecks, and reporting cadence. We’ll flag where automation and sequencing can compress the cycle."
-            // TODO: dedicated Monthly Close assessment dialog. For now the
-            // card opens a soft placeholder so Karina can wire a real dialog
-            // without the card living only in a comment.
-            onClick={() =>
-              toast("Monthly Close Assessment coming soon.", {
-                description:
-                  "In the meantime, use the Accounting assessment or book a call — we'll handle intake directly.",
-              })
-            }
+            onClick={() => setMonthlyCloseOpen(true)}
           />
           <ClickableAssessmentCard
             delay={0.1}
@@ -134,6 +128,10 @@ export default function GetStarted() {
       </main>
 
       <NeedsAssessmentDialog open={accountingOpen} onOpenChange={setAccountingOpen} />
+      <MonthlyCloseAssessmentDialog
+        open={monthlyCloseOpen}
+        onOpenChange={setMonthlyCloseOpen}
+      />
     </div>
   );
 }

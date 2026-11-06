@@ -12,7 +12,7 @@
 import { forwardAssessmentToPortal } from "./portal";
 import { getPool } from "./vendors";
 
-export const NEEDS_ASSESSMENT_KINDS = ["outsourced_accounting"] as const;
+export const NEEDS_ASSESSMENT_KINDS = ["outsourced_accounting", "monthly_close"] as const;
 export type NeedsAssessmentKind = (typeof NEEDS_ASSESSMENT_KINDS)[number];
 
 export type AccountingAssessmentInput = {
@@ -109,6 +109,69 @@ export async function submitAccountingAssessment(input: AccountingAssessmentInpu
   // submissions); the portal stores it and emails the team. Best-effort: the
   // dt_site write above is the primary path, so a portal outage never fails the
   // public submission.
+  await forwardAssessmentToPortal({ kind, ...input }).catch((err) => {
+    console.warn("[Assessments] Portal forward failed:", err);
+    return false;
+  });
+
+  return { id };
+}
+
+export type MonthlyCloseAssessmentInput = {
+  // Section 1: Your Monthly Close
+  closeDuration?: string;
+  hasOrganizedVendorList?: string;
+  monthlyInvoiceCount?: string;
+  invoiceChannelCount?: string;
+  invoiceChannels?: string[];
+  invoiceChannelsOther?: string;
+  // Section 2: Your Invoice and Approval Process
+  centralInvoiceIntake?: string;
+  invoiceApprovalMethod?: string;
+  teamHoursOnInvoices?: string;
+  lateInvoiceFrequency?: string;
+  // Section 3: Your Close Controls and Reporting
+  entityCount?: string;
+  usesCloseChecklist?: string;
+  closeDelayActivities?: string[];
+  closeDelayActivitiesOther?: string;
+  reportConfidence?: string;
+  improvementGoals?: string[];
+  improvementGoalsOther?: string;
+  additionalNotes?: string;
+  // Contact
+  contactName: string;
+  contactEmail: string;
+  familyOfficeName?: string;
+  contactRole?: string;
+  // Meta
+  sourcePage?: string;
+};
+
+export async function submitMonthlyCloseAssessment(
+  input: MonthlyCloseAssessmentInput,
+): Promise<{ id: number | null }> {
+  const pool = await ensureTables();
+  const kind: NeedsAssessmentKind = "monthly_close";
+  let id: number | null = null;
+  if (pool) {
+    const r = await pool.query(
+      `INSERT INTO dt_site.needs_assessment
+         (kind, family_office_name, contact_name, contact_role, contact_email, contact_phone, payload, source_page)
+       VALUES ($1,$2,$3,$4,$5,NULL,$6,$7) RETURNING id`,
+      [
+        kind,
+        input.familyOfficeName || null,
+        input.contactName || null,
+        input.contactRole || null,
+        input.contactEmail || null,
+        JSON.stringify(input),
+        input.sourcePage || null,
+      ],
+    );
+    id = r.rows[0]?.id ?? null;
+  }
+
   await forwardAssessmentToPortal({ kind, ...input }).catch((err) => {
     console.warn("[Assessments] Portal forward failed:", err);
     return false;
