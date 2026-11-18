@@ -587,11 +587,8 @@ export default function Thesis() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(10,101,255,0.10),transparent_30%)]" />
           <div className="container relative text-center">
             <motion.div {...fadeUp} className="mx-auto max-w-4xl">
-              <SectionLabel>Your fusion team can do it</SectionLabel>
               <h2 className="font-display text-[55px] leading-[0.88] tracking-[-0.07em]">
-                Family offices need one solution team
-                <br />
-                for one fused problem.
+                Your Digital Therapy Team will get it done.
               </h2>
               <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-black/80">
                 Digital Therapy delivers one team, one aligned incentive
