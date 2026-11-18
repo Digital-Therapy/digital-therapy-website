@@ -3,10 +3,6 @@
  * Moves the capabilities narrative out of the Home page and adds the typical customer requests
  * using the established quiet-luxury family-office visual system.
  */
-import {
-  BookingWidgetDialog,
-  ContactFormDialog,
-} from "@/components/ContactBooking";
 import PublicHeader from "@/components/PublicHeader";
 import {
   Dialog,
@@ -93,19 +89,6 @@ const capabilities = [
     toolButtonLabel: "More on Insights",
   },
 ];
-
-function PrivateBriefingButton({
-  variant = "primary",
-}: {
-  variant?: "primary" | "secondary";
-}) {
-  return (
-    <BookingWidgetDialog
-      variant={variant}
-      context="capabilities page family-office booking"
-    />
-  );
-}
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -392,59 +375,6 @@ export default function Capabilities() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden bg-[#111111] py-24 text-white lg:py-32">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_22%,rgba(10,101,255,0.34),transparent_35%),linear-gradient(135deg,#111111_0%,#1C1C1C_100%)]" />
-          <div className="container relative grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">
-            <motion.div {...fadeUp}>
-              <SectionLabel>Private by design</SectionLabel>
-              <h2 className="font-display text-[44px] leading-[1.1] tracking-[-0.04em] text-white">
-                Privacy &amp; Security are paramount!
-                <br />
-                But so is Speed &amp; Intelligence.
-                <br />
-                How do you choose?
-              </h2>
-              <img
-                src="/balance-scale.webp"
-                alt="Balance scale weighing Speed & Intelligence against Security & Privacy, with the message: You need both. And we can give that to you."
-                className="mt-10 w-full rounded-2xl border border-white/10"
-                loading="lazy"
-                decoding="async"
-                width={1200}
-                height={800}
-              />
-            </motion.div>
-            <motion.div
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.08 }}
-              className="border border-white/12 bg-white/[0.06] p-8 backdrop-blur-xl"
-            >
-              <p className="text-xl leading-9 text-white/70">
-                Digital Therapy works fluently across cloud platforms, but
-                prefers deploying wholly-owned, custom applications on-prem. We
-                run AI models offline by default &mdash; toggled online only for
-                updates or short-lived tasks &mdash; and install identity-based
-                access management that handles permissions by role, project,
-                entity, title, or any attribute you assign.
-              </p>
-              <p className="mt-6 text-xl leading-9 text-white/70">
-                <strong className="font-bold text-[#0A65FF]">
-                  Our Mission:
-                </strong>{" "}
-                Deliver speed &amp; intelligence to family offices without
-                compromising privacy &amp; security.
-              </p>
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <PrivateBriefingButton />
-                <ContactFormDialog
-                  variant="secondary"
-                  label="Discuss requirements"
-                  context="capabilities page requirements discussion"
-                />
-              </div>
-            </motion.div>
-          </div>
-        </section>
       </main>
     </div>
   );
