@@ -4,6 +4,7 @@ import { createServer } from "http";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
+import { registerShortLinks } from "../redirects";
 import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
@@ -37,6 +38,10 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   registerStorageProxy(app);
   registerOAuthRoutes(app);
+  // Short-link redirects (/book → calendar, etc.) — register before the
+  // Vite dev middleware and the prerender/static fallback so the short
+  // path beats the SPA shell and any baked prerender.
+  registerShortLinks(app);
   // tRPC API
   app.use(
     "/api/trpc",
