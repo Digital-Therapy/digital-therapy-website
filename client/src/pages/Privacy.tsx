@@ -61,7 +61,7 @@ export default function Privacy() {
               <p className={paragraphClass}>We may collect personal and non-personal information, including but not limited to:</p>
               <ul className={bulletListClass}>
                 <li>
-                  <span className="font-semibold">Personal Information:</span> Name, email address, phone number, and other details you provide via forms or other direct interactions.
+                  <span className="font-semibold">Personal Information:</span> Name, email address, phone number, and other details you provide via forms.
                 </li>
                 <li>
                   <span className="font-semibold">Non-Personal Information:</span> Browser type, IP address, &amp; website usage data collected via cookies or analytics tools.
