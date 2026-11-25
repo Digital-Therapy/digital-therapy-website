@@ -64,7 +64,7 @@ export default function Privacy() {
                   <span className="font-semibold">Personal Information:</span> Name, email address, phone number, and other details you provide via forms.
                 </li>
                 <li>
-                  <span className="font-semibold">Non-Personal Information:</span> Browser type, IP address, &amp; website usage data collected via cookies or analytics tools.
+                  <span className="font-semibold">Non-Personal Information:</span> Browser type, IP address, &amp; Website interactions via monitoring tools.
                 </li>
               </ul>
 
