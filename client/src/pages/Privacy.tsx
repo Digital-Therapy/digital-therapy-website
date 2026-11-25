@@ -86,19 +86,6 @@ export default function Privacy() {
               <p className={paragraphClass}>
                 Our website may use cookies and similar technologies to enhance user experience and gather data about site performance. You can adjust your browser settings to refuse cookies, though this may affect site functionality.
               </p>
-              <p className={paragraphClass}>
-                When you visit or log in to our website, cookies and similar technologies may be used by our online data partners or vendors to associate these activities with other personal information they or others have about you, including by association with your email. We (or service providers on our behalf) may then send communications and marketing to these email. You may opt out of receiving this advertising by visiting{" "}
-                <a
-                  className="font-semibold text-[#0A65FF] underline"
-                  href="https://app.retention.com/optout"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  https://app.retention.com/optout
-                </a>
-                .
-              </p>
-
               <PolicyHeading>Data Security</PolicyHeading>
               <p className={paragraphClass}>
                 We implement appropriate technical and organizational measures to protect your data from unauthorized access, disclosure, alteration, or destruction.
