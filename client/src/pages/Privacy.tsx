@@ -106,7 +106,7 @@ export default function Privacy() {
 
               <PolicyHeading>Changes to This Privacy Policy</PolicyHeading>
               <p className={paragraphClass}>
-                We may update this Privacy Policy from time to time. Changes will be reflected on this page with a revised &ldquo;Effective Date.&rdquo;
+                We may update this Privacy Policy. Changes will be reflected on this page with a revised effective date.
               </p>
 
               <PolicyHeading>Contact Us</PolicyHeading>
