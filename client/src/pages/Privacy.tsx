@@ -47,7 +47,7 @@ export default function Privacy() {
                 Privacy Policy
               </h1>
               <p className="mt-6 text-sm font-semibold uppercase tracking-[0.22em] text-black/55">
-                Effective Date: July 25, 2024
+                Effective Date: November 25, 2026
               </p>
             </motion.div>
 
